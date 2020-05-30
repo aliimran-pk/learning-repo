@@ -1,0 +1,14 @@
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: myfirstpodwithlabels
+  labels:
+    type: backend
+    env: production
+spec:
+  containers:
+  - image: aamirpinger/helloworld:latest
+    name: container1
+    ports:
+    - containerPort: 80

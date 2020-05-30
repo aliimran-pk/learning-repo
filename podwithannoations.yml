@@ -1,0 +1,14 @@
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: podwithannotation
+  annotations:
+    createdBy: Ali Imran
+    AuthorEmail: imran@pk.ibm.com
+spec:
+  containers:
+  - image: aamirpinger/flag:latest
+    name: container2
+    ports:
+    - containerPort: 80

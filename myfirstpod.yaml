@@ -1,0 +1,10 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: myfirstpod
+spec:
+ containers:
+  - name: container1
+    image: aamirpinger/helloworld:latest
+    ports:
+    - containerPort: 80

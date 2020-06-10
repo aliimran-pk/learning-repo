@@ -6,8 +6,6 @@ sudo su -
 
 https://github.com/aamirpinger
 
-
-
 Slides by Sir Daniyal Nagori:
 
 CNC Quarter 1:-
@@ -1374,8 +1372,4 @@ git add README.md
 git commit -m "first commit"
 git remote add origin https://github.com/aliimran-pk/learning-repo.git
 git push -u origin master
-
-982525 
-
-
 

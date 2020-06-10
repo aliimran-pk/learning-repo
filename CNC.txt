@@ -928,7 +928,7 @@ sudo systemctl restart network-manager
 
 --------------------------------------MY SQL ----------------------------------------------------------------------
 
-docker run --name mysql -p 306:3306 -e MYSQL_ROOT_PASSWORD=passsword mysql
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=passsword mysql
 
 docker exec -it mysql bash 
 mysql -u root -ppasssword

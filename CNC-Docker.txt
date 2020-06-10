@@ -1,0 +1,410 @@
+***********************************************************--Docker-***********************************************************
+
+1) VM Ware Disadvantages
+licencing cost
+base OS use more resources as it has to deal with all virtual os
+
+
+Hypervisor Layer
+isolate OS and appl from the under lying hardware
+
+Hypervisor = virtual machine monitor
+
+container technology is a method
+
+All containers on a single host/machine share a single OS
+
+license fee`
+portable and fast
+cap-ex money capital
+op-ex operational 
+
+Types of Containers
+ 
+Linux Containers RUNS ON linux kernel
+
+Windows Containers RUNS ON Windows kernel
+
+*Running container uses the kernel of the host machine
+container designed to run on a host with a windows kernel will not run on Linux host
+but it is possible to run Linux container on windows sing switch mode
+
+docker is not a container
+docker is a company
+
+Enterprise Edition Paid
+Community Edition  free
+
+Batteries = features
+can be use 
+
+OCI 
+Open container initiatives OCI
+
+Image formats
+specifications
+runtime specs
+
+Docker Daemon 
+A persistent background process that manages Docker images, containers, networks, and storage volumes. 
+The Docker daemon constantly listens for Docker API requests and processes them.
+The Docker daemon pulls and builds container images as requested by the client.
+Push the docker image to the public registry like DockerHub using the docker push command after 
+pushed you can access these images from anywhere using docker pull command.
+
+Container images can be shared across teams within an enterprise using a private container registry, 
+or shared with the world using a public registry like Docker Hub.
+
+Every container is isolated but access to resources on another host or container 
+can be allowed with the help of docker networking.
+
+A container is volatile it means whenever you remove or kill the container then all of its data will be lost 
+from it. If you want to persist the container data use the docker storage concept.
+
+Data Volumes
+Data Volumes provide the ability to create persistent storage
+Docker registry contains repositories that host one or more Docker Images.
+Public Registries include Docker Hub and Docker Cloud and private Registries can also be use
+The communication between the Docker client and the Docker host is via a REST API
+
+
+
+
+Docker Engine
+It is the core part of the whole Docker system. 
+Docker Engine is an application which follows client-server architecture. 
+It is installed on the host machine. 
+There are three components in the Docker Engine:
+1) Server: It is the docker daemon called dockerd. It can create and manage docker images. Containers, networks, etc.
+2) Rest API: It is used to instruct docker daemon what to do.
+3) Command Line Interface (CLI): It is a client which is used to enter docker commands.
+
+
+---------------------------
+docker installation
+
+Read Offical Documentation
+https://docs.docker.com/engine/install/ubuntu/
+in case of error 
+https://askubuntu.com/questions/1230189/how-to-install-docker-community-on-ubuntu-20-04-lts
+
+---------------------------------------------
+check ubunto verison
+lsb_release -a
+
+--------------------------------------------------------------------------
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+docker --version
+docker info
+
+
+docker version (client and sever)
+
+----------------------------------------
+Docker Engine
+having multiple components which are swappable
+
+1) Docker Client (used to communicate with docker daemon)
+
+2) Docker Demon
+docker API listen to manage images and container
+
+3) Containerd
+act as a bridge b/w deamon and runc
+manage container lifecycle ie start/stop/push/destory
+it is designed for single task
+
+4) runc
+runtime
+how to make a container
+
+5) shim
+convert a container to daemonless
+used whrn to upgrate the docker deamon
+and running containers will work as 
+
+common layers among diffen images are downloaded only once 
+and get re-use in all images
+
+images = stopped container
+
+can create images from container
+image container cut down os things(things which require)
+
+Image registers
+images stored in image resisgter
+popluar is docker hub
+image register have multiple repositorties
+and each repository can contain mulltiple images
+
+official registries
+
+unofficial registries
+
+push = upload
+pull = download
+
+Image Naming and Taging
+docker image pull imageName:version
+
+docker image pull usreName/imageName:version
+
+no tag= latest tag
+
+
+---------------------
+docker pull alpine:latest OR
+docker image pull alpine:latest
+
+docker pull aamirpinger/helloworld:latest
+-----------------------------------
+docker image ls
+OR
+docker images
+
+docker image rm ImageName or ImageId
+docker image rm alpine:latest OR rm alpine
+
+----------------------------------------------------------
+-it is interactive mode (move to the shell/bash)
+
+docker run -it userName/ImageName:latest
+image download and run in iterative mode
+
+docker run -it aamirpinger/helloworld sh 
+# sig (we are in the file system of our containerized application)
+
+No username will be created in the home of the container
+
+exit (back to the host terminal)
+
+To list containers that are running
+docker container ls
+
+interactive mode
+exit command will make the container to stopped
+
+All container with every state
+docker container ls -a 
+
+Ctrl + p + q
+will exit the container terminal but the container will be running
+
+docker ps = docker container ls
+
+docker ps -a 
+
+to go to the already running container
+docker exec -it imageName (in the list of running container)
+
+docker exec -it 94ec7f391f32 sh
+
+---------------------------------------
+can't remove a running container , it should be first in stopped state
+docker container stop containerName
+
+--------------------------------------------------
+docker container rm containerName
+data is the file system of this container also removed
+and can't be recovered after removing the container
+
+--------------Container in Detach mode---------------------------------
+
+No interaction , run in backgroud mode
+
+docker container run -d imageName
+
+docker container run -d aamirpinger/flag 
+No sh is required in this commad
+
+----------------Publish Port------------------------------
+
+
+nginx is a webserver
+
+* ImageName should be at the end of the command
+						   outer:internal	
+docker container run -d -p 5010:80  aamirpinger/helloworld:latest 
+ainer
+http://localhost:5010/
+
+----------------Custom Container Name-----------------------------------------
+docker container run -d --name=docker_app1 -p 5020:80 aamirpinger/flag:latest 
+
+------------Containerizing an App-----------------------
+image to container = containerization/dockerization
+ 
+FROM  nginx (downlod nginx)
+COPY . /usr/share/nginx/html (copy from current directory to the mentioned path in container)
+
+-----------------------------------
+sudo apt-get install git
+cd /home/piaic
+git clone https://github.com/aamirpinger/docker-slide-code.git
+
+cd html-js-app
+docker build -t first-docker-app .
+docker container run --name=first-docker-cont -d -p 8500:80 first-docker-app
+http://localhost:8500
+
+make sure you are in node-js-app folder on your system
+
+cd node-js-app
+docker build -t node-app-image .
+docker container run --name=first-node-cont -d -p 8551:8080 node-app-image
+http://localhost:8551
+
+-------------------------------------------------
+Upload Image to docker hub to make it portable
+
+docker push username/ImageName:tag 
+docker push aamirpinger/node-app-image
+
+
+--------------------------------------------------
+docker tag (will create a copy of image with tag name)
+id of the image is same 
+
+
+docker image push 
+two ways to push to docker hub
+
+1) add user user name while creating the image
+docker build -t aliimran1981/node-app-image .
+
+2) using tag
+docker tag first-docker-app aliimran1981/first-docker-app
+docker login -u aliimran1981 -p pakistan12 docker.io
+docker push aliimran1981/first-docker-app
+
+---------------------------------------------
+docker history imageName
+
+docker history node-app-image
+
+docker inspect node-app-image
+
+--------------------------------
+copy to clipboard
+
+sudo apt install xsel
+sudo apt install xclip
+
+------------Bind Mount---------------------
+dockers two options for container to store files
+
+1) volumes
+2) bind mounts
+
+also use tmpfs on docker container for Linux
+files becomes persists
+or files bound to other running containers
+
+bind mount
+host system folder mount to container's file system
+file now save to host system and not in the container
+complete folder name to be provided
+
+
+docker container run -it --name=bind_mount_example -v  /home/ubuntu/test_app_folder:/test_app_container aamirpinger/helloworld sh
+change in that file and save it 
+see the file in host 
+docker exec -it bind_mount_example sh
+docker container stop bind_mount_example
+docker container rm bind_mount_example
+
+docker container run -it --name=bind_mount_example1 -v  /home/ubuntu/test_app_folder:/test_app_container aamirpinger/helloworld sh
+
+---------------------------------------------------------------------------------------------------------
+Linux install Java/Jre 
+
+sudo apt install default-jre
+sudo apt install default-jdk
+
+Inslattion Visual Studio Code in Linux/Ubuntu
+https://linuxize.com/post/how-to-install-visual-studio-code-on-ubuntu-18-04/
+------------------------------------------------------------------------------------------
+
+----------------Working --Rabbit MQ Docker--------------------
+docker pull rabbitmq:3-management
+docker run -d -p 15672:15672 -p 5672:5672 --name rabbit-test-for-medium rabbitmq:3-management
+http://localhost:15672
+guest/guest
+
+docker ps -a
+
+sudo docker start 94ec7f391f32
+docker exec -it 94ec7f391f32 sh 
+
+docker update --restart=always 94ec7f391f32
+
+-----------------------------------------------------------------------------------------------------
+
+install spring suite 
+https://joseandresmacias.wordpress.com/2015/06/08/how-do-i-modify-my-hosts-file/
+
+cd /opt
+sudo tar -xvf sudo tar -xvf spring-tool-suite-3.6.3.RELEASE-e4.4.1-linux-gtk-x86_64.tar.gz
+chmod 777 -R sts-4.6.1.RELEASE
+ln -s /opt/sts-4.6.1.RELEASE/STS /usr/local/bin/sts
+
+
+------------------------------------------------------------------------------------------
+You need a /etc/docker/daemon.json file that contains
+
+{
+	"dns": ["8.8.8.8", "8.8.4.4"]
+}
+
+Then just restart docker 
+
+sudo systemctl restart docker
+--------------------------------------------------------------------------
+docker images -a
+docker ps -a
+--------------------------
+To remove docker image
+docker rmi image ImageName
+
+---------------------------------
+sudo systemctl restart network-manager
+
+--------------------------------------MY SQL ----------------------------------------------------------------------
+
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=passsword mysql
+
+docker exec -it mysql bash 
+mysql -u root -ppasssword
+
+create database EmployeeDB;
+use EmployeeDB;
+create table employees (id int not null, name text, primary key (id));
+insert into employees values (1,'Ali');
+insert into employees values (2,'Kamran');
+insert into employees values (3,'Qasim');
+commit;
+
+-------------------------------------------REDIS -----------------------------------------------------------------
+docker run --name redis -p 6379:6379 redis 
+docker exec -it redis redis-cli 
+set name "ali"
+get name
+------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------
+Jenkins in Docker (https://github.com/jenkinsci/docker)
+docker run -d -v jenkins_home:/var/jenkins_home -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts
+
+sudo docker rename charming_allen jenkins
+sudo docker restart jenkins
+docker exec -it jenkins bash
+cat /var/jenkins_home/secrets/initialAdminPassword
+---------------------------------------------------------------------------------------------------------------------
+permission issue for ubuntu user
+
+sudo usermod -a -G docker $USER
+sudo chmod 777 /var/run/docker.sock
+reboot

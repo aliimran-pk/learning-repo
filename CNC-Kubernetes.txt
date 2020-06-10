@@ -1,0 +1,419 @@
+
+****************************************************** KUBERNETES **************************************************************************
+Micro services
+decoupled applications
+
+Complexity
+1) Difficult to configure
+2) Management 
+
+Kubernetes orchestration tool
+automated deployment features
+hardware failover scheduling
+communication b/w applications
+
+Google made it 
+Initial name Borg then Omega
+2014 open source
+
+
+Kubernetes Master (Control Plane) gets the requests
+control state of the cluster
+
+
+Master Components 
+
+1) etcd  distibuted data store 
+having config of cluster , nodes address, applcaiton deplyed
+key value pair
+
+2)Scheduler
+Resource requirement of the appp
+resource management
+
+3) Controller Manager
+control worker nodes as well
+apllicaiton managment 
+replicas 
+where to deploy
+failover
+
+3) API Server  
+communicate with client 
+ack as a communication bridge
+
+
+Kubernetes Worker Nodes
+machines that actual run the application
+
+Worker Node Component 
+
+1) kube-proxy
+application bridge for communication b/w 
+multiple applications
+load balancing
+
+2) Container Runtime
+to run container
+image to replicas
+
+3) kubelet
+make sure instance is made of using configurations
+check health
+
+
+Hitting a moving target
+move application from server1 to other server1
+
+one of the node failed
+resource utilisation
+
+If multiple container provides same service then 
+you can group them at a single static IP address
+which remain the same.
+
+minikube
+tool make worker and master node 
+one node one master setup
+tool to help us kubernetes to run in our system
+for development purpose
+
+
+Kubectl
+kubernetes client
+
+----------------------------------Install Minikube and kubectl---------------------------------------------------------------------------
+
+https://computingforgeeks.com/how-to-install-minikube-on-ubuntu-debian-linux/
+
+
+sudo apt-get update
+sudo apt-get install apt-transport-https
+sudo apt-get upgrade
+sudo apt install virtualbox virtualbox-ext-pack
+
+wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+chmod +x minikube-linux-amd64
+sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+
+--------------------------------------------------------------------------------------------
+VirtualBox runs virtual machines.
+Minikube is a Kubernetes-specific package that runs a local development Kubernetes cluster on VirtualBox.
+kubectl is the command line tool that lets you interact with your Minikube Kubernetes cluster.
+
+Get my book on Kubernetes for software developers, used by engineers at Google, Microsoft, and IBM.
+
+
+
+--------------------------------------------------------
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+
+chmod +x ./kubectl
+
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+kubectl version --client
+
+
+---------------------------------
+chage to ubuntu user 
+
+minikube start
+minikube status
+kubectl cluster-info
+
+-------------------------------------------------------
+Nodes
+kubectl get nodes or  kubectl get no
+kubectl describe nodes NODENAME
+kubectl describe nodes minikube 
+
+
+Alias
+
+alias kgn="kubectl get nodes"
+kgn
+
+PODS
+Application must be in containerised
+wrapper around container called pod (like virtual machine)
+each pod having its own ip and hostname and its processes
+Kubernetes ensure that A pod having (1 or more container) to be deployed in one worker node only
+
+when two or more container needs to 
+group together to achieve a task
+
+rule
+container is to perform a single task
+low size
+quick load
+
+pod gives a feel that all processes running in it 
+is executing in a single container
+
+volume can be shared b/w containers  in a pod
+that is why one node one pod
+
+No same port no assign in a pod to difff container
+but can be on a diff pod
+as each pod has diff IP
+
+Grouping Pod
+
+sudo apt-get install cpu-checker
+sudo kvm-ok 
+
+
+minikube start --driver=virtualbox --force
+minikube start --driver=docker --force
+
+
+minikube start --driver=virtualbox
+minikube config set driver virtualbox
+
+*************Minikube KataCoda*********************
+
+Minikube is a tool that makes it easy to run Kubernetes locally. Minikube runs a single-node Kubernetes cluster inside a VM on your laptop for users looking to try out Kubernetes 
+
+minikube version
+
+Start the cluster
+minikube start --wait=false
+
+kubectl cluster-info
+
+kubectl describe node minikube
+
+kubectl get nodes
+This command shows all nodes that can be used to host our applications
+
+alias KGN="kubectl get nodes"
+KGN
+
+kubectl get nodes or kubectl get no
+
+-------------------------------------------
+
+pods is like a  virtal machine
+
+one pod for one worker node
+pod helps to group multiple containers together
+its not a good approch to put all containers inside a single pod as kubernates ensure that it will deploy this pod on a single worker node, hsece resouce utilisation and load sharing is not good .
+
+Grouping Pods
+if
+container should wo
+rk together
+user reach the containers together
+
+POD Defination
+YAML (user friendly)
+JSON
+
+
+Resources
+Pod
+Deployments
+Jobs
+Others
+----------------------------------------------------------
+Creating a POD
+
+nano myfirstpod.yaml
+
+myfirstpod.yaml                             
+kind: Pod
+apiVersion: v1
+metadata:
+  name: myfirstpod
+spec: 
+ containers:
+  - name: container1
+    image: aamirpinger/helloworld:latest
+    ports:
+    - containerPort: 80 
+
+-----------------------------------------------------------
+kubectl create -f myfirstpod.yaml
+
+kubectl get pod or kubectl get po
+
+NAME         READY   			STATUS    RESTARTS   AGE
+myfirstpod   1(1=ready)/1(no. of container)     Running   0          9m29s
+
+
+kubectl get pods myfirstpod -o yaml
+kubectl get pods myfirstpod -o json
+
+kubectl describe pods myfirstpod
+
+
+Port Farwarding
+
+kubectl port-forward myfirstpod 6100:80
+
+http://localhost:6100
+
+Ctrl + C will stop the port forwarding means
+applicatkion still running but can't accessabile
+
+
+creating a pod from 
+
+kubectl run mysecondpod --image=aamirpinger/flag:latest --port 80 --restart=Never 
+
+kubectl port-forward mysecondpod 6101:80
+http://localhost:6101
+
+using volume we can share files directories between containers within the pod
+
+pod ip address and container port no is required.
+
+we can create mutiple copies of our app/container as it gives static ip for each pod
+also load balance
+
+----------------Labels-----------
+
+ helps to group resources
+organise pods with help of label
+key/value 
+
+---------------------------------------------------
+kubectl create -f myfirstpodwithlabels.yml
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: myfirstpodwithlabels
+  labels:
+    type: backend
+    env: production
+spec:
+  containers:
+  - image: aamirpinger/helloworld:latest
+    name: container1
+    ports:
+    - containerPort: 80
+    
+    
+kubectl run myfirstpodwithlabels1 --image=aamirpinger/flag:latest --port 80 --restart=Never --labels=type=frontend,env=development
+
+
+kubectl get pods --show-labels
+
+show lables in cloumns
+kubectl get pods -L env,type,run
+
+assgin lables at runtime
+
+kubectl get pods --show-labels
+
+add a label
+kubectl label pods myfirstpod app=helloworld type=frontend
+
+chnage a label
+kubectl label pods myfirstpodwithlabels1 env=production --overwrite=true
+
+remove a lable
+kubectl label pods myfirstpod app-filter
+
+pods with lable selector (select pods based on the criteria/ )
+
+kubectl get pods -l type=frontend --show-labels
+kubectl get pods -l type!=frontend --show-labels
+
+
+kubectl get pods -l 'type in (frontend,backend)' --show-labels
+
+kubectl get pods -l 'type notin (frontend,backend)' --show-labels
+
+kubectl create -f myfirstpod_selector.yaml
+
+kubectl get pods podwithnodeselector -o yaml
+didn't match node selector on the worker node
+thats why it is in pending state
+
+Assing a label to a worker node
+kubectl label node minikube typeofharddisk=ssd
+
+Note: 
+typeofharddisk=ssd should match in yaml file
+
+----------------Annotations-----------
+
+kubectl annotate pod myfirstpod app-desc="this is example of annotation in kubernetes"
+
+kubectl get pods podwithannotation -o yaml
+
+---------------Describe Pods Insight --------------------------------------------
+
+kubectl describe pod myfirstpod
+
+--------Overlapping Labels using Namespace ------------
+
+
+ is a kind of virtulbox which islolate self contain resources with other namespace. 
+Kubernetes groups objects into namespace
+
+
+kubectl create namespace production 
+
+kubectl create -f myfirstpodwithNS.yaml
+kubectl get pods --namespace=production
+
+kubectl run podwithnamespace1 --image=aamirpinger/helloworld --port=80 --restart=Never --namespace=development
+
+--------------------------------------------------
+
+kubectl create deployment first-deployment --image=katacoda/docker-http-server
+
+kubectl get pods
+
+One possible solution is NodePort, that provides a dynamic port to a container.
+kubectl expose deployment first-deployment --port=80 --type=NodePort
+
+minikube addons enable dashboard
+
+Kubeadm solves the problem of handling TLS encryption configuration, deploying the core Kubernetes components and ensuring that additional nodes can easily join the cluster. The resulting cluster is s
+
+The master is responsible for running the control plane components, etcd and the API serve
+
+
+--------------------------------------
+
+Install DB2 on Docker
+
+sudo dokcer login
+
+docker pull store/ibmcorp/db2_developer_c:11.1.4.4-x86_64
+
+cd /home/ubuntu/piaic/learning-repo/db2
+
+docker run -h db2server_ \
+--name db2server --restart=always \  
+--detach \  
+--privileged=true \
+-p 50000:50000 -p 55000:55000 \
+--env-file .env_list \ 
+-v /home/ubuntu/piaic/learning-repo/db2:/database \
+db2_developer_c:11.1.4.4-x86_64
+
+docker logs -f <your_container_name> 
+docker exec -ti db2server_<your_container_name> bash -c "su - ${DB2INSTANCE}"
+
+
+-----------------Git Related-------------------------------------------------------
+
+echo "# learning-repo" >> README.md
+git init
+git config --global user.email "imran.sheikh@gmail.com"
+git config --global user.name "Ali Imran"
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/aliimran-pk/learning-repo.git
+git push -u origin master
+
+982525 
+
+
+

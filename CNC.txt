@@ -1129,6 +1129,10 @@ sudo kvm-ok
 minikube start --driver=virtualbox --force
 minikube start --driver=docker --force
 
+
+minikube start --driver=virtualbox
+minikube config set driver virtualbox
+
 *************Minikube KataCoda*********************
 
 Minikube is a tool that makes it easy to run Kubernetes locally. Minikube runs a single-node Kubernetes cluster inside a VM on your laptop for users looking to try out Kubernetes 
@@ -1336,10 +1340,42 @@ Kubeadm solves the problem of handling TLS encryption configuration, deploying t
 
 The master is responsible for running the control plane components, etcd and the API serve
 
+
+--------------------------------------
+
+Install DB2 on Docker
+
+sudo dokcer login
+
+docker pull store/ibmcorp/db2_developer_c:11.1.4.4-x86_64
+
+cd /home/ubuntu/piaic/learning-repo/db2
+
+docker run -h db2server_ \
+--name db2server --restart=always \  
+--detach \  
+--privileged=true \
+-p 50000:50000 -p 55000:55000 \
+--env-file .env_list \ 
+-v /home/ubuntu/piaic/learning-repo/db2:/database \
+db2_developer_c:11.1.4.4-x86_64
+
+docker logs -f <your_container_name> 
+docker exec -ti db2server_<your_container_name> bash -c "su - ${DB2INSTANCE}"
+
+
 -----------------Git Related-------------------------------------------------------
 
+echo "# learning-repo" >> README.md
+git init
+git config --global user.email "imran.sheikh@gmail.com"
+git config --global user.name "Ali Imran"
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/aliimran-pk/learning-repo.git
+git push -u origin master
 
-
+982525 
 
 
 

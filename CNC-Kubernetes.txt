@@ -16,10 +16,8 @@ Google made it
 Initial name Borg then Omega
 2014 open source
 
-
 Kubernetes Master (Control Plane) gets the requests
 control state of the cluster
-
 
 Master Components 
 
@@ -412,8 +410,6 @@ git add README.md
 git commit -m "first commit"
 git remote add origin https://github.com/aliimran-pk/learning-repo.git
 git push -u origin master
-
-982525 
 
 
 

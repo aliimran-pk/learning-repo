@@ -1,0 +1,159 @@
+ Class 1 English Videos:
+https://www.facebook.com/piaic.main/videos/170335457846407/
+https://www.youtube.com/watch?v=pjc441QKJFE
+
+Class 1 Urdu Videos:
+https://www.facebook.com/piaic.main/videos/170952927784660/
+https://www.youtube.com/watch?v=OiP7N_ztnik
+
+Learning Material for Class 1::
+https://github.com/panacloud/Bootcamp-Setup
+
+https://docs.google.com/…/1f1AKJIS6WkZ3PjGWG-WVJzurrE…/edit…
+
+https://docs.google.com/…/11D43REjdlsoZgchrhwf8UeuGdtX…/edit  
+
+
+========================
+ALI IMRAN
+PIAIC50192
+
+-------------Class 1 -----------------------------------------------------------
+
+Install GitDestop for Ubuntu
+https://github.com/shiftkey/desktop
+
+wget -qO - https://packagecloud.io/shiftkey/desktop/gpgkey | sudo apt-key add -
+sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/shiftkey/desktop/any/ any main" > /etc/apt/sources.list.d/packagecloud-shiftky-desktop.list'
+sudo apt-get update
+sudo apt install github-desktop
+
+------------------------------------------------
+Install Node Js with Express in Ubuntu
+https://code.visualstudio.com/docs/nodejs/nodejs-tutorial
+
+sudo apt-get update
+sudo apt-get install npm
+sudo apt-get install nodejs
+nodejs -v
+
+sudo npm install -g express-generator
+
+cd /home/ubuntu/myvscode/myExpressApp
+express myExpressApp --view pug
+cd myExpressApp
+npm install
+npm start
+http://localhost:3000
+
+
+Surge is a cloud platform for hosting static websites, which is extremely simple to use but offers customization options for those who need them.
+
+sudo su -
+npm install -g surge
+
+surge token
+
+
+580b8b59744547a64e6317891fa34b30  (TOKEN)
+
+surge
+http://aliimran-piaicbootcamp.surge.sh/
+
+------------------------------------------------------------------------------------------
+
+cd /home/ubuntu/myvscode/piaicbootcamp
+git init
+git remote add piaicbootcamp https://github.com/aliimran-pk/piaicbootcamp.git
+git add .
+git commit -m "Adding Index.html again from /home/ubuntu/myvscode/piaicbootcamp"	
+git push <repo name> <branch name>
+
+git pull --rebase piaicbootcamp master
+git push piaicbootcamp master
+
+--------------------------------------
+
+go to git hub project
+Actions -> new action
+
+changes values according to auto_deploy.yaml
+
+Settings->Secret  New
+SURGE_TOKEN
+580b8b59744547a64e6317891fa34b30
+
+-------------Class 2 -----------------------------------------------------------
+Install Yarn
+Yarn is a JavaScript package manager compatible with npm that helps you automate the process of installing, updating, configuring, and removing npm packages
+
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update
+sudo apt install yarn
+yarn --version
+
+cd /home/ubuntu/myvscode
+
+cd home/ubuntu/myvscode/first-react-app
+yarn build
+
+npx create-react-app first-react-app
+yarn start  or npm start
+
+cd home/ubuntu/myvscode/first-react-app
+surge ./build
+
+App: http://aliimran-piaicbootcamp-session2.surge.sh
+Git: https://github.com/aliimran-pk/first-react-app-repo
+
+surge token 
+9758b2d2efaccc0af2ff3a9f703e0efd
+
+-------------------------------GIT Commands-------------------------
+git status
+git diff index.html
+git add .
+git commit -m "adding all files"
+git push   (git push origin master only once)
+
+------------------------------REACT--------------------------------------------
+ReactJS For Beginners in One Video in Hindi With One Mini Project 2019
+https://www.youtube.com/watch?v=43IbFDSVdB0
+
+React is a javascript library and used for UI 
+created by facebook in 2011
+
+
+Advantage
+declarative approach ( )
+not impactive approach ()
+component based architecture
+Dom update handled gracefully
+designed for speed,simplicity and scalibility
+
+Component Name first letter should be Capital
+
+Class Component 
+provides more power
+works with state
+
+
+Functions Component
+
+
+------------------
+bootstrap alternative
+
+npm install tachyons
+http://joeschmoe.io
+
+ <img src="///api/v1/ jon "> 
+
+---------------------------------------------
+Ctrl + P in Visual Studio
+ext install burkeholland.simple-react-snippets
+
+rcc tab
+imr tab
+

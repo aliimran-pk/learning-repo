@@ -376,40 +376,83 @@ Kubeadm solves the problem of handling TLS encryption configuration, deploying t
 
 The master is responsible for running the control plane components, etcd and the API serve
 
+Listing Pod from All Namespaces
 
+kubectl get pods -n development
 --------------------------------------
-
-Install DB2 on Docker
-
-sudo dokcer login
-
-docker pull store/ibmcorp/db2_developer_c:11.1.4.4-x86_64
-
-cd /home/ubuntu/piaic/learning-repo/db2
-
-docker run -h db2server_ \
---name db2server --restart=always \  
---detach \  
---privileged=true \
--p 50000:50000 -p 55000:55000 \
---env-file .env_list \ 
--v /home/ubuntu/piaic/learning-repo/db2:/database \
-db2_developer_c:11.1.4.4-x86_64
-
-docker logs -f <your_container_name> 
-docker exec -ti db2server_<your_container_name> bash -c "su - ${DB2INSTANCE}"
+kubectl get pods --all-namespaces
 
 
------------------Git Related-------------------------------------------------------
+*****************Lesson 3 ReplicaSets, Jobs and CornJobs*****************************
 
-echo "# learning-repo" >> README.md
-git init
-git config --global user.email "imran.sheikh@gmail.com"
-git config --global user.name "Ali Imran"
-git add README.md
-git commit -m "first commit"
-git remote add origin https://github.com/aliimran-pk/learning-repo.git
-git push -u origin master
+ReplicaSet is a resource
+create and make sure multiple copies of applciations
+
+ReplicaSet notice the missing pod and creates a replacement pod
+if the pod is created using ReplicaSet
+
+ReplicaSets
+
+1) label selector
+gropup pods based on labels
+
+2) Replica Count
+No of copies
+
+3)Pod template
+configurations used to create new pod
+
+Creating 
+
+
+nano rs.yaml
+
+pod name is random generated in metadata
+
+
+kubectl create -f rs.yaml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,18 @@
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: cronjob1
+spec:
+  schedule: "* * * * *" #execute every minute
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels: 
+           app: cjexample1
+        spec:
+          containers:
+          - name: cjcontainer1
+            image: docker/whalesay
+            command: ["cowsay","This is my First Cron Job (cronjob1) in container (cjcontainer1) "] 
+          restartPolicy: Never

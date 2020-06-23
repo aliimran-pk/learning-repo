@@ -1,0 +1,14 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: jobexample1
+spec:
+  template:
+    spec:
+      containers:
+      -  name: jobcontainer
+         image: docker/whalesay
+         command: ["cowsay","Hello ALi Imran "]
+      restartPolicy: OnFailure 
+  backoffLimit: 4
+  activeDeadlineSeconds: 120

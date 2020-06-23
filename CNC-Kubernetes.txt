@@ -402,15 +402,220 @@ No of copies
 3)Pod template
 configurations used to create new pod
 
-Creating 
-
-
+--------------------------
+Creating ReplicaSet
 nano rs.yaml
-
 pod name is random generated in metadata
 
+create a yaml file for creating repicaset
+kubectl create -f rs.yaml
+
+kubectl get replicaset
+OR
+kubectl get rs 
+
+kubectl get pods --show-labels
+
+kubectl get rs my-replica-set -o yaml
+
+
+kubectl describe  rs my-replica-set
+kubectl get rs,pod
+
+kubectl delete pod my-replica-set-6qqrj
+it automatically creates another based on the replication factor
+
+if we chnage lable of a running pod
+kubectl label pod my-replica-set-9pmm7 app=rsexampleNew --overwrite
+
+then another pod with label app=rsexample
+will be created automatically and the mgmt of the updated label is not managed by ReplicaSet
+as its label does't match
+
+
+-----Deleting Pods and Replica Sets------------------------------------
+
+delete all pods and it should not create automatically
+
+kubectl delete pods -l app=rsexample
+kubectl get po,rs
+
+SO We need to remove the RepilaSet then its pods will also be deleted
+kubectl delete rs my-replica-set
+
+What if we want to delete the ReplicaSet and Not the pods then
+kubectl delete rs my-replica-set --cascade=false
+
+NOW pods are running individualy without managed by replicaSet as we 
+deleted it 
+
+Now rs is deleted 
+rename app=rsexampleNew to app=rsexample
+kubectl label pod my-replica-set-9pmm7 app=rsexample --overwrite
+
+kubectl get po
+it will show 
+NAME                    READY   STATUS             RESTARTS   AGE   LABELS
+my-replica-set-9pmm7    1/1     Running            1          16h   app=rsexample
+
+now if execute below command it will create only two 
+new pods and one with same label already exits
 
 kubectl create -f rs.yaml
+
+NAME                    READY   STATUS              RESTARTS   AGE   LABELS
+my-replica-set-9pmm7    1/1     Running             1          16h   app=rsexample
+my-replica-set-kdxgv    0/1     ContainerCreating   0          9s    app=rsexample
+my-replica-set-sx6vb    0/1     ContainerCreating   0          9s    app=rsexample
+
+-------------------------------------------
+ selector:
+    matchLabels:
+      app: rsexample
+-------------------------------------------         
+   
+   matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - rsexample1
+--------------------------------------------------
+Modifying ReplicaSet
+
+At runtime
+
+1) on chnaing replicas value pod count chnage instateneouly
+
+2) lebel selector template does't change at once
+
+-----------------
+chnage rsource configurations at runtime
+
+kubectl edit rs my-replica-set
+
+----Scaling ReplicaSet-------------------
+kubectl scale rs my-replica-set --replicas=5
+
+--------Job Resources--------------------
+tasks to perform and terminate the pod
+it is basically a pod
+creates one or more pods and ensure that a specified no. is successfully terminated
+
+
+if job resource is deleted then its pods deleted
+
+example:
+ need to run a applciation , perform a taks then delete that applciation
+ so job resource is used
+ like bank day end routine
+
+If a job is failed then 
+
+restartPolicy: OnFailure
+container is restarted
+
+ restartPolicy: Never
+ here  new container created to complete the job
+till backoffLimit: 4
+
+kubectl get job
+
+kubectl logs <podName>
+kubectl logs jobexample1-4hrp2
+
+will display the cosole output of the container in the pod
+
+---------------CronJob-------------------------------
+kubectl create -f cronjob.yaml
+
+NAME                     SCHEDULE    SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cronjob.batch/cronjob1   * * * * *   False     0        55s             3m36s
+
+NAME                            COMPLETIONS   DURATION   AGE
+job.batch/cronjob1-1592925240   1/1           12s        2m55s
+job.batch/cronjob1-1592925300   1/1           6s         115s
+job.batch/cronjob1-1592925360   1/1           6s         55s
+job.batch/jobexample1           1/1           7s         34m
+
+NAME                            READY   STATUS             RESTARTS   AGE
+pod/cronjob1-1592925240-vvcv6   0/1     Completed          0          2m55s
+pod/cronjob1-1592925300-9dtbb   0/1     Completed          0          115s
+pod/cronjob1-1592925360-l5cpq   0/1     Completed          0          55s
+
+
+kubectl delete cj cronjob1
+
+* * * * * every minute
+minute 0-59
+hour   0 to 23
+day of month 1-31
+month of year 1-12
+day of week 1-7 Mon-Sunday
+
+*/15 **** every fifteen minute
+
+0 means once 
+
+0 5,17 means 5am and 5pm
+
+5-17 means monday,tue,wed,thur,fri,say
+
+ 0 */15 is every 15 minute
+
+** */2 alternate days
+
+--------------Lesson 4 Services and Probes-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

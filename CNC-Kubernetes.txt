@@ -5,7 +5,7 @@ decoupled applications
 
 Complexity
 1) Difficult to configure
-2) Management 
+2) Managemnt 
 
 Kubernetes orchestration tool
 automated deployment features
@@ -566,19 +566,160 @@ day of week 1-7 Mon-Sunday
 
 --------------Lesson 4 Services and Probes-----------------------------------
 
+Service Resource
+single entry point to access all grouped resouces
+provides a static IP of grouped resources
+static IP exist till the service exists
+
+Types
+
+1) Cluster IP
+internaly communication
+frontend to backend
+It exposes the service on an internal IP in the cluster
+This type makes Service only reachable from within the cluster
+check it using minikube ssh and clsuterIP:port
+gives static IP and can't access from outer world
+by default
+
+
+
+2) NodePort
+port no is assigned 30000 32767
+all worker nodes where pods are grouped 
+
+
+3) LoadBalancer
+external ip for external world
+assign a fixed external IP to the service
 
 
 
 
+4)ExternalName
+Like linux Alias command
+
+can be chnaged at runtime hence no effect on the applciation 
+
+like db string
+
+kubectl create -f lb-service1.yaml
+
+kubectl get svc  or get services
+
+kubectl create -f lb-service1.yaml
+
+kubectl get svc
+NAME          TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+kubernetes    ClusterIP      10.96.0.1      <none>        443/TCP          29d
+lb-service1   LoadBalancer   10.99.209.60   <pending>     8080:31694/TCP   93s
+
+minikube ip
+192.168.99.100
+
+http://192.168.99.100:31694
+
+creating service using command line
+
+kubectl get po,rs --show-labels
+NAME                        READY   STATUS             RESTARTS   AGE   LABELS
+pod/jobexample1-4hrp2       0/1     Completed          0          23h   controller-uid=989e8733-aa7f-4cc1-b47c-abe45e3fd3ae,job-name=jobexample1
+pod/my-replica-set-dsb47    1/1     Running            0          13m   app=rsexample
+pod/my-replica-set-kk7qs    1/1     Running            0          13m   app=rsexample
+pod/my-replica-set-wnhvv    1/1     Running            0          13m   app=rsexample
+pod/my-replica-set1-8l96l   1/1     Running            3          24h   app=rsexample1
+pod/my-replica-set1-kfj9s   1/1     Running            3          24h   app=rsexample1
+pod/my-replica-set1-lz927   1/1     Running            3          24h   app=rsexample1
+pod/myfirstpod              1/1     Running            15         28d   type=frontend
+pod/myfirstpodwithlabels    1/1     Running            15         28d   env=production,type=backend
+
+AME                              DESIRED   CURRENT   READY   AGE   LABELS
+replicaset.apps/my-replica-set    3         3         3       13m   <none>
+replicaset.apps/my-replica-set1   3         3         3       24h   <none>
+
+
+kubectl expose rs my-replica-set --name=lb-service2 --selector=app=rsexample --port 8000 --target-port=80 --type=LoadBalancer
+service/lb-service2 exposed
+
+kubectl get services
+AME          TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+kubernetes    ClusterIP      10.96.0.1       <none>        443/TCP          29d
+lb-service1   LoadBalancer   10.99.209.60    <pending>     8080:31694/TCP   38m
+lb-service2   LoadBalancer   10.98.212.189   <pending>     8000:31566/TCP   28s
+
+http://192.168.99.100:31566
+
+-----------------------------------------------------------------------
+Health Check Liveness Probes
+
+kubernetes helps you to check health of your applicaiton specialy
+in case it hangs
+pods can be configured to periodically check an application's health from the outside world
+you can specify a liveness probe for each container in the pod
+kubernetes will periodically execute the probe and restart the container if probe fails
+Here container restated means old is delted and new one is created.
+
+1) HTTP GET
+send request on containers IP , port and app path
+
+2) TCP Socket
+open TCP connection to the specific port to the container
+
+3) EXEC Probe
+execution probe
+linux command
+container file system 
+
+kubectl create -f lp-probe1.yaml 
+pod/lp-pod1 created
+
+kubectl describe po lp-pod1
+
+failureThreshold: 3 by default
+Means to restart the container in case of 3 consective failure at liveness probe
+
+periodSeconds: 10 by default
+Means run this liveProbe after every 10 sec
+
+successThreshold: 1
+Reset failer threshold counter on first 1 successful response.
+
+timeoutSeconds: 1
+response within second else failure
+
+initialDelaySeconds:15
+will wait for 15 seconds to start first liveness probe (then it follow periodSeconds) as
+it depends on application time require to start
+
+------------------------Readiness Probes --------------------------------
+The readiness probe is invoked persiodically and determines whether specific probe should receive 
+client request or not
+when a continer readiness probe returns success it indicates that the container is
+ready to accept requests.
+Access to users prohibted in case of issue
+
+* Readiness probe mark as user not to reach the container in case of issue
+
+Types
+
+1)HTTP Get
+IP address, port and path
+
+10 seconds is by default time of readiness probe
+kubectl create -f readiness-probe1.yaml
+kubectl describe po readiness-pod1 
 
 
 
+2) TCP Socket
+conenction on port on the container
 
 
+3) EXEC probe
+linux command to issue on container file system
 
 
-
-
+Best practice to use readiness probe along with liveness probe
 
 
 

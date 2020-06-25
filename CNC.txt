@@ -1373,3 +1373,7 @@ git commit -m "first commit"
 git remote add origin https://github.com/aliimran-pk/learning-repo.git
 git push -u origin master
 
+-----------------------------------------------------------------------------
+Installing Nodepad ++ ubuntu
+sudo snap install notepad-plus-plus
+

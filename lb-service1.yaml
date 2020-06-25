@@ -1,0 +1,12 @@
+
+kind: Service
+apiVersion: v1
+metadata:
+  name : lb-service1
+spec:
+ ports:
+ - port: 8080 # pod port is reserved for this container
+   targetPort: 80 # exposed port of container as its ngnx app
+ type: LoadBalancer  #NodePort ClusterIP (by default)
+ selector:
+  app: rsexample1  #matched with label in rs1.yaml 

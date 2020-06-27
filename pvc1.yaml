@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc1
+spec:
+  accessModes:
+  - ReadWriteOnce # kubernetes will match for  ReadWriteOnce Persistent Volume
+  resources:
+    requests: 
+      storage: 100M # less that or equal to be matched with Persistent Volume we created
+  storageClassName: "" # Blank

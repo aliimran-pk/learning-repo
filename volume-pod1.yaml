@@ -1,0 +1,23 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: volume-pod1
+spec:
+  volumes:
+  - name: shared-vol-dir
+    emptyDir: {}    
+  containers:
+  - name: container-1
+    image: aamirpinger/logfile_nodejs:latest
+    ports: 
+    - containerPort: 8080
+    volumeMounts:
+    - name: shared-vol-dir
+      mountPath: /data  # folder created inside container where it put log file  
+  - name: container-2
+    image: nginx
+    ports: 
+    - containerPort: 80
+    volumeMounts:
+    - name: shared-vol-dir
+      mountPath: /var/data1  # folder created inside container      

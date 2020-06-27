@@ -1,9 +1,12 @@
+pavucontrol
+
 Batch 8 Lahore Quarter: Q1 
 -----------------------------------------
 ubuntu / ubunto
 to become root user
 sudo su -
 
+---------------------------------------------------------
 https://github.com/aamirpinger
 
 Slides by Sir Daniyal Nagori:

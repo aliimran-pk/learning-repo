@@ -5,7 +5,7 @@ decoupled applications
 
 Complexity
 1) Difficult to configure
-2) Managemnt 
+2) Management 
 
 Kubernetes orchestration tool
 automated deployment features
@@ -21,7 +21,7 @@ control state of the cluster
 
 Master Components 
 
-1) etcd  distibuted data store 
+1) etcd  distributed data store 
 having config of cluster , nodes address, applcaiton deplyed
 key value pair
 
@@ -716,59 +716,131 @@ conenction on port on the container
 
 
 3) EXEC probe
-linux command to issue on container file system
+Linux command to issue on container file system
 
 
-Best practice to use readiness probe along with liveness probe
+Best practice to use readingitess probe along with liveness probe
 
+--------------Lesson 5 Volumes -----------------------------------
+volumes can be thought o shared directory for the containers in a pod at pod level
+files at pod levels will be shared across the containers in the pod
+pod level means that vol is dependent on pod
+volume is not a resource
+these are components of a pod
+volume should be mount in the container 
+Can merged/map the volume crated at POD level with diff directories in each container in the pod
 
+Volume Types
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+1) empthDir
+2) configMap, secret, downwardAPI
+3) persistentVolumeClaim
 
 
 
+kubectl create -f volume-pod1.yaml
+kubectl get pods -w
+#To go to particular container inside the pod
+kubectl exec volume-pod1 -c container-1 -it sh
+cd /data
+cat time.txt
+echo "Hello Ali Imran" > myFile.txt
+exit
+
+kubectl exec volume-pod1 -c container-2 -it sh
+cd /var/data1  # now here time.txt and myFile.txt also present
+
+Persistent Volume
+add a volume at a cluster level instead of pod level even if pod is failed
+All pods in that cluster can use persitent volume using a resource Persistent volume claim
+persistent vloume remain avaiable outside of a pod.
+its like a formal request
 
 
+Access Modes
+worker node to read/write (related to nodes and not pods as they are at cluster level)
+
+ReadWriteOnce (RWO)
+only a single node can mount the vol for read/write
+
+ReadOnlyMany (ROX)
+multiple nodes can mount for readingitess
+
+ReadWriteMany (RWX)
+Multiple for both reading and writing
+
+Reclaim Policy
+controls the action the cluster will take when a pod releases its
+ownership of the storage
+
+persitentVolumneReclaimPolicy
+Delete
+Recycle
+Retain (Default)
+
+if persitentVolumneReclaimPolicy = Delete
+persitentVolumneReclaimPolicy will delete but data remain persistent
+
+if persitentVolumneReclaimPolicy = Recycle
+persitentVolumneReclaimPolicy will persist but data Recycle
+
+if persitentVolumneReclaimPolicy = Retain
+Kubernetes will retain the vloumen and its content after it released from its claim
+To make PersistenVolume available again for claims can be done by delete and recreate
+the PersistentVloume resource manually
+
+kubectl create -f pv1.yaml
+persistentvolume/pv1 created
+
+kubectl get pv
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+pv1    100M       RWO            Delete           Available                                   72s
 
 
+kubectl create -f pvc1.yaml
+kubectl get pvc
+NAME   STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+pvc1   Bound    pv1      100M       RWO                           7s
 
 
+kubectl get pv,pvc
+NAME                   CAPACITY   ubuntu@aliimrancorei7:~/piaic/learning-repo$ 
+ESS MODES   RECLAIM POLICY   STATUS   CLAIM          STORAGECLASS   REASON   AGE
+persistentvolume/pv1   100M       RWO            Delete           Bound    default/pvc1                           44m
+
+NAME                         STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/pvc1   Bound    pv1      100M       RWO                           35m
+
+----Find Issue in Pod creation-------
+kubectl get events
+------------------------------------
 
 
+kubectl create -f pod-pv1.yaml
+pod/pod-pv1 created
+kubectl exec pod-pv1 -it sh
+cd /data
+ls -l
+echo "Ali Imran" > myname.txt
+exit
 
+to go to minkube cluster
+Resolve minikube ssh error
+chmod 400 /home/ubuntu/.minikube/machines/minikube/id_rsa
 
+minikube ssh
+cd /tmp/pv1-example # path of cluster in pv1.yaml
+exit
 
+kubectl delete po pod-pv1
+pv1 and pvc1 exits but pod-pv1 deleted also the files in the cluster remains persist
 
+kubectl delete pvc pvc1  
+it will delete pvc and pvc1 as the policy is delete Reclaim
+kubectl get pv,pvc
+No resources found in default namespace.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+but even than the data is avaiable in the cluster
 
 
 

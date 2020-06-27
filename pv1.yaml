@@ -1,0 +1,12 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv1
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 100M   # harddisk space allocated for this stogare 
+  hostPath:    #path on cluster where files can be found
+    path: /tmp/pv1-example # on any worker node
+  persistentVolumeReclaimPolicy: Delete

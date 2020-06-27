@@ -1,0 +1,16 @@
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-pv1
+spec:
+  volumes: 
+  - name: pv-vol1
+    persistentVolumeClaim:
+      claimName:  pvc1 # created in pvc1.yaml
+  containers: 
+  - name: container1
+    image: aamirpinger/logfile_nodejs
+    volumeMounts:
+    - name: pv-vol1 # matched with above
+      mountPath: /data # here the applciation creates the log files

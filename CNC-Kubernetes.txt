@@ -1,3 +1,4 @@
+Kubernetes (k8s) is an open-source container-orchestration system for automating deployment, scaling and management of containerized applications.
 
 ****************************************************** KUBERNETES **************************************************************************
 Micro services
@@ -841,6 +842,76 @@ kubectl get pv,pvc
 No resources found in default namespace.
 
 but even than the data is avaiable in the cluster
+
+----------------------------------------------------
+Configuring Applicaiton and Deployments
+
+configMap
+allows you to separate your application configurations from your application code
+can be change at  runtime
+not used for sensitive values
+using command line or from a file
+
+From Literals
+kubectl create configmap configmap1 --from-literal=fname=Ali --from-literal=lname=Imran
+configmap/configmap1 created
+
+ubuntu@aliimrancorei7:~$ kubectl get cm
+NAME         DATA   AGE
+configmap1   2      12s
+
+buntu@aliimrancorei7:~$ kubectl describe cm configmap1
+Name:         configmap1
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+fname:
+----
+Ali
+lname:
+----
+Imran
+Events:  <none>
+-------------------------
+kubectl create configmap configmap2 --from-file=configmap2.txt
+configmap/configmap2 created
+
+kubectl create configmap configmap3 --from-file=myKey=configmap2.txt
+configmap/configmap3 created
+
+kubectl get cm configmap3 -o yaml
+OR 
+
+kubectl describe cm configmap3 
+apiVersion: v1
+data:
+  myKey: |
+    fname=Ali
+    lname=Imran
+    pwd=test123
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-06-29T14:02:31Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:myKey: {}
+    manager: kubectl
+    operation: Update
+    time: "2020-06-29T14:02:31Z"
+  name: configmap3
+  namespace: default
+  resourceVersion: "501300"
+  selfLink: /api/v1/namespaces/default/configmaps/configmap3
+  uid: 39ed1d13-ba97-48f5-be70-0c23622f1a7e
+-----------------------------------------------
+
 
 
 

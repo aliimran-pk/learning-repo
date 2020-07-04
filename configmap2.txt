@@ -1,0 +1,3 @@
+fname=Ali
+lname=Imran
+pwd=test123

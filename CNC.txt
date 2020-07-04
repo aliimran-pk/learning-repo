@@ -38,7 +38,7 @@ https://docs.google.com/presentation/d/1LUjlIRKiDLZSslF5h5jdxerXALn5YWXbcxc0PU3g
 3:Docker:
 https://docs.google.com/presentation/d/1cW24PDlSk-_xTw7sPOYZZzpp5adbJgR6hg1XmPafc70/edit?fbclid=IwAR0hR9MH0qD87mtBQkafFycyTu8iQ8D6VVQlZ-gMIWmi7XeZ3ieH6FDWQCc#slide=id.g582f5daa2b_0_82
 
-4:Kubernetes(Part)
+4:Kubernetes(Part1)
 https://docs.google.com/presentation/d/1_O-CbEDyqyfHIoq25qD4gTsMFqQbjNYCKrkgBKdiXJg/edit?fbclid=IwAR3f0qVgu95vVXd4QoAK1aKYxcXFG6Oyp8wuiT1k3wDJbyrOcO70l3nsLXs#slide=id.g4f7bd8cf17_2_48
 
 5:Kubernetes(Part2)

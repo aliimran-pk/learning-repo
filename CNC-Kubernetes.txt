@@ -1,6 +1,9 @@
 Kubernetes (k8s) is an open-source container-orchestration system for automating deployment, scaling and management of containerized applications.
 
+
 ****************************************************** KUBERNETES **************************************************************************
+--------------------------------Quiz 3 --------------------------------------------------------------------
+
 Micro services
 decoupled applications
 
@@ -23,16 +26,16 @@ control state of the cluster
 Master Components 
 
 1) etcd  distributed data store 
-having config of cluster , nodes address, applcaiton deplyed
+having config of cluster , nodes address, application deployed
 key value pair
 
 2)Scheduler
-Resource requirement of the appp
+Resource requirement of the app
 resource management
 
 3) Controller Manager
 control worker nodes as well
-apllicaiton managment 
+application management 
 replicas 
 where to deploy
 failover
@@ -60,9 +63,8 @@ image to replicas
 make sure instance is made of using configurations
 check health
 
-
 Hitting a moving target
-move application from server1 to other server1
+move application from server1 to other server
 
 one of the node failed
 resource utilisation
@@ -74,12 +76,12 @@ which remain the same.
 minikube
 tool make worker and master node 
 one node one master setup
-tool to help us kubernetes to run in our system
+tool to help us Kubernetes to run in our system
 for development purpose
 
 
 Kubectl
-kubernetes client
+Kubernetes client
 
 ----------------------------------Install Minikube and kubectl---------------------------------------------------------------------------
 
@@ -105,7 +107,7 @@ Get my book on Kubernetes for software developers, used by engineers at Google, 
 
 
 --------------------------------------------------------
-curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+curl -LO https://storage.googleapis.com/Kubernetes-release/release/`curl -s https://storage.googleapis.com/Kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
 
 chmod +x ./kubectl
 
@@ -153,7 +155,7 @@ is executing in a single container
 volume can be shared b/w containers  in a pod
 that is why one node one pod
 
-No same port no assign in a pod to difff container
+No same port no. assign in a pod to diff container
 but can be on a diff pod
 as each pod has diff IP
 
@@ -193,19 +195,19 @@ kubectl get nodes or kubectl get no
 
 -------------------------------------------
 
-pods is like a  virtal machine
+pods is like a  virtual machine
 
 one pod for one worker node
 pod helps to group multiple containers together
-its not a good approch to put all containers inside a single pod as kubernates ensure that it will deploy this pod on a single worker node, hsece resouce utilisation and load sharing is not good .
+its not a good approach to put all containers inside a single pod as Kubernetes
+ensure that it will deploy this pod on a single worker node, hence resource utilisation and load sharing is not good .
 
 Grouping Pods
 if
-container should wo
-rk together
+container should work together
 user reach the containers together
 
-POD Defination
+POD Definition
 YAML (user friendly)
 JSON
 
@@ -247,17 +249,17 @@ kubectl get pods myfirstpod -o json
 kubectl describe pods myfirstpod
 
 
-Port Farwarding
+Port Forwarding
 
 kubectl port-forward myfirstpod 6100:80
 
 http://localhost:6100
 
 Ctrl + C will stop the port forwarding means
-applicatkion still running but can't accessabile
+application still running but can't accessible
 
 
-creating a pod from 
+creating a pod from command
 
 kubectl run mysecondpod --image=aamirpinger/flag:latest --port 80 --restart=Never 
 
@@ -265,15 +267,13 @@ kubectl port-forward mysecondpod 6101:80
 http://localhost:6101
 
 using volume we can share files directories between containers within the pod
-
 pod ip address and container port no is required.
-
-we can create mutiple copies of our app/container as it gives static ip for each pod
+we can create multiple copies of our app/container as it gives static ip for each pod
 also load balance
 
 ----------------Labels-----------
 
- helps to group resources
+helps to group resources
 organise pods with help of label
 key/value 
 
@@ -294,29 +294,28 @@ spec:
     ports:
     - containerPort: 80
     
-    
+labels with command line   
 kubectl run myfirstpodwithlabels1 --image=aamirpinger/flag:latest --port 80 --restart=Never --labels=type=frontend,env=development
-
 
 kubectl get pods --show-labels
 
-show lables in cloumns
+show labels in columns
 kubectl get pods -L env,type,run
 
-assgin lables at runtime
+assign labels at runtime
 
 kubectl get pods --show-labels
 
 add a label
 kubectl label pods myfirstpod app=helloworld type=frontend
 
-chnage a label
+change a label
 kubectl label pods myfirstpodwithlabels1 env=production --overwrite=true
 
-remove a lable
+remove a label
 kubectl label pods myfirstpod app-filter
 
-pods with lable selector (select pods based on the criteria/ )
+pods with label selector (select pods based on the criteria)
 
 kubectl get pods -l type=frontend --show-labels
 kubectl get pods -l type!=frontend --show-labels
@@ -330,9 +329,9 @@ kubectl create -f myfirstpod_selector.yaml
 
 kubectl get pods podwithnodeselector -o yaml
 didn't match node selector on the worker node
-thats why it is in pending state
+that is why it is in pending state
 
-Assing a label to a worker node
+Assign a label to a worker node
 kubectl label node minikube typeofharddisk=ssd
 
 Note: 
@@ -340,7 +339,7 @@ typeofharddisk=ssd should match in yaml file
 
 ----------------Annotations-----------
 
-kubectl annotate pod myfirstpod app-desc="this is example of annotation in kubernetes"
+kubectl annotate pod myfirstpod app-desc="this is example of annotation in Kubernetes"
 
 kubectl get pods podwithannotation -o yaml
 
@@ -350,8 +349,7 @@ kubectl describe pod myfirstpod
 
 --------Overlapping Labels using Namespace ------------
 
-
- is a kind of virtulbox which islolate self contain resources with other namespace. 
+Namespace is a kind of virtual box which isolate self contain resources with other namespace. 
 Kubernetes groups objects into namespace
 
 
@@ -364,19 +362,6 @@ kubectl run podwithnamespace1 --image=aamirpinger/helloworld --port=80 --restart
 
 --------------------------------------------------
 
-kubectl create deployment first-deployment --image=katacoda/docker-http-server
-
-kubectl get pods
-
-One possible solution is NodePort, that provides a dynamic port to a container.
-kubectl expose deployment first-deployment --port=80 --type=NodePort
-
-minikube addons enable dashboard
-
-Kubeadm solves the problem of handling TLS encryption configuration, deploying the core Kubernetes components and ensuring that additional nodes can easily join the cluster. The resulting cluster is s
-
-The master is responsible for running the control plane components, etcd and the API serve
-
 Listing Pod from All Namespaces
 
 kubectl get pods -n development
@@ -387,7 +372,7 @@ kubectl get pods --all-namespaces
 *****************Lesson 3 ReplicaSets, Jobs and CornJobs*****************************
 
 ReplicaSet is a resource
-create and make sure multiple copies of applciations
+create and make sure multiple copies of applications
 
 ReplicaSet notice the missing pod and creates a replacement pod
 if the pod is created using ReplicaSet
@@ -395,7 +380,7 @@ if the pod is created using ReplicaSet
 ReplicaSets
 
 1) label selector
-gropup pods based on labels
+group pods based on labels
 
 2) Replica Count
 No of copies
@@ -426,12 +411,12 @@ kubectl get rs,pod
 kubectl delete pod my-replica-set-6qqrj
 it automatically creates another based on the replication factor
 
-if we chnage lable of a running pod
+if we change label of a running pod
 kubectl label pod my-replica-set-9pmm7 app=rsexampleNew --overwrite
 
 then another pod with label app=rsexample
 will be created automatically and the mgmt of the updated label is not managed by ReplicaSet
-as its label does't match
+as its label doesn't match
 
 
 -----Deleting Pods and Replica Sets------------------------------------
@@ -447,7 +432,7 @@ kubectl delete rs my-replica-set
 What if we want to delete the ReplicaSet and Not the pods then
 kubectl delete rs my-replica-set --cascade=false
 
-NOW pods are running individualy without managed by replicaSet as we 
+NOW pods are running individually without managed by replicaSet as we 
 deleted it 
 
 Now rs is deleted 
@@ -485,12 +470,11 @@ Modifying ReplicaSet
 
 At runtime
 
-1) on chnaing replicas value pod count chnage instateneouly
-
-2) lebel selector template does't change at once
+1) on changing replicas value pod count change instantaneously
+2) label selector template doesn't change at once
 
 -----------------
-chnage rsource configurations at runtime
+change reachsource configurations at runtime
 
 kubectl edit rs my-replica-set
 
@@ -506,7 +490,7 @@ creates one or more pods and ensure that a specified no. is successfully termina
 if job resource is deleted then its pods deleted
 
 example:
- need to run a applciation , perform a taks then delete that applciation
+ need to run a application , perform a task then delete that application
  so job resource is used
  like bank day end routine
 
@@ -515,8 +499,8 @@ If a job is failed then
 restartPolicy: OnFailure
 container is restarted
 
- restartPolicy: Never
- here  new container created to complete the job
+restartPolicy: Never
+here  new container created to complete the job
 till backoffLimit: 4
 
 kubectl get job
@@ -524,7 +508,7 @@ kubectl get job
 kubectl logs <podName>
 kubectl logs jobexample1-4hrp2
 
-will display the cosole output of the container in the pod
+will display the console output of the container in the pod
 
 ---------------CronJob-------------------------------
 kubectl create -f cronjob.yaml
@@ -565,6 +549,7 @@ day of week 1-7 Mon-Sunday
 
 ** */2 alternate days
 
+--------------------------------Quiz 4 --------------------------------------------------------------------
 --------------Lesson 4 Services and Probes-----------------------------------
 
 Service Resource
@@ -600,7 +585,7 @@ assign a fixed external IP to the service
 4)ExternalName
 Like linux Alias command
 
-can be chnaged at runtime hence no effect on the applciation 
+can be chnaged at runtime hence no effect on the application 
 
 like db string
 
@@ -612,7 +597,7 @@ kubectl create -f lb-service1.yaml
 
 kubectl get svc
 NAME          TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-kubernetes    ClusterIP      10.96.0.1      <none>        443/TCP          29d
+Kubernetes    ClusterIP      10.96.0.1      <none>        443/TCP          29d
 lb-service1   LoadBalancer   10.99.209.60   <pending>     8080:31694/TCP   93s
 
 minikube ip
@@ -644,7 +629,7 @@ service/lb-service2 exposed
 
 kubectl get services
 AME          TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-kubernetes    ClusterIP      10.96.0.1       <none>        443/TCP          29d
+Kubernetes    ClusterIP      10.96.0.1       <none>        443/TCP          29d
 lb-service1   LoadBalancer   10.99.209.60    <pending>     8080:31694/TCP   38m
 lb-service2   LoadBalancer   10.98.212.189   <pending>     8000:31566/TCP   28s
 
@@ -653,11 +638,11 @@ http://192.168.99.100:31566
 -----------------------------------------------------------------------
 Health Check Liveness Probes
 
-kubernetes helps you to check health of your applicaiton specialy
+Kubernetes helps you to check health of your applicaiton specialy
 in case it hangs
 pods can be configured to periodically check an application's health from the outside world
 you can specify a liveness probe for each container in the pod
-kubernetes will periodically execute the probe and restart the container if probe fails
+Kubernetes will periodically execute the probe and restart the container if probe fails
 Here container restated means old is delted and new one is created.
 
 1) HTTP GET

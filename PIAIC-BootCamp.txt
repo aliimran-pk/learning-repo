@@ -15,11 +15,9 @@ https://docs.google.com/…/11D43REjdlsoZgchrhwf8UeuGdtX…/edit
 
 
 A study material website for Bootcamp 2020:
-https://panacloud.github.io/bootcamp-...
-
-https://github.com/MuhammadMohsin/Pan...
-
-https://docs.google.com/presentation/...
+https://panacloud.github.io/bootcamp-2020/
+https://github.com/MuhammadMohsin/PanacloudBootcamp2020
+https://docs.google.com/presentation/d/1D44MyYxJls_-voXOCGKwYr6rCGdE1yYfzeXh5K33mfM/edit#slide=id.p
 
 
 ========================

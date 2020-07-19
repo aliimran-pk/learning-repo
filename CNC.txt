@@ -783,9 +783,6 @@ FROM  nginx (downlod nginx)
 COPY . /usr/share/nginx/html (copy from current directory)
 
 -----------------------------------
-sudo apt-get install git
-cd /home/piaic
-git clone https://github.com/aamirpinger/docker-slide-code.git
 
 cd html-js-app
 docker build -t first-docker-app .
@@ -1365,16 +1362,6 @@ docker logs -f <your_container_name>
 docker exec -ti db2server_<your_container_name> bash -c "su - ${DB2INSTANCE}"
 
 
------------------Git Related-------------------------------------------------------
-
-echo "# learning-repo" >> README.md
-git init
-git config --global user.email "imran.sheikh@gmail.com"
-git config --global user.name "Ali Imran"
-git add README.md
-git commit -m "first commit"
-git remote add origin https://github.com/aliimran-pk/learning-repo.git
-git push -u origin master
 
 -----------------------------------------------------------------------------
 Installing Nodepad ++ ubuntu

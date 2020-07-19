@@ -1,0 +1,40 @@
+
+sudo apt-get install git
+cd /home/piaic
+git clone https://github.com/aamirpinger/docker-slide-code.git
+
+
+-----------------Git Related-------------------------------------------------------
+
+echo "# learning-repo" >> README.md
+git init
+git config --global user.email "imran.sheikh@gmail.com"
+git config --global user.name "Ali Imran"
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/aliimran-pk/learning-repo.git
+git push -u origin master
+
+---------------------------------------------------------------------------------------------
+
+
+cd /home/ubuntu/myvscode/piaicbootcamp
+git init
+git remote add piaicbootcamp https://github.com/aliimran-pk/piaicbootcamp.git
+git add .
+git commit -m "Adding Index.html again from /home/ubuntu/myvscode/piaicbootcamp"	
+git push <repo name> <branch name>
+
+git pull --rebase piaicbootcamp master
+git push piaicbootcamp master
+
+-------------------------------GIT Commands-------------------------
+git status
+git diff index.html
+git add .
+git commit -m "adding all files"
+git push   (git push origin master only once)
+
+------------------------------------------------------------------------------------------
+
+

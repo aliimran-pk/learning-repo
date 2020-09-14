@@ -1,0 +1,793 @@
+
+------------------------------------------------------------------------------------------------------------------------------------------
+https://yourlearning.ibm.com/activity/URL-AA49C4823B02
+
+https://smarter-gbs.yourlearning.ibm.com/#/cpt/roadmap/1725
+
+
+--------AWS Certification Material---------------------------
+Amazon Web Services (AWS) Certified - 4 Certifications!
+
+Exam Readiness: AWS Certified Solutions Architect – Associate (Digital) Free
+https://www.aws.training/Details/Curriculum?id=20685
+
+Exam Readiness: AWS Certified Developer – Associate (Digital)
+https://www.aws.training/Details/Curriculum?id=19185
+
+Free AWS Material
+https://digitalcloud.training/amazon-aws-free-certification-training-solutions-architect/
+
+https://aws.amazon.com/certification/certification-prep/
+
+
+AWS Free Digital Training
+https://www.aws.training/LearningLibrary?filters=language%3A1&filters=digital%3A1&tab=view_all
+
+
+Neal Davis
+https://digitalcloud.training/aws-csaa-hands-on-labs-downloads/
+
+AWS Cloud Practitioner Essentials (Second Edition) Prerequsite
+Good https://www.aws.training/Details/Curriculum?id=27076
+
+
+download 
+AWS Certified Solutions Architect Official Study Guide
+
+
+---------AWS Badges---------------------------------AWS Certified Solutions Architect - Associate ----COURSE (skillsoft)----------------------------------------------------------------------
+https://learn.percipio.com/channels/783c9bb0-2b77-11e7-9d24-490aed2acd57
+
+1) AWS Associate Solutions Architect 2020: Identity & Access Management
+https://share.percipio.com/cd/JrXPzVbEL
+
+
+---------------------------------------Udemy Ranga AWS Course----------------------------------------------------------------------
+
+Provisioning (renting ) resources and don't buy
+Also called on-demand resource provisioning
+rent based on the demand
+
+Pay per use
+No upfront planing required
+avoid undifferentiated heavy lifted
+
+Challenging
+building cloud enabled applications
+
+root user have both programmatic and AWS mgmt console
+
+policy can be assigned to an individual users as well as on a group
+called Managed policies (ie managed by AWS)
+
+Regions and Zones
+
+1) slow access from other parts of the world (High Latency)
+2) wjhat if that data center crashes (low availability)
+3) what if entire region go download
+
+Most Services are regional services
+region can be changed 
+
+Global Services
+ie IAM  can't change regions
+
+Choose region based on
+	ur users are located
+	ur data is located
+	regulatory and security compliance
+
+Availability zone
+isolate locations  in region
+Each zone has at least two AZs
+Increase availability of applications in the same Region
+availability zone is physically separated from each other
+AZ consists of data centers
+AZs are connected thorh high throuput network, low letency
+
+US West (Oregon) in cosole = us-west-2 in CLI
+
+Choosing Regions
+availabilty of the service in that region (most services we require)
+As Each region expose is regional services endpoints 
+latency, cost and data residency (complaint with bussiness contaractual reqiments)
+
+
+Region
+ap-south-1
+
+Availability Zone (ends regions with a alphabet)
+ap-south-1a 
+ap-south-1b
+ap-south-1c
+
+They provide High Availability and Low Latency
+
+AWS SDK
+interact aws sevices ffrom our code
+
+AWS as Identoy provider 
+its a managed service 
+single point of faiuler, high avaiable,
+
+Control Plane
+Data Plane
+
+AWS Federaton
+centraly managed to access AWS resources
+single singn on
+SAML security access markup language 
+cross account acccess
+OPENid connect (OIDC) tokens 
+AD is a common Identity provider
+
+AWS SSPO can interact with Active Direcoity
+Amazon Congnito 
+
+
+account name, pwd and email address of root user can be changed 
+
+MFA 
+multi-factor authentication 
+can be used to delete S3 objets
+
+IAM Roles
+delegate access eg. apps to EC2 for S3 bucket
+cross-account access
+	crete IAM policy to trust account
+identity federation (outside aws ) using identity broker application
+
+
+IAM --> Security Status -- Activate MFA
+Activate MFA
+Virtual MFA device
+Install Google Authtication to your mobile
+show the QR code
+after registering the code on the device I need to 
+provide the code
+
+
+AWS Support offers four support plans: 
+Basic, Developer, Business, and Enterprise.
+
+
+----------------------------------------------EC2-----------------------------------------------------------------------------------
+elastic compute cloud
+ec2 instances are virtual server
+billed by second
+EC2 service provisioned EC2 instances/virtual servers
+	creates and manage life cycle of ec2 instances,
+	load balancing and auto-scaling ,
+	attach storage
+	manage network
+
+Security Group
+is like a Virtual Firewall having inbound/outbound rules
+
+Instnce Types
+compute CPU,GPU
+
+t2.micro
+t is instance family (t is General purpose instance)
+2 is generation 
+micro size
+   nano<micro<small<medium<large<xlarge
+
+1) Change Region to 
+	Asia Pacific (Mumbai) ap-south-1
+2) EC2 --> Create instances
+3) AMI Amazon Machine Image
+	Amazon Linux 2 AMI (HVM), SSD Volume Type	
+	
+4) Security Group
+	my-EC2-security-group	
+	
+5) create new keypair file
+and download EC2-keypair.perm at 
+C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
+
+6) Connect
+EC2 Instance Connect (browser-based SSH connection)
+
+whoami
+python --version
+
+6) Security Group 
+Add
+
+HTTP
+AnyWhere
+
+All ICMP ipv4  (used for ping public ip)
+AnyWhere
+
+
+7)
+Open Command Prompt
+cd C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
+ssh -i "EC2-keypair.pem" ec2-user@ec2-13-234-77-166.ap-south-1.compute.amazonaws.com
+
+
+8) 
+sudo su
+yum update -y
+yum install httpd
+systemctl start httpd
+systemctl enable httpd
+echo "Hello World" > /var/www/html/index.html
+ 
+
+ 
+curl -s http://13.234.77.166/latest/dynamic/instance-identity/document > /var/www/html/index.html
+
+1) EC2 instance metadata service 
+get details about EC2 instance
+
+URL accessible within he EC2 instance only
+http://url/lates/meta-data/
+
+curl http://ec2-13-234-77-166.ap-south-1.compute.amazonaws.com/latest/meta-data/ami-id/
+curl http://13.234.77.166/latest/meta-data/hostname
+curl http://13.234.77.166/latest/meta-data/instance-id
+curl http://13.234.77.166/latest/meta-data/instance-type
+
+
+
+curl -L http://13.234.77.166/latest/meta-data/
+
+You can get
+AMI Id
+Storage  Devices
+DNS hostname
+instance id
+instance type
+security groups
+IP addresses
+
+2) dynamic data service
+
+curl http://13.234.77.166/latest/dynamic
+curl http://13.234.77.166/latest/dynamic/instance-identity
+curl http://13.234.77.166/latest/dynamic/instance-identity/document
+ 
+
+9) 
+
+echo "EC2 Instance-2 with ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
+
+curl http://localhost/latest/dynamic/instance-identity/document > /var/www/html/index.html
+
+
+Security Group 
+defence in depth
+
+if there is no rules , no traffic is allowed 
+you can specific only allow rules only rest is not allowed by default
+can assign upto 5 security groups
+No restart is required for Ec2
+* Security Group are stateful , if outgoing/incoming is allowed, the incoming  response for it is automatically allowed
+timeout in case of security group not allowed
+
+EC2 IP Addresses
+
+Public address
+internet addressable
+
+Private address
+internal to the corporate network
+
+Can't have two resources with same public IP address
+however, two diff corporate networks can have resources with same private IP address
+All Ec2 instnces are sigged to private I{P address but public is not assiged autmatically
+Stop/Start Public IP is changed but private is same 
+reboot will not change public IP
+
+------------Elastic IP-----
+constant IIP
+Normally  where 1 instance is required it is ok
+
+Go to Ec2
+Elastic IPs
+Allocate an IP
+Action Associate with instnace
+
+Now in instance the public IP is associated with the elastic ip
+when instance is stopped even elastic IP is there 
+
+*** Elastic IPs can  be swithced to other ec2 insce within the SAME region
+they need to be manually detached
+*** If elastic ip is not in used or if ec2 instance associated with it is stopped  then u will be charged
+better is to relase the elatic ip
+
+----------EC2 HTTP Server Setup--------------
+userdata
+script used at launch of the instance
+
+bootstraping 
+install os patches or sofware when ec2 instance is launched
+
+Create another Ec2 isntance
+
+Add below in the userdata
+#!/bin/bash
+yum update -y
+yum install httpd
+systemctl start httpd
+systemctl enable httpd
+echo "EC2 Instance-2 with ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
+
+
+sudo su
+yum update -y
+yum install httpd
+systemctl start httpd
+systemctl enable httpd
+echo "EC2 Instance-2 with ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
+
+cd C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
+ssh -i "EC2-keypair.pem" ec2-user@ec2-35-154-93-55.ap-south-1.compute.amazonaws.com
+
+
+http://ec2-35-154-93-55.ap-south-1.compute.amazonaws.com
+
+----------------------------------------------Launch Template userdata-------------------------------------------------------
+
+Use launch templates to automate instance launches, simplify permission policies, 
+and enforce best practices across your organization. Save launch parameters in a template 
+that can be used for on-demand launches and with managed services, including 
+EC2 Auto Scaling and EC2 Fleet. Easily update your launch parameters by creating a 
+new launch template version.
+
+EC2 --> Launch templates --> Create launch template
+
+Name
+MyEC2Template
+
+AMI
+Amazon Linux 2 AMI (HVM), SSD Volume Type - ami-09a7bbd08886aafdf (64-bit x86) / ami-011abae98ef4c1bfa (64-bit Arm)
+
+Instance Type
+t2.micro
+
+Keypair 
+EC2-keypair
+
+Security Group
+my-EC2-security-group
+
+userdata
+
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+echo "EC2 Instance with ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
+
+Go to Instances
+Launch Instance from template
+Select MyEC2template
+
+http://ec2-3-7-66-215.ap-south-1.compute.amazonaws.com/
+EC2 Instance with (root ) on host (ip-172-31-14-110.ap-south-1.compute.internal) with ip (172.31.14.110)
+
+http://ec2-13-233-53-139.ap-south-1.compute.amazonaws.com
+EC2 Instance with (root ) on host (ip-172-31-13-231.ap-south-1.compute.internal) with ip (172.31.13.231) 
+
+
+----------------------------------------------Customised AMI-------------------------------------------------------
+
+for installing OS patches and software using userdata at the launch of EC2 isntance increases bootup time
+also called Hardening an Image cusomised EC2 images to your ciporate securiyt standards)
+
+Select a running instance
+Action - Image -- Create Image
+Name
+MyCusomizedEc2AMI
+
+Create Image
+Once Image is created go to
+
+Go to AMI
+Now Launch Template (template can have multiple version)
+Action - Modify template
+create new version  V2
+
+Go to Template
+Create instance from template
+select V2
+
+AMI Image contains
+OS and software on that instnaces
+have root volume also attach non root volumes
+can be shared with other accounts (Permissions -- add account no.)
+AMI are stored in S3 and are region specific, so can be created instancees in AZs of that region
+better to backup AMI in other resions for DR (Copy AMI to other regions)
+
+Three AMI sources
+1) by AWS
+2) AWS market Place  Per hour billing
+3) Customised AMI
+
+
+AMI - Action -- DeregisterAMI
+SnapShot- Action- Delete
+
+Trouble shooting
+EC2-keypair.pem is the private key
+chmod 400 EC2-keypair.pem (read only to the owner)
+as 0777(default , v open) not recommended
+use public DNS or IP to connect 
+
+
+for windows instances
+1) private key
+2) admin pwd
+decrypt the pwd using private key and login via RDP
+3) Security group allow (otherwise timeout can probably come)
+SSH 22
+RDP 3389
+
+EC2 uses public key cryptography using RSA
+public key is stored in EC2 insance
+private key is stored by cusomer
+
+
+For putty
+create ec2_instance1_KP.ppk using puttygen and coonect to EC2 instance
+
+If you stopped EC2 instances then still EBS volumes (harddisk) will be there and u will be charged
+
+----------------------------------------------Good EC2 Scenarios------------------------------------------------------
+
+Q1:  identify all instances belonging to a project, to an eviroment
+SOL: tags
+
+Q2: Change instance type
+SOL: stop the instance and then change its type
+
+Q3: don't want an EC2 instance to be automatically  terminated 
+ie from Action-Instace Sate- Terminate
+SOL: Change Termination Protection to Enable
+also can be set during instance creation
+But EC2 Terminal protection is not effective for termination from
+1) Auto Scaling Groups (ASG)
+2) Spot Instances
+3) OS shutdown
+
+Q4: Update EC2 instance to a new AMI with latest patches
+SOL:create/relaunch a new instance with updated AMI
+
+Q5: create EC2 instances based on on-premise VMs
+SOL: yes, using import/export , you are responsible for licenses
+
+Q6:Changing security group
+SOL: easily chnage/delete securoy group to an instance
+multiple security group can also be assigned
+
+Q7: Timeout
+SOL:	inbound rule for security group to check
+
+Q8: Installing a lot of woftwares sing userdata that slowing down instance launch
+how to make it faster
+SOL:	cusom AMI-------------------------------------------------------
+
+Q9: stopped EC2 instance, will I get bill
+SOL:	if u have storage 
+
+Turn On Termination Protection to protect EC2 instances for termination
+as this option will disable terminate menu
+
+-------------------------Creating EC2 in different Zones--------------------------------------------------------------------------------------------------------
+
+No. of Availability Zones in a Region = No. of subnets 
+
+Services - VPC
+
+A VPC is created default in every region
+
+
+----------------------------Billing in AWS---------------------------------------------------------------------------------
+
+1) Set Billing Alerts
+2) Monitor Every day for first week
+3)
+
+My Account
+IAM User and Role Access to Billing Information
+Activate IAM Access
+
+Billing Alerts
+My Billing Dashboard
+Billing Preference
+
+CloudWatch
+
+1) At the moment, CloudWatch displays all billing data and alarms in US East (N. Virginia)
+so switch to it
+
+2) Select Billing
+
+3) Create Billing alert
+
+4) create SNS topic
+CloudWatch_Alarms_Topic
+
+monitoring service and trigger alarm
+create alarm
+create topic
+
+
+1) Gto to Budget
+2) create a new budget 
+MonthlyBudget
+
+3) Monthly
+4) Budgeted amount 
+$1
+
+----------------------------------Load Balancing---------------------------------------------------------
+Elastic Load Balancer (managed service, and auto scaled (highly available)
+used for LB and distribute load for EC2 
+these EC2 instances can be in multiple AZ within a region
+ELB can be public (accessible over internet ) or private to aws network
+distribute loads to the healthy instances using health check
+
+Each layer makes use of layers beneath it
+
+App Layer layer 7  (HTTP, SMTP)  make api calls
+
+Transport Layer 4  TCP TLS (secure TCP), UDP(high performance over reliability)  ensure bits/bytes transferred properly and order
+
+Network Layer Layer 3 (IP) transferring bits/bytes
+ 
+ 3 Types of ELB
+ 
+ (1) Classic LB (Layer 4 (TCP/TLS & UDP) and layer 7 (http/https) )
+not recommanded by AWS
+older version of ELB
+
+
+2) Application Load Balancer (Layer 7)
+new generation , advance routing ,http/https
+
+3) Network load Balancer (Layer 4)
+very high performance TCP/TLS & UDP
+
+Create a Classic Load Balancer
+
+1) AWS Services -> EC2 - Load Balancer-> create loadbalancer
+Type: Classic Load Balancer (Previous Generation)
+Choose a Classic Load Balancer when you have an existing application running in the EC2-Classic network.
+Name: My-Classic-LB
+Security Group : My-LB-Security-Group
+
+Health Check
+Ping Path: /
+Response Timeout: 5 sec
+Interval: 20 sec
+Unhealthy Threshold: 22) 
+healthy Threshold: 220	
+
+Add EC2 instances:
+
+Enable Connection Draining : 300 sec
+
+
+
+EC2 Instance 1
+http://ec2-3-6-94-201.ap-south-1.compute.amazonaws.com
+EC2 Instance with (root ) on host (ip-172-31-35-58.ap-south-1.compute.internal) with ip (172.31.35.58)
+
+EC2 Instance 2
+http://ec2-13-234-204-76.ap-south-1.compute.amazonaws.com
+EC2 Instance with (root ) on host (ip-172-31-34-29.ap-south-1.compute.internal) with ip (172.31.34.29)
+
+Load balancer  DNS
+http://My-Classic-LB-1642051479.ap-south-1.elb.amazonaws.com
+
+Now Delete the Load Balancer using Action
+
+2) Application Load Balncer  layer 7
+most frequent used
+supports websockets http/https
+supports all supporting load balancer features
+scale automatically
+it is a managed service
+but we are responsible of scaling EC2 instances
+it can also LB with container applications/ web app
+also can lB using Lambdas 
+
+
+EC2 - Load Balancer - Application Load Balancer (Type)
+
+
+Name: My-Application-LB
+Internet-facing
+ip address type: 	ipv4
+
+select all availability zones
+
+Cross Zone LB is enabled defaulty
+
+Security Group (to control traffic using rules) : My-ALB-Security-Group
+
+Configure Routing
+Your load balancer routes requests to the targets in this target group using the protocol and port that you specify, and performs health checks on the targets using these health check settings. 
+***Note that each target group can be associated with only one load balancer
+
+--------Target Group-------------------------------
+Target Group (used to group EC2 instances/lambday/ or set of IP ) for LB to distribute load)
+My-EC2-Target-Group1
+type: instances
+
+De registration delay
+How long should ELB wait before de registering a target.
+This setting ensure that the load balancer gives in-flight requests a chance to complete excution
+default is 300 seconds upto an hour , also called Connection draining
+eg .it will not enterain new request but wait for 300 sec and then de register the ec2 instance
+
+slow start duration
+when a target is ready 
+eg. 10 sec after 10 sec it will send request to newly instance
+
+Algorithm
+Round robin 1 by 1
+Lest outstanding request 
+
+Stickiness
+enable  (for session mgmt, send all request by a same user to the same instnave
+imlemented using cookie
+supported by ALB and CLB
+
+-------------------------------
+
+Security Group : My-LB-Security-Group
+
+Register Targets
+Register targets with your target group. 
+If you register a target in an enabled Availability Zone, the load balancer starts routing requests to the targets as soon as the registration process completes and the target passes the initial health checks.
+
+select all instances - Create
+DNS Name
+http://My-Application-LB-284230688.ap-south-1.elb.amazonaws.com
+
+
+To restrict traffic of EC2 instacnes directly insested of Load Blancer
+
+Select EC2 instance 
+Edit Security Group
+Inbound Rule
+Add Load Balancer Security group
+
+
+Add a new Listner
+port 8080
+response 200
+fixed response
+
+Security Group of LB
+add inbound
+8080
+
+http://My-Application-LB-284230688.ap-south-1.elb.amazonaws.com:8080
+
+
+-------------------------------------------------------------------------------------------------------------------
+User data for Microservice
+
+
+** One ALB can support multiple Microservice
+Create a separate target group for each Microservice
+
+*** Classic LB doesn't support multiple target groups
+
+
+Listener Rules
+configure multiple listener rules for the same listener
+rules are executed in the order they are configured
+default rule executed at the end
+
+
+Create a new EC2 instance from Template
+Select instance with Tag  InstanceForMicroserviceA
+add userdata as below
+
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+echo "EC2 Instance  for MicroService Awith ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
+mkdir /var/www/html/a
+echo "Microservice A Called with ip ($(hostname -i))" > /var/www/html/a/test.html
+
+
+create a new Target Group TargetGroup-MicroserviceA
+Register new EC2 instance with that Target Group
+Go to My-Application-LB - > Select exisitng HTTP Listner --> view/edit rules
+Add Rule
+if Path /a/*  THEN forward it to TargetGroup-MicroserviceA
+
+
+http://my-application-lb-284230688.ap-south-1.elb.amazonaws.com/a/test.html
+Microservice A Called with ip (172.31.10.46)
+
+Lister Rules possibilities
+1) based  on path = test.com/a to target group A`
+2) based  on Host = a.abc.com  to target group A`
+3) HTTP header and methods (GET/POST)
+4) Query String   (/microservice?name=A)  o target group A , (/microservice?name=B)  o target group B
+5) Based on IP all request from a range of IP to a TG A, other to TG B
+
+ Each Lister have (protocol + port)
+
+---------------------------Auto Scaling Groups`------------------------------------------------------------
+
+scale out : increase instances
+scale in:    decrease instances
+ 
+ASG maintained a configured no. of instances
+scale in and scale out automatically to adjust load
+ASG can launch on-demand,spot or both
+Best practice: use Launch template with ASG
+ALB can adjust and distribute load to healthy instance
+
+
+
+EC2- > AutoScaling Group
+Create ASG
+Auto Scaling group name: MyEC2AutoScalingGroup
+	Launch Template (EC2 instance size,AMI) - create new launch template -> My-ASG-Launch-Template
+	Source Template: MyEC2Template with latest version
+Add all Subnets
+Enable load balancing = YES
+Create New Target Group = ASG-TargetGroup (with  no. EC2 instances registered)
+
+Configure group size and scaling policies
+Desired Capacity = 2
+Min Capacity 		 = 1
+Max Capacity 		 = 3
+
+Policy 
+TargetTrackingPolicy
+Policy type:
+Target tracking scaling
+Execute policy when:
+As required to maintain Average CPU utilization at 70
+70
+
+*** Even  if policy indicates, ASG ensure the desired capicty 
+
+IMP usecases
+
+1) maintained current instance levels at ll times
+min=max=desired == CONSTANT
+when always there is constant load expected
+
+2) Scale Manual
+change desired capacity as needed
+you need complete control over scaling 
+
+3) Scale based on schedule
+programs with regular schedules
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------
+Questions
+EC2 Custom AMI vs Custom Template

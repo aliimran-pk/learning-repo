@@ -66,6 +66,17 @@ surge token
 surge
 http://aliimran-piaicbootcamp.surge.sh/
 
+------------------------------------------------------------------------------------------
+
+cd /home/ubuntu/myvscode/piaicbootcamp
+git init
+git remote add piaicbootcamp https://github.com/aliimran-pk/piaicbootcamp.git
+git add .
+git commit -m "Adding Index.html again from /home/ubuntu/myvscode/piaicbootcamp"	
+git push <repo name> <branch name>
+
+git pull --rebase piaicbootcamp master
+git push piaicbootcamp master
 
 --------------------------------------
 
@@ -104,6 +115,13 @@ Git: https://github.com/aliimran-pk/first-react-app-repo
 
 surge token 
 9758b2d2efaccc0af2ff3a9f703e0efd
+
+-------------------------------GIT Commands-------------------------
+git status
+git diff index.html
+git add .
+git commit -m "adding all files"
+git push   (git push origin master only once)
 
 ------------------------------REACT--------------------------------------------
 ReactJS For Beginners in One Video in Hindi With One Mini Project 2019
@@ -164,10 +182,6 @@ http://covid19-analytics-mna.surge.sh/
 GitHub URL: https://github.com/MuhammadBilalMemon/covid-19-tracking-application
 Surge URL : http://covid19-tracking-app-bybilal.surge.sh/
 Material UI
-
-
-
-
 
 
 https://covid19.mathdro.id/api/countries

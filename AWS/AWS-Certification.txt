@@ -1,3 +1,4 @@
+https://202041525381.signin.aws.amazon.com/console
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 https://yourlearning.ibm.com/activity/URL-AA49C4823B02
@@ -621,8 +622,8 @@ Target Group (used to group EC2 instances/lambday/ or set of IP ) for LB to dist
 My-EC2-Target-Group1
 type: instances
 
-De registration delay
-How long should ELB wait before de registering a target.
+De-registration delay
+How long should ELB wait before de-registering a target.
 This setting ensure that the load balancer gives in-flight requests a chance to complete excution
 default is 300 seconds upto an hour , also called Connection draining
 eg .it will not enterain new request but wait for 300 sec and then de register the ec2 instance
@@ -759,7 +760,7 @@ As required to maintain Average CPU utilization at 70
 
 *** Even  if policy indicates, ASG ensure the desired capicty 
 
-IMP usecases
+IMP use cases
 
 1) maintained current instance levels at ll times
 min=max=desired == CONSTANT
@@ -771,6 +772,438 @@ you need complete control over scaling
 
 3) Scale based on schedule
 programs with regular schedules
+Create Schedule Action
+
+4) Dynamic/Automatic Scaling 
+On demand Scale
+Unpredictable load
+
+Types of Dynamic Scaling
+
+1) Target Tracking
+Maintain CPU utilisation at 70%
+Modify current capacity based on the target value for a specific metric
+
+2) Simple Scaling
+more complex policy
++5 if CPU utilisation > 80%
+-3 if CPU utilisation < 60%
+waits for cool down period before triggering additional actions
+
+3) Step Scaling
++1 if CPU utilisation between 70% and 80%
++3 if CPU utilisation between 80% and 100% 
+Warm up time can be configured for each instance.
+
+Cloud watch
+monitor metrics 
+
+CW Alarm -> Auto Scaling -> EC2 instances
+
+CW Alarm (if CPU > 80%)
+Scaling Action (+5 EC2 instances)
+
+CloudWatch --> Alarms
+
+Auto Scaling Scenarios
+
+1) change instance type or size of ASG instances
+OR 
+roll out a new security patch (new AMI) to all ASG instances.
+Sol:
+launch configuration or launch template cannot be edited
+create a new version and ASG use that  version
+Terminate instances in small groups to make sure application is available
+
+2)  Perform actions before instance added/remove
+Create a lifecycle hook , configure clodwatch to trigger actions based on it
+
+Auto scaling Group --> Instance Management --> Life-cycle hooks
+create life-cycle hook
+
+MyLiifeCycle
+
+3) which instance is terminated first when scale in
+based on termination policy
+default is distribute instances across AZ then based on old instance
+
+
+EC2 -> Auto Scaling groups -> MyEC2AutoScalingGroupASG 
+Advance configurations
+Termination policies
+
+
+4) Prevent frequent scale up/down
+Adjust cooldown perod to a high value default 300 sec
+
+5) I want to protect newly launched instance from scale-in 
+Enable instance scaling protection
+if enabled then all new instaces from this ASG will not be scale in
+
+
+Deleting LB and Target groups
+
+1) Delete ALB
+2) ASG Delete (will automatically delete the instances)
+3) Delete Target Groups
+
+
+---------Network Load Balancer---------layer 4 UDP-----------------
+*** A static / Elstic IP can be assigned with NLB
+can load balance EC2, ECS (container- appl, web apps using IP address)
+No support for Lambdas
+
+Name: My-Network-LB
+Protocol Listener : TCP port: 80
+
+Configure routing
+TargetGroup : TargetGroupForNLB
+Register Targets: Add instances
+
+DNS
+http://My-Network-LB-69ad0058bb90cba2.elb.ap-south-1.amazonaws.com
+
+** There is no security groups at the NLB
+
+Attributes that can be changed 
+Delete Protection
+Cross Zone load balancing
+Access log`ie sent to S3
+
+
+1)  Delete NLB : My-Network-LB
+2)  Delete TargetGroup : TargetGroupForNLB
+3)   Terminates all instances
+
+
+Both ALB and NLB supports sticky sessions
+
+------------------------------------Availability-------------------------------------------------------------
+
+Are applications are available when users need them
+Percentage of time
+99.99% is four 9s availability
+
+99.95% 		22 mins down time in a month
+99.99%   	4.5 mins
+99.9995 	26 seconds 
+
+To achieve Availability
+
+1) use LB
+2) deploy EC2 instances to multiple AZ's
+3) use cross Zone LB
+4) Deploy to multiple region
+5) configure EC2 and ELB health checks
+
+ALB by default enabled Cross Zone LB
+CLB and NLB it need to be enabled
+
+----------------------Scalability ----------------------------------------
+
+Ability to serve more growth increase proportionally with resources.
+handle user growth, traffic and data size without effecting performance
+
+1) Deploy to bigger instance vertical scale
+hd,cpu,ram,i/o
+there are limits to VS
+it is expensive
+increase EC2 instance size ie t2.micro to t2.small
+
+2) Horizontal scaling
+Deploying multiple instance of app/db
+it also increase availability
+
+Additional infrastructure needed
+
+Distribute instances
+
+1) Distribute EC2 in a single AZ in same Region
+2) Distribute EC2 in a multiple AZ in same Region
+3) Distribute EC2 in a multiple AZ in multiple Region
+
+Auto Scale Group
+
+Distribute load : ELB , Route53(for multiple regions)
+ELB is managed so no need to think about its scaling
+
+EC2 instance Families
+
+m ( m4,m5,m6 General purpose)
+web servers and code repos
+
+t (t2,t3,t3a) Brustable performance (accumulated CPU  credits)
+workload with spikes, dev env , small db
+unlimted mode (spike beyond CPU credit at additional costs) off for t2 but on for t3 by default
+
+
+c (c4,c5,c5n ) Compute optimised High performance
+batch processing,High performance compute
+
+r (r4,r5,r5a,r5n) Memory Ram  optimized
+in mem db, real time analytics
+
+i (i3,de)  storage optimised
+NoSQL DB and data warehousing
+
+g (g3,g4) GPU optimised 
+video compressio, grapic processing
+
+
+f  (f1) FPGA instances 
+massive parallel processing power as geonomic, data analytics
+
+inf (inf1) Machine learning ASIC instances
+image,speech,nlp recognition 
+
+Tenancy Options
+shared vs dedicated
+
+default is shared
+
+E2 dedicated instances
+virtualised instances on hardware dedicated to a customer
+no visibility into the hardware of underlying host
+billing per instance
+
+E2 dedicated hosts
+physical servers dedicated to one customer
+regular needs, high security
+billing per host
+server bound software licences like windows server, sql server
+
+------------------------Placement Groups-------------------
+low latency net=work communication (instances on a same RAC), Cluster
+high availability (instance on diff RAC) , Spread
+Partition (multpile partitions with)
+
+READ AAGAIN
+
+Elastic Network Infterface
+
+like a virtual nework inerface card
+primary ENI is by default and can't be detached
+
+ENI lives in one subnet and thus in a single AZ
+one primary private IPV4 and one or more secondary PV4
+one Elastic IPv4
+one public IP IPV4
+one or more security groupa mac addeess
+ipv6
+
+No. of EC2 isntances = No. of ENI
+
+EC2 Partition Placement Group
+In large distributed and replicated workloads (HDFS, HBase, and Cassandra), EC2 instances need to be divided into multiple groups.
+
+------------------------------------------------------------------------------------------------
+Monitoring EC2 instances
+using 
+CloudWatch
+basic monitoring every 5 mins Free
+CPU,Disk,Network are tracked by cloudwatch
+
+CW doesn't have access to OS system metric like memory consumption
+1) install cloudwatch agent on ec2
+2) use cloudwatch collected plug-in
+
+-----------EC2 Pricing Model ------------------------------------------------------
+
+1) On demand
+Request when u want it
+Flexible and most expensive
+ideal for spiky traffic 
+batch program having unpredictable runtime
+
+2) Spot
+Quote the max 
+Cheapest upto 90% off But not guarantees
+not for critical apps, non time-critcal workloads
+old-model = bid a price, biggest bidder wins
+new model: quote your max price,based on long term trends
+can a terminated with a 2 min notice
+best practice: stop or hibernate instance on receiving interruption notice as for terminate a new instance will be allocated
+
+Spot Block
+request spot instances for a specific duration (1,2 hrs up to 6)
+
+Sopt Fleet
+Request spot instances across multiple instance types(micro,small,large)
+to get better change to have a spot instance
+
+
+3) Reserve ahead of time
+up to 75% 1-3 years
+
+4) Saving plans 
+commit spending $ per hour on (EC2 or Fargate or Labmda)
+up to 66% 
+No restriction
+
+
+---------------Launch A spot instance ---------------------------------
+EC2  --> Choose instance type --> configure instance
+
+Purchasing option --> Request Spot instances
+
+Maximum price: 	
+The maximum price you are willing to pay per instance hour. 
+Your instance runs when your maximum price is greater than the Spot Price
+
+Persistence request: 
+Ensures that your request will be submitted every time your Spot Instance is terminated. 
+
+
+EC2 > Spot Requests > Request Spot Instances 
+
+for spot block use below option
+Defined duration workloads Launch instances into a Spot block for 1 to 6 hours.
+
+for spot fleet use below option
+Load balancing workloads Launch instances of the same size, in any Availability Zone. Good for running web services.
+
+Fleet request settings
+
+
+EC2 Linux Spot instances - Pricing
+
+Zero charge if terminated or stopped by Amazon EC2 in the first instance hour (60 mins)
+otherwise u will be changed by seconds
+
+terminated/stopped after 50 mins by Amazon = you pay 0
+terminated/stopped after 50 mins by you = you pay for 50 mins
+terminated/stopped after 70 mins by you/Amazon = you bay for 70 mins
+
+
+when interrupted, spot instances can be terminated (default),stopped and hibernated
+
+Completely close a spot request  in the following order for best practice
+
+1) cancel spot request  (only this can't terminate active spot instaces)
+2) terminate all spot instances
+
+---------------------EC2 Reserved instances ------------------------------
+Reserve E2 instances ahead of time
+
+when u have constant worloads that run all the time
+3 types
+1) STANDARD
+
+In a region, i reserve EC2 instance with a specific platform,instance type for a term of 1 or 3 years.
+can switch to other instance sizes within the same instance family ie t2.micro to t2.small,large
+AZ can also be changed
+Instance family , os or tenancies (shared/dedicated) CAN'T be changed
+up to 75% off
+
+2) CONVERTIBLE (with  some flexibility)
+
+In a region, i reserve EC2 instance for a term of 1 or 3 years.
+can switch to other instance sizes within the same instance family ie t2.micro to t2.small,large
+AZ can also be changed
+Instance family , os or tenancies (shared/dedicated) CAN be changed
+up to 54%
+
+3) SCHEDULED
+in a region, i reserve an EC2 instance par-time for a year, x hour every month/week/day at a specif time
+restriction: available in few instance types C2,R3,C4,M4 in few regions 
+use case: bill are generated on the first day of month
+5 to 10%
+
+
+You can also sell reserved on AWS reserved instance marketplace if you don't want to use your reservation.
+
+PAYMENT
+1) 0 upfront, pay monthly instalment
+2) partial upfront ,
+3) All upfront, 0 instalment 
+all upfront < partial upfront < No upfront (a diff upto 5 %)
+
+Saving Plans
+Constant workloads that ru
+
+
+https://www.ec2instances.info/
+
+----------------Elastic Load Balancer Advance------------------------------------------------------------------
+
+for Https we need to install ssl or tls certificates on the server
+in AWS SSL certificates can be managed using AWS Certificate Manager
+
+ELB requires X.509 certificates (ssl/tsl)
+
+Application/Classic LB SSL TLS Termination
+Client -> ELB 		https
+ELB -> EC2        http
+
+Network LB TLS Termination
+Client -> NLB TLS
+NLB -> EC2    TCP
+
+---------------------------------------------Server Name Indication----------------------------------
+Each listener in ALB can be associated with multiple SSL certificates (one for each website)
+and SNI ServerName Indication is automatically enabled
+its extension to TLS
+
+--Monitoring ELB logs and Headers -------------------------------
+
+ELB --> Action
+Edit LB attributes
+Access logs 
+
+NLB allows EC2 intances to see client details like IP but not ALB in request header
+
+X-Forwarded-For      Client IP
+X-Forwarded-Proto   Originating protocol
+X-Forwarded-Port     Originating port
+
+
+IMP ALB VS NLB VS CLB read again
+---------------------------------------------------------------------------------------------------
+IMp LB scenarios 
+
+1)maintain sticky session
+enable stickiness on ELB (cookie name normally: AWSELB)
+
+2)distribute load only yo healthy instances
+configure health
+
+3) configure load among 2 AZ in the same region
+Enable cross zone load balancing
+
+4) in-flight request to unhealthy instances to given opportunity to complete
+enable connection draining 
+
+5) warm up time to EC2 instances before getting load
+configure health check grace period
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

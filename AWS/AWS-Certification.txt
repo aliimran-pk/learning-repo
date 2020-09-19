@@ -1,5 +1,10 @@
 https://202041525381.signin.aws.amazon.com/console
 
+
+------------------------------------------------------------------------
+Questions
+EC2 Custom AMI vs Custom Template
+
 ------------------------------------------------------------------------------------------------------------------------------------------
 https://yourlearning.ibm.com/activity/URL-AA49C4823B02
 
@@ -1176,6 +1181,235 @@ enable connection draining
 5) warm up time to EC2 instances before getting load
 configure health check grace period
 
+6) protect EBL from web attacks, sql injection, cross-site-scripting
+integrate ELB with WAF web application Firewall
+
+7) Protect web app from DDoS attacks 
+by default ELB provide it
+
+-----------Architectural Considerations ----------------------------------------
+ Security
+ use security groups to restrict traffic
+ EC2 instances in private VPC (not accessible out side AWS network)
+ user dedicated hosts when u have regulatory needs
+ 
+ Performance
+ right instance family
+ appropriate placement groups
+ prefer custom AMI to install softwares using user data 
+ choose right ELB for you use case
+
+Cost
+optimal no. and type of EC2 instance family
+use right mix of 
+saving , reserved , on demand , spot instances
+
+Resiliency (how quickly u recover)
+health checks
+cloudwatch for monitoring
+DR , ami coppied to multiple regions
+
+
+warm attach = attaching ENI with EC2 instnace is stopped
+spoot is the cheapest
+on deman is the costly
+
+
+------------------------------------------------------------------------------------
+
+IAAS (Infrastructure as a Service)
+use only INFRASTRUCTURE from cloud provider
+also called Lift and Shift
+eg. EC2 to deploy your applications or db
+
+You are responsible for 
+1) app code and runtime
+2) configure LB
+3) auto scaling
+4) OS upgrade and patches
+5) Availability
+
+PAAS (platform as a service)
+use a PLATFORM provided by cloud
+eg EBS Elastic Beanstalk
+
+alternative to PAAS
+CAAS (container as service)container instead of applications
+ECS Elastic Container Service
+
+FAAS Function as a Service
+serverless
+not worrying about servers`
+AWS Fargate Serverless compute for container
+
+
+Cloud provider provides
+1) OS
+2) App runtime
+3) auto scale-in, lb
+
+You are responsible
+1) Application 
+2) configurations
+
+-----Elastic Beanstalk --------------------------------------------
+simplest way to deploy and scale web apps in AWS
+
+supports java,.net,node.js,php,python,go and docker apps
+Its free but chnarges for resource being consumed
+
+automatic LB
+Auto scalaing
+platform update health monitoring
+
+
+***** Elastic Beanstalk is not EBS (Elastic bean store)
+
+
+An application can have multiple environments to be created
+An  application can have multiple versions (stored in S3)
+
+Elastic Beanstalk
+
+Name: My-First-ElasticBeanstalk-App
+Platform: Python
+Application Code: Sample application
+
+It will create an 
+
+Environment Tier
+
+Web Server environment (for web apps)
+Worker environment (for batch )
+
+You can retain FULL control over ASWS resources created
+It is ideal for simple web applications
+Not ideal for Microservice architectures
+access server logs without logging into the server
+logs can be stored in S3 or in ClodwWatch
+can configure SNS based on health
+can apply patches and platform updates
+
+
+Environment : MyFirstElasticbeanstalkApp-env
+Application: My-First-ElasticBeanstalk-App
+EC2 instance created : i-09198c2b1b80e3fcd
+a LB is created (can make changes in ELB) : awseb-AWSEB-ZV73FYBTVZ9S
+
+URL: http://myfirstelasticbeanstalkapp-env.eba-jsbz4ebm.ap-south-1.elasticbeanstalk.com/
+
+To Delete
+1) Delete the application
+it will delete EC2 and ELB 
+
+
+
+------------------------Containers Solutions------------------------------------------------------------
+Docker is cloud Neutral
+
+Container Orchestration provides
+Auto scaling (scale container based on demand)
+Service Discovery (helps Microservice find others)
+Self healing (replace failing instances using health check)
+Zero Downtime deployments release new versions without downtime
+
+Container Orchestration Options 
+
+1) Cloud Neutral
+	Kubernetes 
+	AWS Service = AWS Elastic Kubrmetes Service (EKS)
+	EKS doesn't have a free tier
+
+2) AWS Specific
+	AWS Elastic Container Service ECS
+	AWS Fargate (No free tier): Serverless version of AWS ECS
+
+
+
+AWS Elastic Container Service ECS (A regional Service)
+Need to create a cluster of EC2 instance managed by ECS for Microservice
+build using container images
+
+For AWS Fargate 
+No need to manage EC2 instances 
+
+Use case 
+Microservice
+batch processing on ECS using AWS Batch
+
+ECS and Fargate points to Elastic Container Service
+
+Dont' Create 
+
+Container definition
+Amazon ECS makes it easy to deploy, manage, and scale Docker containers running applications, services, and batch processes. Amazon ECS places containers across your cluster based on your resource needs and is integrated with familiar features like Elastic Load Balancing, EC2 security groups, EBS volumes and IAM roles
+
+Sample Applicaiton
+Container Name: sample-container-Image
+Image: httpd:2.4
+
+
+A task definition is a blueprint for your application, and describes one or more containers through attributes. Some attributes are configured at the task level but the majority of attributes are configured per container.
+
+Define your service
+A service allows you to run and maintain a specified number (the "desired count") of simultaneous instances of a task definition in an ECS cluster.
+
+Service Name: sample-app-service
+Number of desired tasks: 2
+
+Application Load Balancer
+
+Configure your cluster
+The infrastructure in a Fargate cluster is fully managed by AWS. Your containers run without you managing and configuring individual Amazon EC2 instances.
+
+
+For Fargate
+No EC2 instance created
+LB is created
+Target Group is created
+
+A Task is a definition of a container
+Tasks role can also be attached (RDS)
+Task execution IAM role (permission to pull container images)
+
+
+A existing task deification can't be changed
+A tasks has IP and container details
+
+A Service  allows to run and maintain  a specific  no. of tasks  (desired count)
+it brought up new tasks in case of failure
+
+ECS Cluster
+Groping of one or more container instances (EC2 instances) when   u run your taksk
+
+EC2 instances in a cluster running a container agent for communication
+
+ALB features
+Dynamic host port mapping  (multiple task from the same service allowed per EC2 container)
+path based routing multiple services can use same listener port on same ALB and be routed based the path
+
+
+Elastic Beanstalk can run container using Docker as platform but can't create clusters
+
+Amazon EKS 
+recommended if you are already using Kubernetes and want to move workload dto AWS
+
+ECR 
+Elastic Container Registry
+for deploy container images
+
+
+
+------------------
+To have more access to EC2 instances for ECS
+ECS --> Cluster-> Create Cluster -- Select cluster template
+
+EC2 Linux + Networking
+Resources to be created:
+Cluster
+VPC
+Subnets
+Auto Scaling group with Linux AMI
 
 
 
@@ -1197,30 +1431,3 @@ configure health check grace period
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-------------------------------------------------------------------------
-Questions
-EC2 Custom AMI vs Custom Template

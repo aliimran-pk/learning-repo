@@ -1317,7 +1317,7 @@ Container Orchestration Options
 
 1) Cloud Neutral
 	Kubernetes 
-	AWS Service = AWS Elastic Kubrmetes Service (EKS)
+	AWS Service = AWS Elastic Kubernetes Service (EKS)
 	EKS doesn't have a free tier
 
 2) AWS Specific
@@ -1339,12 +1339,12 @@ batch processing on ECS using AWS Batch
 
 ECS and Fargate points to Elastic Container Service
 
-Dont' Create 
+Don't Create 
 
 Container definition
 Amazon ECS makes it easy to deploy, manage, and scale Docker containers running applications, services, and batch processes. Amazon ECS places containers across your cluster based on your resource needs and is integrated with familiar features like Elastic Load Balancing, EC2 security groups, EBS volumes and IAM roles
 
-Sample Applicaiton
+Sample Application
 Container Name: sample-container-Image
 Image: httpd:2.4
 
@@ -1486,7 +1486,7 @@ API keys for third party developers
 Full Managed Service
 publish , maintain , monitoring and securing APIs
 Integrate with Lambda, EC2, ECS,  or any publicly addressable web servic
-supports HTTP(s) and websockets
+supports HTTP(s) and web sockets
 It is serverless 
 
 HTTP API is new version of REST API
@@ -1497,7 +1497,7 @@ Name: MyHelloWolrdAPI
 EndPoint Type: Regional
 
 Regions = 20 
-Edge Locations = where regions are not avaiable CloudFront distrubyte cotent 200+
+Edge Locations = where regions are not available CloudFront distribute content 200+
 
 Create API
 
@@ -1535,7 +1535,7 @@ URL: 	https://ruvdffuyq5.execute-api.ap-south-1.amazonaws.com/Dev
 Canary Deployment
 sent a % request to a no. of users
 
--------------------------- Virtual  Private Cloud ---------------------------------------------------------
+-------------------------- Virtual  Private Cloud ----------------READ AGAIN IN DETAIL-----------------------------------------
 
 Creating own private network in the cloud
 your own isolated network (traffic not visible to other AWS vps)
@@ -1571,39 +1571,124 @@ IPv6  128 bit alphanumeric
 means
 2 rasie power (32 -30) = 4 
 
-Each VPC is associated with a CIDR block
+Each VPChttp://localhost:7080/mep/services/pcs.ctos.lock.unlock.invoice.ext is associated with a CIDR block
 CIDR b;lock can be from /16 (65536 ) to /28 (16) IP addresses
 
+VPC with CIDR block 69.208.0.0/24  69.208.0.0 to 69.208.0.255 
+
+There can't be an overlap of a VPC CIDR block with another connected network
+
+All addresses inside a VPC CIDR range are private addresses
+Sbunet resides in VPC
+
+CIDR block of a subnet must be a subset or the same as CIDR block for VPC
+
+Can VPC spread over two regions ?
+No
+
+Multiple VPC in same region 
+Yes  (default vpc and custom vpc)
+
+Communication b/w tow resources in a VPC is visible outside VPC
+No
+
+Can we allow External access to your resources in a VPC
+Yes (using Internet Gateway)
+
+Can a subnet spread over two regions ?
+No, since subnet is part of VPC and VPC is associated with a single Region
+
+Can a subnet spread over two Availability Zones
+No, A subnet is specific to a particular AZ
+
+Can I have 2 subnets in one AZ
+Yes , 
+
+Can I have subnet in AZ ap-south-1a if its VPC is in region us-east-1
+No, subnet should be on AZ belonging to the VPC's region
 
 
+VPC Main route table
+
+1) each VPC when created has a main route table by default (enable communication b/w resources in all subnets in a VPC)
+2)default roye rule can't be deleted/edited
+
+3)Each subnet can have its route table or share its route tale with VPC
+4) Multiple subnets can share a route table
+5) A subnet can be associated with one route table ONLY
+
+Security Groups
+
+1) a default SG is created when we created a VPC
+allows all outbound traffic
+allows communication b/r resources assigned with default security grop
+Denies all other in bound (other than default SG)
+can be edited but not deleted
+EC2 instance by default are assigned  the default security group of the VPC
+Security Group can have many to many relationship with Resources (in same VPC)
+
+New security  group
+by default No in bound rule
+allows all outbound traffic
+
+ssh 22
+rdp 8889
+http 80
+https 443
+postgreSQL 5432
+Oracle 1521
+MySQL/Aurora 3306
+MySQL 1433
 
 
+1) Can source/destination of a SG be another SG
+Yes
 
 
+2) A new SG is created and assigned to a DB and Ec2
+they can't talk as SG doesn't allow inbound traffic by default
+
+3) A default SG is created and assigned to a DB and Ec2
+they CAN talk as SG has a rule allowing traffic b/w resources with same SG
+
+NACL Network Access Control Listener
+SG control traffic to specific resources like ec2 ina subnet
+NACL control traffic stopping even entering the subnet
+stateless firewall at subnet level
+Each subnet must be associated with NACL
+default NACL allows all inbound and outbound traffic
+custom crated NACL denies all inbound and outbound traffic by default
+rules have priory no. (lower has high value)
+
+Security Groups
+only allow rules
+stateful, return traffic is automatically allowed
+traffic allowed if there is matching rule
+
+NACL 
+allow rules and deny rules
+stateless, explicitly allow return traffic
+rules are priority , matching rule with highest priority
 
 
+Traffic from outside subnet then NACL will intercept
+Traffic within Subnet SG will intercept
 
+Imp Scenario
 
+EC2 instance can't be accessed from internet
+1) does EC2 have public IP address or an Elastic IP assigned
+2) Check NACL, is inbound and outbound traffic allowed from your IP to the port
+3) Check route table for the subnet, is there a route to internet gateway
+if it a private subnet then can't
+4) Check Security group, all u allowing inbound traffic from ur IP to the port
 
+AWS Service to allow instances in private subnet to connect to internet to download patches
+is using NAT Gateway
 
+A VPC cannot have multiple Internet Gateways
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-------------------------------------------------------------------------------------------------------------------------------------
 
 
 

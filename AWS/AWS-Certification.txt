@@ -2384,24 +2384,269 @@ AWS can't access your encryption master keys in CloudHSM
 use two or more HSMs in separate AZ in production clusters
  AWS KMS can use CloudHSM cluster as "custom key store" to store the keys
  use cloudwatch for monitored and cloud trail for tracking key usage
-  webserver offload SSL processing
+  web server offload SSL processing
   as certificate authority
   digital rights mgmt
-  tde for oracle db
- if You want a dedicated hardware security moulde with cloud
+  TDE for oracle db
+ if You want a dedicated hardware security module with cloud
   
- All serrivce integrate with KMS and KMS use CloudHSM 
+ All service integrate with KMS and KMS use CloudHSM 
 
 CloudHSM --> Create Cluster
 VPC
-AZ
+AZs
 
 KMS -Custom key store and connect it with CloudHSM cluster
  
  All AWS services provides HTTPS endpoints
  Encryption is optional with S3 but highly recommend in flight and at rest
  
+ Server Side Encryption
  
+ SSE-S3
+ S3 manages its own keys
+ keys rotaed every nonth
+ request hearder
+ 
+ SSE-KMS
+ Customer managed keys in KMS
+ 
+ SSE-C
+ customer sends the key in every request 
+ S3 performs encryption/decryption without storing the key
+ Https is must
+ 
+Client Side Encryption
+Customer send encryption data to AWS service
+Amazon S3 encryption client can be used 
+
+------------------------------STORAGE----------------------------------------------------------------------------
+Types of Storage 
+
+1) Block Storage
+hard disk
+typical, one block storage device can be connected to one virtual server
+can connect multiple different block storage devices to to one virtual server
+Direct Attached Storage: like HD
+Storage Area Network SAN
+high speed network
+connecting a pool of storage devices 
+ie used by DB , oracle and SQL server
+
+EBS
+Amazon Elastic Block Store 
+Instance store
+ 
+2) File Storage
+shared with multiple virtual servers
+ user need a  quick way to share files 
+File Storage MANY to MANY Virtual Server
+Amazon Elastic file server EFS (Linux instances)
+Amazon Elastic file server EFx (Windows instances)
+Amazon FSx for Luster (high performance use cases)
+
+
+EC2 instance can be attached to 
+
+1) instance stores
+physical attached to EC2 instance (on the host computer where EC2 instances are availbe)
+used for temporary data (ephemeral storage)
+data lost when hardware/instance fail
+life-cycle tied  to EC2 instance
+used for cache or scratch files
+data is not lost on instance reboot
+only some ec2 instance types supports instance store
+
+Advantages
+v fast I/o
+No extra cost 
+ideal for storing temporary info
+
+DisAdvantages
+slow boot up up to 5 mins
+Cannot take a snapshot or restore
+Size is fixed based on instance type
+cannot attach/detach to other EC2 instance
+
+2) Elastic Block Store
+Network Storage
+Attached to EC2 instance as a network drive
+More durable 
+Life cycle not tied to EC2 instance
+Provisioned capacity
+Highly Flexible increase size when u need
+Can be  attach/detach to other EC2 instance
+999s availability and replicated within same AZ
+UseCase: run your own database
+
+root volume is where OS is stored and it is available by default
+--------------
+EC2 instance
+
+EBS Instance A in AZ 	ap-south-1a - root volume
+EBS Instance B in AZ     ap-south-1a - root volume and secondary volume
+EBS Instance C in AZ     ap-south-1b root volume
+
+name: EBS Instance A
+region = ap-south-1
+Add Storage:only root
+Delete on Termination = yes  delete this root volume when EC terminates
+
+name: EBS Instance B
+region = ap-south-1
+Add Storage: EBS 
+
+name: EBS Instance C
+region = ap-south-b
+Add Storage: only root
+
+*** Volumes in an availability zone can only be attached to EC2 instances in the same AZ
+A volume to be deleted needs to be first detached
+But we can't detached a root volume
+
+
+lsblk
+xdva1 is mounted to /   (root)
+cd / (we are on root vol)
+xsvdb is not mounted yet
+
+sudo file -s /dev/sdb (from console)
+
+create a file system on xvdb and mount it 
+sudo mkfs -t xfs  /dev/xvdb
+sud o mkdir /data
+sudo mount /dev/xvdb /data
+
+cd /data
+touch firstfileonebs.txt
+
+
+cd  ..
+sudo umount /data
+
+
+Now disconnect a secondary vol from insatnce B and attach it to another ec2 A
+
+Now open Instance A
+No need to create the file system as it is already created
+
+sudo file -s /dev/sdf
+lsblk
+sudo mkdir /data
+sudo mount /dev/xvdf /data
+cd /data
+ls
+firstfileonebs.txt
+
+SSD Solid State Drive
+Transactional workloads
+recommended for boot volumes
+
+HD Hard Disk Drive
+Good at  small,random I/O
+low cost
+Large streaming or big data workloads
+Not recommended for boot volumes
+
+
+EBS SSD Types
+*** IO performance increases with size
+IOPS increses per GB upto a limit 
+
+1) General Purpose SSD (gp2)
+balance price and performance for transactional workloads
+
+small/medium DB dev env
+
+2) Provisioned IOPS SSD (io1)
+low latency transactional workloads
+large relational or nosql db
+high performance at high cost
+
+Lower latency refers to a minimal delay in the processing of computer data over a network connection.
+Latency is the amount of time a message takes to traverse a computer network. It is typically measured in milliseconds
+
+EBS HDD Types
+
+1) Throughput Optimised HDD (st1)
+Frequently accessed,
+Throughput intensive sequential workloads
+MapRequce,Kafka, log processing , DWH and ETL
+
+2) Cold HDD (sc1)
+lower cost
+infrequent data access, eg very low transaction databases
+
+Imp
+196. Step 12 - Comparing Four EBS Storage Types
+
+IOPS = input output operations per second
+OPS (input/output operations per second) is the standard unit of measurement for the maximum number of reads and writes
+
+I/O is the number of accesses to the dis
+IOPS is I/O per second.
+Throughput is the amount of info you read in each I/O
+
+if you have a big mouth (big throughput), then you will need less bites and less I/O
+Use cases:
+
+Work loads -> usually General Purpose Volume
+Databases -> usually IOPS (small data but frequently retrieved)
+Big Data / Data warehouses -> usually Throughput ( big data files)
+Cold HDD -> Cold File Servers (lowest IOPS before moving to Magnetic)
+
+--------------- EBS SnapShot------------------------------------+
+backup of EBS volume
+volume can be modify
+Volume type and size even it is attached with an EC2 instance
+
+point-in-time snapshots (stored in S3) Aysnc process
+Can't accessed directly from S3 but from EC2 API
+
+Volumes- Action -Create snapshot
+Can't add encryption here
+We can crate a volume from this scnapshot as well and can add encyption as well
+
+Snapshots are incremental
+You can create multiple snapshots of a vloume snapshot1,snapshot2
+but snapshot2 only have data after snapshot created and not the previsous one
+*** We can't loose data if we delete older snapsho
+deleting snapshot only delete data which is not needed by other snapshots
+snapshot can be shared with other accounts / public
+
+Volumes are constrained to  AZs
+Snapshots created from those volumes are constrained to regionals
+so to move a volume to another Region, create
+snapshot of it
+
+Create a volume 
+vol1  in eu-west-1a
+
+Create snapshot from vol1
+vol1-snapshot1
+
+Select vol1-snapshot1 - Action - Copy
+
+Fast Snap restore 
+eliminates need for pre-warming ie accessing data soon from the volume
+Snapshot - Action -  Manage FastSnapshot restore
+
+EEBS Encryption
+
+using AWS KMS
+AES-256
+Turning on encryption automatically encrypts
+
+Data at rest
+	data vols, boot vols and snapshots
+Data in Transit
+	b/w EC2 and EBS
+	b/w EBS and EBS snapshots
+
+Enable encryption at 
+When EC2 instance is created you can 
+When copy a snapshot 
+
 
 
 

@@ -1,3 +1,31 @@
+----------------------------------------------------------------------------------
+Must do 
+
+AWS Exam Readiness
+https://www.aws.training/Details/Curriculum?id=20685
+
+AWS Certified Solutions Architect - Associate (SAA-C02): Introduction
+https://learning.oreilly.com/videos/aws-certified-solutions/9780136721246/9780136721246-ACS2_00_00_00
+
+
+White paper and FAQs are must
+
+What is AWS Well-Architected Tool?
+https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html
+
+
+cheat sheet
+https://tutorialsdojo.com/links-to-all-aws-cheat-sheets/
+
+Find Qualifier  keywords
+Elimination Technique
+Time Management
+
+
+
+
+-----------------------------------------------------------------------------------
+
 https://202041525381.signin.aws.amazon.com/console
 
 
@@ -69,7 +97,7 @@ called Managed policies (ie managed by AWS)
 Regions and Zones
 
 1) slow access from other parts of the world (High Latency)
-2) wjhat if that data center crashes (low availability)
+2) what if that data centre crashes (low availability)
 3) what if entire region go download
 
 Most Services are regional services
@@ -88,15 +116,15 @@ isolate locations  in region
 Each zone has at least two AZs
 Increase availability of applications in the same Region
 availability zone is physically separated from each other
-AZ consists of data centers
-AZs are connected thorh high throuput network, low letency
+AZ consists of data centres
+AZs are connected through high through put network, low latency
 
 US West (Oregon) in cosole = us-west-2 in CLI
 
 Choosing Regions
-availabilty of the service in that region (most services we require)
+availability of the service in that region (most services we require)
 As Each region expose is regional services endpoints 
-latency, cost and data residency (complaint with bussiness contaractual reqiments)
+latency, cost and data residency (complaint with business contractual reqiments)
 
 
 Region
@@ -110,17 +138,17 @@ ap-south-1c
 They provide High Availability and Low Latency
 
 AWS SDK
-interact aws sevices ffrom our code
+interact aws services from our code
 
-AWS as Identoy provider 
+AWS as Identity provider 
 its a managed service 
-single point of faiuler, high avaiable,
+single point of failure, high available,
 
 Control Plane
 Data Plane
 
-AWS Federaton
-centraly managed to access AWS resources
+AWS Federation
+centrally managed to access AWS resources
 single singn on
 SAML security access markup language 
 cross account acccess
@@ -404,11 +432,11 @@ Create instance from template
 select V2
 
 AMI Image contains
-OS and software on that instnaces
+OS and software on that instances
 have root volume also attach non root volumes
 can be shared with other accounts (Permissions -- add account no.)
 AMI are stored in S3 and are region specific, so can be created instancees in AZs of that region
-better to backup AMI in other resions for DR (Copy AMI to other regions)
+better to backup AMI in other regions for DR (Copy AMI to other regions)
 
 Three AMI sources
 1) by AWS
@@ -435,8 +463,8 @@ SSH 22
 RDP 3389
 
 EC2 uses public key cryptography using RSA
-public key is stored in EC2 insance
-private key is stored by cusomer
+public key is stored in EC2 instance
+private key is stored by customer
 
 
 For putty
@@ -2500,7 +2528,7 @@ name: EBS Instance C
 region = ap-south-b
 Add Storage: only root
 
-*** Volumes in an availability zone can only be attached to EC2 instances in the same AZ
+*** Volumes in an availability zone CAN ONLY be attached to EC2 instances in the SAME AZ
 A volume to be deleted needs to be first detached
 But we can't detached a root volume
 
@@ -2646,6 +2674,221 @@ Data in Transit
 Enable encryption at 
 When EC2 instance is created you can 
 When copy a snapshot 
+when copy an AMI
+
+Getting faster I/O Performance b/w EC2 and EBS
+
+1) Launch EC2 as EBS Optimised Instances
+during instance creation
+
+2) Enhanced networking through ENA Elastic Network Adapter
+increase throughput
+need custom configurations
+
+3) using EFA Elastic Fabric Adapter
+not available for windows
+EFA= ENA + OD Bypass
+High Performance Computing
+
+EC2 Life Cycle
+
+Hibernate  max 60 days
+data in memory is persisted in EBS volume
+only ebs backbend instances can be stopped or hibernated
+
+Increase 
+
+RAID
+redundant array of independent disks
+
+RAID 1
+when higher \durability is required
+data is duplicated
+
+RAID 0
+Higher IOPS or storage is required
+issue is data  can be lost if one disk fail
+use when I/O performance is more important
+
+We can create AMI from a snapshot of a root volume
+
+Scenario
+1) use an AMI belonging to a different AWS account or in diff region
+a) Owner of AMI provides read permission to AMI
+b) for encrypted AMI, owner should share encryption keys
+c)copy AMI to the other regions
+
+If u dont have permissions to cipy AMI but have permission to use it 
+Sol:  
+create EC2 instance from that AMI 
+create new AMI from EC2 instance and copy it 
+
+2) Can I attach EBS vol in us-east-1a to EC2 instance in us-east-1b
+No, it should be in SAME AZ as of EC2 instance
+
+3) Attach multiple EBS vloumens to an EC2 instance
+Yes
+
+4) Attach an EBS vloume to two EC2 instances (at the same time)
+No
+
+5) Switch EBS vol from EC2 to another Ec2
+Yes, detach and attach
+
+6) Will an EBS volume be immediately available when attached to an EC2 instance ?
+Yes, however , by default data is lazily loaded
+
+7) How to endure EBS vol is deleted when EC2 is terminated
+Enable delete on termination
+
+8) retain EBS vol even if EC2 backed instance fail
+On termination all data on root is lost even if EBS backed
+so detach EBS vol before terminating the instance and reover data by connecting 
+it to another eC2 instance
+use snapshot
+
+9) How to Create EBS volume from EBS volume in diff AZ in same region
+create snapshot
+create EBS volume from that snapshot and select diff AZ
+
+10) How to Create EBS volume from EBS volume in diff Region 
+take a snapshot
+copy snapshot to other region
+create ebs volume in other region
+
+11) Lowest cost option to maintain snapshots with EBS
+store just latest snapshot and delete others
+
+12) how to encrypt and un encrypted EBS vloume
+can't do directly
+create a snapshot from this volume
+create vol from this snapshot with encryption
+
+13) how to automate the complete lifecycle
+creation, retention and deletion  of EBS snapshots
+use EBS- Amazon Data LifeCycle Manager
+
+--------------------------EFS--------------------------------------------------------
+Elastic File System
+Can attach a EFS with multiple EC2 (may be in diff Az ) but in a single Region
+petabyte scale , auto scaling shared file system
+
+In EBS for auto scaling , you need to provisioned disk and charge for it
+In EFS just add files and changed for those files like S3
+
+** Compatible with Amazon EC2 LINUX based instances
+use Max I/O Mode for higher throughput (with small latency) 
+use case: home dirs, file share, content mgmt, media workflows
+
+
+Amazon FSX for Lustre
+its a File system Optimised for Performance
+HPC high performance computing
+machine learning, media processing 
+Integrates with S3
+POSIX complicit
+File system data is automatically encrypted at rest and in-transit
+
+
+Amazon FSX Windows File Servers
+fully managed windows file server
+SMB service message block protocol
+AD integration
+File system data is automatically encrypted at rest and in-transit
+*All File sharing options are accessible on AWS or on primises
+
+
+Console - EFS - Create File system
+it is associated with a specific VPC
+
+select Security group : EC2 Security Group
+to all mount targets
+
+life cycle policy = optional
+
+Throughput Mode
+Bursting Mode for most file system
+Provisioned
+
+Performance Mode
+General Purpose
+Max I/O
+
+File System Policy
+
+Access Points
+to provide application to access your filesystem
+
+Sharing File System b/w EC2 instances
+
+Edit EC2 Security Group for Inbound
+NFS
+Custom - EC2 Security Group
+thus allow NFS from all EC2 instances with this SG
+
+Mouting your File system
+
+on each EC2 instance
+sudo yum install -y amazon-efs-utils
+sudo mkdir efs
+sudo mount -t efs fs-a440c755:/ efs
+cd /efs
+sudo touch firstEFsFile.txt
+ 
+
+Console --> FSX
+use us-east-1
+
+Make Optimum Use of Resources in The Cloud
+Terminate EC2 instances
+Delete all unused EBS volumes, snapshots
+Delete all your AMIs
+Delete your EFS file storage servers
+
+-----------------------Storage Gateway -------------------------------------------------
+Hybrid Storage 
+On Premise and on Cloud 
+Storage Gateway 
+unlimited storage with good performance
+Storage Gateway and S3 glacier encrypt data by default
+
+three options
+1) Storage File Gateway
+2) Storage Tape Gateway
+3) Storage Volume Gateway
+
+VM Image with storage gateway software deployed on-premises
+
+supports NFS and SMB protocol
+
+File gateway deployed as VM on premises
+maintains a local cache with most recently used objs
+It benefits from S3 features and integrations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

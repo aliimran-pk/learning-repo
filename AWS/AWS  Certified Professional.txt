@@ -1,0 +1,63 @@
+AWS  Certified Professional 
+
+
+Instructor Emial
+Ramakrishna Tellichery
+
+telliche@amazon.com
+
+Recording
+https://www.aws.training/Details/eLearning?id=34737
+
+https://home.pearsonvue.com/Clients/Amazon-Web-Services.aspx
+https://aws.amazon.com/blogs/security/aws-federated-authentication-with-active-directory-federation-services-ad-fs/
+https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html
+https://docs.aws.amazon.com/dms/latest/userguide/CHAP_GettingStarted.html
+https://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStarted.html
+
+https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf
+https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html
+https://docs.aws.amazon.com/controltower/latest/userguide/getting-started-with-control-tower.html
+https://aws.amazon.com/solutions/implementations/aws-landing-zone/
+https://d1.awsstatic.com/whitepapers/architecture/AWS_Well-Architected_Framework.pdf
+https://aws.amazon.com/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc
+https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html
+https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html
+https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/
+https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/automating-updates-to-serverless-apps.html
+https://d1.awsstatic.com/whitepapers/overview-of-deployment-options-on-aws.pdf
+https://martinfowler.com/bliki/CanaryRelease.html
+https://martinfowler.com/bliki/BlueGreenDeployment.html
+
+https://docs.aws.amazon.com/athena/latest/ug/querying-AWS-service-logs.html
+https://aws.amazon.com/blogs/enterprise-strategy/6-strategies-for-migrating-applications-to-the-cloud/
+https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snowcone-what-is-snowcone.html
+https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html
+https://aws.amazon.com/blogs/aws/new-auto-recovery-for-amazon-ec2/
+https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-weighting.html
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_ES_Stream.html
+https://docs.aws.amazon.com/inspector/latest/userguide/inspector_introduction.html
+
+https://d0.awsstatic.com/aws-answers/Controlling_VPC_Egress_Traffic.pdf
+
+https://github.com/benlec/Trusted-Advisor-Remediator
+
+https://aws.amazon.com/certification/certification-prep/
+https://aws.amazon.com/certification/certification-prep/
+https://d1.awsstatic.com/training-and-certification/ramp-up_guides/Ramp-Up_Guide_Architect.pdf
+
+cheat sheet
+https://tutorialsdojo.com/links-to-all-aws-cheat-sheets/
+
+Find Qualifier  keywords
+Elimination Technique
+Time Management
+
+
+75 Questions
+170 mins
+2.5 mins
+
+
+
+--------------------------------------------------------------------------------------------

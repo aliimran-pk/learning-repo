@@ -2579,7 +2579,7 @@ Not recommended for boot volumes
 
 EBS SSD Types
 *** IO performance increases with size
-IOPS increses per GB upto a limit 
+IOPS increases per GB upto a limit 
 
 1) General Purpose SSD (gp2)
 balance price and performance for transactional workloads
@@ -2633,12 +2633,12 @@ Can't accessed directly from S3 but from EC2 API
 
 Volumes- Action -Create snapshot
 Can't add encryption here
-We can crate a volume from this scnapshot as well and can add encyption as well
+We can crate a volume from this snapshot as well and can add encryption as well
 
 Snapshots are incremental
-You can create multiple snapshots of a vloume snapshot1,snapshot2
-but snapshot2 only have data after snapshot created and not the previsous one
-*** We can't loose data if we delete older snapsho
+You can create multiple snapshots of a volume snapshot1,snapshot2
+but snapshot2 only have data after snapshot created and not the previous one
+*** We can't loose data if we delete older snapshot
 deleting snapshot only delete data which is not needed by other snapshots
 snapshot can be shared with other accounts / public
 
@@ -2718,18 +2718,18 @@ a) Owner of AMI provides read permission to AMI
 b) for encrypted AMI, owner should share encryption keys
 c)copy AMI to the other regions
 
-If u dont have permissions to cipy AMI but have permission to use it 
+If u don't have permissions to cipy AMI but have permission to use it 
 Sol:  
 create EC2 instance from that AMI 
 create new AMI from EC2 instance and copy it 
 
-2) Can I attach EBS vol in us-east-1a to EC2 instance in us-east-1b
+2) Can I attach EBS volume in us-east-1a to EC2 instance in us-east-1b
 No, it should be in SAME AZ as of EC2 instance
 
-3) Attach multiple EBS vloumens to an EC2 instance
+3) Attach multiple EBS volume to an EC2 instance
 Yes
 
-4) Attach an EBS vloume to two EC2 instances (at the same time)
+4) Attach an EBS volume to two EC2 instances (at the same time)
 No
 
 5) Switch EBS vol from EC2 to another Ec2
@@ -2795,7 +2795,7 @@ fully managed windows file server
 SMB service message block protocol
 AD integration
 File system data is automatically encrypted at rest and in-transit
-*All File sharing options are accessible on AWS or on primises
+*All File sharing options are accessible on AWS or on premises
 
 
 Console - EFS - Create File system
@@ -2846,8 +2846,7 @@ Delete all your AMIs
 Delete your EFS file storage servers
 
 -----------------------Storage Gateway -------------------------------------------------
-Hybrid Storage 
-On Premise and on Cloud 
+Hybrid Storage  (On Premise and on Cloud )
 Storage Gateway 
 unlimited storage with good performance
 Storage Gateway and S3 glacier encrypt data by default
@@ -2859,35 +2858,212 @@ three options
 
 VM Image with storage gateway software deployed on-premises
 
-supports NFS and SMB protocol
-
+1) Storage File Gateway
 File gateway deployed as VM on premises
-maintains a local cache with most recently used objs
-It benefits from S3 features and integrations
+maintains a local cache with most recently used objects
+File share (NFS or SMB)  + It benefits from S3 features and integrations
+
+2) AWS Storage Tape Gateway
+used for archives
+avoid physical tape backup manual process
+no need to change tape backup infrastructure
+backup data to virtual tapes ie S3 and glacier
+S3 life cycle mgmt
+
+3) Storage Volume Gateway
+move block storage to cloud
+reduce cost
+mostly for backup and DR
+migration of application data
+
+Cache storage
+primary data stored  at AWS S3
+on premise cache store frequently accessed data
+
+Volume Stored
+High Performance
+Primary data store at On premise
+async copy to AWS
+stored as EBS snapshots
+for DR and restore EBS volumes
+
+scenarios: want to use an AMI belonging to a diff AWS account or a diff Region
+AMI are restricted to a region
 
 
+File Storage used for HPC High performance computing  is Amazon FSx for Lustre
+
+--------------------------DATABASES--------------------------------------------
+DB provides Organised persistent storage
+
+If DB down 
+
+Availability 
+app will not communicate with DB
+measured as % of time app provides its operations as expected
+4 9's is very good
+
+Durability
+data will be lost
+measured as will my data be available after 10 years
+11 9's is very good
+
+Add DB snapshot after an hour to other data centre
+Add transaction log (changes after taking snapshot)
+You can setup DB from latest snapshot and apply transaction logs
+
+Use Standby DB in 2nd DC with Sync Replication
+Create snapshot from standby DB so that performance will not impact
+
+DownTime 
+99.95%
+22 mins in a month
+
+99.99% 4 9's
+4 and .5  mins in a month
+
+99.999% 5 9's
+26 sec in a month
+
+11 9's durability means
+store 1 million files for 10 million years, you would expect to lose 1 file
+
+Increase Availability
+standbys in Multiple AZ and multiple Regions
+
+Increase Durability 
+Multiple copies of data (standby,transaction logs, replicas) in multuple Az and Regions
+
+RTO (Recovery Time Objective)
+is the maximum length of time after an outage that your company is willing to wait for the recovery process to finish
+
+RPO Recovery point objective
+is the maximum amount of data loss your company is willing to accept as measured in time
+
+very small data loss (RPO 1 min)
+very small data loss (RTO 5 min)
+Hot Standby (automatically sync data, failover),standby ready
+
+very small data loss (RPO 1 min)
+downtime can be tolerate (RTO 15 min)
+Warm Standby (automatically sync data,standby with min infra)
+
+Data is critical (RPO 1 min)
+downtime (can be few hours)
+Regular data snapshots and transaction logs
+crate DB from snapshots/transaction logs when a failure happs
+
+Data Can be loss (cached data)
+failover to a completely server
+
+Scenario 
+
+Reporting/Analytic is required on DB 
+issue: will impact DB performance
+Sol:
+vertical scale 
+DB cluster (expensive)
+Create read replicas (async replication)
+
+Actual App will read/write to DB
+Now reporting app will read from Read replica
+Create read replica in multiple regions
+
+Consistency 
+data is updated simultaneously in (standbys and replicas)
+
+Strong Consistency
+sync replication to all replicas
+will be slow if u have multiple replicas/standbys
+
+Eventual Consistency
+Aysnc replication 
+eg. social media posts
+
+Read-After-Write Consistency
+Insert are immediately available
+update/delete are eventually consistent
+eg. S3
 
 
+Choosing type of DB
+1) fixed schema or schema less
+2) Transactional  properties (automaticity and consistency)
+3) latency requirements 
+4) TPS
+5) how much data to store 
 
+Relational Database
+predefined schema
+strong transactional capabilities
 
+OLTP
+large no. of small transactions
+eg. ERP, CRM, Banking
+MySQL,Oracle , 
+Amazon RDS 
+Recommended AWS Service  Aurora (based on PostgreSQL)
+each table row is stored together
+efficient for processing small transactions
 
+OLAP
+analyse petabytes of data
+Eg. reporting apps, DWH, business intelligence, 
+Data is consolidated from multiple transactional databases
+Recommended AWS Service  Redshift based on PostgreSQL
+use columnar storage
+each table column is stored together
+high compression
+distribute data , one table in multiple cluster nodes
+complex queries can be executed efficiently
 
+Document Databases
+data stored as set of documents (whole json)
+structure data the way you application needs it
+one table instead of dozens
+schema-less   semi structure data
+useCase: content mgmt, catalogues, user profiles
+adv. horizontal scaleable to TB with ms response million of TPS
+Recommended AWS Service  DynamoDB
 
+Key-value
+use simple key-value pair 
+key is unique, value can be obj or simple data values
+adv. horizontal scaleable to TB with ms response million of TPS
+Recommended AWS Service  DynamoDB
+useCase: shopping cart,gaming apps, v. high traffic web apps
 
+Graph DB
+store and navigate data with complex relationships
+eg fraud detection , fb, social networking data 
+Recommended AWS Service  Neptune
 
+In Memory Databases
+microsecond latency
+storing persistent data in memory
+Recommended AWS Service
+supports
+Redis  for persistent data
+Memcached for simple cache
 
+use cases: session management, geospatial apps
 
+DB Scenarios
 
+A start up wih quickly evolving tables  ElastiCache
+DynamoDB
 
+Transaction app need to process millions of TPS
+DynamoDB
 
+Very high consistency of data required while  processing thousands of TPS
+RDS
 
+Cache data from db for a web app
+ElastiCache
 
-
-
-
-
-
-
+Relational DB for analytical processing of Petabyte of data
+RedShift
 
 
 

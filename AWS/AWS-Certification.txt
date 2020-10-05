@@ -21,13 +21,9 @@ Find Qualifier  keywords
 Elimination Technique
 Time Management
 
-
-
-
 -----------------------------------------------------------------------------------
 
 https://202041525381.signin.aws.amazon.com/console
-
 
 ------------------------------------------------------------------------
 Questions
@@ -3064,6 +3060,274 @@ ElastiCache
 
 Relational DB for analytical processing of Petabyte of data
 RedShift
+
+--------- Amazon RDS----------------
+
+For a managed service , you no need to worry about
+setup, backup, scaling , replication and upgrade patching 
+
+it supports
+Amazon Aurora (postgreSQL + MySQL)
+PostgresSQL
+MYSQL (InnoDB storage engine full suppot)
+MariaDB (enhanced mysql for enterprises)
+Oracle DB
+Microsoft SQL Server
+
+Multi AZ deployments (standby in another AZ)
+
+Read Replica
+Same AZ, Multi AZ, Cross Region
+auto scaling storage
+automated bacup
+manual snapshots
+
+AWS Responsible 
+availability (as per your configurations)
+durability
+scaling  (as per your configurations)
+Maintenance patches 
+backups 
+
+You cannot 
+ssh in db ec2 instance or setup custom software
+not allow to install db patches
+
+You can 
+manage db users
+app optimisation
+
+Services -> RSD
+Create Database
+standard create
+Engine Type: MySQL
+Template: Free tier
+Instance: mysqldbInstance1
+admin / admin123
+Brustable Classes  db.t2.micro
+SSD 10GB
+Default AVP
+public access = Yes
+Security Group = rds-security-group
+Initial database name: todos  (schema)
+
+EC2 instance
+Name: TestInstnace
+Security Group:  my-EC2-security-group
+
+edit  rds-security-group 
+inbound : add  Custom -- my-EC2-security-group
+
+
+End point 
+mysqldbinstance1.cellrtm8cnov.ap-south-1.rds.amazonaws.com
+
+DBvisulizer URL
+jdbc:mysql://mysqldbinstance1.cellrtm8cnov.ap-south-1.rds.amazonaws.com:3306/todos?characterEncoding=latin1&useConfigs=maxPerformance
+
+
+cd C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
+ssh -i "EC2-keypair.pem" ec2-user@ec2-13-233-198-190.ap-south-1.compute.amazonaws.com
+
+sudo yum update
+
+To install mysql client
+sudo yum install mysql
+msql --version
+
+mysql --host=mysqldbinstance1.cellrtm8cnov.ap-south-1.rds.amazonaws.com --user=admin  --password todos
+
+create table users ( id integer, username varchar(30) );
+insert into users values(1, "Ranga");
+select * from users;
+	
+Multi AZ Deployments
+standby created in a diff AZ
+synchronous replication
+No downtime when DB is converted to MultiAz
+for patches
+apply patches at standby and then switch primary with standby
+standby is automatically deleted when u delete the DB
+
+Read Replicas
+it supports read-heavy database workloads 
+use case: reporting, DWH
+can be in same , diff AZ or diff Region
+App can connect to them
+Create read replicas of a read replica
+use Async replication (eventually consistency ie with delay)
+Read Replicas and Manual Snapshots are Not deleted when DB is deleted , needs to delete it manually
+Must to enable automatic backups before creating read replicas
+reduce replication lag by Vertical Scaling
+Max No of replicas
+MySQL,mariaDB,PostgresSQL, Oracle = 5
+Aws Aurora = 15
+SQL Server not supported read replicas
+
+-----------------------------------Amazon Aurora ----------------
+
+it maintains 2 copies of data each in min 3 AZ
+Uses Cluster volumes (multi AZ storage)
+it creates cluster of volumes spread across multiple AZ 
+Primary instance  read/write to cluster vol and Replicas read from cluster volume
+provides Global database options (multiple regions)
+Deployment Option
+
+1) Single Master 
+one writer and multiple readers
+
+2)  Multi Master 
+multiple writers
+
+3) Serverless
+No need to provide the size
+min or max to be provide and aws scale automatically
+
+
+Maria DB
+MySQL Compatible DB
+
+Oracle
+
+select Edition
+some has license included, some not 
+ 
+SQL Server
+License is included 
+
+RDS Scaling
+Normally manual scale up to 64TB 
+SQL Server up to 16TB
+storage and compute typically applied during maintenance window or you can choose app-immediately
+
+Horizontal Scaling
+configure read replicas
+For Aurora (multi-master, writer with multiple  readers)
+
+Use cloud watch for historical data
+configure cloudwatch alarms when near max capacity
+slow queries  , enable enhanced monitoring
+autonomic backup during backup windows in S3 , default retain 7 days, max 35 days
+Achieve RPO up to 5 mins
+
+RDS -Security and Encryption
+
+create a VPC private subnet
+security groups to control access
+option to use IAM authentication 
+Enable encryption using keys from KMS
+when Encryption is enabled data in database ,automated backups, read replicas and snapshots are all Encrypted
+Use SSL certificates to encrypt data in flight (EC2 to RDS)
+
+RDS Costs
+
+1) DB instance hours
+2) Storage per GB per month  , you provisioned and not usage
+Backups and snapshot storage
+data transfer cost
+Not with in AZ
+With outside Region
+
+When to use RDS
+1) pre-defined schema
+2) where strong transactional capabilities and complex queries required
+
+RDS is Not  recommend for 
+Highly scalable massive read/write eg. millions of writes/sec  (go for DynamoDB)
+Upload files using Get/PUT Rest API (use S3)
+heavy customisation for DB or need to access underlying EC2 (Go for custom DB installation)
+
+Migrate on-premise database to cloud database of same type
+AWS Database Migration Service
+
+Migrate data from one DB engine to other
+use AWS Schema Conversion tool
+
+reduce global latency and improve DR
+use multi region read replica
+
+select subnets a RDS instance is launched into
+create DB subnet groups
+
+Add encryption to an unencrypted db instance
+create DB snapshot
+encrypt the snapshot using keys in KMS
+create database from encrypted snapshot
+
+Billed if DB is stopped 
+Only for storage, IOPS , backups and snapshots
+Not billed for DB instance hours
+
+Need RDS for an year, reduce cost 
+use RDS reserved instances
+
+Efficiently manage DB connections
+use AwS RDS Proxy
+sits b/w client app (including lambda) and RDS
+
+
+------------------------ AWS DynamoDB --------------------------------------------------------
+fast, scalable distributed db for any scale
+schema less
+No sql key value and document based
+Don't worry about scaling , availability or durability
+it automatically partitioned data as it grows across multiple nodes
+single-digit millisecond latency at any scale.
+3 replica in a single region
+No need to crate a DB 
+here create a table directly and configure RCU and WCU Read capacity unit
+provides a expensive serverless  mode
+application which required milli second latency but at v high scale
+
+Hierarchy 
+Table ->Items -> attributes (key value pairs)
+Mandatory Primary Key
+Max 400KB item size
+
+DyamoDB 
+table name: todo
+Primary key : id  (mandatory) used to distribute the data across different partitions
+Add sort key 
+
+TTL time to live 
+expiry of record
+
+Manage Stream
+ie upon any event execute stream,
+
+scan is expensive operation which query is efficient
+based on specific metric , you can create alarms
+
+if you need to create the query by a column other than Id then create an index of that column
+
+keys in Json is case sensitive 
+eg. Address and address will create two columns#
+
+Create Index
+Key : Address
+Name: Address-index
+
+Global tables
+enable you to use DynamoDB as fully managed , multi region, multi-master database
+to create global table , must enabled dynamoDB streams
+
+Triggers 
+connect DynamoDB streams to Lambda functions whenever an item in the tale is modified , a new
+stream record is written, which in turn invoke the lambda function
+
+Access control
+helpful for direct database access by mobile apps, web identify federation allows your
+mobile apps to use identity providers as Login with Facebook, Google
+
+partition key is mandatory for search
+can't search using only sort key
+
+partition key + sort key = composite pk
+
+
+
+
+
 
 
 

@@ -1,3 +1,49 @@
+
+IBM Cloud Leaning paths
+https://ibm.seismic.com/Link/Content/DCoOar42GSrkGLJQWKR050_w
+https://www.ibm.com/cloud/architecture/tutorials/power-simplicity-app-connect-integration
+
+ICCT role-based training is free to IBM employees. IBMers should enroll in ICCT courses from Your Learning to avoid charges. 
+Click the ICCT on IBM Your Learning link.
+https://yourlearning.ibm.com/icct	
+
+Good 
+IBM Cloud Architect: Professional
+https://yourlearning.ibm.com/activity/PLAN-9DE5A5B18C9D
+
+IBM Cloud Developer: Professional
+https://yourlearning.ibm.com/activity/PLAN-785E3A7691DC
+
+Cloud Pak for Integration 
+https://community.ibm.com/community/user/imwuc/viewdocument/cloud-native-deployment-automation?CommunityKey=da043955-1299-4c40-a6a8-479e62046c8fhttps://event.on24.com/eventRegistration/console/EventConsoleApollo.jsp?&eventid=2494886&sessionid=1&username=&partnerref=&format=fhvideo1&mobile=&flashsupportedmobiledevice=&helpcenter=&key=B2D186FF6F43A82D60E56C40F819F67D&newConsole=true&nxChe=true&text_language_id=en&playerwidth=748&playerheight=526&eventuserid=340395883&contenttype=A&mediametricsessionid=311153000&mediametricid=3516327&usercd=340395883&mode=launch
+
+
+Solution architect workshop
+https://www.ibm.com/training/course/ZD108G
+Exam:
+https://www.ibm.com/certify/exam?id=C1000-087
+Developer workshop - TBD
+Exam:
+https://www.ibm.com/certify/exam?id=C1000-099
+
+CP4MCM 1.3 Certification Cohort
+https://ibm.ent.box.com/s/hf66mr7kd2l7hyw02l3njmrdr4i6r3iy/folder/120414914422
+
+https://pages.github.ibm.com/ibmdemos-cloudpaks/cloudpak-applications/labs/
+
+VW015
+
+channel name: garage-tsa-appmod-chapter
+
+
+Microservice for Beginners
+Very Good 
+https://github.com/ibm/cloud-native-starter
+https://developer.ibm.com/videos/teach-your-monolith-to-dance/
+
+https://developer.ibm.com/videos/microservices-for-beginners/?utm_medium=Email&utm_source=Newsletter&utm_content=000039JL&utm_term=10004796&utm_campaign=M00000000&utm_id=Containers2020&cm_mmc=Email_Newsletter-_-Audience+Developer_Developer+Conversation-_-WW_WW-_-Containers2020_ov75905&cm_mmca1=000039JL&cm_mmca2=10004796&spMailingID=43637657&spUserID=Njg0Nzc2NDQzMDIxS0&spJobID=1860650711&spReportId=MTg2MDY1MDcxMQS2
+
+https://github.com/IBM/microservices-using-apiconnect-and-appconnect/blob/master/README.md
 ----------------------------------------------------------------------------------
 Must do 
 
@@ -573,13 +619,13 @@ Network Layer Layer 3 (IP) transferring bits/bytes
  
  3 Types of ELB
  
- (1) Classic LB (Layer 4 (TCP/TLS & UDP) and layer 7 (http/https) )
+ (1) Classic LB (Layer 4 (TCP/TLS & UDP) and layer 7 (HTTP/HTTPS) )
 not recommanded by AWS
 older version of ELB
 
 
 2) Application Load Balancer (Layer 7)
-new generation , advance routing ,http/https
+new generation , advance routing ,HTTP/HTTPS
 
 3) Network load Balancer (Layer 4)
 very high performance TCP/TLS & UDP
@@ -620,7 +666,7 @@ Now Delete the Load Balancer using Action
 
 2) Application Load Balncer  layer 7
 most frequent used
-supports websockets http/https
+supports websockets HTTP/HTTPS
 supports all supporting load balancer features
 scale automatically
 it is a managed service
@@ -1161,8 +1207,8 @@ in AWS SSL certificates can be managed using AWS Certificate Manager
 ELB requires X.509 certificates (ssl/tsl)
 
 Application/Classic LB SSL TLS Termination
-Client -> ELB 		https
-ELB -> EC2        http
+Client -> ELB 		HTTPS
+ELB -> EC2        HTTP
 
 Network LB TLS Termination
 Client -> NLB TLS
@@ -1657,8 +1703,8 @@ allows all outbound traffic
 
 ssh 22
 rdp 8889
-http 80
-https 443
+HTTP 80
+HTTPS 443
 postgreSQL 5432
 Oracle 1521
 MySQL/Aurora 3306
@@ -2003,7 +2049,7 @@ Grant time limited permission (few hours to 7 days) to download objects
 Avoid web site scraping and unintended access
 using AWS SDK API
 input 
-security credentials, bucket name,object key , http method , expiration date time 
+security credentials, bucket name,object key , HTTP method , expiration date time 
 output 
 pre signed url
 
@@ -3303,6 +3349,13 @@ if you need to create the query by a column other than Id then create an index o
 keys in Json is case sensitive 
 eg. Address and address will create two columns#
 
+{
+  "Address": "Lahore",
+  "id": "001",
+  "name": "Ali"
+}
+
+
 Create Index
 Key : Address
 Name: Address-index
@@ -3323,6 +3376,644 @@ partition key is mandatory for search
 can't search using only sort key
 
 partition key + sort key = composite pk
+
+DynamoDB Indexes
+
+Local Secondary Index
+Same partition key  as of Primary Key but different sort key
+Should be created at the table creation
+
+Global Secondary Index
+Partition and sort keys are diff from Primary Key
+Can be added or removed at any point in time
+stored separately from original table
+
+
+Query VS Scan
+
+Query
+search using partition key (PK or Index) and a distinct value to search
+optional: sort key and filters
+results are sorted by PK
+Max 1 MB result returned
+
+SCAN
+read every item in a table
+expensive 
+return all attributes by default
+support paging above 1MB
+Filter items using expressions
+
+Consistency Levels
+Eventually consistent (1 sec lag by default)
+Request for strongly consistent reads
+Set ConsistentRead to true (slow and expensive)
+supports Transactions but cost will be twice
+
+Read/Write Capacity Modes
+
+In DynamoDB, strongly consistent reads are expensive than eventually consistent reads
+
+
+Provisioned
+Recommended
+provision read and write capacity
+dynamically adjustable
+unused capacity can be used in burst(in case of spike)
+Billed for provisioned capacity  irrespective of whether you used it or not
+
+On Demand
+Truly serverless and expensive
+For unknown workloads or traffic with Huge spikes
+used when workloads are really spiky causing low utilization of provisioned capacity
+or usage is very low 
+
+Dynamo DB RCU and WRC
+Capacity used depends on size of item, read consistency , transnational etc
+1 capacity unit to read 4KB or smaller 
+1 capacity unit to write 1KB or smaller 
+twice the capacity for strong consistent or transactional request
+On Demand RCU is 8 times the cost of Provisioned RCU
+
+Performance Monitoring
+use cloudwatch
+alerts on RCU,WCU and throttle request
+
+Migration from RDS or MongoDB to DynamoDB
+AWS Migration Service
+Enable point-in-time recovery (35 days)
+use Time to Live TTL  to automatically expire items
+
+IAM and Encryption
+Server side encryption with KMS keys is Always enabled (automatically encrypt tables, streams and backups)
+
+Client Side encryption
+DynamoDB Encryption Client
+
+Use IAM roles to provide EC2 instances or AWS services access to DynamoDB tables
+predefined polices 
+AmazonDynamoDBReadOnlyAccess
+AmazonDynamoDBFullccess
+Fine-grained control at the individual item level
+
+
+DynaymoDB
+milli sec latency with millions TPS but lower consistency
+Rest API, SDK, CLI
+Difficult to run complex queries
+No upper limit
+
+RDS
+stronger consistency and transactional capabilities
+SQL Queries
+Good to run complex queries
+upper Limit 64TB
+
+
+DynamoDB Accelerator (DAX)
+In memory cache for DynamoDB
+microsecond response time
+
+Few changes needed to connect to DAX
+can reduce your costs by saving our read capacity units (lambda reads from DAX rather than hititng DynamoDB)
+
+Not Recommanded
+if u need strongly consistent reads
+application is write intensive with very few reads
+
+DynamoDB -> DAX 
+create cluster
+encryption is recommended
+
+------------------AWS ElasticCache-------------------------------------------
+Managed Service
+Highly scalable and low latency in-memory data store
+u can store in memory data in EC
+as a distibuted caching solution
+
+1) Redis
+in memory persistence data store
+autoamtic failover with multi AZ deployments
+suports backup (in S3) and restore
+can schedule snapshots
+configure backup windows
+encryption at rest  (KMS) and in transit 
+use cases: caching,session store,chat  messaging, geopolitical apps, queues
+shard = collection of one or more nodes (where a portion of ur data is available)
+One node act as read/write Primary
+Other nodes act as read replicas (up to 5 read replicas)
+In case of Failure:
+	Primary node is replaced
+	if Multi-AZ replication group is enabled, read replica is promoted to primary
+publish subscribe messing  (act as a  message broker)
+read replicas and failover support
+encryption support
+
+
+2) Memcached
+pure caching sol
+distributed 
+non persistent 
+simple key value storage
+ideal for front end for data stores like RDS and DynamoDB
+can be used as a Transient  session store
+create up to 20 cache nodes
+use Auto discovery to discover cache
+Low maintenance simple caching solution
+Easy auto scaling
+Limitations
+No backup or  restore supported
+No encryption or replication or snapshot
+when node fails, all data in that node is lost 
+reduce impact of failure by using Large no. of small small nodes
+
+Cluster Engine : Memcached
+
+---------------------------------------------CloudTrail , Config and CloudWatch ------------------------
+AWS CloudTrail
+who made the request
+what action performed
+what parameter used
+what was end result
+
+its like a chnage log 
+use case: 
+compliance with regulator standards
+troubleshooting
+
+deliver log file to S3(default) or cloudwatch log
+can setup SNS for log file delivery
+
+Trail Types
+1) Multi Region Trail
+One trail of all AWS Regions
+events from all regions can be sent to one CloudWatch logs log group
+
+2) Single Region Trail
+Only event from one specific region
+Destination bucket S3 can be in any region
+
+Log files are automatically encrypted with AWS S3 (SSE server side encryption)
+S3 life cycle rules can be configure to archive/delete logs
+supports log integrity (cant be altered by anyone)
+
+Services - CloudTrail  (its not in the free tier)
+
+Trails -Create trail
+name: cloudtrail_mgmgt_events1
+All Regions = Yes
+Write-only  events
+
+Storage: S3 bucket
+
+Do NOT enable AWS Config and Config Rules if you want to stay in FREE TIER!
+
+----------------AWS Config-----------
+Auditing 
+creates a complete inventory of our AWS resources
+find how resource was configured at any time
+configuration of deleted resources would be maintained
+history file to s3 bucket every 6 hour
+take configuration snapshot when needed
+
+customize config rules for specific resources or for entire aws account
+evaluate compliance against desired configuration
+SNS notification on configuration change
+Group Config rules and remediation actions into conformance packs
+can create lambda functions with custom rules
+can setup auto remediation for each rule (delete elastic ip which is not used, stop ec2 isntance without a TAG)
+Config rules examples (80+ available and custom can be created)
+
+alb-HTTP-HTTPS-redirection-check
+Is HTTP to HTTPS redirection is configured on all HTTP listener of ALB
+
+ebs-optimized-instance 
+EBS optimization enabled
+
+ec2-instance-no-public-ip
+do EC2 having public IP
+
+encrypted-volumes
+EC2 attached with EBS encrypted volumes
+
+eip-restricked
+are elastic ip used
+
+restricted-ssh
+security groups use disallow unrestricted incoming ssh traffic
+
+AWS Config is not free
+more rules = more cost
+
+
+Console - AWS Config
+Settings
+Rules
+
+
+---------------------AWS CloudWatch ---------------------
+
+AWS CloudTrail
+ tracks changes , who made an API call to modify the resource
+
+AWS Config
+What did my AWS resource look like a year back
+enables you to assess, audit, and evaluate the configuration of your AWS resources
+
+CW is all about Mornington and observability service
+informs of logs,metrics and events
+set alarms , visualize logs , take automated actions and troubleshot issues
+
+Create DashBoard
+Choose Metric
+Choose Resource
+
+CloudWatch Alarms (Based on metrics)
+related to metrics
+you can create alarms on an Amazon EC2 instance CPU utilization
+Amazon ELB request latency
+Amazon DynamoDB table throughput,
+Amazon SQS queue length, or even the charges on your AWS bill
+take immediate action
+ 
+Logs
+log groups
+
+Cloudwatch Insights
+write queries and get actionable insight from your logs
+
+ By default, Amazon CloudWatch does NOT have access to operating system metrics like memory consumption
+ 
+CloudWatch Metrics
+
+
+CloudWatch Events  (related to resources)
+near read-time stream of systems events that describe changes in AWS resources
+related to resources and sends notifications out to targets
+eg. 
+trigger when someone stop an ec2 instance
+call lambda when EC2 starts
+notify SNS topic when auto scaling event happs
+Also you can schedule events , use unix cron syntax
+
+AWS CloudTrail only records API calls for future references But cloud watch events allow you to take actois
+
+
+
+X-Ray is used to trace your application
+CloudWatch is used to monitor your application
+Cloudwatch SeviceLens monitors issues with Microservice based applications
+unified access 
+
+Container Insight
+used a pattern called service mesh
+monitor,troubleshoot and set alarms for your containerized applications running in EKS,ECS and Fargate
+
+CloudWatch logs
+monitor and troubleshoot using system,application and custom log files
+monitor for patterns in logs and trigger events based on them 
+long term log retention default = forever
+archive to s3
+Stream to ES Amazon Elastic Search cluster using cloudwatch log subscription
+
+Cloudwatch Logs Agents
+Installed on EC2 to move logs from servers to CloudWatch logs
+
+---------------------------------Decoupling Applications -----------------------------------------------------------------------------
+
+Pull Model SQS
+Multiple Producers and Multiple Consumers 
+Normally same consumers 
+
+produce put messages on queue
+**consume pull on the queue only one of the consume will pick  a msg
+
+Scalability
+scale consumers instances under high load
+
+Availability
+Producer up even if consumer is down
+
+Push Model
+Subscribers subscribe to a topic
+notification broadcast
+
+Simple Queuing Service SQS
+Full Managed, reliable ,scalable Message Queue Service
+Unlimited scaling 
+Low cost (pay for use , no. of msgs)
+
+max messge size = 256KB
+can congifure SSE server account envryption
+Lamda trigger can set
+
+
+Standard Queue
+**Unlimited throughput
+No order guarantee
+No guarantee of exactly one processing 
+
+FIFO Queue
+lower throughput 300 msg per seconds
+**Order guarantee
+Guarantee of exactly one processing 
+batch 10 msg per operations then up to 3000 msg per seconds
+
+1) Producer placed a msg on queue
+2) globally msg Id is assigned ABCD which is received by the proudcer
+3) consumer polls for the msg ,
+4) consumer received the msg with ID ABCD and receipt Handle XYZ
+5) msg remains on the queue and other consumers can't pool it
+6)  consumer process the msg and call delete msg providing receipt handle XYZ
+7) message is remove from the queue
+
+Message Life Cycle
+
+Start -> Ready ->   Being processed -> Done
+delay second = if configure, the msg will be ready after that time 
+if msg is not processed by the consumer after expiry of visibility timeout, then again 
+moves to Ready state and to Dead letter queue in case of max Retry policy 
+
+SQS Auto Scaling
+
+SQS -> CW Alarm -> AutScaling -> EC2
+use target tracking scaling policy
+use SQS metric like ApproximateNumberOfMessages
+
+SQS Important Configurations
+
+1) Visibility Timeout
+other consumers will not received a messages being processed for that time
+default 30 sec up to  12 hrs
+can be changed by call API ChangeMessageVisibility
+
+2) DelaySeconds
+time period before a msg is visible on the queue
+default 0 sec , max 15 mins
+Can be set on queue creation or update using setQueuAttribute
+
+Message Retention period
+max period a msg can be on a queue if no one consume it
+default = 4 days
+min 60 secs
+max 14 days
+
+MaxReceiveCount
+Max no. of failures in processing a msg to a single Dead letter queue
+
+Other account access to your Queue
+SQS Queue Access Policy (resource policy on the queue)
+
+Console --> EC2 -> SQS
+SQS 
+Configure Queue 
+name: First Queue
+
+Create EC2
+
+Create IAM Role
+name: EC2RoleForSQS
+Create IAM Role , giving access to Queue of SQS then assign to EC2 instance
+select EC2
+Permission 
+AWSLambdaSQSQueueuExectionRole
+AWSSQSFullAccess
+
+Go to Running Instances
+Action -> Instance Setting --> attach IAM Role EC2RoleForSQS
+
+configure region where Queue are available
+
+cmd on EC2
+aws configure
+No access key
+No secret key
+default region = us-east-1
+
+aws sqs list-queue
+
+aws sqs receive-message --queue-url=QUEUEURL 
+aws sqs delete message --queue-url=QUEUEURL  --receipt-handle=RECEIPTHANDLE
+aws sqs send-message --queue-url=QUEUEURL --message-body="MyMsgfrom cmd line"
+
+Purge Queue
+Delete all messages from that Queue
+
+SQS Scenarios
+
+Receiver wants to handle the msg without looking msg body
+configure message attributes
+
+Reduce no. of API calls to SQS
+use Long polling ie WaitTimeSeconds up to 20 seconds
+
+Receive messages after a week and observe some msg not processed
+Exceed msg retention period
+default is 4 days
+max 14 days
+
+Give High priority for premium customer
+create separate queues for normal and premium customer
+
+---------------Simple Notification Service  SNS----------------------------------------------------------------
+Publish-Subscribe paradigm (pub-sub)
+broadcast async event notification
+
+provides mobile and enterprise messing web services
+push notification to apple , android , window devices
+send sms to mobile users
+send emails
+
+** SNS does not need SQS or a Queue
+call allow access to other AWS accounts uinsg SNS policy
+can enable encryption SSE
+
+can configure retry policy
+can log deliver status
+configure roles
+
+SNS - Topic
+Create topic
+my-firs-sns-topic
+
+create subscriptions
+Protocol = Lambda (my first lambda)
+Publish Message
+
+Now go to Lambda and see its monitoring , view logs in CW
+
+
+multiple SQS queues can be subscribed to a same Topic
+Applications can send msg to topics where multiple queue are registered and from there labmda function can invoke
+
+Amazon MQ
+
+managed message broker service for Apache ActiveMQ
+Amazon MQ = SQS + SNS but with restricted scalability
+supports traditional APIS (JMS) and protocols AMQP,MQTT,OpenWire,STOMP
+easy to migrate on premises
+start Amazon MQ as first step and slowly redesign app to SQS/SNS
+
+use case: 
+You have multiple applications in your enterprise using the AMQP message broker. You would like to migrate them to AWS but don't want to do much code changes
+
+--------------------- Routing and Content Delivery -------------------------------------
+CDN Content delivery network
+distribute content to multiple edge locations around the world
+200+ edge locations
+High availability and performance
+its a content distribution system (used to distribute contents to outside world)
+
+Amazon CloudFront 
+serve users from nearest edge loc based on user location
+source content can  be S3,EC2, ELB and external websites
+if no content found at edge, it will retriever from the origin server and cached at the edge location
+can use multiple edge locations
+provides features to protect your private content
+integrates  AWS shield to protect DDos attacks
+integrates  AWS WAF web app firewall to protect SQL Injection, cross site scripting
+
+use cases
+static/dynamic websites, audio/video and software downloads , HTTP and rtmp
+
+cost benefits
+0 cost of data transfer b/w S3 and CloudFront 
+reduce compute workload for your EC2 instances
+
+DNS domain name: which endures can access
+Origin: where you get the content from S3,EC2
+Cache Control : TTL = 24 hrs. default
+configure HTTPS only (default support for both HTTP and HTTPS)
+can redirect from HTTP to HTTPS
+configure different cloud front behaviour for different URL path patterns from same origion
+path pattern: *.php
+
+Signed URLs used for
+RTMP distribution (media streaming)
+Application downloads (individual files)
+situations where cookies are not supported
+
+Singed cookies using key pairs
+Multiple files (you have a subscriber website )
+doesn't need any change in application URL
+
+Origin Access Identities (OAI)
+ensure only CloudFront can access S3
+create a special CloudFront user
+Create a bucket policy
+allow access to S3 only to a spacial CloudFront user
+
+CloudFront is a global service
+
+Console -->CloudFront
+Delivery Method --> Web 
+OringDomain Name: select your bucket 
+Default object: index.html
+86400 secs = 24 hours
+create distribution  (15 to 20 mins)
+
+the contents will be automatically expire after TTL from the edge locations if not used
+InvalidationAPI - to remove object from cache (from all edge locations) for emergencies 
+
+use versioning in object path name
+
+Don't use CloudFront for 
+when all requests from a single location 
+when all requests from corporate VPN
+
+Scenario: Restrict content to users in certain countries
+enable CloudFront Geo restriction
+white list(allowed countries)
+black list(blocked countries)
+
+---------------------Route 53---------------------------------------------------
+Route 53 = Domain Registrar + DNS
+ie 
+Buy your domain name
+setup your DNS to route requests to doamin to your hosted web site
+
+Domain Name Server DNS
+each record is associated with a TTL
+how long is your mapping cached at the router at the client
+
+Hosted Zone
+container for records containing DNS records routing traffic for a specifi domain
+can be private L routing with VPC
+can be public : routing on internet
+
+Standard DNS Records
+
+Type
+A			: Name to IPV4 address
+AAAA	: Name to IPV6 address
+NS	:  name server containing DNS records (name of hosted servers) 
+MX    : Mail Exchange
+CNAME : name1 to name2 mapping  
+eg     dumy.in28minutes.com to www.example.com
+
+53 specific extension : Alias records
+
+route traffic to select AWS resources like S3,ELB,CloudFront 
+Alias records can be create for root and non root domains
+ie in28minutes.com   or api.in28minutes.com
+
+** CNAME records only be created for non root domains 
+
+if you want to route domain to an AWS resource then what u need to make of 
+use Alias records
+
+Route 53 - Routing 
+
+based on user requests
+offer multiple routing policies
+
+ie  users from US will route to ELB in us-east-1 and 
+users from india will route to ELB in ap-south-1
+
+Route 53 Policies
+
+Simple
+maps a domain name to an IP address
+
+Weighted
+maps a single DNS name to multiple weighted resources, 10% to A, 30% to b (useful for Canary deployments)
+
+Latency
+choose option with min latency
+latency b/w host on internet can be change over time
+  
+Failover
+active passive failover , ie use DR is primary helth check fails
+
+Geoproximity
+choose nearest resource (geographic distance) to ur user
+ 
+ Multivalve answer
+ return multipke healthy records upto 8 random and then choose
+ 
+ Geolocation
+ choose based on user location
+ ie from Pakistan
+send traffic from Asia to A
+
+**record set for smallest geographic region has priority
+
+use case:
+restrict distribution of content to a specific area where u have distribution rights
+
+recommenced to configure a default policy use if one of the location records match 
+otherwise Rote 53 returns a " no answer"
+
+
+
+
+
+
+
+
+
+
+
 
 
 

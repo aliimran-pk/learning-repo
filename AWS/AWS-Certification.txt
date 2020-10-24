@@ -1,3 +1,51 @@
+AOA Wasif Bhi 
+hope you are  well
+Need your support to get AWS Certification exam approval .
+My plan is to give exam in Dec 2020.
+Email already shared with you and Waqar
+
+Thanks
+
+-------------------------------
+---------------
+Enterprise Integration pattern
+knative
+quarkus
+
+https://github.com/rh-ei-stp/cloud-native-event-mesh
+-------------------
+
+Must To Do
+Hybrid Cloud
+
+Career Conversation
+
+update career tool
+
+------------------------------------------------------------
+
+L&K Pakistan
+https://w3.ibm.com/w3publisher/l-k-pakistan 
+
+IBM Microsoft  Learning Portal
+https://ibm.ontidwit.com/
+
+MEA CTO Office's Personal Room
+https://ibm.webex.com/meet/mea.cto.office | 1459398949
+
+Join by video system
+Dial mea.cto.office@ibm.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-844-531-0958 United States Toll Free
+1-669-234-1178 United States Toll
+Access code: 145 939 8949
+
+---------------------------------------------------
+
+Application modernization is about building automated, operatable, business focused solutions
+you build it , you run it
 
 IBM Cloud Leaning paths
 https://ibm.seismic.com/Link/Content/DCoOar42GSrkGLJQWKR050_w
@@ -45,7 +93,7 @@ https://developer.ibm.com/videos/microservices-for-beginners/?utm_medium=Email&u
 
 https://github.com/IBM/microservices-using-apiconnect-and-appconnect/blob/master/README.md
 ----------------------------------------------------------------------------------
-Must do 
+AWS Must do 
 
 AWS Exam Readiness
 https://www.aws.training/Details/Curriculum?id=20685
@@ -66,6 +114,27 @@ https://tutorialsdojo.com/links-to-all-aws-cheat-sheets/
 Find Qualifier  keywords
 Elimination Technique
 Time Management
+
+cost is tie breaker 
+You can enrol for practise tests on the website. https://aws.amazon.com/certification/certified-solutions-architect-associate/
+The following links provide more information regarding the topics just discussed. Please review the links in preparation for the exam: Amazon Glacier Documentation: https://docs.aws.amazon.com/glacier/index.html#lang/en_us FAQs: Amazon EFS - https://aws.amazon.com/efs/faq/ Amazon S3 - https://aws.amazon.com/s3/faqs/ Amazon Glacier - https://aws.amazon.com/glacier/faqs/ Amazon CloudFront - https://aws.amazon.com/cloudfront/faqs/ Introduction to Amazon S3 Lab – https://amazon.qwiklabs.com/catalog?keywords=Introduction+to+Amazon+Simple+Storage+Service+%28S3%29&format%5B%5D=any&level%5B%5D=any&duration%5B%5D=any&price%5B%5D=any&modality%5B%5D=any&language%5B%5D=any Introduction to Amazon EFS – https://amazon.qwiklabs.com/catalog?keywords=Introduction+to+Amazon+Elastic+File+System+%28EFS%29&format%5B%5D=any&level%5B%5D=any&duration%5B%5D=any&price%5B%5D=any&modality%5B%5D=any&language%5B%5D=any 
+
+** Must remember the Volume matrix
+** AWS Well Architected Framework: 
+https://aws.amazon.com/architecture/well-architected/ 
+
+
+AWS labs
+https://amazon.qwiklabs.com/
+
+https://aws.amazon.com/ebs/features/
+
+To Visit for exam readiness
+https://pages.awscloud.com/traincert_get_certified_2020.html
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html for more information on Amazon EC2 instance stores. Amazon EBS FAQs: https://aws.amazon.com/ebs/faqs/ Whitepaper – AWS Storage Services Overview: https://d0.awsstatic.com/whitepapers/Storage/AWS Storage Services Whitepaper-v9.pdf I will share a consolidated towards the end
+
+
 
 -----------------------------------------------------------------------------------
 
@@ -1549,13 +1618,20 @@ Rest API Challenges
 Management of Rest API is not easy
 authentication and authorization
 Rate limits (quotas)
-Can  Run Multiple Versions of API
+Can  Run Multiple Versions of API and multiple environments
 Monitor API callsCache API requests
-API keys for third party developers 
+API keys for third party developers  to monitor usage
+
+Warning: don't use API keys for authorisation
 
 Full Managed Service
+Life cycle management for REST APIs
+Enable Caching for API call with TTL
+protect backend by throttling reqest
+
 publish , maintain , monitoring and securing APIs
 Integrate with Lambda, EC2, ECS,  or any publicly addressable web servic
+Integrate with  CloudWatch, CloudTrails
 supports HTTP(s) and web sockets
 It is serverless 
 
@@ -1605,7 +1681,282 @@ URL: 	https://ruvdffuyq5.execute-api.ap-south-1.amazonaws.com/Dev
 Canary Deployment
 sent a % request to a no. of users
 
+Amazon API Gateway 
+
+Authentication
+
+AWS Signature version 4
+create a signature using AWS secret access key and send it with API request
+if ur users belong to same AWS Account
+
+
+Lambda Authorizer
+Implement a lambda function to authenticate (JWT,OAtuh) and return AMI policies
+Integrate with any custom user directory
+
+Amazon Congnito
+authenticate mobile and web-apps
+want to integrate with web identity providers google, Facebook
+MFA ,phone and email versification
+support for SAML
+
+Congnito - User pools
+create your own secure user directory
+create sign -u pages
+customisable web UI to sign in with socila sing in option
+create a user pool
+
+Congnito - Identity pools
+for authorizaion to aws services
+connect identity pools with authentication identity providers
+own user pool , faacebook,openId, SAML
+Federated Identity
+an external identity provider
+
+How Congnito works
+1) app send users credentials to identity provider (user pool or  facebook)
+if ok, it gets a token
+2) app send token to identity pool
+3) identiy ool validates it via STS and creates temp access keys,secrect key and session token
+4) app send a request with these credentials to AWS service
+
+
+lambda@Edge
+running labda functions at end location
+lowest network latency for end users
+
+use case: search engine optimisation, W/B testing , dynamic routing
+Cab be trigger on AWS cloudFront Events
+Viewer request- trigger when request arrive at edge location
+Origin request- just before sending request to origin when  obj is not in cache
+Origin response-After edge loc receive response back from origin
+Viewer Response: just before response is end  back from edge loca
+l
+Limitations
+only supports node.js and python
+No free tier and more expensive than lambda
+
+ServerLess Application Model(SAM)
+how to test serverless projects with lambda,api gateway and dynaDB in local
+its a open source
+yaml file with all serverless resourcees, cloud formation template
+
+AWS AppSync
+apps cotinue to work offline
+data sysnc when connect again
+based on GraphQL (FB framework ) get data from multiple api
+can integrate with nosQL db, rds and lambda
+
+
+AWS Step Functions
+build distributed applications using vistual workflows
+
+Crate a serverless wotkflow in 10 mins using visual apporch
+invoke multiple aws services  into serverless workflows
+build workflows as a series of steps
+retry a step until it successed
+max duration is 1 year
+integrate with API Gateway to expose it as API
+include human approvals 
+long-running
+machine leanding models
+
+short duration
+iot data ingestion, steam processing
+less code
+recommend for all new workflows , easy and simple cases
+
+AWS SIMPLE WORKFLOW SERVICE (SWF)
+for complex orchestration 
+buid and run background jobs
+with paralle or sequential steps
+synchronously or asynchronously
+can invlode human inputs
+use case: order processing
+workflow can run upto 1 year
+
+Workflow Starter call SWF action to start workflow
+eg. order is received
+SWF receives request and schedule a Decider
+
+Decider  what is next task to do and return decision to SWF
+eg schedule a activity
+
+SWF schedule Activity1
+one of those Activity worker pick up Activity1 and send results  to SWF
+SWF update workflow history and then schedule another decision task
+until decider to close workflows
+SWF archivers history and close workflow
+
+
+
 -------------------------- Virtual  Private Cloud ----------------READ AGAIN IN DETAIL-----------------------------------------
+
+------------------------------------------Networking -------------------------------------------------------------
+
+VPC is a virtual network or dataset inside AWS for a specific client
+Flat in a building but can't go inside other flat
+logical isolated
+Max 5 VPC in a Region
+200 subnets in a VPC
+200 routing table
+Max 5 Elastic IP in an account (may be extend based on request to AWS)
+
+when we create a VPC the by default below is created automatically
+ 1) DHCP
+ 2) Security Group
+ 3) NACL
+
+VPC is created in a Region and not in AZs
+its all properties are regional
+
+can't use same CIDR in other VPC in the same region
+but for VPC peering (communicate) both CIDR should be different
+
+Subnet is created in AZ and not in regions
+A same subnet can't be used on two AZ
+
+Can a VPC extends to two diff AZs 
+No
+
+Can a Subnet exits in two diff AZs 
+No
+
+Once a VPC is created, you can't change its CIDR block range
+
+--------------------------
+Physical Addressing
+
+MAC address 48 bits
+
+Logical Addressing
+eg my home addreess
+IP address
+IPv4 and  IPv6
+
+IPv4
+Public IP and Private IP
+
+32 bit logical address
+4 Octet
+0 to 255 max value in each octet
+
+IP address = Network ID + Host ID
+
+8 bits  8 bits  8 bits  8 bits 
+
+Large Network
+Class A  1.0.0.0 to 126.0.0.0
+N H H H 
+
+Class B  128.0.0.0 to 191.255.0.0
+N N H H 
+Small Network
+Class C  192.0.0.0 to 223.255.255.0
+N N N H 
+
+Class D  224-239 multi cast4
+Class E  240-255 research
+
+Loop Back Address
+127.0.0.0 to check network interface
+
+To find network ID
+
+Network bit = 1
+Host bit 		 = 0
+
+eg.
+115 .0 .0.15
+Class A
+one oct et is reserved
+115.0.0.0  is become the network id
+
+196.10.10.10
+then its network id will be 
+196.10.10.0
+
+Give IP address find its subnet mask
+
+115.10.10.20
+Class A
+255 0 0 0 0 subnet mask
+
+160.10.10.20
+Class B
+255.255 0 .0 is subnet mask
+
+Private IP for LAN no need to buy, can't got to router or internet
+Class A 
+10
+
+Class B
+172.16 to 172.31
+
+Class C
+192168.0.0 to 192.168.255.255
+
+Q: 150 10 20 30
+Class B
+150 10 0 0 Network Id (Identifier of the network)
+150 10 255 255 broadcast IP
+2 (h) - 2 = 2(16) - 2 = 65534 usable computers can be attached
+
+if both IPs results in same network IP then it means that these are part of same network
+
+Subneting 
+network within a network
+or locally division of IP addresses
+
+Router interfaces
+A different network must be on an Router Interface with diff network ID
+
+router is internet-working device
+b/w multiple networks
+
+switch is b/w same network communication
+
+130 10 0  0
+                  1
+                 2
+				 255
+130 10 1  0				 
+130 10 2  0				 
+
+subnet mask = cidr
+
+A = /8
+B = /16
+C  = /24   24 bits for Network
+
+OTHER WISE there is Subneting
+give host bits to network is called Subneting
+dividing  big network into small networks is called Subneting
+
+
+eg
+192  168    1     3      class C  (3N  and1H)
+255   255 255  0       subnet mask 
+Network address of this will be then 
+192   168   1    0       (255= same and 0 = 0)
+
+very good read its screen shots
+https://www.youtube.com/watch?v=q7wNcYliJ1Q
+
+
+CIDR is classless Inter domain routing
+A method for allocating IP addresses 
+
+ It is as also a 32-bit address, which includes a special number which represents the number of bits that are present in the Block Id.
+a . b . c . d / n 
+Where, n is number of bits that are present in Block Id / Network Id.
+how many bits are turned as 1s
+
+
+CIDR is 8 for class A by default
+CIDR is 16 for class B by default
+CIDR is 24 for class C by default  (3N  and1H)
+-------------------------------------------------------------------------------------------------------------------
 
 Creating own private network in the cloud
 your own isolated network (traffic not visible to other AWS vps)
@@ -3981,12 +4332,16 @@ maps a single DNS name to multiple weighted resources, 10% to A, 30% to b (usefu
 Latency
 choose option with min latency
 latency b/w host on internet can be change over time
+provides u which region gives u low latency 
+
   
 Failover
 active passive failover , ie use DR is primary helth check fails
 
 Geoproximity
 choose nearest resource (geographic distance) to ur user
+ Routing policies will route to the nearest resource by geographic distance to your user?
+ 
  
  Multivalve answer
  return multipke healthy records upto 8 random and then choose
@@ -4004,25 +4359,1136 @@ restrict distribution of content to a specific area where u have distribution ri
 recommenced to configure a default policy use if one of the location records match 
 otherwise Rote 53 returns a " no answer"
 
+WARNING! BILLING ALERT! HOSTED ZONES are NOT in FREE TIER
+
+
+Console --> Route 53 
+DNS Management
+Create hosted Zone
+Domain  Name: learnaws.com
+Type: Private Hosted Zone VPC
+VPC Id  : Associate New VPC
+
+Create EC2 instance in those VPC
+
+Note 
+VPC Id  Region  Public IP of 4 EC2 instances you created
+
+On hosted Zones
+Create Record Set
+
+Record SetName: simple
+Type:all public ips of EC2 there
+Routing Policy = Simple
+save record set
+
+Now on Ec2 instance
+ping simple.learnaws.com will returns one of the pulic ip of EC2
+
+Record Set Name: weighted
+Routing Policy = Weighted 
+Weight : 10
+Side ID : B
+
+Routing Policy = Weighted 
+Weight : 90
+Side ID : B
+
+weighted.learnaws.com
+
+Record Set Name: latency
+Routing Policy = latency 
+Region : 10
+Side ID : A
+
+latency guide based on nearest region
+
+
+WARNING! BILLING ALERT! Delete the Hosted Zone and Terminate all EC2 Instances
+
+
+-----------------------ETL and Big Data Redshift and EMR---------------------------
+
+Redshift is a petabyte-scale distributed data ware house  based on PostgresSQL
+Redshift is a relation database
+
+1) MPP massive parallel processing
+storage and processing b/w multiple nodes
+
+2) Columnar data storage
+
+3) High data compression
+ie city column
+
+A single row data might be stored across multiple nodes
+A query to redshift leader  node is distributed to multiple compute nodes
+
+start with a single node configuration and scale it to multi node 
+add / remove nodes dynamically
+used mainly for ETL and BI cases
+high performance analysis and reporting of large dataset
+** supports standard SQL
+Integration with data loading, reporting , reporting , Miningsby 
+Its a managed service
+High available and durability
+automatic replication (3 copies of data)
+automatic backup (S3 , default retention 1 day, max 35 day)
+automatic recovery from any node failure
+
+
+Redshift cluster
+
+leader node
+received sql queries and distributed to compute nodes
+
+Compute Nodes
+can be in multiple AZ
+no direct access to leader nodes
+
+2) sort keys
+data is stored in sorted order using sort key
+increase efficiency of your queries
+join columns with other tables
+timestamp column if u use most recent data  frequently
+
+Aim is to distribute data equal across nodes and minimize data movement during query execution
+
+default strategy= EVEN
+KEY = based on values of one column
+ALL = entire table on all node ie lookup table
+
+Loading data in Redshift
+
+Simple
+SQL insert queries using ODBC and JDBC
+
+Efficient
+Redshift COPY command to load data from S3,DynamoDB, EMR
+
+Data Pipelines
+Load using AWS Data Pipeline a managed service
+
+On premise data
+user Storage gateway or import/export data into S3 
+COPY data from S3
+
+Other databases
+AWS Data Migration Service
+RDS,DynamoDB
+
+Recommendation
+prefer COPY over INSERT for bulk operations as COPY is parallel and INSERT is sequential
+prefer COPY from multiple files. split into multiple small input files
+
+Managing Redshift workload (WLM)
+used to categorize your queries 
+create queues and put  queries in it
+
+Redshift Security
+
+integrates with AWS KMS or AWS Cloud HSM
+It users 4-tier approach, key based architecture for encryption
+1) master key (choose keys in KMS)
+2) cluster encryption key (CEK)
+3) database encryption key (DEK) 
+4)  data encryption key
+
+IAM to manage user permission for cluster operations
+grant permissions on a cluster basis instead of per table basis
+can add new columns using alter but can't alter existing columns
+sql operations are logged against system tables or download to S3
+monitor performance and queries with cloud watch and redshift web console
+when deleting a redshift cluster, take a final snapshot to S3
+
+Console -> Redshift
+fast simple effective data warehouse 
+
+Redshift Spectrum
+Run sql queries against datasets in S3
+Avro,parquet, csv,json formats supported
+Redshift spectrum makes use of metadata to query from S3
+scale storage and compute independently
+Eliminate expensive data transfer from S3 to data warehousing solutions (cost effective) 
+Integrates with AWS Athena
+Query against EMR
+
+
+------------------- EMR Elastic MapReduce --------------------------------------------------------------
+
+Managed Hadoop service with High availability and durability
+** EMR give access to underlying OS ie u can ssh into it
+Important tools are natively supported
+Pig, Hive , Spark , Presto
+
+use cases
+log processing for insights
+click stream analytics for advertisers
+genomic and life science dataset processing
+
+Storage Types
+
+1) HDFS
+Standard for Hadoop
+Data Storage = EBS or instance (data can lost if instance down)
+Persistence Cluster running 24 X 7
+
+2) EMRFS ( Elastic MapReduce File System)
+Data Storage = S3
+Transient  Cluster running  Infrequent big data jobs (ad-hoc queries)
+can directly run map-reduce  jobs
+
+------------------------------------------------------
+AWS EMR
+For Big data frameworks that needs very large scale data processing and high customizations
+machine learning , graph analytics
+
+AWS Redshift
+Run complex queries against data warehouse,
+housing Structured and Unstructured data
+
+AWS Redshift Spectrum
+Run queries directly against S3 without worrying about loading entries data from S3 into a DWH
+recommended if u are executing quires frequently against Structured data
+You have a huge volume of data in Amazon S3. You would want to run queries against S3 directly instead of moving data to a data warehousing solution
+
+AWS Athena
+Serverless (quick ad-hoc queries without working about provisioning a computer cluster)
+
+----------------------Data Lakes ------------------------------------------
+simplified big data solutions
+Single platform with combination of solutions for data storage , data management and data analytics
+
+Storage 
+S3 and S3 Glacier provide an ideal storage solution for data lakes
+
+Data Injection
+
+1) Streaming data (AWS Kinesis Firehose)
+transform and store to S3
+can execute lambda functions
+encrypt,compress, concatenate records to save S3 cost
+
+2) Bulk Data from on-premises
+AWS Snowball 
+physical device
+
+
+3) Integrate on-premise data with S3
+AWS Storage Gateway
+
+
+Amazon S3 Query in Place
+
+Run your analytics directly from S3 and S3 Glacier using
+
+1) S3 Select and Glacier Select
+SQl queries to retrieve subset of data
+supports csv, json, parquet
+can use lambda 
+Integrates with big data work flows , Presto,hive,spark
+
+2) AWS Athena
+Direct ad-hoc SWL query on data stored in S3
+Presto,hive,spark,avro
+
+3) Redshift Spectrum
+Run queries directly against S3 without loading complete data from S3 in DHW
+for structured data
+
+Quick insights from your cold data stored in S3 Glacier ?
+use S3 Glacier Select 
+store results in S3 buckets
+
+recommendation:
+store data in S3 in parquet format
+reduce storage up-to 85% and improve querying 
+GZIP is recommanded for compression
+
+Apache Parquet is a file format designed to support fast data processing for complex data
+Parquet stores nested data structures in a flat columnar format. Compared to a traditional approach where data is stored in row-oriented approach, parquet is more efficient in terms of storage and performance
+
+Analytics with data in S3 data lake
+
+AWS EMR
+integrates with S3, use big dta frameworks
+
+AWS ML
+create and run models for predictive analytics and ML
+data from S3,Redshift, RDS
+
+AWS QuickSight
+For visualisation 
+data from S3,Redshift, RDS, Athena
+
+AWS Rekognition
+Build image recognition capabilities around images stored in S3
+use case: face based verification
+
+AWS Data Lakes Data Cataloging
+stores format and meta data of the data
+in Hcatalog  , hive catalog
+
+AWS Glue 
+full managed ETL service
+simplify data preparation capture metadata for analytics
+connect AWS Glue to your data on Aurora,RDS,Redshift and S3
+Glue creates a AWS Glue Catalogue with metadata abstracted from  your data
+Run ETL jobs using Spark
+metadata from Glue data catalog can be used from 
+AWS Athena
+AWS EMR
+AWS Redshift Spectrum
+
+Handling Data Streams
+
+Characteristics of Streaming Data
+Continuously Generated
+Small Pieces of data
+Sequenced , associated with time
+
+S3 Notifications
+process streaming data
+
+eg. take image and customise it with lambda function for different devices in S3
+S3 to Lambda is using S3 notification
+SNS,SQS or trigger functions on S3 objects
+at bucket levels
+using prefix and sufix
+cost effective 
+
+DynamoDB Streams
+each event from DynamoDB  (in a time sequenced order) is buffered 
+in a stream near real-time
+can be enabled/diabled
+
+EC2 -> DynamoDB -? DynamoDB Streams -> Lambda -> SNS
+use case: send email when user registered
+streams allow iteration through recotds (last 24 hrs) as batch
+
+Kinesis data Streaming
+Primary handle Streaming data
+Not recommended for ETL jobs
+
+AWS kinesis Data Firehose
+Data Ingestion for streaming data 
+Delivery stream
+receive
+process transform,lambda,compress, encrypt
+store  to S3,Elastic search ,Reshift and splunk
+Pay for volume of data ingested (serverless)
+
+AWS kinesis Analytics
+want real-time intelligence
+you can write SQL queries and build Java apps to continuously analyse streaming data
+data coming via Kinesis Firehose and Kinesis Data Streams
+
+AWS kinesis Video Streams
+monitor video streams from web cams and generate real time alerts
+
+Console -> Kinesis
+Data Stream
+Create data stream
+TestStream
+shard: 1
+
+Producers:
+putting data in that stream
+eg.
+kinesis Agent (java client)
+AWS SDK
+(KPL) Kinesis Producer library
+
+Consumers
+get records from Data streams and process them
+eg.
+Kinesis Data Firehose
+Kinesis Data Analytics
+(KCL) Kinesis Consumer Library using custom code
+
+
+--------------------------------------------------------------------------
+More Serverless
+
+Serverless Options
+
+Serverless Options : COMPUTE
+Aws Lambda
+Run code without provisioning servers
+Also called FAAS
+
+Lambda @ Edge
+Run lambda functions at Edge locations
+integrate with CloudFront
+
+AWS Fargate
+Container orchestration without worrying about EC2
+
+
+Serverless Options : STORAGE
+S3
+Elastic File System
+
+Serverless Options : DATABASE
+DynamoDB
+Aurora Serverless 
+RDS Proxy sits b/w client apps and RDS,  with lambdas , managed  connection pooling
+
+Serverless Options : API PROXY AND ORCHRESTRATION
+API Gaetway , API mgmt platform 
+AWS Strep Functions , setup workflows
+
+Serverless Options :  Applicaiton Integration and Analytics
+
+Amazon SNS
+pub-sub
+
+Amazon SQS
+man\ged service
+
+Amazon Kinesis
+
+Amazon Athena
+SQL queries on data in S3
+
+Serverless Options : Others
+
+Amazon Congito
+Full managed solution providing authorization and authentication solutions
+for web/mobile apps
+
+------------------------------------------------------------------------------
+Amazon API Gateway Features 
 
 
 
 
+---------------------------VPC Peering--------------------------------------
+connect vps each other belonging to same or diff AWS accounts irrespective of the region of VPC
+allow private communication b/w connected vpc
+request / accept protocol
+owner of  requesting VPC send a request
+Owner of Peer VPC has one week to accept
+
+* Peering is not transitive A-B-C so not A-C
+* Peer VPCs Can't have overlapping address ranges
+* CIDR block of each VPC is complete different
+
+
+us-east-2  (ohio)
+VPC 
+Launch VPC wizard
+VPC with Single public subnet
+
+CIDR =  10.0.0.0/16
+Name = custom
+public subnet CIDR = 10.0.0.0/24
+
+us-west-1 (north-california)
+VPC 
+Launch VPC wizard
+VPC with Single public subnet
+
+CIDR =  10.1.0.0/16
+Name = custom1
+public subnet CIDR = 10.1.0.0/24
+
+Peering Connection 
+Create peering connection
+name: my-vpc-peering
+
+VPC Requester: custom1
+
+Account: Same
+Region: us-east-2
+VPC Accepter: custom (put its id here)
+
+Action: Accept request
+
+* Route Table configuration
+us-west-1 (north-california)
+Route Tables
+Edit Route
+
+Destination: 	10.1.0.0/16
+Target: 	local
+
+Destination: 	10.0.0.0/16
+Target: 	Peering connection
+
+on subnet route tables as well
+
+----------------VPC Endpoint ----------------------
+Securely connect your VPC to another service
+
+Gateway Endpoint
+securely connect to S3 and DynamoDB
+endpoint serves as target in your route table for traffic
+
+Interface Endpoint
+securely connect to Aws services other than S3 and DynamoDB
+powered by PrivateLink (keep traffic wintin AWS network)
+need ENI as entry point for traffic
+
+Avoid DDoS, as traffic not go thru internet
+Simple, Don't need Internet Gateway, VPN and NAT
+
+---------------VPC Flow Logs -------------
+Monitor network traffic
+troubleshoot connectivity issues (NACL)
+capture traffic going in and out of your VPC
+Flow logs can be created for VPC,subnet or Netowrk Interface
+publish to Cloudwatch or S3
+Contains Accept or reject 
+
+SG is stateful ie if inbound is allowed, outboud is automatically allowed
+
+User --> NACL -->Subnet --> Security Group --> EC2
+
+Inbound Traffic rules
+if inbound request is rejected, NACL or SG could be mis-configured
+if outbound response is rejected, NACL is mis-configured
+
+Outbound Traffic rules
+if outbound request is rejected, NACL  OUT or SG  OUT could be mis-configured
+if outbound response is rejected, NACL OUT is mis-configured
+
+if problem with request -> problem with NACL or SG
+if problem with response -> problem with NACL
+
+----------------------------AWS and On-Premises -------------------
+Are there any programs/projects available for cloud where one can have hands-on experience on real projects working with cloud experts ?
+
+AWS MANAGED VPN
+IPsec VPN tunnels from VPC to Customer Network
+ over internhttps://w3.ibm.com/w3publisher/ibmaot
+et is encrypted ysing IPsec protocl
+ VPN gateway to connect one VPC to customer Network
+ Customer Gateway installed in customer network and u need a niternet routable IP address of cusomer gateway
+ 
+AWS Direct Connect (DC) 
+Private Dedicated Network
+can reduce ISP{ bandwidth costs
+direct line from AWS to your Data Center
+Connection options
+dedicated 1 GBPS or 10 GBPS
+Hosted : shared 50 MBPS to 10 GBPS
+
+* Establish DC can takes more than a month
+* Establish redundant DC for max reliability
+* DC doesn't encrypt data , (private connection only)
+
+AWS Direct Connect  Plus VPN
+IPsec site-to-site VPN tunnel from an direct connect location to
+customer network
+Traffic is encrypted using IPsec protocol
+
+On AWS you connect to Direct Connecf and then DC to VPN to customre data center
+
+Software VPN
+Fully managed both sides of AWS VPC connectivity
+Run software VPN appliance in your VPC
+recommanded for Compliance as you need to manage both sides of the connectio
+Recommended when u use gateway devices which are not supported by AWS VPN
+u responsible e for patches and updates
+and its become a single point of failure
+
+AWS VPN CloudHub
+when u need network connectivity b/w your multiple banch offices
+CloudHub can be connect on Direct Connect or via VPN
+install Virtual private Gateway at AWS and Customer Gateways in customer offices
+
+
+VPC Flow Logs
+service helps you to troubleshoot network connectivity issues
+
+-------- Moving Data b/w AWS and on-premises------------------
+data migration
+
+S3 transfer Acceleration
+when transferring less data up to few TB
+basic option
+uses cloudFront edge locations
+Enable S3 transfer acceleration and use endpoints
+
+AWS Snowball
+transfer dozes of TB to Petabyte from on-premises
+physical shipping
+request the snowball from console
+100TB  (80 TB usable)per appliance
+all data is automatically encrypted
+choose snowball if data transfer takes over a week based on your network connection
+eg. 5TB can be transferred on 100Mbpc line in a week at 80%utilization
+
+AWS Snowmobile
+peta byte of data
+100 PB storage per truck
+data is automatically encrypted with KMS (AES-256)
+
+AWS DataSync 
+Transfer file storage to cloud
+secure
+10 X faster of TB to/from AWS over internet or AWS direct connect
+transfer from on premise file storage (NFS,SMB) to S3, FRx
+Integration with AWS storage Gateway for ongoing update
+use case: Data Migration,replication and clod data archival
+
+
+Alternatively, use S3 transfer acceleration if apps integrated with S3 AP1 
+
+------AWS Data PipeLine--------------------------------------
+automate data processing pipelines b/w S3,RDS , DynamBO,EMR and On-preimieses
+
+On-Primise DB ->  S3 ->EMR->S3->redshift
+
+* Create COMPLEX DATA PROCESSING WORKLOADS that are FAULT Tolerant
+repeatable and Highly available
+Launches required resources and tear them down after execution
+*** It is not for Streaming Data
+
+----------- Database Migration Service ---DMS-------------------
+migrate databases to AWS
+Homogenous (Oracle to Oracle) preferred 
+Heterogeneous (Oracle to Aurora)
+free for first 6 months when migrating to Aurora,redshift or DynamoDB
+use case: 
+consolidate multiple DB into a single target database
+DMS is for smaller workloads (less than 10TB)
+* continuous data replication for DR
+
+------AWS Schema Conversion Tool --------SCT-------
+It is a part of DMS
+preferred option for migrating data warehouse data to Redshift
+Migrate DB schema
+SCT assessment report
+update source code    
+Fan-in (Multiple Source- Single Target) 
+Fan-out (Single Source- Multiple Target)
+SCT is preferred when schema conversion are involved
+SCT is preferred for large data warehouse workloads (migration to Redshift)
+No data replication for DR
+
+-----------------------DevOps----------------------------------------------------
+
+AWS CodeCommit
+private source control (based on Git)
+
+AWS CodePipeLine
+Orchestrate CI/CD pipelines
+
+AWS CodeBuild
+Build and Test code (application packages, containers)
+
+AWS CodeDeploy
+Automate Deployment (EC2,EKS, lambda etc)
+
+Infrastructure as a code IAAC
+treat infra as the same way as application code
+track your infra changes over time (version control)
+being repeatability into your infrastructure
+
+2 key parts
+
+1) Infrastructure Provisioning
+provisioned compute,db,storage,networking
+open source, cloud neutral, Terraform
+AWS service: CloudFormation
+
+1) Configuration management
+Install right software and tools on provisioned resources
+AWS Service: OpsWorks lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2
+
+
+---------AWS CloudFormation  -----------------
+
+Automate deployments and modification of AWS resources in a controlled and predictive way
+
+avoiding configuration drift (less error prone)
+all configurations in a simple txt JSON or YAML
+CloudFormaion handles dependencies
+eg. first VPC then subnets and then db
+Automatic Rollback
+Free to use , pay for resources provisioned
+get an automated estimate for your configuration
+
+
+CloudFormation Templates
+JSON/YAML defining multiple resources
+
+Stack
+group of resources that are created from CF template
+
+Change Sets
+to make changes to the stack, update the template
+tells what whould chnage if you execute
+allows u to verify the changes and then execite
+
+Resources
+what u want to create
+One and only mandatory element
+
+Parameters
+values to pass to your template at runtime
+ie "t2.micro"
+
+Mappings
+key value pairs
+configure diff values for diff regions
+
+Outputs
+Return values from execution
+eg. id of resource
 
 
 
+CloudFormation VS Elastic Beanstalk
+
+CloudFormation
+Deleting stack will delete all associated resources 
+except DelitoinPolicy set to "Retain"
+or you caexaecn enable Termination policy for the entire stack
+Template stored in S3
+
+use CloudFormation StackSets to create/update/dele stack across multiple accounts and regions
+with a single operation
+
+Elastic Beanstalk
+like a pre packaged cloudformation template with a user interface
+and in background cloudformation template is created and executed
+
+AWS OpsWorks
+is a Configuration Management Tool
+Managed service based on Chef and Puppet
+eg. copy a file 10 100 servers
+make a change across 100 servers
+both on preimies and on cloud
+
+Configurations resides at 
+Chef recepies/cookbooks
+Puppet manifest
+
+All metric send to CloudWatch
+All configuration mgmt tools can also do
+infrastructure provisions but not recommended
 
 
+-----------------AWS Certification FAQ -------------------
+Understanding Data Transfer Cost
+
+using public IP address for communication b/e EC2 instances can get expensive
+use private IP address
+
+Data transfer is free with same AZ
+Ec2,RDS,Redshift,ElasticCache,ElastiC Network Interface
+
+Data transfer is free with same AZ
+between EC2 and S3,G\lacier,DynamoDB,SNS,SWS,Kinesis
+
+Best Practice: Maximize traffic that stays with an AZ 
+
+High Availability 
+Req: need 2 EC2 instances running all the time in single region
+2 EC2 instance in AZ1 and 2 in Az2
+
+Req: need 4 EC2 instances running all the time in single region
+2 EC2 instance in AZ1 and 2 in Az2 and 2 in Az3
+
+Fault Tolerance means zero chance of failure 
+extra safe
+
+Req: need 2 EC2 instances running all the time in single region
+ie place instances in diff subnets
+2 EC2 instance in AZ1 and 2 in Az2 and 2 in Az3
+
+AWS Shield
+shields from distributed denial of service attacks DDoS
+eg. sending million request to the server
+protect Route S3,CloudFront,Global Accelerator,EC2,ELB
+
+AWS Shield Standard 
+Zero cost
+automatically enabled
+layer 3 and 4
+
+AWS Shield Advanced
+paid service
+24X7
+protect your AWS bills from usage spikes
+
+AWS WAF  Web Application Firewall
+protect web applications from OWASP to 10 (Open web application security project)
+most critical and common security risks to web apps
+CVE (common vulnerabilities and exposure)
+can be deployed on CloudFront,ALB,API Gateway
+web traffic filtering, block attacks
+
+Manage AWS Accounts
+diff accounts for diff env and diff business units
+centralized management,billing, security, compliance
+
+AWS ORGANIZATIONS
+Organize accounts into Organizational UnitsOU 
+centralized compliance mgmt for AWS config rules
+Send AWS CloudTrail Data to one S3 bucket (across accounts)
+AWS Firewall Manager to manage firewall rules across org accounts
+WAF,Shield Adv protection, security groups
+**Service Control policies SCPs to define restrictions across accounts
+eg. 
+prevent users from disabling AWS config or rules
+EC2 is always of specific type
+require MFA to stop EC2 instance
+require to have a must tag  on a resource
+
+AWS RESOURCE ACCESS MANAGER
+share resources with any AWS account or within your AWS org
+eg.
+AWS Transit Gateways
+subnets
+AWS License manager configurations
+S3 Resolver rules
+it reduced operational overhead and optimized costs
+
+AWS TRUSTED ADVISOR
+recommendations for cost optimization, performance, security and fault tolerance
+All AWS customers get 4 checks free
+1) service lints
+2) SG\ having unrestricted access
+3) Proper use of IAM
+4) MFA on Root Account
 
 
+Business or Enterprise AWS support plan provides over 50 checks
+ie
+how much u saved with reserved instances
+resource utilization look like ? are u right sized  for ur load ?
+
+Recommendations by Trust Advisor
+
+Cost Optimization
+highlight unused resources
+opportunities to reduce costs
+
+Security
+Settings that make sol more secure
+
+Fault tolerance
+Increase resiliency 
+redundancy improvements, over utilized resources
+
+Performance
+Improve speed and responsiveness
+
+Service Limits
+identify if service usage > 80% of service limits
+
+AWS SERVICE QUOTAS
+AWS account has regional-specific default quotas or limits for each service
+aService Quotas allows you to manage your quotas /limits for over 100 AWS services
+from one location
+
+AWS Directory Service
+user data mgmt service
+It provide AWS access to on-premise users without IAM users
+
+Option1: AWS Directory Service for MicrosoftAD
+more than 5000 users
+Trust relationship needed b/s AWS and on-premise directory
+
+Option2: Simple AD
+less than  than 5000 users
+powered by Samba4
+Doesn't support Trust relationship with other AD domains
+
+Option3: AD Connector
+use your existing on-premise directory with AWS cloud services
+your users use existing credential to access AWS resources
+
+AWS Global Accelerator  (Again)
+
+Direct traffic to optimal endpoints oover AWS global network
+Provides two static IPs from AWS edge network
+Distribute traffic across multiple endpoint resources in multiple AWS regions
+works with ALB,EC2,Elastic IP
+
+AWS Elemental MediaConvert
+
+new video transcoding service
+convert multiple media formats
+high quality video processing workflows
+
+AWS Elastic Transcoder
+create WebM video,Mp3 audio or animated Gif
+For all other video processing use cases, recommanded to use Element MediaConvert
+
+AWS Elemental MediaLive
+For live video processing
+
+AWS Macie
+Fully managed data security and data privacy service
+*Automatically discover,classify and protect sensitive data in S3
+use AI and ML
+
+AWS Workspaces
+Desktop as a Service (DaaS)
+replacement for VDI (virtual Desktop infrastructure)
+provision windows or Linux Desktop in minutes
+
+AWS System Manager Parameter Store
+manage application environment configuration and secrets
+ie database connections, password
+supports Hierarchical structure
+store config at one place for multiple apps and environments  
+maintain history of configuration over a period of time
+integrate with KMS,IAM,CloudWatch and SNS
+
+AWS Secret manager
+rotate , manage and retrieve database credentials , API keys and other secrets for your applicaitons
+Integrate with KMS,RDS,Redshift and DynamoDB
+*Rotate secrets automatically without impacting applications
+*service dedicated to secrets management
+* recommended for workloads needed HIAA,PCI-DSS compliance
+
+Simple Workflow Service (SWF)
+background jobs parallel o
 
 
+AWS Single Sign on
+single account to access multiple websites
+centrally manage SSO access to all of your AWS accounts
+Microsoft AD integration
+SAML
+Integration with AWS Organization
+One place  auditing in AWS CloudTrail
+
+AWS Elasticsearch
+managed service around Elasticsearch
+support ELK stack
+elsticsearch
+logstach to inject data
+Kibana for dashboard visualization
+use case: 
+fast serach
+app/server  monitoring get intelligence from you logs
+
+---------Well Architect Framework ----------------------
+
+PILARS
+
+1) OPERATIONAL EXCELLENCE PILAR
+To avoid/minimize effort and problems with
+Provisioning servers
+Deployment
+Monitoring
+Support
+
+Recommendation
+Use Managed Services (no worry about managin server,availability,durability)
+Go serverless (prefer Lambda to EC2)
+Automation with CloudFormation 
+Implement CI/CD to find problems early (codepipeline,codebuild,codedeploy)
+Perform frequent,small reversible changes
+
+3 Stage approach AWS Recommend
+
+1) PREPARE: for failure
+simulate failure 
+game days 
+Disaster recovery exercise
+Implement Standards with AWS config rules
+
+2)OPERATE: gather data and metrics
+cloudwatch (logs agents)
+config, config rules,
+cloud trail
+VPC flow logs
+X-Rays (tracing)
+
+3) EVLOVE: Get Intelligence
+
+use Amazon Elasticsearch to analyze logs
+
+2) SECURITY PILAR
+IAM, AWS Shield, WAF,KMS, HSM
+
+a. PRINCIPLE OF LEAST PRIVILEGE for least time
+use temporary credentials when possible (IAM roles, Instance profiles)
+use IAM groups to simplify IAM management
+Enforce strong password policies
+Enforce MFA
+Rotate credentials regularly
+
+b. SECURITY IN DEPTH - Apply security in all layers
+VPS and Private subnets
+Security Groups
+NACL
+use hardened EC2 AMIs (Golden Images)
+use CloudFornt with AWS sheild for DDoS
+use WAF with CloudFront and ALB
+Use CloudFormation (enforce security via scripts)
+Protect data in Transit and at rest
+Actively monitor for security issues
+Centralize security policies for multiple AWS accounts
+
+c.Protecting DATA AT REST
+enable versioning 
+enable encryption KMS and Cloud HSM ,(rotate encryption keys)
+
+S3
+SSE-C,  SSE-S3,   SSE-KMS
+
+DynamoDB
+Encryption client, SSE-KMS
+
+Redshift
+KMS and AWS CloudHSM
+
+EBS, SQS and SNS
+KMS
+
+RDS
+KMS, TDE
+	
+d.Protecting DATA IN TRANSIT	
+data coming in and out of AWS
+by default All AWS API use https/ssl
+perform client side encryption 
+Ensure your data goes through AWS network as mush as possible
+VPC endpoints and AWS Private link
+
+e: Detect Threats
+actively monitor security issues
+Monitor CloudWatch logs
+use GuadDurty to detect threats and contiguously monitor malicious behaviour 
+use AWS Organization to centralize security policies 	
+	
+	
+2) Reliability PILAR
+It is about how quickly you recover from Infrastructure and application issues
+How quickly you adopt changes demands in load
+
+Automate recovery from failure
+health checks and auto scaling
+managed services like RDS  automatically switch to standby
+
+Scale Horizontally
+Maintain redundancy
+multiple Direct Connect connections
+Multiple regions and AZ
+Prefer Serverless
+prefer loosely couple architecture
+SNS,SQS
+
+Distributed system best practices
+API Gateway for throttling requests
+
+Loosely coupled architecture
+ELB
+as users are not tied to EC2
+SQS
+SNS publish subscribe
+Amazon Kinesis
+handle event streams, multiple clients
+
+Troubleshooting on AWS
+
+S3 server access logs
+S2 data request details,request type,date time
+Troubleshoot bucket access issues and data requests
+
+ELB Access Logs
+Client IP,latencies and server response
+analyse traffic pattern and troubleshoot network issues
+
+AWS VPC Flow Logs
+monitor network traffic
+troubleshoot network connectivity and security logs
+
+CloudWatch
+monitor metrics from AWS resources
+
+CloudWatch logs
+logs from various errices, debug app issues
+
+CloudConfig
+AWS resource inventory, history , rules
+
+AWS CloudTrail
+History of AWS API calls , cli,sdk
+auditing and troubleshooting, who did what and from hwere-
+
+Shared Responsibility Model
+Security and Compliance is shared responsibility b/w AWS and Customer
+
+AWS responsible for  Security OF the cloud
+Customer responsible for  Security IN the cloud
 
 
+using EC2 instance is IAAS 
+AWS only responsible for infrastructure only
+
+Managed Services
+S3,DynamoDB
+AWS Manages Infa,OS and Platform
+
+3) PERFORMANCE PILAR
+meet needs with minimum resources (EFFiciency)
+Use Managed services
+Go Serverless (Lower cost)
+Monitor performance
+CloudWatch Alarms
 
 
+EFFiciency use right solutions
+Compute: EC2 VS Lambda VS Containers
+
+Storage
+Block, File , Objects 
+
+Database
+RDS VS DynamoDB VS Redshift (big data and relationsal)
+
+Caching
+ElastiCache (front end to DB) VS CloudFront (contents server from edge) VS DAX (cache infront of Dynamo DB) VS Read Replics (reporting apps to run) 
+
+Network
+CloudFront, Global Accelerator, Route 53, Placement Groups, VPS endpoints , Direct Connect
+
+Product specific features
+S3 Transfer acceleration , EBS optimised instances
+
+4) COST OPTIMIZATION PILAR
+match supply and demand
+implement auto scaling stop dev and test resources when don't need
+go serverless
+Track you expenditure
+cost explorer
+aws budget 
+use tags on resources
+
+Right Sizing
+Trusted advisor for recommendations
+On demand Vs Reserved VS spot instances
+AVoid expensive sols: MySQL VS Autrora VS Oralce
+AWS Direct Connect (save internet cost)
+CloudFtont  reduce load on backbend system
 
 
+X-Rays traces a request between API Gateway and Lambda functions
+
+Certification Reading
+AWS Architecture Center
+***AWS FAQS
+
+During register
+Accommodation Type: ESL + 30 mins
+wait for it to approval
+
+
+--------Recommendations -----
+Keys parts in questions
+Features: serverless, key value,atuo scaling
+Qualities: cost effective, high available , fault tolerant
+
+Skip wrong answer
 
 
 

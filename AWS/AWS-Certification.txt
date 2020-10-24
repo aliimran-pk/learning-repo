@@ -7,6 +7,9 @@ Email already shared with you and Waqar
 Thanks
 
 -------------------------------
+
+linked /stephanemaarek
+
 ---------------
 Enterprise Integration pattern
 knative
@@ -138,7 +141,7 @@ https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html for mor
 
 -----------------------------------------------------------------------------------
 
-https://202041525381.signin.aws.amazon.com/console
+
 
 ------------------------------------------------------------------------
 Questions
@@ -206,6 +209,15 @@ policy can be assigned to an individual users as well as on a group
 called Managed policies (ie managed by AWS)
 
 Regions and Zones
+A region is a cluster of data centres
+
+AZ 
+min - 2
+max = 6
+
+AZs are separate from each other so that they are isolated from disaster
+AZ is one or more discrete data centres
+
 
 1) slow access from other parts of the world (High Latency)
 2) what if that data centre crashes (low availability)
@@ -229,8 +241,8 @@ Increase availability of applications in the same Region
 availability zone is physically separated from each other
 AZ consists of data centres
 AZs are connected through high through put network, low latency
-
-US West (Oregon) in cosole = us-west-2 in CLI
+high bandwidth and ultra-low latency networking b/w AZs
+US West (Oregon) in console = us-west-2 in CLI
 
 Choosing Regions
 availability of the service in that region (most services we require)
@@ -262,13 +274,12 @@ AWS Federation
 centrally managed to access AWS resources
 single singn on
 SAML security access markup language 
-cross account acccess
+cross account access
 OPENid connect (OIDC) tokens 
 AD is a common Identity provider
 
-AWS SSPO can interact with Active Direcoity
+AWS SSPO can interact with Active directory
 Amazon Congnito 
-
 
 account name, pwd and email address of root user can be changed 
 
@@ -279,14 +290,14 @@ can be used to delete S3 objets
 IAM Roles
 delegate access eg. apps to EC2 for S3 bucket
 cross-account access
-	crete IAM policy to trust account
+create IAM policy to trust account
 identity federation (outside aws ) using identity broker application
 
 
 IAM --> Security Status -- Activate MFA
 Activate MFA
 Virtual MFA device
-Install Google Authtication to your mobile
+Install Google Authentication to your mobile
 show the QR code
 after registering the code on the device I need to 
 provide the code
@@ -294,6 +305,23 @@ provide the code
 
 AWS Support offers four support plans: 
 Basic, Developer, Business, and Enterprise.
+
+Groups are for physical person
+Roles are for machines (internal usage within AWS resources)
+
+IAM has global view
+permissions are governed by polices (JSON)
+IAM has predefined 'managed policies'
+
+Least Privilege Principle
+give minimum amount of permissions
+
+One IAM user per physical person
+One IAM role per application
+
+
+
+
 
 
 ----------------------------------------------EC2-----------------------------------------------------------------------------------
@@ -665,11 +693,11 @@ create topic
 
 1) Gto to Budget
 2) create a new budget 
+Cost Budget
 MonthlyBudget
-
 3) Monthly
 4) Budgeted amount 
-$1
+$0.01
 
 ----------------------------------Load Balancing---------------------------------------------------------
 Elastic Load Balancer (managed service, and auto scaled (highly available)

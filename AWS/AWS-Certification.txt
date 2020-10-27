@@ -1,14 +1,6 @@
-AOA Wasif Bhi 
-hope you are  well
-Need your support to get AWS Certification exam approval .
-My plan is to give exam in Dec 2020.
-Email already shared with you and Waqar
+------------------------------
 
-Thanks
-
--------------------------------
-
-linked /stephanemaarek
+linked in /stephanemaarek
 
 ---------------
 Enterprise Integration pattern
@@ -192,136 +184,6 @@ https://share.percipio.com/cd/JrXPzVbEL
 
 ---------------------------------------Udemy Ranga AWS Course----------------------------------------------------------------------
 
-Provisioning (renting ) resources and don't buy
-Also called on-demand resource provisioning
-rent based on the demand
-
-Pay per use
-No upfront planing required
-avoid undifferentiated heavy lifted
-
-Challenging
-building cloud enabled applications
-
-root user have both programmatic and AWS mgmt console
-
-policy can be assigned to an individual users as well as on a group
-called Managed policies (ie managed by AWS)
-
-Regions and Zones
-A region is a cluster of data centres
-
-AZ 
-min - 2
-max = 6
-
-AZs are separate from each other so that they are isolated from disaster
-AZ is one or more discrete data centres
-
-
-1) slow access from other parts of the world (High Latency)
-2) what if that data centre crashes (low availability)
-3) what if entire region go download
-
-Most Services are regional services
-region can be changed 
-
-Global Services
-ie IAM  can't change regions
-
-Choose region based on
-	ur users are located
-	ur data is located
-	regulatory and security compliance
-
-Availability zone
-isolate locations  in region
-Each zone has at least two AZs
-Increase availability of applications in the same Region
-availability zone is physically separated from each other
-AZ consists of data centres
-AZs are connected through high through put network, low latency
-high bandwidth and ultra-low latency networking b/w AZs
-US West (Oregon) in console = us-west-2 in CLI
-
-Choosing Regions
-availability of the service in that region (most services we require)
-As Each region expose is regional services endpoints 
-latency, cost and data residency (complaint with business contractual reqiments)
-
-
-Region
-ap-south-1
-
-Availability Zone (ends regions with a alphabet)
-ap-south-1a 
-ap-south-1b
-ap-south-1c
-
-They provide High Availability and Low Latency
-
-AWS SDK
-interact aws services from our code
-
-AWS as Identity provider 
-its a managed service 
-single point of failure, high available,
-
-Control Plane
-Data Plane
-
-AWS Federation
-centrally managed to access AWS resources
-single singn on
-SAML security access markup language 
-cross account access
-OPENid connect (OIDC) tokens 
-AD is a common Identity provider
-
-AWS SSPO can interact with Active directory
-Amazon Congnito 
-
-account name, pwd and email address of root user can be changed 
-
-MFA 
-multi-factor authentication 
-can be used to delete S3 objets
-
-IAM Roles
-delegate access eg. apps to EC2 for S3 bucket
-cross-account access
-create IAM policy to trust account
-identity federation (outside aws ) using identity broker application
-
-
-IAM --> Security Status -- Activate MFA
-Activate MFA
-Virtual MFA device
-Install Google Authentication to your mobile
-show the QR code
-after registering the code on the device I need to 
-provide the code
-
-
-AWS Support offers four support plans: 
-Basic, Developer, Business, and Enterprise.
-
-Groups are for physical person
-Roles are for machines (internal usage within AWS resources)
-
-IAM has global view
-permissions are governed by polices (JSON)
-IAM has predefined 'managed policies'
-
-Least Privilege Principle
-give minimum amount of permissions
-
-One IAM user per physical person
-One IAM role per application
-
-
-
-
 
 
 ----------------------------------------------EC2-----------------------------------------------------------------------------------
@@ -329,10 +191,10 @@ elastic compute cloud
 ec2 instances are virtual server
 billed by second
 EC2 service provisioned EC2 instances/virtual servers
-	creates and manage life cycle of ec2 instances,
-	load balancing and auto-scaling ,
-	attach storage
-	manage network
+creates and manage life cycle of ec2 instances,
+load balancing and auto-scaling ,
+attach storage
+manage network
 
 Security Group
 is like a Virtual Firewall having inbound/outbound rules
@@ -344,17 +206,17 @@ t2.micro
 t is instance family (t is General purpose instance)
 2 is generation 
 micro size
-   nano<micro<small<medium<large<xlarge
+nano<micro<small<medium<large<xlarge
 
 1) Change Region to 
-	Asia Pacific (Mumbai) ap-south-1
+Asia Pacific (Mumbai) ap-south-1
 2) EC2 --> Create instances
 3) AMI Amazon Machine Image
-	Amazon Linux 2 AMI (HVM), SSD Volume Type	
-	
+Amazon Linux 2 AMI (HVM), SSD Volume Type	
+
 4) Security Group
-	my-EC2-security-group	
-	
+my-EC2-security-group	
+
 5) create new keypair file
 and download EC2-keypair.perm at 
 C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
@@ -388,9 +250,9 @@ yum install httpd
 systemctl start httpd
 systemctl enable httpd
 echo "Hello World" > /var/www/html/index.html
- 
 
- 
+
+
 curl -s http://13.234.77.166/latest/dynamic/instance-identity/document > /var/www/html/index.html
 
 1) EC2 instance metadata service 
@@ -422,7 +284,7 @@ IP addresses
 curl http://13.234.77.166/latest/dynamic
 curl http://13.234.77.166/latest/dynamic/instance-identity
 curl http://13.234.77.166/latest/dynamic/instance-identity/document
- 
+
 
 9) 
 
@@ -713,10 +575,10 @@ App Layer layer 7  (HTTP, SMTP)  make api calls
 Transport Layer 4  TCP TLS (secure TCP), UDP(high performance over reliability)  ensure bits/bytes transferred properly and order
 
 Network Layer Layer 3 (IP) transferring bits/bytes
- 
- 3 Types of ELB
- 
- (1) Classic LB (Layer 4 (TCP/TLS & UDP) and layer 7 (HTTP/HTTPS) )
+
+3 Types of ELB
+
+(1) Classic LB (Layer 4 (TCP/TLS & UDP) and layer 7 (HTTP/HTTPS) )
 not recommanded by AWS
 older version of ELB
 
@@ -893,13 +755,13 @@ Lister Rules possibilities
 4) Query String   (/microservice?name=A)  o target group A , (/microservice?name=B)  o target group B
 5) Based on IP all request from a range of IP to a TG A, other to TG B
 
- Each Lister have (protocol + port)
+Each Lister have (protocol + port)
 
 ---------------------------Auto Scaling Groups`------------------------------------------------------------
 
 scale out : increase instances
 scale in:    decrease instances
- 
+
 ASG maintained a configured no. of instances
 scale in and scale out automatically to adjust load
 ASG can launch on-demand,spot or both
@@ -911,8 +773,8 @@ ALB can adjust and distribute load to healthy instance
 EC2- > AutoScaling Group
 Create ASG
 Auto Scaling group name: MyEC2AutoScalingGroup
-	Launch Template (EC2 instance size,AMI) - create new launch template -> My-ASG-Launch-Template
-	Source Template: MyEC2Template with latest version
+Launch Template (EC2 instance size,AMI) - create new launch template -> My-ASG-Launch-Template
+Source Template: MyEC2Template with latest version
 Add all Subnets
 Enable load balancing = YES
 Create New Target Group = ASG-TargetGroup (with  no. EC2 instances registered)
@@ -1355,16 +1217,16 @@ integrate ELB with WAF web application Firewall
 by default ELB provide it
 
 -----------Architectural Considerations ----------------------------------------
- Security
- use security groups to restrict traffic
- EC2 instances in private VPC (not accessible out side AWS network)
- user dedicated hosts when u have regulatory needs
- 
- Performance
- right instance family
- appropriate placement groups
- prefer custom AMI to install softwares using user data 
- choose right ELB for you use case
+Security
+use security groups to restrict traffic
+EC2 instances in private VPC (not accessible out side AWS network)
+user dedicated hosts when u have regulatory needs
+
+Performance
+right instance family
+appropriate placement groups
+prefer custom AMI to install softwares using user data 
+choose right ELB for you use case
 
 Cost
 optimal no. and type of EC2 instance family
@@ -1483,13 +1345,13 @@ Zero Downtime deployments release new versions without downtime
 Container Orchestration Options 
 
 1) Cloud Neutral
-	Kubernetes 
-	AWS Service = AWS Elastic Kubernetes Service (EKS)
-	EKS doesn't have a free tier
+Kubernetes 
+AWS Service = AWS Elastic Kubernetes Service (EKS)
+EKS doesn't have a free tier
 
 2) AWS Specific
-	AWS Elastic Container Service ECS
-	AWS Fargate (No free tier): Serverless version of AWS ECS
+AWS Elastic Container Service ECS
+AWS Fargate (No free tier): Serverless version of AWS ECS
 
 
 
@@ -1584,9 +1446,9 @@ Auto Scaling group with Linux AMI
 You don't worry about  infrastructure
 flexible scaling and automated high availability
 Pay for use 
-	No of requests
-	duration of requests
-	memory consume
+No of requests
+duration of requests
+memory consume
 
 Lambda called/trigger from 
 Amazon API Gateway
@@ -1610,12 +1472,12 @@ EnvironmentName = Development
 
 add beow code in index.js
 exports.handler = async (event) => {
-    // TODO implement
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify('Hello Ali from ' + process.env.EnvironmentName),
-    };
-    return response;
+// TODO implement
+const response = {
+statusCode: 200,
+body: JSON.stringify('Hello Ali from ' + process.env.EnvironmentName),
+};
+return response;
 };
 
 
@@ -1831,9 +1693,9 @@ Max 5 VPC in a Region
 Max 5 Elastic IP in an account (may be extend based on request to AWS)
 
 when we create a VPC the by default below is created automatically
- 1) DHCP
- 2) Security Group
- 3) NACL
+1) DHCP
+2) Security Group
+3) NACL
 
 VPC is created in a Region and not in AZs
 its all properties are regional
@@ -1945,9 +1807,9 @@ b/w multiple networks
 switch is b/w same network communication
 
 130 10 0  0
-                  1
-                 2
-				 255
+		  1
+		 2
+		 255
 130 10 1  0				 
 130 10 2  0				 
 
@@ -1975,7 +1837,7 @@ https://www.youtube.com/watch?v=q7wNcYliJ1Q
 CIDR is classless Inter domain routing
 A method for allocating IP addresses 
 
- It is as also a 32-bit address, which includes a special number which represents the number of bits that are present in the Block Id.
+It is as also a 32-bit address, which includes a special number which represents the number of bits that are present in the Block Id.
 a . b . c . d / n 
 Where, n is number of bits that are present in Block Id / Network Id.
 how many bits are turned as 1s
@@ -2000,7 +1862,7 @@ Each VPC is associated with a Region
 each subnet is created in AZ
 
 eg VPC = us-east-1
-      Subnets = us-east-1a,us-east-1b
+Subnets = us-east-1a,us-east-1b
 
 VPC -> 
 default VPC always created without a name
@@ -2012,7 +1874,7 @@ IPv4  32 bit  (allows 4.3 billion address) most popular
 127.255.255.255
 
 IPv6  128 bit alphanumeric
-  
+
 182.82.143.132/32 is a single ip 
 0.0.0.0/0 all
 
@@ -2169,9 +2031,9 @@ Standard
 
 
 2030
-   10
-      course1.jpg
-	  course2.jpg
+10
+course1.jpg
+course2.jpg
 
 key 2030/10/course1.jpg    value is image 1
 key 2030/10/course2.jpg    value is image 2
@@ -2223,16 +2085,16 @@ Granting Read-Only Permission to an Anonymous User
 copy readonly access and put ur bucket name
 
 {
-  "Version":"2012-10-17",
-  "Statement":[
-    {
-      "Sid":"PublicRead",
-      "Effect":"Allow",
-      "Principal": "*",
-      "Action":["s3:GetObject","s3:GetObjectVersion"],
-      "Resource":["arn:aws:s3:::my-s3-bucket-1/*"]
-    }
-  ]
+"Version":"2012-10-17",
+"Statement":[
+{
+"Sid":"PublicRead",
+"Effect":"Allow",
+"Principal": "*",
+"Action":["s3:GetObject","s3:GetObjectVersion"],
+"Resource":["arn:aws:s3:::my-s3-bucket-1/*"]
+}
+]
 }
 
 
@@ -2497,16 +2359,16 @@ Transfer acceleration (fast/secure file transfer to/from bucket )
 
 2) Upload large objects to S3
 use multipart upload API
- quick recovery from a network issue
- pause and resume object upload
- recommend for files > 10MB and Must for files > 4GB
- 
- 3 )Get some part of the object
- 
- Use Byte-Range_fetches
- 
- 4) EC2 (Region A) accessing S3 bucket(region B)
- Not recommend , reduce network latency and data transfer cost
+quick recovery from a network issue
+pause and resume object upload
+recommend for files > 10MB and Must for files > 4GB
+
+3 )Get some part of the object
+
+Use Byte-Range_fetches
+
+4) EC2 (Region A) accessing S3 bucket(region B)
+Not recommend , reduce network latency and data transfer cost
 
 
 5) How make user pay for S3 storage
@@ -2831,40 +2693,40 @@ FIPS 140-2 level complaint
 it is single tenant
 AWS can't access your encryption master keys in CloudHSM
 use two or more HSMs in separate AZ in production clusters
- AWS KMS can use CloudHSM cluster as "custom key store" to store the keys
- use cloudwatch for monitored and cloud trail for tracking key usage
-  web server offload SSL processing
-  as certificate authority
-  digital rights mgmt
-  TDE for oracle db
- if You want a dedicated hardware security module with cloud
-  
- All service integrate with KMS and KMS use CloudHSM 
+AWS KMS can use CloudHSM cluster as "custom key store" to store the keys
+use cloudwatch for monitored and cloud trail for tracking key usage
+web server offload SSL processing
+as certificate authority
+digital rights mgmt
+TDE for oracle db
+if You want a dedicated hardware security module with cloud
+
+All service integrate with KMS and KMS use CloudHSM 
 
 CloudHSM --> Create Cluster
 VPC
 AZs
 
 KMS -Custom key store and connect it with CloudHSM cluster
- 
- All AWS services provides HTTPS endpoints
- Encryption is optional with S3 but highly recommend in flight and at rest
- 
- Server Side Encryption
- 
- SSE-S3
- S3 manages its own keys
- keys rotaed every nonth
- request hearder
- 
- SSE-KMS
- Customer managed keys in KMS
- 
- SSE-C
- customer sends the key in every request 
- S3 performs encryption/decryption without storing the key
- Https is must
- 
+
+All AWS services provides HTTPS endpoints
+Encryption is optional with S3 but highly recommend in flight and at rest
+
+Server Side Encryption
+
+SSE-S3
+S3 manages its own keys
+keys rotaed every nonth
+request hearder
+
+SSE-KMS
+Customer managed keys in KMS
+
+SSE-C
+customer sends the key in every request 
+S3 performs encryption/decryption without storing the key
+Https is must
+
 Client Side Encryption
 Customer send encryption data to AWS service
 Amazon S3 encryption client can be used 
@@ -2885,10 +2747,10 @@ ie used by DB , oracle and SQL server
 EBS
 Amazon Elastic Block Store 
 Instance store
- 
+
 2) File Storage
 shared with multiple virtual servers
- user need a  quick way to share files 
+user need a  quick way to share files 
 File Storage MANY to MANY Virtual Server
 Amazon Elastic file server EFS (Linux instances)
 Amazon Elastic file server EFx (Windows instances)
@@ -3087,10 +2949,10 @@ AES-256
 Turning on encryption automatically encrypts
 
 Data at rest
-	data vols, boot vols and snapshots
+data vols, boot vols and snapshots
 Data in Transit
-	b/w EC2 and EBS
-	b/w EBS and EBS snapshots
+b/w EC2 and EBS
+b/w EBS and EBS snapshots
 
 Enable encryption at 
 When EC2 instance is created you can 
@@ -3255,7 +3117,7 @@ sudo mkdir efs
 sudo mount -t efs fs-a440c755:/ efs
 cd /efs
 sudo touch firstEFsFile.txt
- 
+
 
 Console --> FSX
 use us-east-1
@@ -3565,7 +3427,7 @@ mysql --host=mysqldbinstance1.cellrtm8cnov.ap-south-1.rds.amazonaws.com --user=a
 create table users ( id integer, username varchar(30) );
 insert into users values(1, "Ranga");
 select * from users;
-	
+
 Multi AZ Deployments
 standby created in a diff AZ
 synchronous replication
@@ -3616,7 +3478,7 @@ Oracle
 
 select Edition
 some has license included, some not 
- 
+
 SQL Server
 License is included 
 
@@ -3729,9 +3591,9 @@ keys in Json is case sensitive
 eg. Address and address will create two columns#
 
 {
-  "Address": "Lahore",
-  "id": "001",
-  "name": "Ali"
+"Address": "Lahore",
+"id": "001",
+"name": "Ali"
 }
 
 
@@ -3882,8 +3744,8 @@ shard = collection of one or more nodes (where a portion of ur data is available
 One node act as read/write Primary
 Other nodes act as read replicas (up to 5 read replicas)
 In case of Failure:
-	Primary node is replaced
-	if Multi-AZ replication group is enabled, read replica is promoted to primary
+Primary node is replaced
+if Multi-AZ replication group is enabled, read replica is promoted to primary
 publish subscribe messing  (act as a  message broker)
 read replicas and failover support
 encryption support
@@ -3993,7 +3855,7 @@ Rules
 ---------------------AWS CloudWatch ---------------------
 
 AWS CloudTrail
- tracks changes , who made an API call to modify the resource
+tracks changes , who made an API call to modify the resource
 
 AWS Config
 What did my AWS resource look like a year back
@@ -4014,15 +3876,15 @@ Amazon ELB request latency
 Amazon DynamoDB table throughput,
 Amazon SQS queue length, or even the charges on your AWS bill
 take immediate action
- 
+
 Logs
 log groups
 
 Cloudwatch Insights
 write queries and get actionable insight from your logs
 
- By default, Amazon CloudWatch does NOT have access to operating system metrics like memory consumption
- 
+By default, Amazon CloudWatch does NOT have access to operating system metrics like memory consumption
+
 CloudWatch Metrics
 
 
@@ -4362,21 +4224,21 @@ choose option with min latency
 latency b/w host on internet can be change over time
 provides u which region gives u low latency 
 
-  
+
 Failover
 active passive failover , ie use DR is primary helth check fails
 
 Geoproximity
 choose nearest resource (geographic distance) to ur user
- Routing policies will route to the nearest resource by geographic distance to your user?
- 
- 
- Multivalve answer
- return multipke healthy records upto 8 random and then choose
- 
- Geolocation
- choose based on user location
- ie from Pakistan
+Routing policies will route to the nearest resource by geographic distance to your user?
+
+
+Multivalve answer
+return multipke healthy records upto 8 random and then choose
+
+Geolocation
+choose based on user location
+ie from Pakistan
 send traffic from Asia to A
 
 **record set for smallest geographic region has priority
@@ -4888,11 +4750,11 @@ Are there any programs/projects available for cloud where one can have hands-on 
 
 AWS MANAGED VPN
 IPsec VPN tunnels from VPC to Customer Network
- over internhttps://w3.ibm.com/w3publisher/ibmaot
+over internhttps://w3.ibm.com/w3publisher/ibmaot
 et is encrypted ysing IPsec protocl
- VPN gateway to connect one VPC to customer Network
- Customer Gateway installed in customer network and u need a niternet routable IP address of cusomer gateway
- 
+VPN gateway to connect one VPC to customer Network
+Customer Gateway installed in customer network and u need a niternet routable IP address of cusomer gateway
+
 AWS Direct Connect (DC) 
 Private Dedicated Network
 can reduce ISP{ bandwidth costs
@@ -5374,7 +5236,7 @@ KMS
 
 RDS
 KMS, TDE
-	
+
 d.Protecting DATA IN TRANSIT	
 data coming in and out of AWS
 by default All AWS API use https/ssl
@@ -5387,8 +5249,8 @@ actively monitor security issues
 Monitor CloudWatch logs
 use GuadDurty to detect threats and contiguously monitor malicious behaviour 
 use AWS Organization to centralize security policies 	
-	
-	
+
+
 2) Reliability PILAR
 It is about how quickly you recover from Infrastructure and application issues
 How quickly you adopt changes demands in load

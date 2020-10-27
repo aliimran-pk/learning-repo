@@ -1,0 +1,165 @@
+Provisioning (renting ) resources and don't buy
+Also called on-demand resource provisioning
+rent based on the demand
+
+Pay per use
+No upfront planing required
+avoid undifferentiated heavy lifted
+
+Challenging
+building cloud enabled applications
+
+root user have both programmatic and AWS mgmt console
+
+policy can be assigned to an individual users as well as on a group
+called Managed policies (ie managed by AWS)
+
+Regions and Zones
+A region is a cluster of data centres
+
+AZ 
+min - 2
+max = 6
+
+AZs are separate from each other so that they are isolated from disaster
+AZ is one or more discrete data centres
+
+
+1) slow access from other parts of the world (High Latency)
+2) what if that data centre crashes (low availability)
+3) what if entire region go download
+
+Most Services are regional services
+region can be changed 
+
+Global Services
+ie IAM  can't change regions
+
+Choose region based on
+ur users are located
+ur data is located
+regulatory and security compliance
+
+Availability zone
+isolate locations  in region
+Each zone has at least two AZs
+Increase availability of applications in the same Region
+availability zone is physically separated from each other
+AZ consists of data centres
+AZs are connected through high through put network, low latency
+high bandwidth and ultra-low latency networking b/w AZs
+US West (Oregon) in console = us-west-2 in CLI
+
+Choosing Regions
+availability of the service in that region (most services we require)
+As Each region expose is regional services endpoints 
+latency, cost and data residency (complaint with business contractual requirements)
+
+Region
+ap-south-1
+
+Availability Zone (ends regions with a alphabet)
+ap-south-1a 
+ap-south-1b
+ap-south-1c
+
+They provide High Availability and Low Latency(delay)
+
+AWS SDK
+interact aws services from our code
+
+AWS as Identity provider 
+its a managed service 
+single point of failure, high available,
+
+Control Plane
+Data Plane
+
+AWS Federation
+centrally managed to access AWS resources
+single singn on
+SAML security access markup language 
+cross account access
+OPENid connect (OIDC) tokens 
+AD is a common Identity provider
+
+AWS SSPO can interact with Active directory
+Amazon Congnito 
+
+account name, pwd and email address of root user can be changed 
+
+MFA 
+multi-factor authentication 
+can be used to delete S3 objets
+
+IAM Roles
+delegate access eg. apps to EC2 for S3 bucket
+cross-account access
+create IAM policy to trust account
+identity federation (outside aws ) using identity broker application
+
+
+IAM --> Security Status -- Activate MFA
+Activate MFA
+Virtual MFA device
+Install Google Authentication to your mobile
+show the QR code
+after registering the code on the device I need to 
+provide the code
+
+
+AWS Support offers four support plans: 
+Basic, Developer, Business, and Enterprise.
+
+Groups are for physical person
+Roles are for machines (internal usage within AWS resources)
+
+IAM has global view
+permissions are governed by polices (JSON)
+IAM has predefined 'managed policies'
+
+Least Privilege Principle
+give minimum amount of permissions
+
+One IAM user per physical person
+One IAM role per application
+
+https://aws.amazon.com/iam/faqs/
+
+Any AWS customer can use IAM. The service is offered at no additional charge.
+user can be an individual, system, or application requiring access to AWS services
+Any AWS resources created by a user are under control of and paid for by its AWS account. A user cannot independently subscribe to AWS services or control resources. 
+
+A user can belong to multiple groups.
+Groups cannot belong to other groups.
+Groups can be granted permissions using access control policies
+You can enable and disable an IAM user's access keys via the IAM APIs, AWS CLI, or IAM console.
+You can organize users and groups under paths, similar to object paths in Amazon S3—for example /mycompany/division/project/joe.
+All limits are on the AWS account as a whole
+
+A role does not have long term security credential, i.e., password or security key. Instead, if the user uses a role, temporarily security credentials are created and provided to the user.
+You can use the roles to delegate access to users, applications or services that generally do not have access to your AWS resources.
+
+https://codingbee.net/aws-csa-associate/aws-iam-groups-and-roles
+
+A better approach is to group together all the permissions. This grouping of permissions is called a  “role”. You need to give this role an appropriate name, e.g. “developers”. You can then assign this role to each of the groups.
+Then there is a conflict like this, then the deny permissions have the final say.
+
+We can't assign polices to aws services directly like we did with groups
+if EC2 needs to talk to S3
+Assign a role to EC2 (ie  the role is create for what service, select the AWS service   ) 
+and give policy (select S3 policy Full Acess)to access S3 to that role
+Role can be created for Other AWS account, Web Identity or SAML
+
+
+By Default root user access is allowed and IAM user is deined
+Principal (do er)
+user
+an app 
+federated user
+
+Explicit Denied
+Explicit Allow overrides Implicit Deny
+Explicit Deny overrides everything
+
+

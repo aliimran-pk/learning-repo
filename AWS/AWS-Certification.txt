@@ -587,35 +587,6 @@ Auto Scale Group
 Distribute load : ELB , Route53(for multiple regions)
 ELB is managed so no need to think about its scaling
 
-EC2 instance Families
-
-m ( m4,m5,m6 General purpose)
-web servers and code repos
-
-t (t2,t3,t3a) Brustable performance (accumulated CPU  credits)
-workload with spikes, dev env , small db
-unlimted mode (spike beyond CPU credit at additional costs) off for t2 but on for t3 by default
-
-
-c (c4,c5,c5n ) Compute optimised High performance
-batch processing,High performance compute
-
-r (r4,r5,r5a,r5n) Memory Ram  optimized
-in mem db, real time analytics
-
-i (i3,de)  storage optimised
-NoSQL DB and data warehousing
-
-g (g3,g4) GPU optimised 
-video compressio, grapic processing
-
-
-f  (f1) FPGA instances 
-massive parallel processing power as geonomic, data analytics
-
-inf (inf1) Machine learning ASIC instances
-image,speech,nlp recognition 
-
 Tenancy Options
 shared vs dedicated
 
@@ -632,16 +603,9 @@ regular needs, high security
 billing per host
 server bound software licences like windows server, sql server
 
-------------------------Placement Groups-------------------
-low latency net=work communication (instances on a same RAC), Cluster
-high availability (instance on diff RAC) , Spread
-Partition (multpile partitions with)
+Elastic Network Interface (ENI)
 
-READ AAGAIN
-
-Elastic Network Infterface
-
-like a virtual nework inerface card
+like a virtual network interface card
 primary ENI is by default and can't be detached
 
 ENI lives in one subnet and thus in a single AZ
@@ -651,7 +615,7 @@ one public IP IPV4
 one or more security groupa mac addeess
 ipv6
 
-No. of EC2 isntances = No. of ENI
+No. of EC2 instances = No. of ENI
 
 EC2 Partition Placement Group
 In large distributed and replicated workloads (HDFS, HBase, and Cassandra), EC2 instances need to be divided into multiple groups.

@@ -164,7 +164,7 @@ create ec2_instance1_KP.ppk using puttygen and coonect to EC2 instance
 
 
 --------------- Security Group ---------------
-defence in depth acting as firewall on EC2 intances
+defence in depth acting as firewall on EC2 instances
 It live outside the EC2
 SG are the fundamental of Network Security in AWS
 They control how traffic is allowed into or out of EC2 Machines
@@ -185,6 +185,7 @@ All inbound traffic is BLOCKED by default
 All outbound traffic is Authorized by default
 
 Referencing Other Security Groups 
+*SG can reference other SG instead of IP ranges 
 
 AZ are in is
 this helps guarantee that multi AZ won't all fail at once (due to a meteorological disaster for example). 
@@ -194,7 +195,7 @@ AM is a global service (encompasses all regions)
 
 You pay for an EC2 instance compute component Only when it is in start state
  getting a permission error exception when trying to SSH into your Linux Instance
- The key is mising permissions chmod 0400
+ The key is missing permissions chmod 0400
  
  SG can reference to 
  IP address
@@ -294,8 +295,23 @@ cat /var/www/html/index.html
 
 http://ec2-35-154-93-55.ap-south-1.compute.amazonaws.com
 
+--------------- EC2 Hibernate  ---------------------------------
+EC2 stop: data on Disk EBS is kept intact in next start
+Terminate: EBS vol destroy
 
---------------EC2 INSTANCE TYPES----------------
+On Start Following happs:
+First Start ; OS boot and EC2 user data scripts
+App Start , cache gets warmed up
+
+EC2 Hibernate 
+RAM state is preserved in root EB volume must Encrypted
+Instance boot is much faster
+
+Available for On demand and Reserved instances only
+cannot be hibernated more than 60 days
+Specific instances families supported
+
+--------------EC2 INSTANCE TYPES-----Launch Modes-----------
 
 1) EC2 On Demand (come and stay at hotel room)
 pay for what you use
@@ -334,7 +350,7 @@ Cancelling a spot requests does not terminate instances
 **You must cancel a spot request First m then terminate the spot instances
 
 spot request contains
-max priace
+max price
 desired no. of instances
 request type one-time or persistent
 valid from , valid to
@@ -470,10 +486,10 @@ EC2 Instance with (root ) on host (ip-172-31-13-231.ap-south-1.compute.internal)
 AMI can be built for Linux or windows
 Faster boot time
 active directory out of box
-installing your app ahead of time for faster deply when auto scale
+installing your app ahead of time for faster deploy when auto scale
 use some one else AMU
 *AMI are built for a specific region
-for installing OS patches and software using userdata at the launch of EC2 isntance increases bootup time
+for installing OS patches and software using userdata at the launch of EC2 instance increases bootup time
 also called Hardening an Image customised EC2 images to your ciporate securiyt standards)
 
 AMI take space and live in S3 but can't see them in S3 console
@@ -517,18 +533,116 @@ AMI - Action -- DeregisterAMI
 SnapShot- Action- Delete
 
 
-If you stopped EC2 instances then still EBS volumes (harddisk) will be there and u will be charged
+If you stopped EC2 instances then still EBS volumes (hard disk) will be there and u will be charged
+
+
+You can share AMI with another AWS account
+owner must grant u read permission for storage either EBS snapshot
+or S3 bucket
+You can't copy an encrypted AMI unless keys were shared
+**You can't copy an AMI with an associated billingProdut code shared
+with you from another account.to copy shared AMI with billingProduct ,
+launch an EC2 instance in your account using shared AMI and then 
+create AMI from that instance.
+
+sharing AMI doesn't affect ownership of AMI
+
+**AMI is region locked and Same Id can't be used across regions
+**Creating an AMI after installing the applications allows you to start more EC2 instances directly from that AMI, hence bypassing the need to install the application (as it's already installed)
+
+------------------------Placement Groups-------------------
+Use placement groups to influence the placement of a group of interdependent instances
+
+
+Add instance to placement group = checked
+
+1) Cluster
+low latency network communication (instances on a same RAC),
+in single AZ
+** good for high performance computing
+same hardware
+Not available for t2 types
+Big data Analysis
+
+***  Pros: Great Network 10Gbps
+Cons: Rack fail, all instances failed
+Use Case: Big data jobs to complete v fast
+
+2) Partition
+create multiple partitions across multiple AZ
+each partition is located on Separate AWS Racks
+partitions are set of Racs
+up to 7 partitions  per AZ and 100s of EC2 instance in a partition
+
+A partition failure can affect many EC2 in it but won't affect other partitions
+EC2 instances get access to the partition info as metadata
+Use Case: Distributed jobs, HDFS, hadoop , kafka, cassandara, Big data jobs to complete v fast
+
+3) Spread
+high availability (instance on diff RAC)
+Each instance is located in a separate rack in diff AZ
+High resiliency
+*** Critical applications
+
+Pros: Reduced risk in simultaneous failure
+Cons: 7 instances per AZ per placement group
+Use Case: Apps need High Availability
+where each instance must be isolated from failure from each other
+
+ie 
+AZ1
+R11 - Intance1
+R12 - Intance2
+AZ2
+R21 - Intance3
+
+Create a Placement Group
+Name: 
+Strategy : Cluster
+
+Launch Instance
+Placement Group: Select my PG
+-----------Elastic Network Interface ENI ------------------------------------------
+
+It is logical component in VPC that represents a virtual network interface card
+Primary ENI is by default and can't be detached
+
+ENI lives in one subnet and thus in a single AZ
+1 primary private IPV4 (eth0) and one or more secondary PV4 (eth1)
+1 Elastic IPv4
+1 public IPV4
+One or more security group 
+A mac address
+
+** No. of EC2 instances = No. of ENI
+You can create ENI independently and attach them on fly (move them)
+on EC2 instances for failover thus new instance gets IP of old instnace
+** ENI are bound to AZ
+
+Also we can create our own ENI
+Network Interfaces --> Create Network Interface
+Desc: My Secondary ENI
+Subnet:eu-west-1a
+IPv4 Private IP: Auto assign
+Security Group:
+
+Right Click on that ENI --> Attach -- Select EC2 Instance Id
+now it contains eth0 and eth1
+
+A single EC2 instance can now be attached to two ENIs, each one on a distinct subnet. The ENI (not the instance) is now associated with a subnet.
+Also can Detach it and Attach it to other instance as well
+You would use the private network for SSH access, management, logging, and so forth. You can apply different security groups to each ENI so that traffic port 80 is allowed through the first ENI, and traffic from the private subnet on port 22 is allowed through the second ENI.
 
 ----------------------------------------------Good EC2 Scenarios------------------------------------------------------
 
-Q1:  identify all instances belonging to a project, to an eviroment
+Q1:  identify all instances belonging to a project, to an environment
 SOL: tags
 
 Q2: Change instance type
 SOL: stop the instance and then change its type
 
 Q3: don't want an EC2 instance to be automatically  terminated 
-ie from Action-Instace Sate- Terminate
+ie from Action-Instance Sate- Terminate
 SOL: Change Termination Protection to Enable
 also can be set during instance creation
 But EC2 Terminal protection is not effective for termination from
@@ -543,15 +657,15 @@ Q5: create EC2 instances based on on-premise VMs
 SOL: yes, using import/export , you are responsible for licenses
 
 Q6:Changing security group
-SOL: easily chnage/delete securoy group to an instance
+SOL: easily change/delete 7) Papa AC=11000  + Car 8000 + Car Token 11013 group to an instance
 multiple security group can also be assigned
 
 Q7: Timeout
 SOL:	inbound rule for security group to check
 
-Q8: Installing a lot of woftwares sing userdata that slowing down instance launch
+Q8: Installing a lot of software sing userdata that slowing down instance launch
 how to make it faster
-SOL:	cusom AMI-------------------------------------------------------
+SOL:	custom AMI
 
 Q9: stopped EC2 instance, will I get bill
 SOL:	if u have storage 
@@ -606,3 +720,53 @@ MonthlyBudget
 3) Monthly
 4) Budgeted amount 
 $0.01
+--------------------------------------------------------------------
+SCALABILITY 
+means an application can handle greater load
+
+Horizontal
+increase no. of instances
+scale out: increase
+
+Vertical
+increase size of instance
+t2.micro to t2.large
+common to Non disribited databases
+scale up/down
+
+High Availability
+run instances for the same applcaiton across mlti AZ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

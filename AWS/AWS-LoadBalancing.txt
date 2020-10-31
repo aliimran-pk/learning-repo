@@ -53,7 +53,7 @@ ENI lives in one subnet and thus in a single AZ
 one primary private IPV4 and one or more secondary PV4
 one Elastic IPv4
 one public IP IPV4
-one or more security groupa mac addeess
+one or more security groups mac address
 ipv6
 
 No. of EC2 instances = No. of ENI
@@ -363,9 +363,6 @@ ASG is free, you pay for underlying resources
 ASG can terminate instances marked as unhealthy by an LB
 to update ASG, must provide a  new launch template
 
-
-
-
 EC2- > AutoScaling Group
 Create ASG
 Auto Scaling group name: MyEC2AutoScalingGroup
@@ -376,22 +373,43 @@ Enable load balancing = YES
 Create New Target Group = ASG-TargetGroup (with  no. EC2 instances registered)
 
 Configure group size and scaling policies
-Desired Capacity    = 2
+Desired Capacity    = 2  how many we want
 Min Capacity 		 = 1
 Max Capacity 		 = 3
 
-Policy 
-TargetTrackingPolicy
+Auto Scaling Policies
+
+1) TargetTrackingPolicy
+Most simple and easy to setup
 Policy type:
 Target tracking scaling
 Execute policy when:
 As required to maintain Average CPU utilization at 70
 70
 
+AGG--> Activity
+
+basic monitoring for ASG is 300 secs from console and is free
+detailed monitoring for ASG is 60 secs from console and is not free
+
+Stand By
+Can put EC2 instance manually to stand by (still part of ASG and changed but no traffic will come to it, use for software upgrade)
+**ASG doesn't perform Health Check on instances on stand by state
+
+Cool down period helps to ensure that your ASG doesn't launch or terminate additional instances before the 
+previous scaling activity takes effect
+A scaling specific cool down period overrides the default cool down period
+
+It is always recommended to create a scale-in event for every scale out event
+** launch Configuration once created can't be edited 
+
+https://www.youtube.com/watch?v=c-AwFkicRY8
+
 *** Even  if policy indicates, ASG ensure the desired capacity 
 
-IMP use cases
+**ASG uses Alarms and Policies to determine scaling
 
+MANUAL SCALIG 
 1) maintained current instance levels at ll times
 min=max=desired == CONSTANT
 when always there is constant load expected
@@ -400,7 +418,7 @@ when always there is constant load expected
 change desired capacity as needed
 you need complete control over scaling 
 
-3) Scale based on schedule
+3) Scale based on schedule / predictive scaling/cyclic 
 programs with regular schedules
 Create Schedule Action
 
@@ -408,11 +426,21 @@ Create Schedule Action
 On demand Scale
 Unpredictable load
 
-Types of Dynamic Scaling
+TYPES OF DYNAMIC SCALING
+
 
 1) Target Tracking
-Maintain CPU utilisation at 70%
+I need to keep/maintain CPU utilisation at 70%
 Modify current capacity based on the target value for a specific metric
+Example of AC  
+I need temp to be maintained at 20%
+
+cool down  period
+ignore alarms within this time duration and will not create a new ec2 instance
+
+warm up period
+wait for EC2 instance to start for this time
+
 
 2) Simple Scaling
 more complex policy
@@ -420,10 +448,13 @@ more complex policy
 -3 if CPU utilisation < 60%
 waits for cool down period before triggering additional actions
 
-3) Step Scaling
+3) Step Scaling (adding steps)
 +1 if CPU utilisation between 70% and 80%
 +3 if CPU utilisation between 80% and 100% 
+- 1 if CPU utilisation between 40% and 50% 
 Warm up time can be configured for each instance.
+** Here cool down period will not work in Step Scaling Policy
+
 
 Cloud watch
 monitor metrics 
@@ -435,7 +466,20 @@ Scaling Action (+5 EC2 instances)
 
 CloudWatch --> Alarms
 
-Auto Scaling Scenarios
+
+ASG Launch Configuration is legacy
+
+ASG  Launch template is latest
+versioned
+provisioned for both on-demand and spot instances
+can use T2 unlimited burst feature
+
+* Because the ASG has been configured to leverage the ALB health checks, unhealthy instances will be terminated
+* The metric "requests per minute" is not an AWS metric, hence it needs to be a custom metric
+* Network Load Balancers expose a public static IP, whereas an Application or Classic Load Balancer exposes a static DNS (URL)
+* SNI (Server Name Indication) is a feature allowing you to expose multiple SSL certs if the client supports it.
+* The Default Termination Policy for ASG. It tries to balance across AZ first, and then delete based on the age of the launch configuration. 
+---------------- AUTO SCALING SCENARIOS----------------------------
 
 1) change instance type or size of ASG instances
 OR 
@@ -446,11 +490,11 @@ create a new version and ASG use that  version
 Terminate instances in small groups to make sure application is available
 
 2)  Perform actions before instance added/remove
-Create a lifecycle hook , configure clodwatch to trigger actions based on it
+Create a lifecycle hook , 
+configure cloudwatch to trigger actions based on it
 
 Auto scaling Group --> Instance Management --> Life-cycle hooks
 create life-cycle hook
-
 MyLiifeCycle
 
 3) which instance is terminated first when scale in
@@ -462,13 +506,20 @@ EC2 -> Auto Scaling groups -> MyEC2AutoScalingGroupASG
 Advance configurations
 Termination policies
 
-
 4) Prevent frequent scale up/down
-Adjust cooldown perod to a high value default 300 sec
+**Adjust cool down period to a high value (default 300 sec)
 
 5) I want to protect newly launched instance from scale-in 
 Enable instance scaling protection
-if enabled then all new instaces from this ASG will not be scale in
+if enabled then all new instances from this ASG will not be scale in
+
+To scale a resource other than EC2, you can use the Application Auto Scaling API, which allows you to define scaling policies to automatically scale your AWS resources or schedule one-time or recurring scaling actions.
+AWS Auto Scaling is enabled by Amazon CloudWatch, so service fees apply for CloudWatch and your application resources (such as Amazon EC2 instances, Elastic Load Balancing load balancers, etc.).
+
+ASG Termination Policy
+1) Find AZ which has most no. of instances
+2) If there are multiple instances in a AZ, delete the one with oldest configurations
+
 
 ------------------------------------Availability-------------------------------------------------------------
 
@@ -476,7 +527,7 @@ Are applications are available when users need them
 Percentage of time
 99.99% is four 9s availability
 
-99.95% 		22 mins down time in a month
+99.95% 	22 mins down time in a month
 99.99%   	4.5 mins
 99.9995 	26 seconds 
 
@@ -543,13 +594,13 @@ when interrupted, spot instances can be terminated (default),stopped and hiberna
 
 Completely close a spot request  in the following order for best practice
 
-1) cancel spot request  (only this can't terminate active spot instaces)
+1) cancel spot request  (only this can't terminate active spot instances)
 2) terminate all spot instances
 
 ---------------------EC2 Reserved instances ------------------------------
 Reserve E2 instances ahead of time
 
-when u have constant worloads that run all the time
+when u have constant workloads that run all the time
 3 types
 1) STANDARD
 
@@ -687,10 +738,10 @@ saving , reserved , on demand , spot instances
 Resiliency (how quickly u recover)
 health checks
 cloudwatch for monitoring
-DR , ami coppied to multiple regions
+DR , ami copied to multiple regions
 
 
-warm attach = attaching ENI with EC2 instnace is stopped
-spoot is the cheapest
-on deman is the costly
+warm attach = attaching ENI with EC2 instance is stopped
+spot is the cheapest
+on demand is the costly
 

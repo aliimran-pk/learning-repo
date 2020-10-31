@@ -1,3 +1,39 @@
+
+IAAS (Infrastructure as a Service)
+use only INFRASTRUCTURE from cloud provider
+also called Lift and Shift
+eg. EC2 to deploy your applications or db
+
+You are responsible for 
+1) app code and runtime
+2) configure LB
+3) auto scaling
+4) OS upgrade and patches
+5) Availability
+
+PAAS (platform as a service)
+use a PLATFORM provided by cloud
+eg EBS Elastic Beanstalk
+
+alternative to PAAS
+CAAS (container as service)container instead of applications
+ECS Elastic Container Service
+
+FAAS Function as a Service
+serverless
+not worrying about servers`
+AWS Fargate Serverless compute for container
+
+
+Cloud provider provides
+1) OS
+2) App runtime
+3) auto scale-in, lb
+
+You are responsible
+1) Application 
+2) configurations
+
 Provisioning (renting ) resources and don't buy
 Also called on-demand resource provisioning
 rent based on the demand

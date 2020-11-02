@@ -3,7 +3,7 @@ Types of Storage
 
 1) Block Storage
 hard disk
-typical, one block storage device can be connected to one virtual server
+* typical, one block storage device can be connected to one virtual server
 can connect multiple different block storage devices to to one virtual server
 Direct Attached Storage: like HD
 Storage Area Network SAN
@@ -11,30 +11,35 @@ high speed network
 connecting a pool of storage devices 
 ie used by DB , oracle and SQL server
 
-EBS
-Amazon Elastic Block Store 
-Instance store
+EC2 instances support two types for block level storage 
+1) Amazon Elastic Block Store 
+2) Instance store
 
 2) File Storage
-shared with multiple virtual servers
+* shared with multiple virtual servers
 user need a  quick way to share files 
 File Storage MANY to MANY Virtual Server
 Amazon Elastic file server EFS (Linux instances)
 Amazon Elastic file server EFx (Windows instances)
 Amazon FSx for Luster (high performance use cases)
 
-
 EC2 instance can be attached to 
 
-1) instance stores
+1) Instance stores
+
 physical attached to EC2 instance (on the host computer where EC2 instances are availbe)
 used for temporary data (ephemeral storage)
-data lost when hardware/instance fail
+** data lost when hardware/instance fail or instance stop/terminate
 life-cycle tied  to EC2 instance
 used for cache or scratch files
 data is not lost on instance reboot
 only some ec2 instance types supports instance store
+Boot time is slower then EBS backed volumes and usually less then 5 min
 
+
+eg .c5 dlarge can have instance store
+
+up to 7.5 TB
 Advantages
 v fast I/o
 No extra cost 
@@ -45,9 +50,11 @@ slow boot up up to 5 mins
 Cannot take a snapshot or restore
 Size is fixed based on instance type
 cannot attach/detach to other EC2 instance
+** Can't resize the instance store
 
-2) Elastic Block Store
-Network Storage
+
+2) Elastic Block Store (EBS)
+** Network Storage (not a physical device)
 Attached to EC2 instance as a network drive
 More durable 
 Life cycle not tied to EC2 instance
@@ -55,13 +62,17 @@ Provisioned capacity
 Highly Flexible increase size when u need
 Can be  attach/detach to other EC2 instance
 999s availability and replicated within same AZ
+EBS is locked to a AZ , to move volume across , you first need to snapshot it
 UseCase: run your own database
-
+Require network to communicate to the instance , means a little latency
+We billed for provisioned capacity (GBs and IOPS)  and not for usage
 root volume is where OS is stored and it is available by default
+multiple volumes can be attached to an EC2 instance
+EBS volumes preserve their data through instance stops and terminations, 
 --------------
 EC2 instance
 
-EBS Instance A in AZ 	ap-south-1a - root volume
+EBS Instance A in AZ   ap-south-1a - root volume
 EBS Instance B in AZ     ap-south-1a - root volume and secondary volume
 EBS Instance C in AZ     ap-south-1b root volume
 
@@ -79,11 +90,11 @@ region = ap-south-b
 Add Storage: only root
 
 *** Volumes in an availability zone CAN ONLY be attached to EC2 instances in the SAME AZ
+
 A volume to be deleted needs to be first detached
 But we can't detached a root volume
 
-
-lsblk
+lsblk (will show you all the attached drives)
 xdva1 is mounted to /   (root)
 cd / (we are on root vol)
 xsvdb is not mounted yet
@@ -92,8 +103,8 @@ sudo file -s /dev/sdb (from console)
 
 create a file system on xvdb and mount it 
 sudo mkfs -t xfs  /dev/xvdb
-sud o mkdir /data
-sudo mount /dev/xvdb /data
+sudo  mkdir /data
+sudo mount /dev/xvdb /data (now )our 
 
 cd /data
 touch firstfileonebs.txt
@@ -127,16 +138,30 @@ Large streaming or big data workloads
 Not recommended for boot volumes
 
 
-EBS SSD Types
+------ EBS SSD Types---------------
 *** IO performance increases with size
-IOPS increases per GB upto a limit 
+IOPS increases per GB up to a limit 
 
 1) General Purpose SSD (gp2)
+cheap
 balance price and performance for transactional workloads
-
 small/medium DB dev env
+recommended for most workloads
+system boot volumes
+virtual desktops
+low latency interactive apps
+1 GB - 16TB (16386 GB)
+burst IOPS to 3000
+Max IOPS 16000
+
+** IOPS are decrease/increased with value of Size
+3 IOPS per GB
 
 2) Provisioned IOPS SSD (io1)
+expensive
+critical business application
+more than 16000 IOPS per volume, max 32000
+4GB to 16TB
 low latency transactional workloads
 large relational or nosql db
 high performance at high cost
@@ -150,18 +175,20 @@ EBS HDD Types
 Frequently accessed,
 Throughput intensive sequential workloads
 MapRequce,Kafka, log processing , DWH and ETL
+500 GB - 16TB , 500 MB/s throughput
 
 2) Cold HDD (sc1)
-lower cost
 infrequent data access, eg very low transaction databases
+lower cost
+250 GB - 16TB , 250 MB/s
 
 Imp
 196. Step 12 - Comparing Four EBS Storage Types
 
 IOPS = input output operations per second
-OPS (input/output operations per second) is the standard unit of measurement for the maximum number of reads and writes
+Is the standard unit of measurement for the maximum number of reads and writes
 
-I/O is the number of accesses to the dis
+I/O is the number of accesses to the disk
 IOPS is I/O per second.
 Throughput is the amount of info you read in each I/O
 
@@ -173,7 +200,11 @@ Databases -> usually IOPS (small data but frequently retrieved)
 Big Data / Data warehouses -> usually Throughput ( big data files)
 Cold HDD -> Cold File Servers (lowest IOPS before moving to Magnetic)
 
---------------- EBS SnapShot------------------------------------+
+* Only gp2 and io1 can be used as boot volume
+
+
+--------------- EBS SNAPSHOT------------------------------------
+
 backup of EBS volume
 volume can be modify
 Volume type and size even it is attached with an EC2 instance
@@ -181,21 +212,25 @@ Volume type and size even it is attached with an EC2 instance
 point-in-time snapshots (stored in S3) Aysnc process
 Can't accessed directly from S3 but from EC2 API
 
-Volumes- Action -Create snapshot
+Volumes -> Action -> Create snapshot
 Can't add encryption here
-We can crate a volume from this snapshot as well and can add encryption as well
+We can create a volume from this snapshot as well and can add encryption as well
 
-Snapshots are incremental
+** Snapshots are incremental
 You can create multiple snapshots of a volume snapshot1,snapshot2
 but snapshot2 only have data after snapshot created and not the previous one
 *** We can't loose data if we delete older snapshot
 deleting snapshot only delete data which is not needed by other snapshots
 snapshot can be shared with other accounts / public
+max 100,000 snapshots per account
+can make Images AMI from snapshot
 
+EBS Migration
 Volumes are constrained to  AZs
 Snapshots created from those volumes are constrained to regionals
-so to move a volume to another Region, create
-snapshot of it
+** so to move a volume to another Region, create snapshot of it
+copy it to other region
+create volume from this copied snapshots in that new region
 
 Create a volume 
 vol1  in eu-west-1a
@@ -205,14 +240,21 @@ vol1-snapshot1
 
 Select vol1-snapshot1 - Action - Copy
 
+LifeCycle Manager (automated backup solution for EBS volumes) 
+Schedule and manage creation and deletion of EBS snapshots
+create snapshot lifecycle policy
+schedule name:
+ie after 24 hrs
+
+
 Fast Snap restore 
 eliminates need for pre-warming ie accessing data soon from the volume
 Snapshot - Action -  Manage FastSnapshot restore
 
-EEBS Encryption
+EBS Encryption
 
-using AWS KMS
-AES-256
+using AWS KMS ** AES-256
+
 Turning on encryption automatically encrypts
 
 Data at rest
@@ -225,6 +267,21 @@ Enable encryption at
 When EC2 instance is created you can 
 When copy a snapshot 
 when copy an AMI
+
+When you create an encrypted EBS volume
+data at rest is encrypted inside the volume
+all data in flight moving b/w instance and vol is encrypted
+all snapshots are encrypted
+all volumes created from those snapshots are encrypted
+
+Encryption has minimal impact on latency
+
+How to encrypt an unencrypted volume
+create EBS snapshot of this vol
+Encrypt the snapshot using copy (in same region or in order region)
+create new EBS vol from this snapshot (which is now encrypted)
+attach this encrypted volume to the original instance
+
 
 Getting faster I/O Performance b/w EC2 and EBS
 
@@ -246,29 +303,44 @@ Hibernate  max 60 days
 data in memory is persisted in EBS volume
 only ebs backbend instances can be stopped or hibernated
 
-Increase 
+ ----------EBS Raid Options -------------
 
 RAID
 redundant array of independent disks
+raid is possible as long as your OS supports it
 
-RAID 1
-when higher \durability is required
-data is duplicated
-
-RAID 0
+RAID 0 (to increase performance)
 Higher IOPS or storage is required
+combining 2 or more volumes and getting the total disk space 
+When fault tolerance is not reburied
 issue is data  can be lost if one disk fail
 use when I/O performance is more important
+Using this we can have a very big disk with lot of IOPS
+eg. for a database which has already replication enabled
+
+eg two 500 GB EBS io1 vol with 4000 IOPS can create
+1000GB RAID 0 with available bandwidth 8000 IOPS and 100 MB/s throughput
+
+
+RAID 1 (to increase fault tolerance)
+when higher durability is required
+data is duplicated as data write to both volumes called mirroring
+use case: 
+eg two 500 GB EBS io1 vol with 4000 IOPS can create
+500GB RAID 1 with available bandwidth 4000 IOPS and 500 MB/s throughput
+
+RAID 5 and RAID 6 is not recommended for EBS
 
 We can create AMI from a snapshot of a root volume
 
-Scenario
+-------- EBS SCENARIO-----------
+
 1) use an AMI belonging to a different AWS account or in diff region
 a) Owner of AMI provides read permission to AMI
 b) for encrypted AMI, owner should share encryption keys
 c)copy AMI to the other regions
 
-If u don't have permissions to cipy AMI but have permission to use it 
+If u don't have permissions to copy AMI but have permission to use it 
 Sol:  
 create EC2 instance from that AMI 
 create new AMI from EC2 instance and copy it 
@@ -293,7 +365,7 @@ Enable delete on termination
 
 8) retain EBS vol even if EC2 backed instance fail
 On termination all data on root is lost even if EBS backed
-so detach EBS vol before terminating the instance and reover data by connecting 
+so detach EBS vol before terminating the instance and recover data by connecting 
 it to another eC2 instance
 use snapshot
 
@@ -304,12 +376,12 @@ create EBS volume from that snapshot and select diff AZ
 10) How to Create EBS volume from EBS volume in diff Region 
 take a snapshot
 copy snapshot to other region
-create ebs volume in other region
+create EBS volume in other region
 
 11) Lowest cost option to maintain snapshots with EBS
 store just latest snapshot and delete others
 
-12) how to encrypt and un encrypted EBS vloume
+12) how to encrypt and unencrypted EBS volume
 can't do directly
 create a snapshot from this volume
 create vol from this snapshot with encryption
@@ -319,26 +391,39 @@ creation, retention and deletion  of EBS snapshots
 use EBS- Amazon Data LifeCycle Manager
 
 --------------------------EFS--------------------------------------------------------
-Elastic File System
+
+ELASTIC FILE SYSTEM
 Can attach a EFS with multiple EC2 (may be in diff Az ) but in a single Region
 petabyte scale , auto scaling shared file system
-
-In EBS for auto scaling , you need to provisioned disk and charge for it
-In EFS just add files and changed for those files like S3
-
-** Compatible with Amazon EC2 LINUX based instances
+Highly available , scalable m expensive (3 X gp2), pay per use
+** Compatible with Amazon EC2 LINUX based instances only
+uses NFSv4.1 protocol
+Uses SG to control access to EFS
+Encryption at rest using KMS
 use Max I/O Mode for higher throughput (with small latency) 
 use case: home dirs, file share, content mgmt, media workflows
 
+EFS -Performance and Storage Classes
 
-Amazon FSX for Lustre
+EFS Scale
+1000s of concurrent of NFS clients , 10GB/throughput
+automatically grow , petabyte scale network file system
+
+Performance Mode (set at EFS creation time)
+General  purpose (default) , web server, CMS
+Max.I/O higher latency, throughput, high parallel (big data , media processing)
+
+Storage Tiers (lifecycle management feature- move file after n days)
+standard: for frequently accessed files
+(EFS-IA ) EFS Infrequent Access  : cost saving , cost to retrieve files , lower price to store
+
+AMAZON FSX FOR LUSTRE
 its a File system Optimised for Performance
 HPC high performance computing
 machine learning, media processing 
 Integrates with S3
 POSIX complicit
 File system data is automatically encrypted at rest and in-transit
-
 
 Amazon FSX Windows File Servers
 fully managed windows file server
@@ -357,14 +442,14 @@ to all mount targets
 life cycle policy = optional
 
 Throughput Mode
-Bursting Mode for most file system
-Provisioned
+Bursting Mode for most file system (scale with file system size)
+Provisioned (for high throughput)
 
 Performance Mode
 General Purpose
 Max I/O
 
-File System Policy
+File System Policy (optional)
 
 Access Points
 to provide application to access your filesystem
@@ -373,10 +458,15 @@ Sharing File System b/w EC2 instances
 
 Edit EC2 Security Group for Inbound
 NFS
-Custom - EC2 Security Group
+Custom - EC2 Security Group (referenced)
+ie referencing EC2 SG in EFS SG
 thus allow NFS from all EC2 instances with this SG
 
-Mouting your File system
+Select EFS
+Click Attach
+Now use those commands and execute it on the EC2 machines
+
+Mouting your File system (mounted your EC2 directory to the EFS)
 
 on each EC2 instance
 sudo yum install -y amazon-efs-utils
@@ -394,6 +484,13 @@ Terminate EC2 instances
 Delete all unused EBS volumes, snapshots
 Delete all your AMIs
 Delete your EFS file storage servers
+
+
+----------------EBS VS EFS ----------------------------------
+** EBS is mount to single AZ, attached to one instance at a time
+** EFS is mount to multiple AZ
+In EBS for auto scaling , you need to provisioned disk and charge for it
+In EFS just add files and charged for those files like S3
 
 -----------------------Storage Gateway -------------------------------------------------
 Hybrid Storage  (On Premise and on Cloud )

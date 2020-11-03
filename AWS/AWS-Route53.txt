@@ -1,0 +1,130 @@
+---------------------Route 53---------------------------------------------------
+Route 53 = Domain Registrar + DNS
+ie 
+Buy your domain name
+setup your DNS to route requests to doamin to your hosted web site
+
+Domain Name Server DNS
+each record is associated with a TTL
+how long is your mapping cached at the router at the client
+
+Hosted Zone
+container for records containing DNS records routing traffic for a specifi domain
+can be private L routing with VPC
+can be public : routing on internet
+
+Standard DNS Records
+
+Type
+A			: Name to IPV4 address
+AAAA	: Name to IPV6 address
+NS	:  name server containing DNS records (name of hosted servers) 
+MX    : Mail Exchange
+CNAME : name1 to name2 mapping  
+eg     dumy.in28minutes.com to www.example.com
+
+53 specific extension : Alias records
+
+route traffic to select AWS resources like S3,ELB,CloudFront 
+Alias records can be create for root and non root domains
+ie in28minutes.com   or api.in28minutes.com
+
+** CNAME records only be created for non root domains 
+
+if you want to route domain to an AWS resource then what u need to make of 
+use Alias records
+
+Route 53 - Routing 
+
+based on user requests
+offer multiple routing policies
+
+ie  users from US will route to ELB in us-east-1 and 
+users from india will route to ELB in ap-south-1
+
+Route 53 Policies
+
+Simple
+maps a domain name to an IP address
+
+Weighted
+maps a single DNS name to multiple weighted resources, 10% to A, 30% to b (useful for Canary deployments)
+
+Latency
+choose option with min latency
+latency b/w host on internet can be change over time
+provides u which region gives u low latency 
+
+
+Failover
+active passive failover , ie use DR is primary helth check fails
+
+Geoproximity
+choose nearest resource (geographic distance) to ur user
+Routing policies will route to the nearest resource by geographic distance to your user?
+
+
+Multivalve answer
+return multipke healthy records upto 8 random and then choose
+
+Geolocation
+choose based on user location
+ie from Pakistan
+send traffic from Asia to A
+
+**record set for smallest geographic region has priority
+
+use case:
+restrict distribution of content to a specific area where u have distribution rights
+
+recommenced to configure a default policy use if one of the location records match 
+otherwise Rote 53 returns a " no answer"
+
+WARNING! BILLING ALERT! HOSTED ZONES are NOT in FREE TIER
+
+
+Console --> Route 53 
+DNS Management
+Create hosted Zone
+Domain  Name: learnaws.com
+Type: Private Hosted Zone VPC
+VPC Id  : Associate New VPC
+
+Create EC2 instance in those VPC
+
+Note 
+VPC Id  Region  Public IP of 4 EC2 instances you created
+
+On hosted Zones
+Create Record Set
+
+Record SetName: simple
+Type:all public ips of EC2 there
+Routing Policy = Simple
+save record set
+
+Now on Ec2 instance
+ping simple.learnaws.com will returns one of the pulic ip of EC2
+
+Record Set Name: weighted
+Routing Policy = Weighted 
+Weight : 10
+Side ID : B
+
+Routing Policy = Weighted 
+Weight : 90
+Side ID : B
+
+weighted.learnaws.com
+
+Record Set Name: latency
+Routing Policy = latency 
+Region : 10
+Side ID : A
+
+latency guide based on nearest region
+
+
+WARNING! BILLING ALERT! Delete the Hosted Zone and Terminate all EC2 Instances
+
+

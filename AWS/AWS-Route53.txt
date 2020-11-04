@@ -1,26 +1,46 @@
----------------------Route 53---------------------------------------------------
-Route 53 = Domain Registrar + DNS
+---------------------Route53---------------------------------------------------
+
+Route53 is a managed DNS , a collection of rules and records which 
+helps client understand how to reach a server through its domain name
+* It is a G\lobal Service 
+
+Route53 = Domain Registrar + DNS
 ie 
 Buy your domain name
-setup your DNS to route requests to doamin to your hosted web site
+setup your DNS to route requests to domain to your hosted web site
 
 Domain Name Server DNS
 each record is associated with a TTL
 how long is your mapping cached at the router at the client
 
 Hosted Zone
-container for records containing DNS records routing traffic for a specifi domain
-can be private L routing with VPC
-can be public : routing on internet
+Is a container for records containing DNS records routing traffic for a specific domain
 
-Standard DNS Records
+Route53 can use 
+public domains your own (routing on internet)
+app1.mypublicdomain.com
+
+private domain name that can be resolved by your instances in your VPC (routing with VPC)
+app1.company.internal
+
+Route53 can do
+Load Balancing (through DNS called client load balancing)
+Health Checks 
+Routing Policies (simple, failover,...)
+
+Not for free tier
+you pay 0.05 $ per month per hosted zone
+
+COMMON/ STANDARD DNS RECORDS
 
 Type
-A			: Name to IPV4 address
-AAAA	: Name to IPV6 address
+A			: hostname to IPV4 address
+AAAA	: hostname to IPV6 address
+CNAME : hostname1 to hostname2 mapping  
+Alias: hostname to AWS resource
 NS	:  name server containing DNS records (name of hosted servers) 
 MX    : Mail Exchange
-CNAME : name1 to name2 mapping  
+
 eg     dumy.in28minutes.com to www.example.com
 
 53 specific extension : Alias records
@@ -28,21 +48,21 @@ eg     dumy.in28minutes.com to www.example.com
 route traffic to select AWS resources like S3,ELB,CloudFront 
 Alias records can be create for root and non root domains
 ie in28minutes.com   or api.in28minutes.com
-
-** CNAME records only be created for non root domains 
-
 if you want to route domain to an AWS resource then what u need to make of 
 use Alias records
 
-Route 53 - Routing 
+** CNAME records only be created for non root domains 
 
+
+
+Route 53 - Routing 
 based on user requests
 offer multiple routing policies
 
 ie  users from US will route to ELB in us-east-1 and 
 users from india will route to ELB in ap-south-1
 
-Route 53 Policies
+ROUTE 53 POLICIES
 
 Simple
 maps a domain name to an IP address
@@ -82,29 +102,114 @@ otherwise Rote 53 returns a " no answer"
 
 WARNING! BILLING ALERT! HOSTED ZONES are NOT in FREE TIER
 
+DNS Management
 
 Console --> Route 53 
-DNS Management
-Create hosted Zone
-Domain  Name: learnaws.com
-Type: Private Hosted Zone VPC
-VPC Id  : Associate New VPC
+Domains --> Register Domains --> 12$ cost
+ 
+Click on Hosted Zones
+a hosted zone is a created 
 
-Create EC2 instance in those VPC
-
-Note 
-VPC Id  Region  Public IP of 4 EC2 instances you created
-
-On hosted Zones
 Create Record Set
+myfirstrecord
+A-IP4v
+value 11.22.33.44
+
+Now myfirstrecord.stephenrheteacher.com goes to Route53 will redirect it to 11.22.33.44
+
+nslookup myfirstrecord.stephenrheteacher.com will gives 11.22.33.44
+
+Create a EC2 isnsatce and add user data into it
+Amazon EC2 Instances have metadata they can access. 
+They get it by accessing a web server on a link-local address, 169.254.169.254
+
+
+#!/bin/bash
+yum update -y
+yum install -y httpd
+systemctl start httpd.service
+systemctl enable httpd.service
+EC2_AVAIL_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+echo "<h1>Hello World from $(hostname -f) in AZ $EC2_AVAIL_ZONE </h1>" > /var/www/html/index.html
+
+It gives public IP = 3.112.71.34
+
+So 3.112.71.34 will output 
+Hello World from ip-172-31-42-165.ap-northeast-1.compute.internal in AZ ap-northeast-1a
+
+So create 3 EC2 instances in different regions with above user data
+
+Public IP   				Region
+34.255.122.73			eu-west-1
+3.86.116.186			us-east-1
+3.112.71.34 			ap-northeast-1
+
+Also create a ALB in eu-west-1 pointing to EC2 instance there
+
+DNS Records TTL time to live
+
+Web Browser --> DNS request to S3
+S3 responded back IP and TTL
+Browser cache the response 
+Browser if TTL is valid then call the IP directly rather going to S3
+
+High TTL 
+24 hrs
+less traffic on DNS
+outdated records
+
+Low TTL 
+60 sec
+More traffic on DNS
+easy to change records
+
+* TTL is mandatory for each DNS record
+
+CNAME
+hostname to hostname
+AWS Resources LB,CloudFront exposes AWS hostname which you want
+to be pointed by yourapp.yourdomain.com
+** Only for Non root domain like yourapp.yourdomain.com and not yourdomain.com
+
+create a Record set
+Name: myapp.stephenrheteacher.com
+Type:  CNAME
+value : DNS name for my LB which points to EC2
+
+
+ALIAS
+hostname to AWS resources
+points to a hostname to an AWS resource
+** Works for both root and non root domain (sub domains)
+** Free of charge
+** native health check
+
+create a Record set
+Name: myAlias.stephenrheteacher.com (non root domain)
+Type:  Alias
+value : DNS name for my LB which points to EC2
+
+create a Record set
+Name: stephenrheteacher.com    (root domain)
+Type:  Alias
+value : DNS name for my LB which points to EC2
+
+------------------------------------
+
+Simple Routing Policy
+
+use when you redirect to a single resource
+You can't attach health checks to simple routing policy
+if multiple values are returned , a random one is chosen by the client browser called client site load balancing
 
 Record SetName: simple
-Type:all public ips of EC2 there
+Type:A
+value : all public ips of EC2 there
+TTL= 60 sec
 Routing Policy = Simple
 save record set
-
 Now on Ec2 instance
-ping simple.learnaws.com will returns one of the pulic ip of EC2
+ping simple.stephenrheteacher will returns one of the public ip of EC2
 
 Record Set Name: weighted
 Routing Policy = Weighted 

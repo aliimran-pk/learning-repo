@@ -2,7 +2,7 @@
 
 Route53 is a managed DNS , a collection of rules and records which 
 helps client understand how to reach a server through its domain name
-* It is a G\lobal Service 
+* It is a Global Service 
 
 Route53 = Domain Registrar + DNS
 ie 
@@ -52,8 +52,7 @@ if you want to route domain to an AWS resource then what u need to make of
 use Alias records
 
 ** CNAME records only be created for non root domains 
-
-
+The DNS protocol does not allow you to create a CNAME record for the top node of a DNS namespace (mycoolcompany.com), also known as the zone apex
 
 Route 53 - Routing 
 based on user requests
@@ -64,33 +63,85 @@ users from india will route to ELB in ap-south-1
 
 ROUTE 53 POLICIES
 
-Simple
+1) Simple Routed Policy
 maps a domain name to an IP address
+use when you redirect to a single resource
+You can't attach health checks to simple routing policy
+if multiple values are returned , a random one is chosen by the client browser called client site load balancing
 
-Weighted
+Record SetName: simple
+Type:A
+value : all public ips of EC2 there
+TTL= 60 sec
+Routing Policy = Simple
+save record set
+Now on Ec2 instance
+ping simple.stephenrheteacher will returns one of the public ip of EC2
+
+2) Weighted Routed Policy
 maps a single DNS name to multiple weighted resources, 10% to A, 30% to b (useful for Canary deployments)
+eg. 
+for a new app version only 1% available to users
+helpful to split traffic b/w two regions
+can be associated with health check
 
-Latency
+Record Set Name: weighted
+Routing Policy = Weighted 
+Weight : 10
+Side ID : B
+
+Routing Policy = Weighted 
+Weight : 90
+Side ID : B
+
+weighted.learnaws.com
+
+3) Latency Routed Policy
+Users to AWS region
 choose option with min latency
 latency b/w host on internet can be change over time
 provides u which region gives u low latency 
+minimize response time
+** Latency will evaluate the latency results and help your users get a DNS response that will minimize their latency (e.g. response time)
+
+add IP address of EC2 with its associated region
+
+Record Set Name: latency
+Routing Policy = latency 
+Region : 10
+Side ID : A
+
+latency guide based on nearest region
+
+4) Failover Routed Policy
+active passive failover , ie use DR is primary health check fails
+If health check primary fails then requested will be routed to secondary only
+health check is mandatory
 
 
-Failover
-active passive failover , ie use DR is primary helth check fails
+5) Geolocation Routed Policy
+choose based on user location
+ie from Pakistan should go to this IP
+should create create a "default" policy in case there is no match
 
-Geoproximity
+Record Set Name: geo
+Routing Policy = Geo Location 
+Location : France
+
+6) Multivalve answer
+use when routing traffic to multiple resources
+return multiple healthy records up to 8 random and then choose one of them by the browser
+
+Record Set Name: multi
+value: Ip address EC2
+Routing Policy = Multi value health check
+enable health check
+
+
+Geoproximity Routed Policy
 choose nearest resource (geographic distance) to ur user
 Routing policies will route to the nearest resource by geographic distance to your user?
 
-
-Multivalve answer
-return multipke healthy records upto 8 random and then choose
-
-Geolocation
-choose based on user location
-ie from Pakistan
-send traffic from Asia to A
 
 **record set for smallest geographic region has priority
 
@@ -109,7 +160,6 @@ Domains --> Register Domains --> 12$ cost
  
 Click on Hosted Zones
 a hosted zone is a created 
-
 Create Record Set
 myfirstrecord
 A-IP4v
@@ -176,7 +226,6 @@ Name: myapp.stephenrheteacher.com
 Type:  CNAME
 value : DNS name for my LB which points to EC2
 
-
 ALIAS
 hostname to AWS resources
 points to a hostname to an AWS resource
@@ -186,7 +235,7 @@ points to a hostname to an AWS resource
 
 create a Record set
 Name: myAlias.stephenrheteacher.com (non root domain)
-Type:  Alias
+Type:  Alias
 value : DNS name for my LB which points to EC2
 
 create a Record set
@@ -194,42 +243,44 @@ Name: stephenrheteacher.com    (root domain)
 Type:  Alias
 value : DNS name for my LB which points to EC2
 
-------------------------------------
-
-Simple Routing Policy
-
-use when you redirect to a single resource
-You can't attach health checks to simple routing policy
-if multiple values are returned , a random one is chosen by the client browser called client site load balancing
-
-Record SetName: simple
-Type:A
-value : all public ips of EC2 there
-TTL= 60 sec
-Routing Policy = Simple
-save record set
-Now on Ec2 instance
-ping simple.stephenrheteacher will returns one of the public ip of EC2
-
-Record Set Name: weighted
-Routing Policy = Weighted 
-Weight : 10
-Side ID : B
-
-Routing Policy = Weighted 
-Weight : 90
-Side ID : B
-
-weighted.learnaws.com
-
-Record Set Name: latency
-Routing Policy = latency 
-Region : 10
-Side ID : A
-
-latency guide based on nearest region
-
-
 WARNING! BILLING ALERT! Delete the Hosted Zone and Terminate all EC2 Instances
+
+HEALTH CHECKS
+have health checks failed = unhealthy default 3
+have health checks passed = healthy default 3
+health check interval default = 30 sec
+health checks can be linked to Route53 DNS queries
+
+R3 -> Create Health Check
+Name
+Want to monitor : Endpoint
+Endpoint by : Ip address
+Protocol : Http
+IP address: 3.112.71.34
+
+now create other 2 health checks
+
+
+
+Route53 as a Registrar
+a domain registrar is an organisation that manages the reservation of internet
+domain names
+eg GoDaddy, google domains
+
+Domain Registrar is not like DNS
+
+If you buy your own domain on 3rd party website, you can still use Route53
+1) create a hosted zone in Route53
+A hosted zone tells Route 53 how to respond to DNS queries for a domain such as example.com. and its subdomains.
+
+2) update NS record on 3rd party website to use Route 53 name server
+
+Private hosted zones are meant to be used for internal network queries and are not publicly accessible. Public Hosted Zones are meant to be used for people requesting your website through the public internet. Finally, NS records must be updated on the 3rd party registrar. 
+
+
+
+
+
+
 
 

@@ -1,0 +1,433 @@
+-----------------------------------------------S3 Fundamentals--------------------------------------------------------------------------------------
+Simple Storage Service
+inexpensive 
+store large objects with key value approach
+also called Object StorageProvides REST API 
+unlimited storage
+objects are replicated in a single region across  multiple AZ
+
+
+Buckets are fundamental container in S3
+
+S3 -> Create Bucket
+bucket name should be using  across AWS accounts
+no space and special or upper case char in Name and become part of object URL
+enabling object lock automatically enables Bucket versioning 
+S3 is a global service 
+however a bucket is created in a region
+every object is asccess using key value pair
+max  size of an object in  a bucket is 5 TB
+No hireachy of buckets,sub buckets or foldes
+
+
+Name:
+my-s3-bucket-1
+
+Upload a folder
+
+Storage Class
+Standard
+
+
+2030
+10
+course1.jpg
+course2.jpg
+
+key 2030/10/course1.jpg    value is image 1
+key 2030/10/course2.jpg    value is image 2
+
+PATH
+http://bucketName/key
+s3://my-s3-bucket-1/2030/10/course2.jpg
+
+OBJECT URL
+https://my-s3-bucket-1.s3-eu-west-1.amazonaws.com/2030/10/course2.png
+
+
+Bucket Level Property
+
+Versioning 
+Versioning is at Bucket level
+
+my-s3-bucket-1 -> Properties -> Versioning
+Enable Versioning
+
+
+All old objects will have a version of null
+We can't turn off the versioning once set
+
+WARNING! BILLING ALERT! Do NOT Enable Access Logging For Your Buckets
+Enable Logging 
+Target Bucket my-s3-bucket-1
+prefix logs
+
+Permission
+S3 log delivery group
+
+Creating a Public website with S3
+
+Static Web site hosting
+Index document: index.html
+on root of the bucket 
+1) select all file 
+C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\course-presentation-and-downloads\s3
+Permissions
+
+2) Edit  Block public access
+
+3) Bucket policy ()resource based policy , give cross account access)
+
+Documentation https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html
+Granting Read-Only Permission to an Anonymous User
+
+copy readonly access and put ur bucket name
+
+{
+"Version":"2012-10-17",
+"Statement":[
+{
+"Sid":"PublicRead",
+"Effect":"Allow",
+"Principal": "*",
+"Action":["s3:GetObject","s3:GetObjectVersion"],
+"Resource":["arn:aws:s3:::my-s3-bucket-1/*"]
+}
+]
+}
+
+
+https://my-s3-bucket-1.s3-eu-west-1.amazonaws.com/index.html
+
+Object level Logging and Encryption
+using cloud trail
+
+
+Encryption
+None 
+AES-256 (server side encryption with Amazon S3 Managed keys SSE-S3)
+AWS-KMS (server side encryption with Amazon KMS Managed keys SSE-KMS))
+
+Object Lock
+prevents object from being deleted
+Enable only at the time of creation bucket in advance setting, also versioning enabled
+after that we can't delete objects from bucket eg. for regulatory constrains
+
+S3 Tags
+used for automation ,polices cost tracking
+key values
+
+Transfer acceleration
+to improve speed of data transfer 
+not free
+
+Requester Pays
+In general, bucket owners pay for all Amazon S3 storage and data transfer costs associated with their buckets. 
+With Requester Pays buckets
+- The requester instead of the bucket owner pays the cost of the request and the data download from the bucket
+The bucket owner always pays the cost of storing data.
+when this is enabled
+anonymous access to the bucket is disabled
+
+Events
+Notifications to Lambda fns
+
+Event Sources
+new obj created,removal
+RRS object lost events
+replication across events
+
+Events Destination
+SNS Topic
+SQS queue
+Lambda Fn
+
+
+Versioning CANNOT be configured at an individual object level?
+S3 Life Cycle Configuration allows you to move files between different S3 Storage Classes?    
+ACLs are primarily used to grant permissions to the public and other AWS accounts
+
+
+Create a lambda function
+S3NotificationLambda
+
+Create event in S3 Bucket  in my-s3-bucket-1
+S3NotificationEvent
+PUT, POST
+Send to Lambda Function
+lambda S3NotificationLambda
+
+Now add a file to the bucket and 
+
+Select lamda Function 
+View logs in CloudWatch
+
+S3 Prefix
+search for keys starting with a certain prefix
+URL?prefix=2030/10
+supported by rest api,aws cli,aws sdk, conle
+Used in IAM and Bucket polices to restrict access to a specific files or group of files
+
+http://s3.amazonaws.com/my-s3-bucket-1?prefix=2030/10
+getting error
+
+http://s3.amazonaws.com/my-s3-bucket-1/index.html
+
+
+Now S3-> Permissions --> Access Control Listener--> Public Access --> List Object 
+
+Prefix is the substr at the start of the key
+
+it is accessible using below url and displayed the XML
+http://my-s3-bucket-1.s3.amazonaws.com/
+or 
+
+http://my-s3-bucket-1.s3.amazonaws.com/?prefix=2030/10
+
+CROS
+cross origin content sharing
+
+Block Public Access is at Highest level than access control and bucket policy
+Bucket level is a policy at bucket level
+
+Access Control List is at bucket and object levels
+
+Use Object ACL when bucket owner is not the object owner
+need diff permissions for different objects in the same bucket
+
+IMP
+Bucket / Object ACL don't have conditions but polices can have
+
+ACL are primarily used to grant permissions to public or other user accounts
+
+
+--------------------------S3 Storage Classes-----------------------
+wide variety of data
+huge variations in access pattern
+S3 storage classes help to optimise your cost  while meeting access time needs
+durability 11 9's
+
+
+Standard
+Frequently access data 
+data replicated in at least 3 AZs
+Encryption = Optional
+per GB cost = 0.025
+
+Standard-1A
+long lived, infrequently access data  (eg backups for DR)
+data replicated in at least 3 AZs
+Encryption = Optional
+per GB cost = 0.018
+
+One Zone-1A
+Non Critical data
+long lived, infrequently access data  (data that can be easily generated again)
+data replicated in only 1 AZs
+Encryption = Optional
+per GB cost = 0.0144
+
+Intelligent-Tiering
+Long lived data with changing or unknow access 
+AWS choose storage classes standard or standard1A
+Encryption = Optional
+
+Glacier
+Archive data with retrieval times ranging from minutes to hour
+Encryption = Mandatory
+0.005
+
+Glacier Deep Archive
+Archive data with that  rarely retrieval times ranging from hours  to days
+Encryption = Mandatory
+0.002
+
+You can switch storage class of an object in a  bucket or during file upload
+
+Life Cycle Management
+
+how can you save costs and move files automatically between storage classes 
+sol: S3 Life-cycle Configurations
+
+transition actions
+one storage class to another
+
+expiration actions
+delete obj eg after one month
+
+Life Cycle Rules is NOT FREE
+S3 Cross-Region Replication is NOT FREE
+
+S3 Replication 
+Can  be in same region and multiple region
+Could be cross account
+Access to destination is provided using IAM policy
+Versioning should be enabled on BOTH source and destination
+Only new objects are replicated 
+
+Management -> Replication -> Add Rule
+
+Object Level Configurations
+select OBJECT
+Properties
+Can override  Storage Class, Encryption,metadata, tags
+Object lock is cannot be enabled at Object level 
+Permissions can be changed Object ACls 
+
+S3 Consistency Model
+S3 is distributed ans it maintains multiple copies of your data in a regions to ensure durability 
+
+READ AFTER WRITE FOR PUTS of new object
+means when u create a new objects, it is immediately available
+
+EVENTUAL CONSITENCY for Overwrite PUTS and DELETES
+means no guarantee, you might get a previous version of data immediately after an object is updated 
+
+
+S3 Pre signed URL
+Grant time limited permission (few hours to 7 days) to download objects
+Avoid web site scraping and unintended access
+using AWS SDK API
+input 
+security credentials, bucket name,object key , HTTP method , expiration date time 
+output 
+pre signed url
+
+S3 Access Points
+simplify bucket policy configuration
+
+access specific vpc to a specific bucket
+
+create application specific access points with an application specifi policy
+
+for App1 we can set different kind of action and for App2 diff action on the same bucket
+
+Bucket -- Access points
+one for each application to access
+
+S3 Cost Factors
+Cost of Retrieval Charge Per GB
+Monthly Tiering (only for Intelligent Tiering)
+Data Transfer Fee 
+
+Free
+Data  Transfer into S3 
+Data  Transfer from  S3 to CloudFront
+Data  Transfer from  S3 to Services in the same region (EC2, lambda Fn in same region)
+
+S3 Security Scenarios
+
+Prevent Object from being deleted or overwritten
+Use S3 Object Lock
+
+Protect against accidental deletion
+Use  Versioning
+
+Avoid Content Scraping
+Pre-Signed URL also called Query String Authentication
+
+Enable Cross Domain request to S3 hosted web site
+Use CORS
+
+S3 Cost Scenarios
+
+1) Reduce cost 
+use proper storage classes  and configure life-cycle management
+
+2)  analyse storage access patterns and decide  right SC
+use Intelligent Tiering 
+use storage class analysis report
+
+3) Move data automatically b/w SC
+use lifecycle rules
+
+4) Remove objects from bucket after a specified time period
+use life cycle rules and configure expiration policy
+
+S3 Performance Scenarios
+
+S3 is serverless
+recommended for large objects
+
+1) Improve S3 bucket performance
+Use S3 prefix
+supports up to 3500 request per second to add data
+supports up to 55500 request per second to retrieve data
+
+Transfer acceleration (fast/secure file transfer to/from bucket )
+
+2) Upload large objects to S3
+use multipart upload API
+quick recovery from a network issue
+pause and resume object upload
+recommend for files > 10MB and Must for files > 4GB
+
+3 )Get some part of the object
+
+Use Byte-Range_fetches
+
+4) EC2 (Region A) accessing S3 bucket(region B)
+Not recommend , reduce network latency and data transfer cost
+
+
+5) How make user pay for S3 storage
+Requester pays
+
+6) Create inventory of S3 objects 
+use S3 inventory report
+
+7) Need S3 bucket access logs
+enable S3 Server Access logs (default:off)
+
+
+8) change object metadata or tags or acl or invoke lambda functions for billions of objects in S3
+Generate S3 inventory report and Perform S3 Batch operations using it
+
+9)  Need S3 Object bucket Access logs
+Enable S3 Server Access Logs
+
+
+S3 Glacier is a separate Service 
+Amazon S3 Glacier is an extremely low-cost storage service that provides secure, durable, 
+and flexible storage for data backup and archival
+As  a replacement for magnetic tapes
+High durability 11 9's
+High security as encryption is must
+Cannot upload objects to glacier using management console but using 
+REST API, AWS CLI, AWS SDK
+
+
+S3
+object are stored in buckets
+object keys are user defined
+allow uploading new content to the objects ie object can be modified
+object size can be up to 5TB
+operations at bucket and object level supported
+Encryption is optional
+WORM write once read many times = Enable object lock policy
+can immediately  down data , synchronous 
+
+S3 Glacier  (is a regional service)
+archives are stored in Vaults
+object keys are system defined
+can't be updated , best for regularity compliance
+object size can be up to 40TB
+only vault level operations supported
+Encryption is mandatory
+WORM write once read many times = Enable Vault lock policyAsynchronous 2 steps 
+1) initiate a archive retrieve
+2) down the archive
+
+Reduce Cost
+can reduce cost by optionally specify a range or portion of archive
+Requesting longer access time
+
+Expedited 		1-5 mins  (make sure you have provisioned capacity available)
+Standard   		3-5 hours
+Bulk retrieval 	5-12 hours
+
+
+Console --> S3 Glacier --> Create Vault
+my-vault
+Enable Notification
+SNS topic 

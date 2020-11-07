@@ -1,1 +1,144 @@
 AWS Solution Architecture
+
+1) Stateless Web App
+http://whatisthetime.com
+No DB
+Scaling require
+
+Starting simple
+
+user -> EC2 t2.micro (with elastic IP)
+Scale Vertical
+stop instance , change type to large (downtime required)
+
+Scale Horizontally
+
+Route 53 (using Alias record) -> ELB + Health check -> EC2
+Route 53 (using Alias record) -> ELB + Health check -> ASG(EC2)
+Route 53 (using Alias record) -> ELB + Health check + MultiAZ -> ASG+MultiAZ (EC2)
+
+2) Stateful Web App
+myclothes.com
+buy clothes online
+shopping cart
+hundreds of users at a time
+not loose shoping cart
+data in db
+
+
+Introduce stickiness : Session Affinity 
+using cart content in web cookies but make http request data heavier
+also security risk if cookies can be altered
+so cookies must be validated and must less than 4kb
+
+Introduce Server Session
+only session id is passed and get it from ElasticCache (alternative is DynamoDB)
+
+ElasticCahe In Multi AZ
+RDS in Multi AZ with Read Replicas
+
+For security
+https from cleint 
+ELB : restric Traffic to EC2
+ElastiCache: restrict trafic to ElaticCahce from EC2
+RDS: restrict trafic to RDSrom EC2
+
+
+3) Stateful web app , mywordpress.com
+manage scalable wordpress website
+access and display pictures upload
+data in mysql globaly
+
+
+Store Image
+a. to EC2 instances
+issue with reading as image is stored on only one instance
+
+b. EC2-> ENI -> EFS
+
+EBS is cheaper than EFS
+
+4) Instantiating Applications quickly
+
+1) For EC2 instances
+Golden AMI , install apps , dependencies beforehand
+2) bootstrap using user data for dynamic configurations
+3) RDS:  restore from snapshot
+4) EBS:  restore from snapshot
+
+-----Elastic Beanstalk --------------------------------------------
+Managed Service
+simplest way to deploy and scale web apps in AWS
+It is a developer centric view of deploying application on AWS
+it uses all components like EC2,ASG,ELB,RDS etc
+but still have full control over configuration
+
+supports Java,.NET,NODE.JS,PHP,PYTHON,GO ,Rubbyand docker apps
+Also custom platform
+Its free but charges for resource being consumed
+
+automatic LB
+Auto scaling
+platform update health monitoring
+
+* Elastic Beanstalk is not EBS (Elastic bean store)
+
+An application can have multiple environments to be created
+An  application can have multiple versions (stored in S3)
+
+Three architecture models
+1) single instance deployment, good for dev
+This will create one EC2 instance and one Elastic IP
+
+2) LB + ASG for production and pre production web apps
+3) ASG only , great for non web apps in production
+
+Elastic Beanstalk has 3 components
+1) Application
+2) Application version 
+3) Environment name 
+
+
+Elastic Beanstalk
+
+Name: My-First-ElasticBeanstalk-App
+Platform: Python
+Application Code: Sample application
+
+It will create an Environment Tier
+
+ASG created mulitple AZ
+EC2 created
+ALB is created multiple AZ , created a Target Groups
+two SG is created , EC2 and ALB
+
+
+Web Server environment (for web apps)
+Worker environment (for batch )
+
+You can retain FULL control over ASWS resources created
+It is ideal for simple web applications
+Not ideal for Microservice architectures
+access server logs without logging into the server
+logs can be stored in S3 or in ClodwWatch
+can configure SNS based on health
+can apply patches and platform updates
+
+Environment : MyFirstElasticbeanstalkApp-env
+Application: My-First-ElasticBeanstalk-App
+EC2 instance created : i-09198c2b1b80e3fcd
+a LB is created (can make changes in ELB) : awseb-AWSEB-ZV73FYBTVZ9S
+
+URL: http://myfirstelasticbeanstalkapp-env.eba-jsbz4ebm.ap-south-1.elasticbeanstalk.com/
+
+To Delete
+Delete the environment
+Delete the application
+it will delete EC2 and ELB 
+
+
+
+EBS volumes are created for a specific AZ and can only be attached to one EC2 instance at a time. This will not help make our application stateles
+EFS is a network file system (NFS) and allows to mount the same file system to 100s of EC2 instances. Publishing software updates their allow each EC2 instance to access them. 
+Golden AMI are a standard in making sure you snapshot a state after an application installation so that future instances can boot up from that AMI quickly. 
+

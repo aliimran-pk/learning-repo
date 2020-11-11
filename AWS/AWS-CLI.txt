@@ -1,0 +1,86 @@
+AWS - CLI
+
+using AWC-CLI on local computer, EC2 machines
+using AWC-SDK on local computer, EC2 machines
+using AWS Instance metadata service for EC2
+
+install AWS CLI
+aws --version
+
+IAM User - Users
+
+aws configure
+put key access key and secret key
+
+it create files ~ / .aws
+
+AWS CLI on EC2
+IAM roles can be attached to apps like EC2 instances which comes with a policy
+what EC2 should be able to do and EC2 instances can then use these policies without additional configurations
+
+IAM - Role
+Select EC2 as trust service
+create policy
+AmazonS3ReadOnlyAccess
+myEC2RoleForS3
+
+Select EC2
+Instance Settings -- Attach IAM Roles
+
+aws s3 ls s3://mys3bucket1
+
+aws s3 mb s3://mys3bucket2 will be error as we only provides readon,y access to IAM role assighed
+to EC2
+
+** Apply  S3 policy may take some times as it replicates
+
+**A role can be assigned to multiple EC2 instances
+** But each EC2 instance can have only one role
+
+aws s3 cp help
+
+We can also leverage AWS Policy Simulator to test the policy
+https://policysim.aws.amazon.com
+
+AWS EC2 instance Metadata
+it allows AWS EC2 instances to learn about themselves
+you can retrieve IAM role name from metadata but CANNOT retrieve IAM policy
+
+URL is http://169.254.169.254/latest/meta-data/
+
+curl http://169.254.169.254/latest/meta-data/instance_id 
+will get my instance id of the EC2 instance
+
+curl http://169.254.169.254/latest/meta-data/iam/security-credentials/myRoleName
+
+it comes for free
+metadata = info about EC2 instance
+userdata = launch script of the  EC2 instance
+
+AWS SDK
+perform action on AWS via your applcaitions without CLI
+Official SDK are Java,.NEt,Nodejs,PHP,Python (boto3/botocore), Go,Rubby,C++
+
+AWS CLI uses Python SKD (boto3)
+us-east-1 will be chosen by default
+
+SDK Security Credentials
+recommended to use default credential provider chain
+like ~/.qss/credentials , IAM Roles (work wint) or Envioment variables (not recommebed)
+
+Exponential Backoff
+API that fails because of too many calls needs to be retired with Exponential
+fist 20ms the 40ms and so on
+Retry mechanism
+
+** You can't attach EC2 IAM roles to on premise servers
+
+
+
+
+
+
+
+
+
+

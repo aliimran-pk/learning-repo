@@ -6,28 +6,42 @@ also called Object StorageProvides REST API
 unlimited storage
 objects are replicated in a single region across  multiple AZ
 
-
-Buckets are fundamental container in S3
+Buckets (directories) are fundamental container in S3
 
 S3 -> Create Bucket
-bucket name should be using  across AWS accounts
-no space and special or upper case char in Name and become part of object URL
+bucket name should be using  across AWS accounts (unique)
+no space and special or upper case char in Name and become part of object URL ,IP
+* must start with lower case letter or number
 enabling object lock automatically enables Bucket versioning 
-S3 is a global service 
+* S3 is a global service 
 however a bucket is created in a region
-every object is asccess using key value pair
-max  size of an object in  a bucket is 5 TB
-No hireachy of buckets,sub buckets or foldes
+every object is access using key value pair
+* max  size of an object in  a bucket is 5 TB
+must use multi part upload for uploading more than 5GB
+No hierarchy of buckets,sub buckets or folders
 
+key is full path
+keys is composed of Prefix + Object Name
+s3://my-bucket/myFolder1/fileName1.txt
+
+key = myFolder1/fileName1.txt
+
+Objects are files 
+
+S3 --> Create Bucket
 
 Name:
 my-s3-bucket-1
+
+Select Region 
+as bucket is region specific close to you
+
+Go to that Bucket
 
 Upload a folder
 
 Storage Class
 Standard
-
 
 2030
 10
@@ -47,10 +61,15 @@ https://my-s3-bucket-1.s3-eu-west-1.amazonaws.com/2030/10/course2.png
 
 Bucket Level Property
 
-Versioning 
-Versioning is at Bucket level
+VERSIONING 
+Versioning is at Bucket level must be enabled first
+increment the version by same key
+any file that is not versioned prior to enable versioning will have version "null"
+But if suspend versioning the previous version files will not delete and new vision will not create
+But if we delete a specific versioned then it will delete permanently
 
 my-s3-bucket-1 -> Properties -> Versioning
+
 Enable Versioning
 
 
@@ -103,10 +122,91 @@ Object level Logging and Encryption
 using cloud trail
 
 
-Encryption
+------------- S3 ENCRYPTION-------------------------
 None 
-AES-256 (server side encryption with Amazon S3 Managed keys SSE-S3)
-AWS-KMS (server side encryption with Amazon KMS Managed keys SSE-KMS))
+
+Four methods for encrypting objects in S3
+
+1)  SSE_S3:
+server side encryption
+Encrypt S3 objects using keys handled & managed by AWS
+AES-256 encryption type
+Must set header:  "x-amz-server-side -encryption":"AES256"
+example:
+pass http/https request with above header to S3
+S3 encrypts object using its own managed data key and put  the encrypted obj in the bucket
+
+2) SSE-KMS (key management service)
+server side encryption
+Leverage AWS key management service (AWS-KMS) to manage encryption keys
+Must set header:  "x-amz-server-side -encryption":"aws:kms"
+** KMS uses CMK Customer master key for encryption 
+** With SSE-KMS you let AWS manage the encryption keys but you have full control of the key rotation policy
+
+3) SSE-C
+manage your own encryption keys
+server side encryption
+using data keys fully managed by customer outside of AWS
+S3 doesn't store that encryption key
+** Https is mandatory
+encryption key must be provided in the header for each request
+Here you have full control over the encryption keys, and let AWS do the encryption
+
+4) Client Side Encryption
+encrypt the data before uploading to S3
+client libraries like S3 Encryption client can be used
+customer fully manages the keys and encryption cycle
+
+Encryption in transit/flight is SSL/TLS
+S3 provides both http/https  but https is recommend
+
+using Bucket Properties we can  set Default encryption
+it is being applied event it is set none using upload a file
+
+1)None
+2) AEC-256
+3) AWS-KMS
+
+S3 SECURITY
+
+1) User based
+IAM policies, which API should be allowed for a specific user from IAM
+
+2) Resource Based
+Bucket policies - bucket wide rules from S3 console- allow cross account
+JSON based 
+Resources: buckets and objects
+Action: set of API to allow or deny
+Effect : Allow / Deny
+eg. 
+Grant public access to the bucket
+Force objects to be encrypted at upload
+rant access to another account (Cross account)
+
+Object Access - ACL - fine grain
+Bucket Access - ACL - less common
+
+** an IAM principal can access S3 object if 
+the user IAM permission allow it 
+OR
+The resource policy Allows 
+AND 
+there's no explicit DENY
+
+***Explicit DENY in an IAM policy will take precedence over a bucket policy permission
+
+
+Support VPC endpoint 
+S3 access logs can be stored in other S3 bucket
+API calls can be logged ni AWS cloudTrail
+MFA for delete objects
+Pre-singed URLS for a limited time
+
+Bucket --> Management --> Bucket Policy
+We acan leverage S3 bucket policy generator
+https://awspolicygen.s3.amazonaws.com/policygen.html
+
+* Also Block public access to the bucket at the account level 
 
 Object Lock
 prevents object from being deleted
@@ -116,6 +216,17 @@ after that we can't delete objects from bucket eg. for regulatory constrains
 S3 Tags
 used for automation ,polices cost tracking
 key values
+
+S3 WebSite
+can host static websites 
+
+<bucket-name>.s3-website-<aws-region>.amazonaws.com
+
+Static website hosting
+provides index.html and errpr.html
+if u get 403 forbidden error, make sure the bucket policy allows public reads
+1) Disable Block access 
+2) Create a bucket policy
 
 Transfer acceleration
 to improve speed of data transfer 
@@ -159,7 +270,7 @@ lambda S3NotificationLambda
 
 Now add a file to the bucket and 
 
-Select lamda Function 
+Select lambda Function 
 View logs in CloudWatch
 
 S3 Prefix
@@ -184,10 +295,40 @@ or
 
 http://my-s3-bucket-1.s3.amazonaws.com/?prefix=2030/10
 
-CROS
-cross origin content sharing
+CORS
+cross origin resource sharing
+origin is a scheme consisted of protocol + host+ port
+its a web browser based mechanism to allow request to other origins while visiting  main origion
 
-Block Public Access is at Highest level than access control and bucket policy
+same origin
+http://example.com/app1 
+http://example.com/app2
+
+Different origin
+http://example.com
+http://otherexample.com
+
+The request won't fullfiled unless the other origin allows for the request using
+CORS headers (ex:Access-Control-Allow)
+
+S3 CORS
+if a client does a cross-origin request to our S3 bucket with enabled website , we 
+need to enable correct CORS headers
+** You can allow for a specific origin or use * fro all origins
+CORS headers must be defined at the other bucket (tow whome first origin want to send the request )
+when it allowed access for CORS then browser can be able to request for that site
+
+
+Create a new bucket 
+same region
+make it public
+Permission -> add bucket policy
+enable static web shosting
+Permission -> CORS configuration
+add the configuration file with full URL of the origion in AllowedOrigin
+
+
+** Block Public Access is at Highest level than access control and bucket policy
 Bucket level is a policy at bucket level
 
 Access Control List is at bucket and object levels
@@ -196,9 +337,50 @@ Use Object ACL when bucket owner is not the object owner
 need diff permissions for different objects in the same bucket
 
 IMP
-Bucket / Object ACL don't have conditions but polices can have
+** Bucket / Object ACL don't have conditions but polices can have
 
 ACL are primarily used to grant permissions to public or other user accounts
+
+-------------S3 MFA -Delete ---------------------------------------------------------------
+To use MFA delete, enable versioning on S3
+
+You will need MFA to restrict
+* permanently delete an object version
+* suspend versioning on the bucket
+
+You won't need MFA to
+enable versioning
+list delete versions
+
+* Only the bucket owner (root account) can enable/disable MFA delete
+* MFA-Delete currently can only be enabled using CLI
+
+-------------S3 Access Logs -----
+for audit purpose , any request made to S3 from any account autorized or denied 
+will be loged into another S3 bucket
+* Don't set your logging bucket to be the monitoring bucket, (infinite loging loop)
+
+create bucket 
+S3AccessLog
+
+create bucket 
+mySampleBucket
+Properties -> Enable Logging -> Target Bucket -> S3AccessLog
+
+------------------------------------------------------------------------------------------------------
+S3 Default encryption vs Bucket Policies
+
+old way to enable default encryption was to use bucket policy and refuse any 
+http command without proper header
+But
+New way is to use "default encryption" option in S3
+** Bucket Policies are evaluated before "default encryption"
+
+
+
+
+
+
 
 
 --------------------------S3 Storage Classes-----------------------
@@ -258,12 +440,27 @@ delete obj eg after one month
 Life Cycle Rules is NOT FREE
 S3 Cross-Region Replication is NOT FREE
 
-S3 Replication 
-Can  be in same region and multiple region
+------- S3 Replication  --------------- 
+*Can  be in same region and multiple region
 Could be cross account
 Access to destination is provided using IAM policy
-Versioning should be enabled on BOTH source and destination
+*Versioning should be enabled on BOTH source and destination
 Only new objects are replicated 
+
+CRR Cross region replication
+compliance , lower latency access , replication across accounts
+
+SRR Same region replication
+log aggregation , live replication from prod to dev accounts
+
+* after activating S3 replication, only new objects replicated
+* If you delete with/without version id , delete marker will NOT replicated
+* No Channing ie B1-B2-B3 then not B1 to B2 automatically
+
+Crate two buckets B1 and B2 in diff regions
+Enable versioning in both buckets
+in B1- Properties -> Replication - Add rule - select B2 as destination
+then select a new Role 
 
 Management -> Replication -> Add Rule
 
@@ -274,15 +471,21 @@ Can override  Storage Class, Encryption,metadata, tags
 Object lock is cannot be enabled at Object level 
 Permissions can be changed Object ACls 
 
-S3 Consistency Model
-S3 is distributed ans it maintains multiple copies of your data in a regions to ensure durability 
+** S3 CONSISTENCY MODEL
+S3 is distributed and it maintains multiple copies of your data in a regions to ensure durability 
 
-READ AFTER WRITE FOR PUTS of new object
+1) READ AFTER WRITE FOR PUTS of new object
 means when u create a new objects, it is immediately available
+PUT 200 --> GET 200
 
-EVENTUAL CONSITENCY for Overwrite PUTS and DELETES
+2) EVENTUAL CONSITENCY for Overwrite DELETES and PUTS
 means no guarantee, you might get a previous version of data immediately after an object is updated 
+PUT 200 --> PUT 200 - GET 200 (might get older version)
+If we delete an object , we might still be avable to retrieve it for a short time 
+DELETE 200 --> GET 200 
 
+** There is no way to request or API "strong vonsistency"
+so u need to wait a while after updating an object 
 
 S3 Pre signed URL
 Grant time limited permission (few hours to 7 days) to download objects
@@ -395,7 +598,6 @@ High durability 11 9's
 High security as encryption is must
 Cannot upload objects to glacier using management console but using 
 REST API, AWS CLI, AWS SDK
-
 
 S3
 object are stored in buckets

@@ -1,3 +1,22 @@
+10 S3, AWS CLI
+11 S3 and Athena
+12 CloudFront
+13 Storage Extras
+14  SQS
+15 Server less
+16 Server less Solution
+16 Server less Solution
+17 Database in AWS
+18 CloudWatch
+19 IAM Advance)
+20 Security Encryption
+21 VPC
+22 VPC
+23 DR and Migration
+24 More solution Architecture
+25 White papers
+26 Prep
+
 ------------------------------
 
 linked in /stephanemaarek

@@ -376,13 +376,6 @@ But
 New way is to use "default encryption" option in S3
 ** Bucket Policies are evaluated before "default encryption"
 
-
-
-
-
-
-
-
 --------------------------S3 Storage Classes-----------------------
 wide variety of data
 huge variations in access pattern
@@ -390,31 +383,51 @@ S3 storage classes help to optimise your cost  while meeting access time needs
 durability 11 9's
 
 
-Standard
-Frequently access data 
-data replicated in at least 3 AZs
+Standard S3 - General Purpose
+* Frequently access data
+* High Durability 
+* data replicated in at least 3 AZs
 Encryption = Optional
 per GB cost = 0.025
+use cases: 
+Big data analytics,mobile and gaming , content sharing
 
-Standard-1A
-long lived, infrequently access data  (eg backups for DR)
-data replicated in at least 3 AZs
+
+S3 Standard-1A
+* long lived, infrequently access data  (eg backups for DR)
+* data replicated in at least 3 AZs
 Encryption = Optional
 per GB cost = 0.018
+lower than S3 standard
+use cases: 
+data store for DR and backups
 
-One Zone-1A
+S3 One Zone-1A
 Non Critical data
 long lived, infrequently access data  (data that can be easily generated again)
-data replicated in only 1 AZs
+* data replicated in only 1 AZs
 Encryption = Optional
 per GB cost = 0.0144
+use cases:
+storing secondary backup copies of on-premise data or storing data that you can easily re create
+eg. thumb nails from image 
 
-Intelligent-Tiering
-Long lived data with changing or unknow access 
+
+S3- Intelligent-Tiering
+same low latency and high throughput performance as of S3 standard
+small monthly  monitoring and auto Tiering fee
+automatically moves objects b/w two access tiers based on changing access patterns
+Long lived data with changing or unknown access 
+multiple zone for resiliency
 AWS choose storage classes standard or standard1A
 Encryption = Optional
 
-Glacier
+Amazon Glacier
+v low cost 
+10s of years
+alternative to on-premise magnetic tape
+Each item in Glacier is called "Archive" file upto 40TB
+Archives are stored in "Vaults"
 Archive data with retrieval times ranging from minutes to hour
 Encryption = Mandatory
 0.005
@@ -481,12 +494,13 @@ PUT 200 --> GET 200
 2) EVENTUAL CONSITENCY for Overwrite DELETES and PUTS
 means no guarantee, you might get a previous version of data immediately after an object is updated 
 PUT 200 --> PUT 200 - GET 200 (might get older version)
-If we delete an object , we might still be avable to retrieve it for a short time 
+If we delete an object , we might still be available to retrieve it for a short time 
 DELETE 200 --> GET 200 
 
-** There is no way to request or API "strong vonsistency"
+** There is no way to request or API "strong consistency"
 so u need to wait a while after updating an object 
 
+-----------------------------------------------------------
 S3 Pre signed URL
 Grant time limited permission (few hours to 7 days) to download objects
 Avoid web site scraping and unintended access
@@ -496,11 +510,27 @@ security credentials, bucket name,object key , HTTP method , expiration date tim
 output 
 pre signed url
 
+for downloads : easy can use CLI
+for upload : harder, must use SDK
+
+default valid for 1 hour
+can change it TIME_BY_SECONDS argument
+users given a presiged URL inherits the permissions of the person who generated the URL
+
+example:
+allow only certification permium users to download video from S3
+changing list of users by generating dynamic urls
+
+aws s3 presign help
+aws configure set default.s3.signature_version s3v4
+aws s3 presign s3://mybucket/myfile.jpg --expires-in 300 --region eu-west-1
+
+this results in a URL which is accessible in 5 minutes
+-------------------------------------------------------------
 S3 Access Points
+
 simplify bucket policy configuration
-
 access specific vpc to a specific bucket
-
 create application specific access points with an application specifi policy
 
 for App1 we can set different kind of action and for App2 diff action on the same bucket

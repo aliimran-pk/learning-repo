@@ -208,10 +208,18 @@ https://awspolicygen.s3.amazonaws.com/policygen.html
 
 * Also Block public access to the bucket at the account level 
 
-Object Lock
-prevents object from being deleted
+*** Object Lock  (same asa Glacier Vault lock)
+prevents object from being deleted fpr a specified amount of time 
 Enable only at the time of creation bucket in advance setting, also versioning enabled
 after that we can't delete objects from bucket eg. for regulatory constrains
+adopt WORM (write once read many) model
+
+**MFA Delete forces users to use MFA tokens before deleting objects. It's an extra level of security to prevent accidental deletes
+** all your files in S3 to be encrypted by default
+Enable Default encryption on S3
+** S3 Access Logs log all the requests made to buckets, and Athena can then be used to run serverless analytics on top of the logs files
+**  automate the transition of S3 objects between their different tiers?
+use S3 LifeCycle Rules
 
 S3 Tags
 used for automation ,polices cost tracking
@@ -382,6 +390,9 @@ huge variations in access pattern
 S3 storage classes help to optimise your cost  while meeting access time needs
 durability 11 9's
 
+when we upload the file in Bucket t, then storage classes option comes
+we can change storage class of a object
+
 
 Standard S3 - General Purpose
 * Frequently access data
@@ -401,6 +412,7 @@ per GB cost = 0.018
 lower than S3 standard
 use cases: 
 data store for DR and backups
+** Minimum storage duration is 30 days
 
 S3 One Zone-1A
 Non Critical data
@@ -421,6 +433,7 @@ Long lived data with changing or unknown access
 multiple zone for resiliency
 AWS choose storage classes standard or standard1A
 Encryption = Optional
+** Minimum storage duration is 30 days
 
 Amazon Glacier
 v low cost 
@@ -432,10 +445,23 @@ Archive data with retrieval times ranging from minutes to hour
 Encryption = Mandatory
 0.005
 
+** 3 retrieval options
+1) Expedited (1 to 5 mins)
+2) Standard (3 to 5 hours)
+3) Bulk (5 to 12 hours)
+** Minimum storage duration is 90 days
+
 Glacier Deep Archive
 Archive data with that  rarely retrieval times ranging from hours  to days
 Encryption = Mandatory
 0.002
+
+1) Standard (12 hours)
+2) Bulk (48 hours)
+** Minimum storage duration is 180 days
+
+
+For durability All S3 classes are 11 9s
 
 You can switch storage class of an object in a  bucket or during file upload
 
@@ -444,12 +470,19 @@ Life Cycle Management
 how can you save costs and move files automatically between storage classes 
 sol: S3 Life-cycle Configurations
 
-transition actions
+TRANSITION ACTIONS
 one storage class to another
+defines when objects are transitioned to another storage class
+ie more objs to Standard IA class 60 days after creation
+Move to Glacier for archiving after 6 months
 
-expiration actions
+EXPIRATION ACTIONS
 delete obj eg after one month
+can be used to delete old versions of files if versioning is enabled
+ca be used to delete incomplete multip part uplods
+rules can be created for a certain prefix  ie /mp3/*
 
+Storage Classes -> Management -> Lifecycle Rules
 Life Cycle Rules is NOT FREE
 S3 Cross-Region Replication is NOT FREE
 
@@ -577,23 +610,29 @@ use lifecycle rules
 4) Remove objects from bucket after a specified time period
 use life cycle rules and configure expiration policy
 
-S3 Performance Scenarios
+
+------------ S3 PERFORMANCE SCENARIOS------------------
 
 S3 is serverless
 recommended for large objects
 
 1) Improve S3 bucket performance
-Use S3 prefix
-supports up to 3500 request per second to add data
-supports up to 55500 request per second to retrieve data
+S3 automatically scales to high request rates, latency 100-200 ms
 
-Transfer acceleration (fast/secure file transfer to/from bucket )
+
+Use S3 prefix
+supports up to 3500 request per second to add data (PUT/COPY/POST/DELETE)
+supports up to 5500 request per second per prefix in a bucket to retrieve data
+
+There is no limits to the number of prefixes in a bucket
+bucket/folder1/sub1/file  = object path
+folder1/sub1/ = prefix
 
 2) Upload large objects to S3
 use multipart upload API
 quick recovery from a network issue
 pause and resume object upload
-recommend for files > 10MB and Must for files > 4GB
+* recommend for files > 100MB and Must for files > 5GB
 
 3 )Get some part of the object
 
@@ -619,7 +658,48 @@ Generate S3 inventory report and Perform S3 Batch operations using it
 9)  Need S3 Object bucket Access logs
 Enable S3 Server Access Logs
 
+S3 KMS limitation
+if u use SSE-KMS you may be impacted by KMS Limits
+when  u upload it calls GenerateDataKey KMS API
+when u download it calls Decrypt KMS API
 
+Count towards KMS quota per second 
+(5500,10000,30000 req/sec based on region)
+can't request quota increase for KMS
+
+TRANSFER ACCELERATION (fast/secure file transfer to/from bucket )
+* only for upload
+increase transfer speed by transferring file to edge location
+eg
+File is US --fast using public www --> Edge Loc at US ---> fast private AWS -- S3 bucket in Australia
+
+S3 BYTE RANGE FETCHES
+parallelize GETs by requesting specific byte ranges 
+better resilience in case of failure
+can be used to speed up downloads from S3
+can be used to retrience only partial data ie first 50 bytes
+
+
+S3 Notifications
+process streaming data
+S3:ObjectCreated, S3:ObjectRemoved
+Object name filtering possible (*.jpg)
+use case: generate thumbnails of images uploaded in S3
+eg. take image and customise it with lambda function for different devices in S3
+S3 to Lambda is using S3 notification
+SNS,SQS or trigger functions on S3 objects
+at bucket levels
+using prefix and sufix
+cost effective 
+*** If you want to ensure that an event notification is sent for every successful write, you can enable
+versioning on your bucket
+Go to events -> 
+name = SQS
+All object create
+send to : SQS/lambda/SNS   (queue should be in same region as of bucket)
+Go to SQS queue --> Permission -- Allow 
+
+------------------------------------------------------------------------------------------------------
 S3 Glacier is a separate Service 
 Amazon S3 Glacier is an extremely low-cost storage service that provides secure, durable, 
 and flexible storage for data backup and archival
@@ -663,3 +743,21 @@ Console --> S3 Glacier --> Create Vault
 my-vault
 Enable Notification
 SNS topic 
+
+------------------------AWS Athena ------------------------
+Serverless service to perform analytics directly against S3 files
+** Used to analyse data on S3 with out loading into any DB and directly from S3
+uses SQL language 
+Has JDBC/ODBC driver
+charged per query and of data scanned
+support scv,json,avro and parquet
+
+use case:
+reporting , analysing , VPC flow logs, ELB logs , cloudTrail logs
+
+Athena -> Query Editor
+query result location = s3://aws-results
+New Query -> 
+create database s3_access_logs_db;
+create table myTable on location myBcuke name
+

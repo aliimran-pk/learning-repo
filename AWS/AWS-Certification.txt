@@ -1305,8 +1305,6 @@ Also you can schedule events , use unix cron syntax
 
 AWS CloudTrail only records API calls for future references But cloud watch events allow you to take actois
 
-
-
 X-Ray is used to trace your application
 CloudWatch is used to monitor your application
 Cloudwatch SeviceLens monitors issues with Microservice based applications
@@ -1325,253 +1323,6 @@ Stream to ES Amazon Elastic Search cluster using cloudwatch log subscription
 
 Cloudwatch Logs Agents
 Installed on EC2 to move logs from servers to CloudWatch logs
-
----------------------------------Decoupling Applications -----------------------------------------------------------------------------
-
-Pull Model SQS
-Multiple Producers and Multiple Consumers 
-Normally same consumers 
-
-produce put messages on queue
-**consume pull on the queue only one of the consume will pick  a msg
-
-Scalability
-scale consumers instances under high load
-
-Availability
-Producer up even if consumer is down
-
-Push Model
-Subscribers subscribe to a topic
-notification broadcast
-
-Simple Queuing Service SQS
-Full Managed, reliable ,scalable Message Queue Service
-Unlimited scaling 
-Low cost (pay for use , no. of msgs)
-
-max messge size = 256KB
-can congifure SSE server account envryption
-Lamda trigger can set
-
-
-Standard Queue
-**Unlimited throughput
-No order guarantee
-No guarantee of exactly one processing 
-
-FIFO Queue
-lower throughput 300 msg per seconds
-**Order guarantee
-Guarantee of exactly one processing 
-batch 10 msg per operations then up to 3000 msg per seconds
-
-1) Producer placed a msg on queue
-2) globally msg Id is assigned ABCD which is received by the proudcer
-3) consumer polls for the msg ,
-4) consumer received the msg with ID ABCD and receipt Handle XYZ
-5) msg remains on the queue and other consumers can't pool it
-6)  consumer process the msg and call delete msg providing receipt handle XYZ
-7) message is remove from the queue
-
-Message Life Cycle
-
-Start -> Ready ->   Being processed -> Done
-delay second = if configure, the msg will be ready after that time 
-if msg is not processed by the consumer after expiry of visibility timeout, then again 
-moves to Ready state and to Dead letter queue in case of max Retry policy 
-
-SQS Auto Scaling
-
-SQS -> CW Alarm -> AutScaling -> EC2
-use target tracking scaling policy
-use SQS metric like ApproximateNumberOfMessages
-
-SQS Important Configurations
-
-1) Visibility Timeout
-other consumers will not received a messages being processed for that time
-default 30 sec up to  12 hrs
-can be changed by call API ChangeMessageVisibility
-
-2) DelaySeconds
-time period before a msg is visible on the queue
-default 0 sec , max 15 mins
-Can be set on queue creation or update using setQueuAttribute
-
-Message Retention period
-max period a msg can be on a queue if no one consume it
-default = 4 days
-min 60 secs
-max 14 days
-
-MaxReceiveCount
-Max no. of failures in processing a msg to a single Dead letter queue
-
-Other account access to your Queue
-SQS Queue Access Policy (resource policy on the queue)
-
-Console --> EC2 -> SQS
-SQS 
-Configure Queue 
-name: First Queue
-
-Create EC2
-
-Create IAM Role
-name: EC2RoleForSQS
-Create IAM Role , giving access to Queue of SQS then assign to EC2 instance
-select EC2
-Permission 
-AWSLambdaSQSQueueuExectionRole
-AWSSQSFullAccess
-
-Go to Running Instances
-Action -> Instance Setting --> attach IAM Role EC2RoleForSQS
-
-configure region where Queue are available
-
-cmd on EC2
-aws configure
-No access key
-No secret key
-default region = us-east-1
-
-aws sqs list-queue
-
-aws sqs receive-message --queue-url=QUEUEURL 
-aws sqs delete message --queue-url=QUEUEURL  --receipt-handle=RECEIPTHANDLE
-aws sqs send-message --queue-url=QUEUEURL --message-body="MyMsgfrom cmd line"
-
-Purge Queue
-Delete all messages from that Queue
-
-SQS Scenarios
-
-Receiver wants to handle the msg without looking msg body
-configure message attributes
-
-Reduce no. of API calls to SQS
-use Long polling ie WaitTimeSeconds up to 20 seconds
-
-Receive messages after a week and observe some msg not processed
-Exceed msg retention period
-default is 4 days
-max 14 days
-
-Give High priority for premium customer
-create separate queues for normal and premium customer
-
----------------Simple Notification Service  SNS----------------------------------------------------------------
-Publish-Subscribe paradigm (pub-sub)
-broadcast async event notification
-
-provides mobile and enterprise messing web services
-push notification to apple , android , window devices
-send sms to mobile users
-send emails
-
-** SNS does not need SQS or a Queue
-call allow access to other AWS accounts uinsg SNS policy
-can enable encryption SSE
-
-can configure retry policy
-can log deliver status
-configure roles
-
-SNS - Topic
-Create topic
-my-firs-sns-topic
-
-create subscriptions
-Protocol = Lambda (my first lambda)
-Publish Message
-
-Now go to Lambda and see its monitoring , view logs in CW
-
-
-multiple SQS queues can be subscribed to a same Topic
-Applications can send msg to topics where multiple queue are registered and from there labmda function can invoke
-
-Amazon MQ
-
-managed message broker service for Apache ActiveMQ
-Amazon MQ = SQS + SNS but with restricted scalability
-supports traditional APIS (JMS) and protocols AMQP,MQTT,OpenWire,STOMP
-easy to migrate on premises
-start Amazon MQ as first step and slowly redesign app to SQS/SNS
-
-use case: 
-You have multiple applications in your enterprise using the AMQP message broker. You would like to migrate them to AWS but don't want to do much code changes
-
---------------------- Routing and Content Delivery -------------------------------------
-CDN Content delivery network
-distribute content to multiple edge locations around the world
-200+ edge locations
-High availability and performance
-its a content distribution system (used to distribute contents to outside world)
-
-Amazon CloudFront 
-serve users from nearest edge loc based on user location
-source content can  be S3,EC2, ELB and external websites
-if no content found at edge, it will retriever from the origin server and cached at the edge location
-can use multiple edge locations
-provides features to protect your private content
-integrates  AWS shield to protect DDos attacks
-integrates  AWS WAF web app firewall to protect SQL Injection, cross site scripting
-
-use cases
-static/dynamic websites, audio/video and software downloads , HTTP and rtmp
-
-cost benefits
-0 cost of data transfer b/w S3 and CloudFront 
-reduce compute workload for your EC2 instances
-
-DNS domain name: which endures can access
-Origin: where you get the content from S3,EC2
-Cache Control : TTL = 24 hrs. default
-configure HTTPS only (default support for both HTTP and HTTPS)
-can redirect from HTTP to HTTPS
-configure different cloud front behaviour for different URL path patterns from same origion
-path pattern: *.php
-
-Signed URLs used for
-RTMP distribution (media streaming)
-Application downloads (individual files)
-situations where cookies are not supported
-
-Singed cookies using key pairs
-Multiple files (you have a subscriber website )
-doesn't need any change in application URL
-
-Origin Access Identities (OAI)
-ensure only CloudFront can access S3
-create a special CloudFront user
-Create a bucket policy
-allow access to S3 only to a spacial CloudFront user
-
-CloudFront is a global service
-
-Console -->CloudFront
-Delivery Method --> Web 
-OringDomain Name: select your bucket 
-Default object: index.html
-86400 secs = 24 hours
-create distribution  (15 to 20 mins)
-
-the contents will be automatically expire after TTL from the edge locations if not used
-InvalidationAPI - to remove object from cache (from all edge locations) for emergencies 
-
-use versioning in object path name
-
-Don't use CloudFront for 
-when all requests from a single location 
-when all requests from corporate VPN
-
-Scenario: Restrict content to users in certain countries
-enable CloudFront Geo restriction
-white list(allowed countries)
-black list(blocked countries)
 
 -----------------------ETL and Big Data Redshift and EMR---------------------------
 
@@ -1752,6 +1503,10 @@ SQl queries to retrieve subset of data
 supports csv, json, parquet
 can use lambda 
 Integrates with big data work flows , Presto,hive,spark
+retrieve less data using SQL by performing server side filtering 
+less network transfer , less CPU cost client side
+ie get SSV with S3 select , only selected columns so the filtration happs at server side
+
 
 2) AWS Athena
 Direct ad-hoc SWL query on data stored in S3
@@ -1776,7 +1531,7 @@ Parquet stores nested data structures in a flat columnar format. Compared to a t
 Analytics with data in S3 data lake
 
 AWS EMR
-integrates with S3, use big dta frameworks
+integrates with S3, use big data frameworks
 
 AWS ML
 create and run models for predictive analytics and ML
@@ -1811,16 +1566,6 @@ Characteristics of Streaming Data
 Continuously Generated
 Small Pieces of data
 Sequenced , associated with time
-
-S3 Notifications
-process streaming data
-
-eg. take image and customise it with lambda function for different devices in S3
-S3 to Lambda is using S3 notification
-SNS,SQS or trigger functions on S3 objects
-at bucket levels
-using prefix and sufix
-cost effective 
 
 DynamoDB Streams
 each event from DynamoDB  (in a time sequenced order) is buffered 
@@ -2066,40 +1811,6 @@ install Virtual private Gateway at AWS and Customer Gateways in customer offices
 
 VPC Flow Logs
 service helps you to troubleshoot network connectivity issues
-
--------- Moving Data b/w AWS and on-premises------------------
-data migration
-
-S3 transfer Acceleration
-when transferring less data up to few TB
-basic option
-uses cloudFront edge locations
-Enable S3 transfer acceleration and use endpoints
-
-AWS Snowball
-transfer dozes of TB to Petabyte from on-premises
-physical shipping
-request the snowball from console
-100TB  (80 TB usable)per appliance
-all data is automatically encrypted
-choose snowball if data transfer takes over a week based on your network connection
-eg. 5TB can be transferred on 100Mbpc line in a week at 80%utilization
-
-AWS Snowmobile
-peta byte of data
-100 PB storage per truck
-data is automatically encrypted with KMS (AES-256)
-
-AWS DataSync 
-Transfer file storage to cloud
-secure
-10 X faster of TB to/from AWS over internet or AWS direct connect
-transfer from on premise file storage (NFS,SMB) to S3, FRx
-Integration with AWS storage Gateway for ongoing update
-use case: Data Migration,replication and clod data archival
-
-
-Alternatively, use S3 transfer acceleration if apps integrated with S3 AP1 
 
 ------AWS Data PipeLine--------------------------------------
 automate data processing pipelines b/w S3,RDS , DynamBO,EMR and On-preimieses
@@ -2368,7 +2079,7 @@ Option3: AD Connector
 use your existing on-premise directory with AWS cloud services
 your users use existing credential to access AWS resources
 
-AWS Global Accelerator  (Again)
+
 
 Direct traffic to optimal endpoints oover AWS global network
 Provides two static IPs from AWS edge network

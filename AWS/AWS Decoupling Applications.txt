@@ -1,0 +1,177 @@
+---------------------------------Decoupling Applications -----------------------------------------------------------------------------
+
+Pull Model SQS
+Multiple Producers and Multiple Consumers 
+Normally same consumers 
+
+produce put messages on queue
+**consume pull on the queue only one of the consume will pick  a msg
+
+Scalability
+scale consumers instances under high load
+
+Availability
+Producer up even if consumer is down
+
+Push Model
+Subscribers subscribe to a topic
+notification broadcast
+
+Simple Queuing Service SQS
+Full Managed, reliable ,scalable Message Queue Service
+Unlimited scaling 
+Low cost (pay for use , no. of msgs)
+
+max messge size = 256KB
+can congifure SSE server account envryption
+Lamda trigger can set
+
+
+Standard Queue
+**Unlimited throughput
+No order guarantee
+No guarantee of exactly one processing 
+
+FIFO Queue
+lower throughput 300 msg per seconds
+**Order guarantee
+Guarantee of exactly one processing 
+batch 10 msg per operations then up to 3000 msg per seconds
+
+1) Producer placed a msg on queue
+2) globally msg Id is assigned ABCD which is received by the proudcer
+3) consumer polls for the msg ,
+4) consumer received the msg with ID ABCD and receipt Handle XYZ
+5) msg remains on the queue and other consumers can't pool it
+6)  consumer process the msg and call delete msg providing receipt handle XYZ
+7) message is remove from the queue
+
+Message Life Cycle
+
+Start -> Ready ->   Being processed -> Done
+delay second = if configure, the msg will be ready after that time 
+if msg is not processed by the consumer after expiry of visibility timeout, then again 
+moves to Ready state and to Dead letter queue in case of max Retry policy 
+
+SQS Auto Scaling
+
+SQS -> CW Alarm -> AutScaling -> EC2
+use target tracking scaling policy
+use SQS metric like ApproximateNumberOfMessages
+
+SQS Important Configurations
+
+1) Visibility Timeout
+other consumers will not received a messages being processed for that time
+default 30 sec up to  12 hrs
+can be changed by call API ChangeMessageVisibility
+
+2) DelaySeconds
+time period before a msg is visible on the queue
+default 0 sec , max 15 mins
+Can be set on queue creation or update using setQueuAttribute
+
+Message Retention period
+max period a msg can be on a queue if no one consume it
+default = 4 days
+min 60 secs
+max 14 days
+
+MaxReceiveCount
+Max no. of failures in processing a msg to a single Dead letter queue
+
+Other account access to your Queue
+SQS Queue Access Policy (resource policy on the queue)
+
+Console --> EC2 -> SQS
+SQS 
+Configure Queue 
+name: First Queue
+
+Create EC2
+
+Create IAM Role
+name: EC2RoleForSQS
+Create IAM Role , giving access to Queue of SQS then assign to EC2 instance
+select EC2
+Permission 
+AWSLambdaSQSQueueuExectionRole
+AWSSQSFullAccess
+
+Go to Running Instances
+Action -> Instance Setting --> attach IAM Role EC2RoleForSQS
+
+configure region where Queue are available
+
+cmd on EC2
+aws configure
+No access key
+No secret key
+default region = us-east-1
+
+aws sqs list-queue
+
+aws sqs receive-message --queue-url=QUEUEURL 
+aws sqs delete message --queue-url=QUEUEURL  --receipt-handle=RECEIPTHANDLE
+aws sqs send-message --queue-url=QUEUEURL --message-body="MyMsgfrom cmd line"
+
+Purge Queue
+Delete all messages from that Queue
+
+SQS Scenarios
+
+Receiver wants to handle the msg without looking msg body
+configure message attributes
+
+Reduce no. of API calls to SQS
+use Long polling ie WaitTimeSeconds up to 20 seconds
+
+Receive messages after a week and observe some msg not processed
+Exceed msg retention period
+default is 4 days
+max 14 days
+
+Give High priority for premium customer
+create separate queues for normal and premium customer
+
+---------------Simple Notification Service  SNS----------------------------------------------------------------
+Publish-Subscribe paradigm (pub-sub)
+broadcast async event notification
+
+provides mobile and enterprise messing web services
+push notification to apple , android , window devices
+send sms to mobile users
+send emails
+
+** SNS does not need SQS or a Queue
+call allow access to other AWS accounts uinsg SNS policy
+can enable encryption SSE
+
+can configure retry policy
+can log deliver status
+configure roles
+
+SNS - Topic
+Create topic
+my-firs-sns-topic
+
+create subscriptions
+Protocol = Lambda (my first lambda)
+Publish Message
+
+Now go to Lambda and see its monitoring , view logs in CW
+
+
+multiple SQS queues can be subscribed to a same Topic
+Applications can send msg to topics where multiple queue are registered and from there labmda function can invoke
+
+Amazon MQ
+
+managed message broker service for Apache ActiveMQ
+Amazon MQ = SQS + SNS but with restricted scalability
+supports traditional APIS (JMS) and protocols AMQP,MQTT,OpenWire,STOMP
+easy to migrate on premises
+start Amazon MQ as first step and slowly redesign app to SQS/SNS
+
+use case: 
+You have multiple applications in your enterprise using the AMQP message broker. You would like to migrate them to AWS but don't want to do much code changes

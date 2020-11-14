@@ -393,6 +393,7 @@ use EBS- Amazon Data LifeCycle Manager
 --------------------------EFS--------------------------------------------------------
 
 ELASTIC FILE SYSTEM
+Network File System for Linux instances , POSIX filesystem
 Can attach a EFS with multiple EC2 (may be in diff Az ) but in a single Region
 petabyte scale , auto scaling shared file system
 Highly available , scalable m expensive (3 X gp2), pay per use
@@ -417,20 +418,25 @@ Storage Tiers (lifecycle management feature- move file after n days)
 standard: for frequently accessed files
 (EFS-IA ) EFS Infrequent Access  : cost saving , cost to retrieve files , lower price to store
 
-AMAZON FSX FOR LUSTRE
-its a File system Optimised for Performance
-HPC high performance computing
-machine learning, media processing 
-Integrates with S3
-POSIX complicit
-File system data is automatically encrypted at rest and in-transit
 
-Amazon FSX Windows File Servers
-fully managed windows file server
-SMB service message block protocol
-AD integration
+1) Amazon FSx Windows (File Server)
+fully managed windows file system share drive
+SMB service message block and NTFS protocol 
+Microsoft AD integration
 File system data is automatically encrypted at rest and in-transit
 *All File sharing options are accessible on AWS or on premises
+can be  configured to be Multi AZ (for HA)
+Data is backed up daily to S3
+build on SSD
+
+2) AMAZON FSx FOR LUSTRE (Linux and cluster)
+its a File system Optimised for Performance
+** HPC high performance computing
+machine learning, media processing , Financial modelling
+** Seamless Integrates with S3
+POSIX complicit
+File system data is automatically encrypted at rest and in-transit
+can be used from on premise servers
 
 
 Console - EFS - Create File system
@@ -475,9 +481,11 @@ sudo mount -t efs fs-a440c755:/ efs
 cd /efs
 sudo touch firstEFsFile.txt
 
-
+--------------------------------
 Console --> FSX
 use us-east-1
+FSx for windows File server or FSx for Lustre
+
 
 Make Optimum Use of Resources in The Cloud
 Terminate EC2 instances
@@ -494,48 +502,129 @@ In EFS just add files and charged for those files like S3
 
 -----------------------Storage Gateway -------------------------------------------------
 Hybrid Storage  (On Premise and on Cloud )
-Storage Gateway 
+
+part of infra is on the cloud
+part of infra is on on-premise
+
+this can be due to
+long cloud migration
+security and compliance requirements
+
+Storage Gateway is the Bridge b/w on-primise and cloud data in S3
 unlimited storage with good performance
 Storage Gateway and S3 glacier encrypt data by default
 
-three options
-1) Storage File Gateway
-2) Storage Tape Gateway
-3) Storage Volume Gateway
+3 types of Storage Gateway
+1) *Storage File Gateway
+2) *Storage Tape Gateway
+3) *Storage Volume Gateway
 
 VM Image with storage gateway software deployed on-premises
 
-1) Storage File Gateway
+1)  File Gateway
+
+** Store files as object in S3 with a local cache for low latency
 File gateway deployed as VM on premises
-maintains a local cache with most recently used objects
-File share (NFS or SMB)  + It benefits from S3 features and integrations
 
-2) AWS Storage Tape Gateway
-used for archives
-avoid physical tape backup manual process
-no need to change tape backup infrastructure
-backup data to virtual tapes ie S3 and glacier
-S3 life cycle mgmt
+* maintains a local cache with most recently used objects
+** File share (NFS or SMB)  + It benefits from S3 features and integrations
+* Configured S3 buckets are accessible using NFS and SMB protocol
+Bucket access using IAM roles for each File Gateway
+can be mounted on many servers
+application feels that they are accessing file system locally but it was S3 using FGW
 
-3) Storage Volume Gateway
+2) Volume Gateway
 move block storage to cloud
 reduce cost
 mostly for backup and DR
 migration of application data
+** Block storage using iSCSI protocol backed by S3
+backed by EBS snapshots which can help restore on-premise volumes
 
-Cache storage
-primary data stored  at AWS S3
+Cached volumes
+**  primary data stored at AWS S3, low latency access to most recent data
 on premise cache store frequently accessed data
 
-Volume Stored
+Stored Volume
 High Performance
-Primary data store at On premise
+** Primary data (entire dataset) store at On premise
 async copy to AWS
 stored as EBS snapshots
 for DR and restore EBS volumes
+
+3) AWS Storage Tape Gateway
+used for archives
+**backup data using existing tape based processes using iSCI
+avoid physical tape backup manual process
+no need to change tape backup infrastructure
+backup data to virtual tapes ie S3 and glacier 
+**VTL Virtual Tape Library backed by S3 and Glacier
+
+S3 life cycle mgmt
+
 
 scenarios: want to use an AMI belonging to a diff AWS account or a diff Region
 AMI are restricted to a region
 
 
 File Storage used for HPC High performance computing  is Amazon FSx for Lustre
+
+
+File gateway- Hardware Appliance
+** helpful for daily NFS backups in small data centres
+--------------------------------------------------------------
+ Moving Data b/w AWS and on-premises
+data migration
+
+S3 transfer Acceleration
+when transferring less data up to few TB
+basic option
+uses cloudFront edge locations
+Enable S3 transfer acceleration and use endpoints
+
+AWS Snowball
+transfer dozes of TB to Petabyte from on-premises
+physical shipping
+KMS 256 bit encryption
+Large data cloud migration
+100TB  (80 TB usable)per appliance
+all data is automatically encrypted
+choose snowball if data transfer takes more than a week based on your network connection
+eg. 5TB can be transferred on 100Mbpc line in a week at 80%utilization
+request the snowball from console
+install snowball client on your servers
+copy file using client
+ship back device
+data loaded in S3 and snowball is completely wiped
+
+Snowball Edge
+add computational capability to the device
+compute optimised / storage optimized
+supports custom lambda function
+supports a custom EC2 AMI so you can perform processing on the go
+use case: pre-process the data while moving
+
+
+AWS Snowmobile (truck)
+peta byte of data
+** 100 PB storage per truck
+data is automatically encrypted with KMS (AES-256)
+1 EB = 1000 PB = 1000,000 TB
+use case: when to trasfer more than 10 PB
+
+Snowball into Glacier
+Not directly
+First import into S3 and then use S3 lifecycle policy
+
+AWS DataSync 
+Transfer file storage to cloud
+secure
+10 X faster of TB to/from AWS over internet or AWS direct connect
+transfer from on premise file storage (NFS,SMB) to S3, FRx
+Integration with AWS storage Gateway for ongoing update
+use case: Data Migration,replication and clod data archival
+
+
+Alternatively, use S3 transfer acceleration if apps integrated with S3 AP1 
+
+-------------------------------------------------------

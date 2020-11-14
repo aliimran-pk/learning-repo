@@ -1,0 +1,208 @@
+--------------------- Routing and Content Delivery -------------------------------------
+CDN Content delivery network
+distribute content to multiple edge locations around the world
+200+ edge locations
+High availability and performance
+its a content distribution system (used to distribute contents to outside world)
+
+Amazon CloudFront 
+serve users from nearest edge loc based on user location
+** Improved read performance, content is cached at the edge.
+source content can  be S3,EC2, ELB and external websites
+if no content found at edge, it will retriever from the origin server and cached at the edge location
+can use multiple edge locations
+provides features to protect your private content
+integrates  AWS shield to protect DDos attacks
+integrates  AWS WAF web app firewall to protect SQL Injection, cross site scripting
+
+use cases
+static/dynamic websites, audio/video and software downloads , HTTP and rtmp
+
+cost benefits
+0 cost of data transfer b/w S3 and CloudFront 
+reduce compute workload for your EC2 instances
+
+DNS domain name: which endures can access
+Origin: where you get the content from S3,EC2
+Cache Control : TTL = 24 hrs. default
+configure HTTPS only (default support for both HTTP and HTTPS)
+can redirect from HTTP to HTTPS
+configure different cloud front behaviour for different URL path patterns from same origion
+path pattern: *.php
+
+Signed URLs used for
+RTMP distribution (media streaming)
+Application downloads (individual files)
+situations where cookies are not supported
+
+Singed cookies using key pairs
+Multiple files (you have a subscriber website )
+doesn't need any change in application URL
+
+---------CLOUDFRONT ORIGINS------------------
+
+1) S3 Bucket
+
+Origin Access Identities (OAI)
+** ensure only CloudFront can access S3, enhanced security
+create a special CloudFront user
+Create a bucket policy
+allow access to S3 only to a special CloudFront user
+CloudFtont can be used as ingress to upload files to S3
+** Client - (passing header)--->  Edge Location --> Origin (S3 or HTTP) uses OAI
+
+2) Custom Origin (HTTP)
+ALB
+EC2 instance
+S3 Website 
+Any HTTP back-end
+
+** Client - (passing header)--->  Edge Location --> Origin (EC2 must be public) uses IAM Role
+Security group of EC2 must allow all IPs of Edge locations
+
+** Client - (passing header)--->  Edge Location --> Origin (ALB must be public) uses IAM Role  --> EC2 can be private
+Security group of ALB must allow all IPs of Edge locations
+Security group of EC2 must allow SG of ALB
+
+CloudFront is a global service
+
+Console -->CloudFront
+Delivery Method --> Web 
+OringDomain Name: select your bucket 
+Default object: index.html
+86400 secs = 24 hours
+create distribution  (15 to 20 mins)
+
+the contents will be automatically expire after TTL from the edge locations if not used
+InvalidationAPI - to remove object from cache (from all edge locations) for emergencies 
+
+use versioning in object path name
+
+Don't use CloudFront for 
+when all requests from a single location 
+when all requests from corporate VPN
+
+Scenario: Restrict content to users in certain countries
+enable CloudFront Geo restriction
+whitelist(allowed countries)
+blacklist(blocked countries)
+
+
+* CloudFront is great for static content that must be available everywhere
+* S3 Cross Region replication is great for dynamic content that needs to be available at low latency in few regions
+
+Practical
+Create a bucket b1
+upload some files
+
+CloudFront -> Create Distribution -> 
+Origin = b1
+Restrict Bucket Access = Yes
+Select Origin Access Identity 
+Read Permission to bucket policy
+
+A bucket policy automated created
+make the files public
+Open cloud front URl and append coffee.jpeg
+
+so OAI is copied in the bucket policy to restrict it accessible only through cloud front
+
+
+CloudFront Signed URL/Cookie
+want to distribute paid shared content to premium user over the world
+and see who has 
+** access to individual files (one signed URL per file)
+shared content (a few minutes)
+private content (for years)
+
+**Signed Cookie = access to multiple files (one signed cookie for many files)
+
+
+Client -> Custom App -> AWS SDK to get Singed URL -> Edge location
+Client -.> using singed URL -> CloudFront
+
+CloudFront Signed URL
+allows access to a path,  no matter the origin (s3,ec2,http)
+can leverage caching features
+account wide key-pair , only root can manage
+
+S3 pre-signed URL
+Issue a requet as the person who pre-signed the url
+limited life time
+use IAM key of the singing IAM principal
+
+
+ -------------AWS Global Accelerator -----------------------------------
+you have deployed an application and have global users to access
+ie application in India region  with a public ALB but users are all over 
+the world and their are hops when user connect via internet
+
+Unicast IP
+one server holds one IP
+
+Anycast IP
+All servers hold same IP and the client is routed to the nearest one.
+
+AWS Global Accelerator uses Anycast
+It leverage AWS internal network to route to your application
+Anycast IP send traffic directly to Ede locations
+Edge locations send the traffic to your application
+2 Anycast IP are created for your application
+works with Elastic IP, EC2, ALB,NLB, public or private
+consistent performance
+intelligent routing to lowest latency and fast regional failover
+health checks and good for DR
+only 2 external ip need to be whitelisted
+DDos protection using AWS shield
+
+
+CloudFront VS Global Accelerator
+
+both uses AWS global network and its edge locations around the world
+both services integrate with AWS shield for DDos protection
+
+CloudFront
+improves performance both cacheable contents images and videos and dynamic content
+
+Global Accelerator
+improves performance over TCP or UDP
+good for non http use caes like gaming(UDP),IOT(MQTT) or voice over IP
+good for http use caes that required static IP and fast regional faiolver
+
+Practical 
+** Accelerator is not Free
+
+create EC2 in us-east-1
+create EC2 in ap-south-1
+
+aws global Accelerator
+name: myFirstacc
+Add Listener : 
+port : 80
+protocol : TCP
+End point group
+Region = us-east-1
+Region = ap-south-1
+with health check
+
+Now click on Endpoint group : us-east-1
+type: EC2
+provide instance id
+add end point  of EC2 in us-east-1
+
+
+Now click on Endpoint group : ap-south-1
+type: EC2
+provide instance id
+add end point  of EC2 in ap-south-1
+
+Two static IP will be created by the Accelerator
+
+
+**CloudFront Signed URL are commonly used to distribute paid content through dynamic CloudFront Signed URL generation. 
+** S3 CRR allows you to replicate the data from one bucket in a region to another bucket in another region
+** Global Accelerator will provide us with the two static IP, and the ALB will provide use with the HTTP routing rules
+
+
+
+

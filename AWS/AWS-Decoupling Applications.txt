@@ -1,0 +1,421 @@
+---------------------------------Decoupling Applications -----------------------------------------------------------------------------
+
+async is event based
+
+Pull Model SQS
+Multiple Producers and Multiple Consumers 
+Normally same consumers 
+
+produce put messages on queue
+**consume pull on the queue only one of the consume will pick  a msg
+
+Scalability
+scale consumers instances under high load
+
+Availability
+Producer up even if consumer is down
+
+Push Model
+Subscribers subscribe to a topic
+notification broadcast
+
+Simple Queuing Service SQS
+Full Managed, reliable ,scalable Message Queue Service
+Unlimited scaling 
+Low cost (pay for use , no. of msgs)
+
+max message size = 256KB
+can configure SSE server account encryption
+Lambda trigger can set
+consumer receivers and process messages in parallel 
+and consumer delete messages after processing it
+
+Standard Queue
+**Unlimited throughput
+No order guarantee
+No guarantee of exactly one processing 
+can have duplicate messages but at least once delivery
+limitation = 256KB per msg sent
+
+FIFO Queue
+Limitation: lower throughput 300 msg per seconds
+**Order guarantee
+** Guarantee of exactly one processing 
+* batch 10 msg per operations then up to 3000 msg per seconds
+
+Create a FiFO queue
+name: demoQeuue.fifo  (must ends with .fifo)
+send msg  with message group id
+
+1) Producer placed a msg on queue
+2) globally msg Id is assigned ABCD which is received by the producer
+3) consumer polls for the msg ,
+4) consumer received the msg with ID ABCD and receipt Handle XYZ
+5) msg remains on the queue and other consumers can't pool it
+6)  consumer process the msg and call delete msg providing receipt handle XYZ
+7) message is remove from the queue
+
+
+Message Life Cycle
+
+Start -> Ready ->   Being processed -> Done
+delay second = if configure, the msg will be ready after that time 
+if msg is not processed by the consumer after expiry of visibility timeout, then again 
+moves to Ready state and to Dead letter queue in case of max Retry policy 
+
+SQS Auto Scaling
+SQS scale Automatically 
+
+SQS -> CW Alarm -> AutScaling -> EC2
+use target tracking scaling policy
+use SQS metric like ApproximateNumberOfMessages
+
+EC2 instances are associated with ASG
+CloudWatch Metric based on Queue Length is attached to SQS Queue
+It will trigger CloudWatch Alarm which send info to ASG to increase/decrease EC2 instances
+
+SQS IMPORTANT CONFIGURATIONS
+
+1) Visibility Timeout
+After a message is pulled by consumer, it will be become invisible to other consumers during that time
+other consumers will not received a messages being processed for that time
+default 30 sec up to  12 hrs
+means that the message needs to be processed in 30 sec
+can be changed by call API ChangeMessageVisibility to get more time
+** if visibility timeout is too high , and consumer crash, re-processing takes much time
+if visibility timeout is too low , we may get duplicates
+
+2) Delivery Delay
+time period before a msg is visible on the queue
+delays a message (consumer don't see it immediately) up to 15 mins 
+default 0 sec , max 15 mins
+Can be set on queue creation or update using setQueuAttribute
+can override the default on send using DelaySeconds param
+use case: if your consumers need additional time to process messages, you can delay each new message coming to the queu
+
+3) Message Retention period
+max period a msg can be on a queue if no one consume it
+*default = 4 days
+*min 60 secs  ie 
+*max 14 days
+
+4) MaxReceiveCount
+Max no. of failures in processing a msg to a single Dead letter queue
+We can set a threshold for how many times a message can go back to the queue
+DLQ is used for debugging
+Good to set a retention of 14 days in the DLQ
+
+Create a DLQ
+name: myDLQ
+Go to FirstQueue
+ Dead-letter-queue
+ select myDLQ
+ 
+Other account access to your Queue
+SQS Queue Access Policy (resource policy on the queue)
+
+Practical
+Console --> EC2 -> SQS
+SQS 
+Configure Queue 
+name: First Queue
+
+Create EC2
+
+Create IAM Role
+name: EC2RoleForSQS
+Create IAM Role , giving access to Queue of SQS then assign to EC2 instance
+select EC2
+Permission 
+AWSLambdaSQSQueueuExectionRole
+AWSSQSFullAccess
+
+Go to Running Instances
+Action -> Instance Setting --> attach IAM Role EC2RoleForSQS
+
+configure region where Queue are available
+
+cmd on EC2
+aws configure
+No access key
+No secret key
+default region = us-east-1
+
+aws sqs list-queue
+
+aws sqs receive-message --queue-url=QUEUEURL 
+aws sqs delete message --queue-url=QUEUEURL  --receipt-handle=RECEIPTHANDLE
+aws sqs send-message --queue-url=QUEUEURL --message-body="MyMsgfrom cmd line"
+
+Purge Queue
+Delete all messages from that Queue
+
+SQS Scenarios
+
+Receiver wants to handle the msg without looking msg body
+configure message attributes
+
+Reduce no. of API calls to SQS
+use Long polling ie WaitTimeSeconds up to 20 seconds
+
+Receive messages after a week and observe some msg not processed
+Exceed msg retention period
+default is 4 days
+max 14 days
+
+Give High priority for premium customer
+create separate queues for normal and premium customer
+
+SQS Security
+In flight encryption using HTTPS API
+At rest encryption using KMS keys
+
+Access Controls
+IAM policies to regulate access to SQS API
+
+SQS Access Policies (similar to S3 bucket polices)
+** useful for cross access to SQS queues
+** useful for allowing other services (SNS,S3) to write to SQS API
+
+---------------Simple Notification Service  SNS----------------------------------------------------------------
+
+** Publish-Subscribe paradigm (pub-sub)
+broadcast async event notification
+
+The event producer only sends message to one SNS topic
+As many event receives listen to the SNS topic
+
+provides mobile and enterprise messing web services
+push notification to apple , android , window devices
+send SMS to mobile users
+send emails
+
+*** SNS Subscribers can be 
+SQS,http/https,Lambda,emails,sms msg,mobile notifications
+
+SNS integrates with a lot of AWS services
+CloudWatch - alarms
+ASG 
+S3 - bucket events
+CloudFormation (state change)
+
+1) Topic Publish (using SDK)
+create topic
+create subscription 
+publish to topic
+
+2) Direct Publish (for mobile apps SDK)
+create a platform application
+create a platform endpoint
+publish to a platform endpoint
+works with GOOGLE GCM, APLE APNS and AMAZON ADM
+
+** SNS does not need SQS or a Queue
+call allow access to other AWS accounts using SNS policy
+can enable encryption SSE
+
+can configure retry policy
+can log deliver status
+configure roles
+
+Practical 
+SNS - Topic
+Create topic
+my-firs-sns-topic
+
+Encryption  optional
+
+create subscription
+Email
+go to https://www.mailinator.com/
+add aliimran-ibm
+endpoint = aliimran-ibm@mailinator.com
+create subscription
+
+Publish message
+hello world 
+it will send to the email mention above
+
+create subscriptions
+Topic ARN
+Protocol = Lambda (my first lambda)
+Publish Message
+
+Now go to Lambda and see its monitoring , view logs in CW
+
+multiple SQS queues can be subscribed to a same Topic
+Applications can send msg to topics where multiple queue are registered and from there labmda function can invoke
+
+SNS security is similar to SQS
+
+-----------------------------------------------------------------------------------------------
+
+SNS + SQS : Fan Out
+Push once in SNS receive in all SQS queues that are subscribers
+make sure your SQS queue access policy allows for SNS to write
+* SNS can't send message to SQS FIFO queues (AWS limitation)
+
+------------------------AWS Kinesis --------------------------------------
+Kinesis is a managed alternative to Apache Kafka
+great for app logs, iot, clickstreams
+** great for "real-time" big data
+great for streaming processing frameworks (Spark, Nifi)
+** Data is automatically replicated to 3 AZ
+
+1) ** Kinesis Data Streaming
+Primary handle Streaming data with low latency
+ recommended for ETL jobs
+Data retention is 1 day by default up to 7 days
+** Ability to reprocess/replay data as compared to SQS
+multiple apps can consume same stream like SNS
+*Immutability: data inserted in Kinesis can't be deleted
+
+Streams are divided into ordered SHARDS/PARTITIONS
+one stream is made of many different shards
+1 MB/sec messages/ sec at write per shard
+2 MB/sec messages/ sec at read per shard so for 5 MB/sec we need 3 shards
+Billing is per shard provisioned 
+shard can be reshard (increase shard) /merge (decrease shard)
+* Records are ordered  per shard
+
+** PutRecord API + Partition key that gets hashed
+the same key goes to the same partition
+messages sent get a "sequence number"
+** Choose a partition key ie user_id that is highly distributed
+so that request will not always goes to a particular shard and overwhelmed it (hot partition)
+user_id is good but not cuntry_id as partition key
+** use Batching with PutRecords to reduce cost and increase throughput
+ProvisonedThroughputExceeded exception is we go over the limits
+Can use a normal consume CLI, SDK 
+Can use Kinesis Client Library (in lava,node,python,ruby,.net)
+KCL uses DynamoDB to checkpoint offsets
+
+Kinesis Security
+Control access/authorization using IAM policies
+in flight encryption  using Https endpoints
+encryption at rest using KMS
+* VPC endpoints available for Kinesis to access within VPC
+
+Kinesis is not in free tier
+
+Practical 
+Console -> Kinesis
+Data Stream
+Create data stream
+TestStream
+No. of shard: 1
+create
+
+cmd
+aws kenisis list -streams
+TestStream
+
+aws kenisis descibe-stream TestStream
+aws kenisis  put-record  --stream-name TestStream --data "hello" --partition-key user_123
+aws kenis help
+aws kenisis  get-shard-iterator  --stream-name TestStream --shard_id 00001121 --shard-iterator-type TRIM_HORIZON
+aws kenisis get-records --shard-iterator 002121212
+will gives the data but data is in base64 
+
+2) AWS Kinesis Analytics
+*perform real-time analytics on stream using SQL
+you can write SQL queries and build Java apps to continuously analyse streaming data
+* Data coming via Kinesis Firehose and Kinesis Data Streams
+auto scaling 
+real time
+pay for actual  consumption rate 
+
+
+3) AWS Kinesis Data Firehose
+*store  to S3,Elastic search ,Redshift and splunk
+managed service , serverless
+*Data Ingestion for streaming data
+Delivery stream
+receive
+near rear time ie 60 latency
+** process transform,lambda,compress, encrypt
+** Pay for volume of data ingested (serverless)
+No replay
+
+KPL, Kinesis Agent, Kinesis Data stream, cloudwatch events  -->
+Kinesis Data Firehose (biotransformation using lambda ) --> 
+Amazon S3,Redshift, ElasticSearch,Splunk
+
+
+AWS kinesis Video Streams
+monitor video streams from web cams and generate real time alerts
+
+
+Producers:
+putting data in that stream
+eg.
+kinesis Agent (java client)
+AWS SDK
+(KPL) Kinesis Producer library
+
+Consumers
+get records from Data streams and process them
+eg.
+Kinesis Data Firehose
+Kinesis Data Analytics
+(KCL) Kinesis Consumer Library using custom code
+
+
+*** Streams  VS Firehose
+
+going to write custom code (producer/consumer)
+real time 200 ms
+must manage scaling(shard)
+data storage 1 to 7 days ,replay, multi consumer
+
+Full managed, send to S3,splunk,redshift,elasticSearch
+near real time 1 min
+serverless data transformation using lambda
+automated scaling and No storage
+
+
+Scenarios
+
+1) 100 trucks send gps position
+sol: sending data using partition_key (hashed it) truck_id
+the same key will always go to the same shard
+
+2) SQS there is no ordering
+SQS FIFO if u don't use a Group ID, messages are consumed in the order they are sent, with only one consumer
+
+Group Id is similar to partition key
+the more group id , the more consumer
+
+-------------------------------------------
+Amazon MQ
+managed message broker service for Apache ActiveMQ
+** use open protocol as MQTT, AMQP,OpenWire,WSS,STOMP
+Amazon MQ = SQS + SNS but with restricted scalability
+*Amazon MQ runs on a dedicated machine can run in HA for failover
+* MQ has both queue (SQS) and topic (SNS) features
+
+supports traditional APIS (JMS) and protocols AMQP,MQTT,OpenWire,STOMP
+** easy to migrate on premises
+start Amazon MQ as first step and slowly redesign app to SQS/SNS
+
+use case: 
+**You have multiple applications in your enterprise using the AMQP message broker. You would like to migrate them to AWS but don't want to do much code changes
+
+Console --> Amazon MQ 
+name: myDemo Broker
+engine : Apache ActiveMQ
+active mq web console 
+
+add port 8162 in SG
+
+
+--------------------------------------------------
+send a message to 3 different applications all using SQS.
+This is a common pattern as only one message is sent to SNS and then "fan out" to multiple SQS queues
+
+
+
+
+
+
+

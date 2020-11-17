@@ -120,7 +120,7 @@ OPENid connect (OIDC) tokens
 AD is a common Identity provider
 
 AWS SSPO can interact with Active directory
-Amazon Congnito 
+Amazon Cognito 
 
 account name, pwd and email address of root user can be changed 
 

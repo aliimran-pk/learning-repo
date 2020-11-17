@@ -301,8 +301,6 @@ ECR
 Elastic Container Registry
 for deploy container images
 
-
-
 ------------------
 To have more access to EC2 instances for ECS
 ECS --> Cluster-> Create Cluster -- Select cluster template
@@ -313,10 +311,6 @@ Cluster
 VPC
 Subnets
 Auto Scaling group with Linux AMI
-
-
-
-
 
 -------------------------- Virtual  Private Cloud ----------------READ AGAIN IN DETAIL-----------------------------------------
 
@@ -747,7 +741,7 @@ IAM - Web Identity Federation
 1) authenticate users using we identities 
 eg open id (Facebook,google)
 
-2) Amazon Congnito supports login with FB, google or other open id compatible identity providers
+2) Amazon Cognito supports login with FB, google or other open id compatible identity providers
 
 3) configure role to use Web Identity as trusted entity
 authentication token exchanged using STSAssumeRoleWithWebIdentity API
@@ -1331,14 +1325,6 @@ Continuously Generated
 Small Pieces of data
 Sequenced , associated with time
 
-DynamoDB Streams
-each event from DynamoDB  (in a time sequenced order) is buffered 
-in a stream near real-time
-can be enabled/diabled
-
-EC2 -> DynamoDB -? DynamoDB Streams -> Lambda -> SNS
-use case: send email when user registered
-streams allow iteration through recotds (last 24 hrs) as batch
 
 
 

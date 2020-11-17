@@ -47,7 +47,7 @@ eg     dumy.in28minutes.com to www.example.com
 
 route traffic to select AWS resources like S3,ELB,CloudFront 
 Alias records can be create for root and non root domains
-ie in28minutes.com   or api.in28minutes.com
+ie in28minutes.com   or API.in28minutes.com
 if you want to route domain to an AWS resource then what u need to make of 
 use Alias records
 

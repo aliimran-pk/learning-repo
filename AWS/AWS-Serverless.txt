@@ -1,4 +1,6 @@
 ---------------------------ServerLess-----------------------------------------
+A new paradigm in which the developers don't have to manage/provision servers anymore
+
 You don't worry about  infrastructure
 flexible scaling and automated high availability
 Pay for use 
@@ -6,16 +8,79 @@ No of requests
 duration of requests
 memory consume
 
+
+Lambda is virtual functions
+limited by time , short executions
+run on  demand
+scaling is automated
+pay per request and compute time
+integrate with whole  suite of services
+easy to get mre resource per functions (up to 3GB of RAM)
+
+
+Language support
+Node.js
+python
+Java 8
+C#
+Golang
+C# powershell
+Ruby
+Custom Runtime API (rust)
+
+**  Docker is not for AWS lambda, its for ECS / Fargate
+
 Lambda called/trigger from 
+
+AWS Cognito (ie when user log in to ur db)
 Amazon API Gateway
-AWS Cognito
-DynamoDB (event)  chnage in DB
+DynamoDB (event)  change in DB
 CloudFront (lambda@Edge)
 AWS Step Functions
-Kinesis (event)
+Kinesis (event) 
 S3 Simple Storage Service , new object
 SQS (event) new msg in Queue
 SNS Simple notification service and so on
+CloudWatch Events event bridge
+CloudWatch Logs
+
+Examples:
+
+1) serverless thumbnail creation
+image inserted in S3
+Lambda function creates a thumbnail
+Push thumbnail to another S3 or meta data to DynamoDB
+
+2) Serverless CRON Job
+CloudWatch events -> \trigger Every one hour --> Lambda Function to perform a task
+
+AWS lambda Pricing 
+
+1) pay per call
+first 1 million (1000,000 )requests are free
+.20 per 1 million requests thereafter
+
+2) pay per duration
+400,000 GB seconds of compute per month if Free
+
+
+Practical -----
+
+Create Function
+use a blueprint (sample code)
+hello word python
+name: hello-world
+create a IAM role (must) to perform integration with other services
+Effect= Allow 
+CreatelogStream
+PutLog Event
+ie cloudwatch log
+
+Handler 
+lambda_function.lambda_Handler
+where 
+lambda_function = lambda_function.py
+lambda_Handler = name of method
 
 
 name: MyNodeJsLambda1
@@ -53,37 +118,103 @@ TimeOut  of lambda function  = 3 seconds is default
 max timeout = 15 mins
 
 stateless - store data to S3 or DynamoDB
-500 MB of non persistent distk /tmp
+500 MB of non persistent disk /tmp
 Allocate memory in 64MB increments from 128MB to 3 GB
 
+**** Lambda Limits per Region
+
+**Execution limits
+
+1) memory allocation : 128 MB - 3008 MB (64 MB increment)
+2) Max execution time : 900 secs or 15 mins
+3) environment variables: 4KB
+4) disk capacity : 512 MB in /tmp
+5) concurrency executions : 1000 (can be increase)
+
+** Deportment Limits
+1) deployment size : 50 MB compressed
+2) un compressed: 250 MB
+3) can use /tmp to load other files at startup
 
 -----------------------------API Gateway-----------------------------------------------------
 
-Rest API Challenges
-
-Management of Rest API is not easy
+Rest API Challenges Management of Rest API is not easy
 authentication and authorization
 Rate limits (quotas)
+support for web sockets protocol
+handle different environments
+create API keys, handle request throttling (too many unwanted request)
+Swagger/open API to define APIs
+transformation and validation  of request/response
+Cache API responses
 Can  Run Multiple Versions of API and multiple environments
 Monitor API callsCache API requests
 API keys for third party developers  to monitor usage
 
+lambda + API Gateway = No infra to manage
+
 Warning: don't use API keys for authorisation
 
 Full Managed Service
+Serverless offering by AWS
 Life cycle management for REST APIs
 Enable Caching for API call with TTL
-protect backend by throttling reqest
-
+protect backed by throttling request
 publish , maintain , monitoring and securing APIs
-Integrate with Lambda, EC2, ECS,  or any publicly addressable web servic
+
+Integrate with Lambda, EC2, ECS,  or any publicly addressable web service
+easy way to expose Rest API backed by lambda function 
+
 Integrate with  CloudWatch, CloudTrails
 supports HTTP(s) and web sockets
+expose http endpoints , internal http on premise Http API
+
 It is serverless 
+Expose any AWS API through API Gateway
+ie start AWS step function workflow, post msg to SQS
+
+API Gateway: Endpoint Types
+3 ways to deploy API Gateway
+
+1) Edge-Optimized (default) 
+For global clients
+requests are routed through CloudFront edge locations 
+Improves Latency
+API gateway still lives in only one region
+
+2) Regional
+for clients within the same region
+more control over caching
+
+3) Private
+can only be accessed from your VPC using VPC endpoint ENI
+use response policy for access
+
+
+-----------Practical ---------------------------
+Console -> API Gateway
+
+REST API
+build
+protocol: REST
+name: myFirstAPI
+
+Action - create method -GET
+
+Integration type: Lambda Function
+Lambda Function = lambdaapi-gateway-fn
+use lambda proxy integration
+save
+
+policy of lambda function is updated which allow API gateway to access to this function
+
+Action -> Deploy API
+Deployment Stage:  Dev
+Invoke URL will come
+
+-----------Practical -----------------------------------------------------------------
 
 HTTP API is new version of REST API
-
-
 REST API -->  New API
 Name: MyHelloWolrdAPI
 EndPoint Type: Regional
@@ -92,7 +223,6 @@ Regions = 20
 Edge Locations = where regions are not available CloudFront distribute content 200+
 
 Create API
-
 Action-> Create Method -> Get
 
 Integration Type:
@@ -102,7 +232,7 @@ Test
 
 Authorizers
 Name:
-Type  Congnito and Lambda authorizer (JWT token or SAML)
+Type  Cognito and Lambda authorizer (JWT token or SAML)
 
 API keys
 To identifying API clients  based on key used for usagePlan
@@ -127,85 +257,139 @@ URL: 	https://ruvdffuyq5.execute-api.ap-south-1.amazonaws.com/Dev
 Canary Deployment
 sent a % request to a no. of users
 
-Amazon API Gateway 
+------------------------------------------------------------------------------------
+*** API Gateway - Security 
 
-Authentication
+1) IAM Permissions (sig v4)
 
-AWS Signature version 4
+create an IAM policy  and attach it to User/Role
+* Handle Authentication + Authorization
+** great of users/roles already in AWS account
+** User call API and provides  IAM credentials in header with "sig v4" capability to API gateway
+which call IAM policy to check
 create a signature using AWS secret access key and send it with API request
 if ur users belong to same AWS Account
 
-
-Lambda Authorizer
+2) Lambda Authorizer / Custom Authorizer
 Implement a lambda function to authenticate (JWT,OAtuh) and return AMI policies
+** great for 3rd party token
+** helps to use OATh/SAML/3rd party type of authentication
+* Handle Authentication + Authorization
 Integrate with any custom user directory
+uses QWS lambda to validate the token in header being passed
+pay per lambda invocation
 
-Amazon Congnito
+User call API wit token --> API gateway -> pass it to Lambda Authorizer -> Evaluate token and return IAM policy
+
+
+---------------------------------3) Amazon Cognito------------------------------------------------------------
+
+Fully manages user lifecycle
+we want to give our users an identity to that they can interact with our application
 authenticate mobile and web-apps
 want to integrate with web identity providers google, Facebook
 MFA ,phone and email versification
 support for SAML
 
-Congnito - User pools
+
+a) Cognito - USER POOLS  (CUP)
+* manage your own user pool (can be backed by Facebook, google etc)
+* Creates a serverless database of user for your mobile app
+simple login: username or email / password
+sends back a JSON web token JWT
 create your own secure user directory
+only for authentication and not for authorization
 create sign -u pages
-customisable web UI to sign in with socila sing in option
+*** customisable web UI to sign in with social sign in option
+Integrate with API Gateway
 create a user pool
 
-Congnito - Identity pools
-for authorizaion to aws services
-connect identity pools with authentication identity providers
-own user pool , faacebook,openId, SAML
-Federated Identity
-an external identity provider
+Client register to CUP which send a JWT
+Client connect to Cognito user pools which authenticate and retrieve token
+which application pass it to the API gateway and API gateway communicate with Cognito user pool
+** Can  enabled Federated identity in user pool
 
-How Congnito works
-1) app send users credentials to identity provider (user pool or  facebook)
+b) Cognito - IDENTITY POOLS (FEDERATED IDENTITY)
+* Goal is to provide direct access to AWS services from client side
+
+Federated Identity (FI) is an external identity provider
+
+App Connect to Identity provider FB or google) which gives token to the app
+Token is passed to our  Federated Identity Pool which connect to Identity provider to validate
+FI pool connect to STS service to get temp credentials for AWS
+it pass back to app
+app use this temp credit directly to S3 bucket
+
+connect identity pools with authentication identity providers
+own user pool , Facebook,openId, SAML
+
+example:
+Provide temporary access to write to S3 buckets using FB login
+
+How Cognito works
+1) app send users credentials to identity provider (user pool or  Facebook)
 if ok, it gets a token
 2) app send token to identity pool
-3) identiy ool validates it via STS and creates temp access keys,secrect key and session token
+3) identity pool validates it via STS and creates temp access keys,secret key and session token
 4) app send a request with these credentials to AWS service
 
 
-lambda@Edge
-running labda functions at end location
-lowest network latency for end users
+Cognito Sync
+synchronize data from device to Cognito
+May be deprectead and replaced with AppSync
+--------------------------------------Lambda@Edge---------------------------------------------------------
 
-use case: search engine optimisation, W/B testing , dynamic routing
-Cab be trigger on AWS cloudFront Events
-Viewer request- trigger when request arrive at edge location
-Origin request- just before sending request to origin when  obj is not in cache
-Origin response-After edge loc receive response back from origin
-Viewer Response: just before response is end  back from edge loca
-l
+
+running lambda functions at end location
+to run a global AWS Lambda alongside
+how to implement request filtering before reaching your application
+lowest network latency for end users
+deploy  lambda functions alongside your CloudFtont CDN
+pay only what you use
+
+use case: search engine optimisation SEO, A/B testing , intelligent  routing
+Dynamic web application at Edge
+Bot mitigation at edge
+Real time Image transformation
+User authentication/authorization, Prioritization
+User tracking and analytics
+Can be trigger on AWS cloudFront Events
+
+* Viewer request- trigger when request arrive at edge location
+* Origin request- just before sending request to origin when  obj is not in cache
+* Origin response-After edge loc receive response back from origin
+* Viewer Response: just before response is end  back from edge to user
+
+* you can also generate responses to viewer without ever sending the request to the origin
+
 Limitations
 only supports node.js and python
 No free tier and more expensive than lambda
 
-ServerLess Application Model(SAM)
+** ServerLess Application Model(SAM)
 how to test serverless projects with lambda,api gateway and dynaDB in local
 its a open source
-yaml file with all serverless resourcees, cloud formation template
+yaml file with all serverless resources, cloud formation template
 
 AWS AppSync
-apps cotinue to work offline
+apps continue to work offline
 data sysnc when connect again
 based on GraphQL (FB framework ) get data from multiple api
 can integrate with nosQL db, rds and lambda
 
-
+------------------------------------------------------------------------------------------------
 AWS Step Functions
-build distributed applications using vistual workflows
+build distributed applications using visual workflows
 
-Crate a serverless wotkflow in 10 mins using visual apporch
+Crate a serverless workflow in 10 mins using visual approach
 invoke multiple aws services  into serverless workflows
 build workflows as a series of steps
-retry a step until it successed
+retry a step until it succeeded
 max duration is 1 year
 integrate with API Gateway to expose it as API
 include human approvals 
 long-running
-machine leanding models
+machine leaning models
 
 short duration
 iot data ingestion, steam processing
@@ -214,12 +398,12 @@ recommend for all new workflows , easy and simple cases
 
 AWS SIMPLE WORKFLOW SERVICE (SWF)
 for complex orchestration 
-buid and run background jobs
-with paralle or sequential steps
+bud and run background jobs
+with parallel or sequential steps
 synchronously or asynchronously
-can invlode human inputs
+can involved human inputs
 use case: order processing
-workflow can run upto 1 year
+workflow can run up to 1 year
 
 Workflow Starter call SWF action to start workflow
 eg. order is received

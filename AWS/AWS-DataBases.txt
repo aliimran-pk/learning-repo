@@ -575,17 +575,26 @@ Multi AZ ensure High Availability
 Global Databases allow you to have cross region replication
 
 ------------------------ AWS DynamoDB --------------------------------------------------------
-fast, scalable distributed db for any scale
-schema less
-No sql key value and document based
+
+Fully managed , HA, fast, scalable DISTRIBUTED  NoSQL DB for any scale
+** schema less
+** 3 replica in a single region
+NoSQL key value and document based
 Don't worry about scaling , availability or durability
 it automatically partitioned data as it grows across multiple nodes
 single-digit millisecond latency at any scale.
-3 replica in a single region
-No need to crate a DB 
-here create a table directly and configure RCU and WCU Read capacity unit
+millions of requests per seconds and trillions of rows , 100s TB of storage
+Low cost and auto scaling capability
+No need to create  a Database
+** here create a table directly and configure RCU and WCU Read capacity unit
+each table can have infinite items (rows)
+each item has attributes (columns)
+max item size = 400KB
 provides a expensive serverless  mode
 application which required milli second latency but at v high scale
+Enables event driven programming with DynamoDB streams
+Throughput can be extended temporary using "burst credits"
+"ProvisionedThroughputException" when burst credits are empty so it is advised to do exponential back-off retry
 
 Hierarchy 
 Table ->Items -> attributes (key value pairs)
@@ -602,6 +611,32 @@ expiry of record
 
 Manage Stream
 ie upon any event execute stream,
+
+
+** DynamoDB NewFeatures
+
+1) Supports Transactions across multiple tables
+include up to 10 unique items or up to 4 MB of data
+
+2) On Demand
+No capacity planing needed, scale automatically
+2.5X more expensive than provisioned capacity
+useful in case of un predictable spikes or application is v low throughput
+
+Security 
+VPC endpoints available to access DynamoDB without internet
+Access controlled by IAM 
+Encryption at rest KMS
+Encryption in Transit SSL/TSL
+
+Backup and restore
+point in time restore like RDS
+No performance impact
+
+Migrate to Dynamo DB using DMS (from Mongo, Oracle,MySWL,S3)
+can launch a local DynamoDB on your computer for development purpose
+
+
 
 scan is expensive operation which query is efficient
 based on specific metric , you can create alarms
@@ -622,9 +657,14 @@ Create Index
 Key : Address
 Name: Address-index
 
-Global tables
+** Global tables
 enable you to use DynamoDB as fully managed , multi region, multi-master database
-to create global table , must enabled dynamoDB streams
+to create global table , 
+** Must enabled dynamoDB streams
+Active aActive replication , in many regions
+useful for DR 
+CRUS in one Global table automatically reflected in to other table of different region and vice versa
+
 
 Triggers 
 connect DynamoDB streams to Lambda functions whenever an item in the tale is modified , a new
@@ -649,7 +689,6 @@ Global Secondary Index
 Partition and sort keys are diff from Primary Key
 Can be added or removed at any point in time
 stored separately from original table
-
 
 Query VS Scan
 
@@ -676,9 +715,8 @@ Read/Write Capacity Modes
 
 In DynamoDB, strongly consistent reads are expensive than eventually consistent reads
 
-
 Provisioned
-Recommended
+** Recommended
 provision read and write capacity
 dynamically adjustable
 unused capacity can be used in burst(in case of spike)
@@ -690,11 +728,17 @@ For unknown workloads or traffic with Huge spikes
 used when workloads are really spiky causing low utilization of provisioned capacity
 or usage is very low 
 
-Dynamo DB RCU and WRC
+** Dynamo DB RCU and WRC
 Capacity used depends on size of item, read consistency , transnational etc
-1 capacity unit to read 4KB or smaller 
-1 capacity unit to write 1KB or smaller 
+
+Read Capacity Unit : throughput for reads
+1 capacity unit to read 4KB or smaller  = 1 RCU
+
+Write Capacity Unit : throughput for writes
+
+1 capacity unit to write 1KB or smaller  = 1 WCU
 twice the capacity for strong consistent or transactional request
+
 On Demand RCU is 8 times the cost of Provisioned RCU
 
 Performance Monitoring
@@ -718,7 +762,6 @@ AmazonDynamoDBReadOnlyAccess
 AmazonDynamoDBFullccess
 Fine-grained control at the individual item level
 
-
 DynaymoDB
 milli sec latency with millions TPS but lower consistency
 Rest API, SDK, CLI
@@ -731,13 +774,21 @@ SQL Queries
 Good to run complex queries
 upper Limit 64TB
 
+---------------------------------------------------------------------------------------------
+** DynamoDB Accelerator (DAX)
 
-DynamoDB Accelerator (DAX)
-In memory cache for DynamoDB
+** In memory cache for DynamoDB
 microsecond response time
+
+Applications --> DAX -->. DynamoDB
 
 Few changes needed to connect to DAX
 can reduce your costs by saving our read capacity units (lambda reads from DAX rather than hititng DynamoDB)
+solves Hot key problem (too many reads)
+5 mins TTL
+up to 10 cluster nodes
+Multi AZ min 3 
+Secure , encryption at rest via KMS,VPC,IAM,cloudTrail
 
 Not Recommanded
 if u need strongly consistent reads
@@ -746,4 +797,17 @@ application is write intensive with very few reads
 DynamoDB -> DAX 
 create cluster
 encryption is recommended
+
+---------------------------------------------------------------------------------------------
+** DynamoDB Streams
+changes in DynamoDB (Create,update,delete) can end up in a DynamoDB stream
+each event from DynamoDB  (in a time sequenced order) is buffered  in a stream near real-time
+This  stream can be read from AWS lambda 
+can be enabled/disabled
+* could implement cross region replication using streams
+* steam has 24 hrs of data retention
+
+EC2 -> DynamoDB -> DynamoDB Streams -> Lambda -> SNS
+use case: send email when user registered
+streams allow iteration through records (last 24 hrs) as batch
 

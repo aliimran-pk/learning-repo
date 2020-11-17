@@ -79,7 +79,7 @@ LB error 503  at capacity or no registered target
 
 Each layer makes use of layers beneath it
 
-App Layer layer 7  (HTTP, SMTP)  make api calls
+App Layer layer 7  (HTTP, SMTP)  make API calls
 
 Transport Layer 4  TCP TLS (secure TCP), UDP(high performance over reliability)  ensure bits/bytes transferred properly and order
 

@@ -747,10 +747,12 @@ SNS topic
 ------------------------AWS Athena ------------------------
 Serverless service to perform analytics directly against S3 files
 ** Used to analyse data on S3 with out loading into any DB and directly from S3
+Query Engine over S3
 uses SQL language 
 Has JDBC/ODBC driver
 charged per query and of data scanned
 support scv,json,avro and parquet
+pay per query 
 
 use case:
 reporting , analysing , VPC flow logs, ELB logs , cloudTrail logs

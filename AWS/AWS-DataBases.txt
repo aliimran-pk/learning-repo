@@ -834,8 +834,152 @@ streams allow iteration through records (last 24 hrs) as batch
 --------------------------------------------------------------------------------------------
 S3 is a key/value store for objects like a DB
 Great for big objects (5 TB) and not for small objects
-serverless,
+serverless
+--------------------------------------------Neptune----------------------------------------------------------
 
+
+Fully managed Graph database
+High relationship data 
+social networking , Wikipedia
+HA across 3 AZ with 15 read replica
+point in time recovery with continuous backup to S3
+IAM, KMS and Https support
+
+ ----------------------Redshift--------------------------
+
+Redshift is a petabyte-scale distributed data ware house  
+*based on PostgresSQL
+Redshift is a relational database
+*OLAP 
+10X better performance than other DW
+pay as you go based on instances provisioned
+from 1 node to 128 nodes, up to 160GB per node
+* Redshift spectrum: perform queries directly against S3 (but not server less like Athena)
+* Redshift Enhanced VPC routing, copy/unload goes through VPC and not internet
+
+*1) MPP massive parallel processing
+storage and processing b/w multiple nodes
+
+*2) Columnar data storage
+
+*3) High data compression
+ie city column
+
+A single row data might be stored across multiple nodes
+A query to redshift leader  node is distributed to multiple compute nodes
+
+start with a single node configuration and scale it to multi node 
+add / remove nodes dynamically
+used mainly for ETL and BI cases
+high performance analysis and reporting of large dataset
+** supports standard SQL
+Integration with data loading, reporting , reporting , Miningsby 
+Its a managed service
+High available and durability
+automatic replication (3 copies of data)
+automatic backup (S3 , default retention 1 day, max 35 day)
+automatic recovery from any node failure
+snapshots are point in time backup of your cluster stored in S3
+increment , only store what has changed
+can restore a snapshots into a new cluster
+manual snapshot retained until u delete it
+** Configure Redshift to automatically copy snapshot of a cluster to another Region
+
+Redshift cluster
+
+*Leader node
+received sql queries and distributed to compute nodes
+
+* Compute Nodes
+can be in multiple AZ
+no direct access to leader nodes
+
+2) sort keys
+data is stored in sorted order using sort key
+increase efficiency of your queries
+join columns with other tables
+timestamp column if u use most recent data  frequently
+
+Aim is to distribute data equal across nodes and minimize data movement during query execution
+
+default strategy= EVEN
+KEY = based on values of one column
+ALL = entire table on all node ie lookup table
+
+Loading data in Redshift
+
+Simple
+SQL insert queries using ODBC and JDBC
+
+Efficient
+Redshift COPY command to load data from S3,DynamoDB, EMR
+
+Data Pipelines
+Load using AWS Data Pipeline a managed service
+
+On premise data
+user Storage gateway or import/export data into S3 
+COPY data from S3
+
+Other databases
+AWS Data Migration Service
+RDS,DynamoDB
+
+Recommendation
+prefer COPY over INSERT for bulk operations as COPY is parallel and INSERT is sequential
+prefer COPY from multiple files. split into multiple small input files
+
+Managing Redshift workload (WLM)
+used to categorize your queries 
+create queues and put  queries in it
+
+Redshift Security
+
+integrates with AWS KMS or AWS Cloud HSM
+It users 4-tier approach, key based architecture for encryption
+1) master key (choose keys in KMS)
+2) cluster encryption key (CEK)
+3) database encryption key (DEK) 
+4)  data encryption key
+
+IAM to manage user permission for cluster operations
+grant permissions on a cluster basis instead of per table basis
+can add new columns using alter but can't alter existing columns
+sql operations are logged against system tables or download to S3
+monitor performance and queries with cloud watch and redshift web console
+when deleting a redshift cluster, take a final snapshot to S3
+
+Console -> Redshift
+fast simple effective data warehouse 
+
+** Redshift Spectrum
+Run sql queries against datasets in S3 Without loading it
+*Query is then submitted to thousands of Redshift Spectrum Nodes
+** must have a Redshift cluster available to start unlike Athena
+Avro,parquet, csv,json formats supported
+Redshift spectrum makes use of metadata to query from S3
+scale storage and compute independently
+** Eliminate expensive data transfer from S3 to data warehousing solutions (cost effective) 
+Integrates with AWS Athena
+Query against EMR
+
+-------------------------------------------------------------------------------
+AWS Elasticsearch
+Managed service around Elasticsearch
+support ELK stack
+Elasticsearch
+logstach to inject data
+Kibana for dashboard visualization
+use case: 
+fast search
+app/server  monitoring get intelligence from you logs
+
+eg. In DynamoDB we only search by PK or indexes
+With ElastiSearch, you can search any field , even partial matches
+It has usage for Big data applications as well
+you can provision cluster of instances
+Can integrate with Kinesis Data Firehose, AWS IOT, CloudWatch logs
+------------------------------------------------------------------------------------------------
 RDS for Solution Architect w.rt  well Architected 5 pillars
 
 1) Operations
@@ -843,15 +987,21 @@ small downtime when failover happ
 scaling in read replicas/ec2 instance
 DynamoDB:No ops needed, auto scaling and serverless
 S3: No operation required
-
+Athena: serverless
+Redshift: same as of RDS
+Neptune: same as of RDS
+ElasticSearch:  same as of RDS
 
 2) Security
 OS security by AWS
-we will do setting KMS SG,IAM polices , SSL
+we will do setting KMS SmG,IAM polices , SSL
 ElastiCache: use Redis Auth 
 DynamoDB:IAM,KMS,SSL
 S3: IAM,Bucket Policy,ACL,Encryption
-
+Athena: IAM + S3 security
+Redshift: same as of RDS
+Neptune: same as of RDS + IAM
+ElasticSearch: Cognito, IAM,VPC,KMS, SSL
 
 3) Reliability
 Multi AZ , failover in case of failure
@@ -859,17 +1009,23 @@ Aurora: Serverless
 ElastiCache: Multi AZ,Clustering
 DynamoDB:Multi AZ,Backup
 S3: high durability and availability , multi AZ and CRR
-
-
+Athena: managed service, use Presto engine, High available
+Redshift: HA and Auto healing features
+Neptune: Multi AZ, Clustering
+ElasticSearch: multi AZ, clustering
 
 4) Performance
 depends on EC2 instance type, EBS volume type 
 ability to Read replica
 Doesn't auto scale 
 Aurora: 5X faster up to 15 Read Replica
-ElastiCache: 
+ElastiCache: sub millisecond, in memory, read replicas for sharding
 DynamoDB: single digit millisecond, DAX for caching reads
 S3: scales to thousands of read/writes, Transfer acceleration , multi part for big files
+Athena:query scale based on size
+Redshift: 10X faster than other DWH solutions, support Compressions
+Neptune: best for graph clustering 
+ElasticSearch: open source, petabyte scale
 
 5) Cost
 Pay per hour based on EC2 and EBS
@@ -877,30 +1033,10 @@ Aurora: pay per hour based on EC2, cost less than enterprise db like Oracle
 ElastiCache:  Pay per hour based on EC2 and EBS
 DynamoDB: Pay per capacity and storage unit, no need to guess capacity in advance
 S3: pay per storage,network cost , no. of requests
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Athena:pay per query/per TB data scanned, serverless
+Redshift: pay per node provisioned, 1/10 of cost vs other DWS
+Neptune: pay per node as RDS
+ElasticSearch: pay per node as RDS
 
 
 

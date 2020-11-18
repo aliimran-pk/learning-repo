@@ -1,0 +1,150 @@
+---------------------------------------------CloudTrail , Config and CloudWatch ------------------------
+AWS CloudTrail
+who made the request
+what action performed
+what parameter used
+what was end result
+
+its like a chnage log 
+use case: 
+compliance with regulator standards
+troubleshooting
+
+deliver log file to S3(default) or cloudwatch log
+can setup SNS for log file delivery
+
+Trail Types
+1) Multi Region Trail
+One trail of all AWS Regions
+events from all regions can be sent to one CloudWatch logs log group
+
+2) Single Region Trail
+Only event from one specific region
+Destination bucket S3 can be in any region
+
+Log files are automatically encrypted with AWS S3 (SSE server side encryption)
+S3 life cycle rules can be configure to archive/delete logs
+supports log integrity (cant be altered by anyone)
+
+Services - CloudTrail  (its not in the free tier)
+
+Trails -Create trail
+name: cloudtrail_mgmgt_events1
+All Regions = Yes
+Write-only  events
+
+Storage: S3 bucket
+
+Do NOT enable AWS Config and Config Rules if you want to stay in FREE TIER!
+
+----------------AWS Config-----------
+Auditing 
+creates a complete inventory of our AWS resources
+find how resource was configured at any time
+configuration of deleted resources would be maintained
+history file to s3 bucket every 6 hour
+take configuration snapshot when needed
+
+customize config rules for specific resources or for entire aws account
+evaluate compliance against desired configuration
+SNS notification on configuration change
+Group Config rules and remediation actions into conformance packs
+can create lambda functions with custom rules
+can setup auto remediation for each rule (delete elastic ip which is not used, stop ec2 isntance without a TAG)
+Config rules examples (80+ available and custom can be created)
+
+alb-HTTP-HTTPS-redirection-check
+Is HTTP to HTTPS redirection is configured on all HTTP listener of ALB
+
+ebs-optimized-instance 
+EBS optimization enabled
+
+ec2-instance-no-public-ip
+do EC2 having public IP
+
+encrypted-volumes
+EC2 attached with EBS encrypted volumes
+
+eip-restricked
+are elastic ip used
+
+restricted-ssh
+security groups use disallow unrestricted incoming ssh traffic
+
+AWS Config is not free
+more rules = more cost
+
+
+Console - AWS Config
+Settings
+Rules
+
+
+---------------------AWS CloudWatch ---------------------
+
+AWS CloudTrail
+tracks changes , who made an API call to modify the resource
+
+AWS Config
+What did my AWS resource look like a year back
+enables you to assess, audit, and evaluate the configuration of your AWS resources
+
+CW is all about Mornington and observability service
+informs of logs,metrics and events
+set alarms , visualize logs , take automated actions and troubleshot issues
+
+Create DashBoard
+Choose Metric
+Choose Resource
+
+CloudWatch Alarms (Based on metrics)
+related to metrics
+you can create alarms on an Amazon EC2 instance CPU utilization
+Amazon ELB request latency
+Amazon DynamoDB table throughput,
+Amazon SQS queue length, or even the charges on your AWS bill
+take immediate action
+
+Logs
+log groups
+
+Cloudwatch Insights
+write queries and get actionable insight from your logs
+
+By default, Amazon CloudWatch does NOT have access to operating system metrics like memory consumption
+
+CloudWatch Metrics
+
+
+CloudWatch Events  (related to resources)
+near read-time stream of systems events that describe changes in AWS resources
+related to resources and sends notifications out to targets
+eg. 
+trigger when someone stop an ec2 instance
+call lambda when EC2 starts
+notify SNS topic when auto scaling event happs
+Also you can schedule events , use unix cron syntax
+
+AWS CloudTrail only records API calls for future references But cloud watch events allow you to take actois
+
+X-Ray is used to trace your application
+CloudWatch is used to monitor your application
+Cloudwatch SeviceLens monitors issues with Microservice based applications
+unified access 
+
+Container Insight
+used a pattern called service mesh
+monitor,troubleshoot and set alarms for your containerized applications running in EKS,ECS and Fargate
+
+CloudWatch logs
+monitor and troubleshoot using system,application and custom log files
+monitor for patterns in logs and trigger events based on them 
+long term log retention default = forever
+archive to s3
+Stream to ES Amazon Elastic Search cluster using cloudwatch log subscription
+
+Cloudwatch Logs Agents
+Installed on EC2 to move logs from servers to CloudWatch logs
+
+
+

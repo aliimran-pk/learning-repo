@@ -1,7 +1,16 @@
 --------------------------DATABASES--------------------------------------------
 DB provides Organised persistent storage
 
-If DB down 
+Questions to choose right database based on your architecture
+read heavy , write heavy , balanced workload , how much Throughput need
+scaling or fluctuate
+how much data to sore and how long, will it grow, avg object size
+data durability
+latency requirements 
+concurrent users
+data model, joins , structured, semi structure
+strong schema,,reporting
+License costs , migration to cloud
 
 Availability 
 app will not communicate with DB
@@ -155,7 +164,7 @@ use cases: session management, geospatial apps
 
 DB Scenarios
 
-A start up wih quickly evolving tables  ElastiCache
+A start up with quickly evolving tables  ElastiCache
 DynamoDB
 
 Transaction app need to process millions of TPS
@@ -170,7 +179,7 @@ ElastiCache
 Relational DB for analytical processing of Petabyte of data
 RedShift
 
---------- Amazon RDS----------------
+--------- Amazon RDS--------------------------------------------------------------------------
 
 RDS is a managed service
 For a managed service , you no need to worry about
@@ -187,9 +196,9 @@ MariaDB (enhanced mysql for enterprises)
 Oracle DB
 Microsoft SQL Server
 
-Multi AZ deployments (standby in another AZ)
+** Multi AZ deployments (standby in another AZ)
 
-Read Replica
+** Read Replica
 Same AZ, Multi AZ, Cross Region
 auto scaling storage
 
@@ -302,11 +311,10 @@ create table users ( id integer, username varchar(30) );
 insert into users values(1, "Ranga");
 select * from users;
 
-
-
 RDS -Security and Encryption
 
 1) At Rest Encryption
+through IAM and SG
 encrypt master and read replica with AWS KMS - AEC-256 encryption
 Encryption has to be defined at launch time
 * If master is not encrypted, the read replica can't be encrypted
@@ -354,7 +362,8 @@ data transfer cost
 Not with in AZ
 With outside Region
 
------------------------------------Amazon Aurora ----------------
+-----------------------------------Amazon Aurora ------------------------------------------
+
 It is propriety of AWS and not open sourced
 AWS cloud optimized and claim 5X performance over MySQL and 3X over Postgres
 Storage automatically grow inclemently of 10GB up to 64GB
@@ -362,7 +371,8 @@ Storage automatically grow inclemently of 10GB up to 64GB
 Instance failover
 Cost is 20% than RDS but is efficient
 
-it maintains 6 copies of  your data across 3 AZ
+** it maintains 6 copies of  your data across 3 AZ
+* Read Replicas can be Global 
 4 copies out of 6 for writes
 3 copies out of 6 for reads
 replication + self healing + auto expanding  
@@ -372,7 +382,11 @@ Primary instance  read/write to cluster vol and Replicas read from cluster volum
 provides Global database options (multiple regions)
 support for cross region replication
 Backtrack: restore data at any point of time without using backups
-Aurora Security similar to RDS as it uses same engine
+** Aurora Security similar to RDS as it uses same engine
+auto scaling  of storage from 10GB to 64 GB
+
+use case:
+same as RDS but with less maintenance / more flexibility / more performance
 
 Deployment Option
 
@@ -486,13 +500,16 @@ sits b/w client app (including lambda) and RDS
 
 ------------------AWS ElasticCache-------------------------------------------
 Managed Service
-Highly scalable and low latency in-memory data store
-u can store in memory data in EC
+Highly scalable and low latency in-memory key value data store
+*sub millisecond latency
+** u can store in memory data in EC
 as a distributed caching solution
-
+** must provision an EC2 instance type
 WRITE scaling using sharding
 READ scaling using Read Replicas
 Multi AZ with failover 
+*point in time restore feature
+* can't use SQL
 
  Cash Miss
  get data from db
@@ -515,7 +532,7 @@ Multi AZ with failover
  memcached supports SASL based authentication
  
  
- Redis and Memcached are two Custer engine for ElasticCache
+** Redis and Memcached are two Custer engine for ElasticCache
  
 1) Redis
 in memory persistence data store
@@ -595,6 +612,9 @@ application which required milli second latency but at v high scale
 Enables event driven programming with DynamoDB streams
 Throughput can be extended temporary using "burst credits"
 "ProvisionedThroughputException" when burst credits are empty so it is advised to do exponential back-off retry
+* can only query on primary key, sort key or indexes
+* can replace ElasticCache as key/value store for storing session data
+
 
 Hierarchy 
 Table ->Items -> attributes (key value pairs)
@@ -810,4 +830,80 @@ can be enabled/disabled
 EC2 -> DynamoDB -> DynamoDB Streams -> Lambda -> SNS
 use case: send email when user registered
 streams allow iteration through records (last 24 hrs) as batch
+
+--------------------------------------------------------------------------------------------
+S3 is a key/value store for objects like a DB
+Great for big objects (5 TB) and not for small objects
+serverless,
+
+RDS for Solution Architect w.rt  well Architected 5 pillars
+
+1) Operations
+small downtime when failover happ
+scaling in read replicas/ec2 instance
+DynamoDB:No ops needed, auto scaling and serverless
+S3: No operation required
+
+
+2) Security
+OS security by AWS
+we will do setting KMS SG,IAM polices , SSL
+ElastiCache: use Redis Auth 
+DynamoDB:IAM,KMS,SSL
+S3: IAM,Bucket Policy,ACL,Encryption
+
+
+3) Reliability
+Multi AZ , failover in case of failure
+Aurora: Serverless 
+ElastiCache: Multi AZ,Clustering
+DynamoDB:Multi AZ,Backup
+S3: high durability and availability , multi AZ and CRR
+
+
+
+4) Performance
+depends on EC2 instance type, EBS volume type 
+ability to Read replica
+Doesn't auto scale 
+Aurora: 5X faster up to 15 Read Replica
+ElastiCache: 
+DynamoDB: single digit millisecond, DAX for caching reads
+S3: scales to thousands of read/writes, Transfer acceleration , multi part for big files
+
+5) Cost
+Pay per hour based on EC2 and EBS
+Aurora: pay per hour based on EC2, cost less than enterprise db like Oracle
+ElastiCache:  Pay per hour based on EC2 and EBS
+DynamoDB: Pay per capacity and storage unit, no need to guess capacity in advance
+S3: pay per storage,network cost , no. of requests
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

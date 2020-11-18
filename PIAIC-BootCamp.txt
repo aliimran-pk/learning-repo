@@ -154,7 +154,7 @@ bootstrap alternative
 npm install tachyons
 http://joeschmoe.io
 
- <img src="///api/v1/ jon "> 
+ <img src="///API/v1/ jon "> 
 
 ---------------------------------------------Expense Tracker-------------------------------------------
 
@@ -184,9 +184,9 @@ Surge URL : http://covid19-tracking-app-bybilal.surge.sh/
 Material UI
 
 
-https://covid19.mathdro.id/api/countries
-https://covid19.mathdro.id/api/countries/PK
-https://covid19.mathdro.id/api/daily  (For all Daily data)
+https://covid19.mathdro.id/API/countries
+https://covid19.mathdro.id/API/countries/PK
+https://covid19.mathdro.id/API/daily  (For all Daily data)
 
 
 aliimran-piaicbootcamp-covid19-tracker.surge.sh

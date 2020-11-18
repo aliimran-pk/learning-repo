@@ -15,7 +15,7 @@ run on  demand
 scaling is automated
 pay per request and compute time
 integrate with whole  suite of services
-easy to get mre resource per functions (up to 3GB of RAM)
+easy to get more resource per functions (up to 3GB of RAM)
 
 
 Language support
@@ -115,7 +115,7 @@ MEMORY = the more memory the more CPU
 Price proportional to Memory 
 
 TimeOut  of lambda function  = 3 seconds is default 
-max timeout = 15 mins
+** max timeout = 15 mins 
 
 stateless - store data to S3 or DynamoDB
 500 MB of non persistent disk /tmp
@@ -252,7 +252,7 @@ Action -> Deploy API
 Deployment Stage:  New Stage
 Stage Name:Dev
 
-URL: 	https://ruvdffuyq5.execute-api.ap-south-1.amazonaws.com/Dev
+URL: 	https://ruvdffuyq5.execute-API.ap-south-1.amazonaws.com/Dev
 
 Canary Deployment
 sent a % request to a no. of users
@@ -339,7 +339,6 @@ synchronize data from device to Cognito
 May be deprectead and replaced with AppSync
 --------------------------------------Lambda@Edge---------------------------------------------------------
 
-
 running lambda functions at end location
 to run a global AWS Lambda alongside
 how to implement request filtering before reaching your application
@@ -367,18 +366,21 @@ only supports node.js and python
 No free tier and more expensive than lambda
 
 ** ServerLess Application Model(SAM)
-how to test serverless projects with lambda,api gateway and dynaDB in local
+SAM is a framework for developing and deploying serverless applications
+All configurations in YAML code
+** how to test serverless projects with lambda,API gateway and dynaDB in local
 its a open source
 yaml file with all serverless resources, cloud formation template
+SAM can use CodeDeploy to deploy lambda functions
 
 AWS AppSync
 apps continue to work offline
 data sysnc when connect again
-based on GraphQL (FB framework ) get data from multiple api
+based on GraphQL (FB framework ) get data from multiple API
 can integrate with nosQL db, rds and lambda
 
-------------------------------------------------------------------------------------------------
-AWS Step Functions
+-----------------------------------------AWS Step Functions-------------------------------------------------------
+
 build distributed applications using visual workflows
 
 Crate a serverless workflow in 10 mins using visual approach
@@ -417,4 +419,93 @@ one of those Activity worker pick up Activity1 and send results  to SWF
 SWF update workflow history and then schedule another decision task
 until decider to close workflows
 SWF archivers history and close workflow
+
+
+-----------------------------------------------------------------------------------
+** Mobile Application Scenario
+
+1) Rest API
+Mobile Client (Https) -> API Gateway (invoke ) -> AWS Lambda  (query)-> DynamoDB
+Mobile Client (Authenticate) -> AWS Cognito (verify auth) -> API Gateway
+
+2) Access S3
+Mobile Client (Authenticate) -> AWS Cognito (generate temp credentials) -> AWS STS security token service
+Mobile Client (store/retrieve files) -> S3
+
+3) High read throughput , static data
+ie many RCU
+
+Mobile Client (Https) -> API Gateway (invoke ) -> AWS Lambda  (query)->  DAX Caching Layer -->  DynamoDB
+For static 
+Can cache data at API gateway level
+
+4) myblog.com , scale globally severing static content
+
+static website in S3 which is regional
+
+Client (interact with edge loc) --> AWS CloudFront -> S3
+to communicate securely with S3
+
+Client (interact with edge loc) --> AWS CloudFront (OAI) -> S3(bucket policy)
+to send welcome email
+
+DynamoDB (stream changes) -> DynamoDB Stream(invoke Lambda) -> Lambda (SDK to send email) -> SES Simple email service
+
+5) thumb flow generation
+Client (interact with edge loc) --> AWS CloudFront (OAI) -> S3(triggers) -> lambda(generate thumbnail ) -> S3
+
+-------------------------------***-----Microservice------------------------------------------
+ Synchronous Patterns
+ API Gateway, Load Balancer
+
+Asynchronous Patterns
+SQS,SNS,Kinesis,Lambda Triggers (S3)
+
+Distributed paid content
+want to send links of our videos to premium user ie who paid amount
+application should be global and want full serverless
+
+Client (get Premium URL) -> API Gateway (invoke Lambda) -> Lambda (verify preimum user)-> DynamoDb 
+Lambda  (generate url)> AWS CloudFront (using OAI) - S3
+
+** S3 signed URL are not efficient for global access
+
+Software Updates Offloading
+caching at the edge
+use cloudFront
+CloudFront is easy way to make an existing application more scalable and chepre
+
+Client --> CloudFront --> ALB --> ASG (EC2) --> Elastic File System (software updates)
+
+** Big Data Ingestion Pipeline
+should be fully serverless
+
+
+IOT Devices -> AWS IoT Core -> Kinesis Data Stream -> Kinesis Firehose -> S3 ingestion bucket
+S3 ingestion bucket -. Lambda -> Athena to Query bucket data -> S3 storage for reporting
+-> Aws QuickSight (AWS business intelligence tool)
+
+*Streams enable DynamoDB to get a changelog and use that changelog to replicate data across regions
+**SQS allows you to retain messages for days and process them later, while we take down our EC2 instances
+** CloudFront Signed URL have security including IP restriction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

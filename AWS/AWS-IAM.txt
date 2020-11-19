@@ -108,25 +108,87 @@ AWS as Identity provider
 its a managed service 
 single point of failure, high available,
 
+Aws planes of access
+
 Control Plane
+access to aws instances operations
+via aws API 
+
 Data Plane
+allow access to aws compute instances
+------------------------------------------------------------------------------------------------------
 
 AWS Federation
 centrally managed to access AWS resources
-single singn on
+single sign on
 SAML security access markup language 
 cross account access
 OPENid connect (OIDC) tokens 
 AD is a common Identity provider
 
-AWS SSPO can interact with Active directory
-Amazon Cognito 
+1) SAML 2.0 Federation (old way) (not recommended by aws)
+* To integrate Active Directory or ADFS (any SAML 2.0)
+provide access to AWS console/CLI using temp credential
+* No need to create IAM user for each of your emplSAML) to assume the role which return temp credentials
+c) user use these temp credentials to access S3
 
+** New way is to use AmazonSingle Sign on federation
+
+2) Custom Identity Broker Application
+if your Identity provider is not compatible with SAML 
+it uses STS API, AssumeRole or GetFederationToken
+
+user-> Identity Broker -> get temp credentials from STS
+
+3) Web Identity Federation AssumeRoleWithWebIdentity (not recommended by aws)
+Mobile App -- validate from Google > STS
+
+4) Amazon Cognito 
+Provide direct access to AWS resources from client side (mobile,web ap)
+provide temp access to write to S3 using Facebook login with creating IAM users for applcaiton user
+
+------------------------------------------------------------------------------------------------------
+Microsoft Active Directory (AD)
+centralized security management
+objects are organized into trees and a group of trees is a forest
+Each system is connect to domain controller which validates and able to log in from any machine in the same network
+
+AWS Directory Service
+user data mgmt service
+It provide AWS access to on-premise users without IAM users
+
+Option1: AWS Managed  Microsoft AD
+create our own AD in AWS
+* manage users locally
+**supports MFA
+more than 5000 users
+Trust relationship needed b/s AWS and on-premise directory
+
+Option2: AD Connector
+Directory Gateway (proxy) to redirect  directory requests to on premise AD
+without caching info in the cloud
+small : 500 users
+large: 5000 users
+* users are managed on the on premise AD
+use your existing on-premise directory with AWS cloud services
+your users use existing credential to access AWS resources
+
+Option3: Simple AD
+less than  than 5000 users
+powered by Samba4
+** can't joined with  on premise AD
+Doesn't support Trust relationship with other AD domains
+
+
+Console -> Directory Service
+
+----------------------------------------------------------------------------------------
+AWS SSPO can interact with Active directory
 account name, pwd and email address of root user can be changed 
 
 MFA 
 multi-factor authentication 
-can be used to delete S3 objets
+can be used to delete S3 objects
 
 IAM Roles
 delegate access eg. apps to EC2 for S3 bucket
@@ -197,5 +259,189 @@ federated user
 Explicit Denied
 Explicit Allow overrides Implicit Deny
 Explicit Deny overrides everything
+
+-------------------------------------------------------------------------------------
+
+IAM Scenarios
+
+1) A user in one AWS account wants to access a resource in another AWS account (cross account Access)
+ie Dev AWS account , PROD AWS account
+Sol: IAM Role
+
+
+Corporate Directory Federation
+1)user authenticated wit a corporate directory,  send token to IAM and get permissions if SAML 2.o complaint direcpty
+2)for Microsoft AD then ou can use AWS directory Service
+3) set up a custom proxy server to translate user identities from enterprise to IAM roles
+
+
+IAM - Web Identity Federation
+
+1) authenticate users using web identities 
+eg open id (Facebook,google)
+
+2) Amazon Cognito supports login with FB, google or other open id compatible identity providers
+
+3) configure role to use Web Identity as trusted entity
+authentication token exchanged using STSAssumeRoleWithWebIdentity API
+
+1) Identity Based policies
+attached to IAM User, Group or Role
+managed and Inline
+Focus: what resource , what action ?
+eg. 
+
+User Can list S3 bucket named Bucket1
+
+user access resource directly from is aws account user can switch role 
+All services supported
+
+2) Resource Based Policy
+attached to resource, S3 buckets, SQS, and AWS KMS keys
+Inline Only
+Focus: Who (which account, it is public), what action ?
+Account A can read and modify
+Public can read
+cross-account access: user access resource directly from is aws account
+subset of  services supported
+
+IAM Scenarios
+
+1) How to rotate access keys without causing problem
+create a  new access key
+use new access key in all apps
+disable original access key
+test and verify
+delete original key
+
+2) Multiple Permission resolved
+By Default Deny (no explicit allow/deny)
+if explicitly deny and no explicit  allow then deny
+if explicitly allow and no explicit  deny then allow
+
+IMP
+IAM users identities exits until thy are explicit ly deleted (no expiration)
+IAM allow you to create a password policy
+Account Setting --> Set pwd policy
+An IAM role can be added to a already running EC2 instance, immediate effective
+An IAM role is not associated with IAM user
+An IAM role is not associated with long term credentials
+
+when a user , resource or an application Assume a Role, it is provided with temporary credentails
+
+
+-----------------------------------------------------------
+Amazon STS , Security Token Service
+Allows to grant limited and temporary access to AWS resources
+Token is valid up to1 hour (must be refreshed)
+
+AssumeRole
+within our account for enhance security
+cross account access: assume rile in target account to perform action there
+
+AssumeRoleWithSAML
+return credentials for users logged with SAML
+
+AssumeRoleWithWebIdentity
+return credentials for user logged with IdP (facebook)
+AWS recommend Congnito for this
+
+GetSessionToken
+For MFA from a user or AWS account root user
+
+
+**accessing production app in another account (prod) using dev account
+admin create role and provide read/write to S3 in production account
+admin  creates dev group and assign permission to that group in dev account to assume the role
+when user request to access the role, sts return role credentials
+user than able to update in production app using this role credentials
+
+STS is good for cross account access
+
+---------------------------------------------------------------------------
+Manage AWS Accounts
+diff accounts for diff env and diff business units
+centralized management, consolidated billing, security, compliance
+
+AWS ORGANIZATIONS
+Global service
+The main account is master account, you can't change it 
+others are member account
+API is available to automate AWS account creation
+Organize accounts into Organizational UnitsOU 
+centralized compliance mgmt for AWS config rules
+Send AWS CloudTrail Data to one S3 bucket (across accounts)
+AWS Firewall Manager to manage firewall rules across org accounts
+WAF,Shield Adv protection, security groups
+**Service Control policies SCPs to define restrictions across accounts
+eg. 
+prevent users from disabling AWS config or rules
+EC2 is always of specific type
+require MFA to stop EC2 instance
+require to have a must tag  on a resource
+
+Multi Account Strategies
+create account based on
+department
+cost Center
+environment
+better resource isolation VPC ie separate per account service limit
+
+AWS RESOURCE ACCESS MANAGER
+share resources with any AWS account or within your AWS org
+eg.
+AWS Transit Gateways
+subnets
+AWS License manager configurations
+S3 Resolver rules
+it reduced operational overhead and optimized costs
+
+AWS TRUSTED ADVISOR
+recommendations for cost optimization, performance, security and fault tolerance
+All AWS customers get 4 checks free
+1) service lints
+2) SG\ having unrestricted access
+3) Proper use of IAM
+4) MFA on Root Account
+
+
+Business or Enterprise AWS support plan provides over 50 checks
+ie
+how much u saved with reserved instances
+resource utilization look like ? are u right sized  for ur load ?
+
+Recommendations by Trust Advisor
+
+Cost Optimization
+highlight unused resources
+opportunities to reduce costs
+
+Security
+Settings that make sol more secure
+
+Fault tolerance
+Increase resiliency 
+redundancy improvements, over utilized resources
+
+Performance
+Improve speed and responsiveness
+
+Service Limits
+identify if service usage > 80% of service limits
+
+AWS SERVICE QUOTAS
+AWS account has regional-specific default quotas or limits for each service
+aService Quotas allows you to manage your quotas /limits for over 100 AWS services
+from one location
+
+
+
+
+
+
+
+
+
+
 
 

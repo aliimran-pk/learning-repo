@@ -1,17 +1,40 @@
 ---------------------------------------------CloudTrail , Config and CloudWatch ------------------------
-AWS CloudTrail
+Cloud Watch Metrics
+provides metrics for each service in AWS
+Metric is a variable to monitor (CPUUtilization, Networking)
+Metric belongs to a namespace(category)
+Dimension  is an attribute of a metric (Instance id, environment)
+Up to 10 dimensions per metric
+Metric have timestamps
+can create CloudWatch Dashboards of metrics
+
+* EC2 Memory usage is by default not pushed (must be pushed from inside the instance as custom metric)
+Possibility  to define and send your own custom metrics to CloudWatch
+Metric resolution
+standard: 1 min
+High resolution: up to 1 sec (StorageResolution API parameter) , Higher cost
+use API call PutMetricData
+
+** The number of instances in an ASG cannot go below the minimum, even if the alarm would in theory trigger an instance termination
+
+------- AWS CloudTrail-----------------------------------
+Provides governance , compliance and audit for your AWS Account
+CloudTrail is enabled by defauly
+Can put logs from Cloudtrail into CloudWatch logs
 who made the request
 what action performed
 what parameter used
 what was end result
 
-its like a chnage log 
+its like a change log 
 use case: 
 compliance with regulator standards
 troubleshooting
 
 deliver log file to S3(default) or cloudwatch log
 can setup SNS for log file delivery
+
+** If a resource is delete in AWS, look into CloudTrail First
 
 Trail Types
 1) Multi Region Trail
@@ -37,14 +60,17 @@ Storage: S3 bucket
 
 Do NOT enable AWS Config and Config Rules if you want to stay in FREE TIER!
 
-----------------AWS Config-----------
+----------------AWS Config--------------------------------------------------------
 Auditing 
 creates a complete inventory of our AWS resources
+helps record configurations and changes over time
 find how resource was configured at any time
 configuration of deleted resources would be maintained
 history file to s3 bucket every 6 hour
 take configuration snapshot when needed
-
+* AWS config is a per-region service
+can be aggregated across regions and accounts
+You can receive alerts SNS for any changes
 customize config rules for specific resources or for entire aws account
 evaluate compliance against desired configuration
 SNS notification on configuration change
@@ -52,6 +78,13 @@ Group Config rules and remediation actions into conformance packs
 can create lambda functions with custom rules
 can setup auto remediation for each rule (delete elastic ip which is not used, stop ec2 isntance without a TAG)
 Config rules examples (80+ available and custom can be created)
+can make custom config rules
+rules can have auto remediation
+Questions that can be solved by AWS config
+Do my buckets have public access
+How my ALB configurations changed over time
+Is there unrestricted SSH access to my SG
+Config rules are not free, $2 per active rule per region per month
 
 alb-HTTP-HTTPS-redirection-check
 Is HTTP to HTTPS redirection is configured on all HTTP listener of ALB
@@ -77,7 +110,13 @@ more rules = more cost
 
 Console - AWS Config
 Settings
-Rules
+Record All resources
+S3 bucket : myAWSconfigBucket
+Create AWS config service-linked role
+select config rule
+restricted -ssh   (don't allow 22 port)
+Resources: EC2: Security Group
+
 
 
 ---------------------AWS CloudWatch ---------------------
@@ -89,41 +128,79 @@ AWS Config
 What did my AWS resource look like a year back
 enables you to assess, audit, and evaluate the configuration of your AWS resources
 
-CW is all about Mornington and observability service
+AWS CloudWatch is all about Mornington and observability service
 informs of logs,metrics and events
 set alarms , visualize logs , take automated actions and troubleshot issues
 
-Create DashBoard
+1) Create DashBoard
+great way for quick access to key metrics
+** Dashboards are global
+** Dashboards can include graphs from different regions
+can change time zone , automatic refresh
+3 dashboard (up to 50 metrics) are free
+$3 /dashboard/month afterwards, quite expensive
+
+name : MysysDashBoard
+select widgets , Line
+metric: CPU Utilization
+
+If I switch region, then even I can see MysysDashBoard as it is Global
+
 Choose Metric
 Choose Resource
 
-CloudWatch Alarms (Based on metrics)
+-------------CloudWatch Alarms (Based on metrics)---------------------
 related to metrics
 you can create alarms on an Amazon EC2 instance CPU utilization
 Amazon ELB request latency
 Amazon DynamoDB table throughput,
 Amazon SQS queue length, or even the charges on your AWS bill
 take immediate action
+An alarm on a High Resolution metric can be trigger as often as 10 sec
 
-Logs
-log groups
+** EC2Instnace recovery
+setup a cloudwatch alarm (StatisCheckFailed_system) that when trigger
+do instance recovery 
+same Private IP, Public IP, ElatiC IP, metadata and placement group
+
+
+-------------- CloudWatch Logs-----------------------------------------------------
+
+log groups: represent app name
+log stream: log files/containers
+**  can define log expiration policies 
+use AWS CI to tail CloduWatch logs
+** to send logs to CloudWatch, make sure IAM permission are correct
+Encryption of logs using KMS at Group level
+monitor and troubleshoot using system,application and custom log files
+monitor for patterns in logs and trigger events based on them 
+long term log retention default = forever
+archive to s3
+Stream to ES Amazon Elastic Search cluster using cloudwatch log subscription
+** By default, Amazon CloudWatch does NOT have access to operating system metrics like memory consumption
 
 Cloudwatch Insights
 write queries and get actionable insight from your logs
 
-By default, Amazon CloudWatch does NOT have access to operating system metrics like memory consumption
-
-CloudWatch Metrics
-
-
 CloudWatch Events  (related to resources)
 near read-time stream of systems events that describe changes in AWS resources
+schedule: cron jobs
+event pattern: rules eg CodePipeline state changes
 related to resources and sends notifications out to targets
+Event creates a small JSON document to give info about the chnage
 eg. 
 trigger when someone stop an ec2 instance
 call lambda when EC2 starts
 notify SNS topic when auto scaling event happs
 Also you can schedule events , use unix cron syntax
+
+Practical
+Events - Create Rule
+Event Pattern
+Service Name: CodePipeline
+Event type: CodePipeLine execution state change
+specific state: FAILED
+Target - SNS Topic
 
 AWS CloudTrail only records API calls for future references But cloud watch events allow you to take actois
 
@@ -136,15 +213,46 @@ Container Insight
 used a pattern called service mesh
 monitor,troubleshoot and set alarms for your containerized applications running in EKS,ECS and Fargate
 
-CloudWatch logs
-monitor and troubleshoot using system,application and custom log files
-monitor for patterns in logs and trigger events based on them 
-long term log retention default = forever
-archive to s3
-Stream to ES Amazon Elastic Search cluster using cloudwatch log subscription
-
 Cloudwatch Logs Agents
-Installed on EC2 to move logs from servers to CloudWatch logs
+By default no logs from your EC2 machine will got to CloudWatch
+** Installed on EC2 to move logs from servers to CloudWatch logs
+Can also installed on premise server
+
+create EC2
+create and assign role to access EC2 for CloudWatch
+go to EC2 instance
+sudo yum update -y
+sudo yum install -y awslogs
+etc/awslogs/awscli.confg (change region to current region)
+sudo  systemctl start awslogsd
+
+CloudWatch Unified Agent
+logs at lot more granularity level
+**Newer version of agent
+**Collect additional system level metrics such as Ram, Processes t
+Centralized configuration using SSM Parameter store
+CPU metric (active, idle)
+RAM(FREE, USED)
+Processes(total, dead,idle)
+Netstat(no of TCP and UDP connections, bytes)
+
+--------------------------------------------------------------------------------------
+**  For an Elastic Load Balancer
+
+CloudWatch
+monitor incoming connection metrics
+visualize error codes as a % over time
+make a dashboard to get idea of LB performance
+
+Config
+Track SG rules for LB
+ensure SSL certificate is always assigned t LB for compliance
+
+CloudTrail
+track who made any chnages to LB with API calls
+
+
+
 
 
 

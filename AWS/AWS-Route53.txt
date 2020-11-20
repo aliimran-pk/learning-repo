@@ -75,7 +75,7 @@ value : all public ips of EC2 there
 TTL= 60 sec
 Routing Policy = Simple
 save record set
-Now on Ec2 instance
+Now on EC2 instance
 ping simple.stephenrheteacher will returns one of the public ip of EC2
 
 2) Weighted Routed Policy

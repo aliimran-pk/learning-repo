@@ -313,7 +313,7 @@ use new access key in all apps
 disable original access key
 test and verify
 delete original key
-
+SCP
 2) Multiple Permission resolved
 By Default Deny (no explicit allow/deny)
 if explicitly deny and no explicit  allow then deny
@@ -364,11 +364,23 @@ diff accounts for diff env and diff business units
 centralized management, consolidated billing, security, compliance
 
 AWS ORGANIZATIONS
+Orgs enables you to certainly apply policy based controls across multiple accounts 
+
 Global service
 The main account is master account, you can't change it 
 others are member account
 API is available to automate AWS account creation
 Organize accounts into Organizational UnitsOU 
+
+RootOU
+	Master Account
+		ProdOU
+			Account A
+				HR OU
+					Account B
+				Finmance OU
+					Account C
+
 centralized compliance mgmt for AWS config rules
 Send AWS CloudTrail Data to one S3 bucket (across accounts)
 AWS Firewall Manager to manage firewall rules across org accounts
@@ -387,6 +399,116 @@ cost Center
 environment
 better resource isolation VPC ie separate per account service limit
 
+
+Service Control Policies (SCP)
+used to whitelist/black  IAM actions
+applied at OU or Account Level 
+don't apply to master account
+SCP is applied to all users and roles of the account
+Doesn't  effect service link roles
+SCP must have a explicit allow (does not allow anything by default)
+
+use cases: 
+restrict access to certain services(can't use EMR)
+enforce PCI compliance 
+
+** Precedence at higher level takes over the lower level element
+
+Parent 
+Allow All
+
+Child
+deny scp
+even than it allow 
+
+
+Practical
+
+create a account
+aws-course-master
+console -> AWS Organisations
+Create Organization
+verify master account via email
+master account is with *
+Add Account
+Invite account
+aws-child-account@stepheman -marerek.com
+
+Go to aws-child-account@stepheman -marerek.com
+Organisations > Invitations
+Accept
+
+Go to aws-master-account@stepheman -marerek.com
+Organizations --> Organise Accounts
+
+Root (create 3 OU under root OU)
+
+Dev
+Test (master account)
+Prod
+	HR (child account)
+	Finance	
+
+Now move child account to HR OU
+and move master account to Test OU
+
+Go to root and enable Service  Policies
+
+Go to Policies
+Create Policy
+DenyAccessAthena
+
+Assign DenyAccessAthena policy to HR OU
+Now the child account not able to use Athena 
+
+---------------------------------------------------------------------------------------
+IAM Conditions
+make IAM policies bit more restricted using Condition element in the JSON
+
+aws:SourceIP restrict the client IP from the API calls are being made
+aws:RequestedRegion: restrict the region 
+Restrict based on tags : ie can only stop EC2 whose tag include test
+Force MFA: only stop/start EC2 if you have MFA enabled
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------
+
 AWS RESOURCE ACCESS MANAGER
 share resources with any AWS account or within your AWS org
 eg.
@@ -395,6 +517,7 @@ subnets
 AWS License manager configurations
 S3 Resolver rules
 it reduced operational overhead and optimized costs
+
 
 AWS TRUSTED ADVISOR
 recommendations for cost optimization, performance, security and fault tolerance

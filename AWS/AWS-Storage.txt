@@ -33,7 +33,7 @@ used for temporary data (ephemeral storage)
 life-cycle tied  to EC2 instance
 used for cache or scratch files
 data is not lost on instance reboot
-only some ec2 instance types supports instance store
+only some EC2 instance types supports instance store
 Boot time is slower then EBS backed volumes and usually less then 5 min
 
 
@@ -114,7 +114,7 @@ cd  ..
 sudo umount /data
 
 
-Now disconnect a secondary vol from insatnce B and attach it to another ec2 A
+Now disconnect a secondary vol from insatnce B and attach it to another EC2 A
 
 Now open Instance A
 No need to create the file system as it is already created
@@ -354,7 +354,7 @@ Yes
 4) Attach an EBS volume to two EC2 instances (at the same time)
 No
 
-5) Switch EBS vol from EC2 to another Ec2
+5) Switch EBS vol from EC2 to another EC2
 Yes, detach and attach
 
 6) Will an EBS volume be immediately available when attached to an EC2 instance ?
@@ -366,7 +366,7 @@ Enable delete on termination
 8) retain EBS vol even if EC2 backed instance fail
 On termination all data on root is lost even if EBS backed
 so detach EBS vol before terminating the instance and recover data by connecting 
-it to another eC2 instance
+it to another EC2 instance
 use snapshot
 
 9) How to Create EBS volume from EBS volume in diff AZ in same region

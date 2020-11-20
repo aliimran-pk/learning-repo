@@ -591,14 +591,14 @@ SFTP : 22
 Yes
 
 
-2) A new SG is created and assigned to a DB and Ec2
+2) A new SG is created and assigned to a DB and EC2
 they can't talk as SG doesn't allow inbound traffic by default
 
-3) A default SG is created and assigned to a DB and Ec2
+3) A default SG is created and assigned to a DB and EC2
 they CAN talk as SG has a rule allowing traffic b/w resources with same SG
 
 NACL Network Access Control Listener
-SG control traffic to specific resources like ec2 ina subnet
+SG control traffic to specific resources like EC2 ina subnet
 NACL control traffic stopping even entering the subnet
 stateless firewall at subnet level
 Each subnet must be associated with NACL
@@ -672,7 +672,7 @@ Apply Policy
 
 
 cmd
-aws configure  (store aws credentials on the ec2 instance which is not a good practice)
+aws configure  (store aws credentials on the EC2 instance which is not a good practice)
 
 aws s3 ls
 aws s3 ls bucketName
@@ -1345,7 +1345,7 @@ using public IP address for communication b/e EC2 instances can get expensive
 use private IP address
 
 Data transfer is free with same AZ
-Ec2,RDS,Redshift,ElasticCache,ElastiC Network Interface
+EC2,RDS,Redshift,ElasticCache,ElastiC Network Interface
 
 Data transfer is free with same AZ
 between EC2 and S3,G\lacier,DynamoDB,SNS,SWS,Kinesis

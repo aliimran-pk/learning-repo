@@ -461,7 +461,7 @@ DenyAccessAthena
 Assign DenyAccessAthena policy to HR OU
 Now the child account not able to use Athena 
 
----------------------------------------------------------------------------------------
+----------------------------------IAM Advanced-----------------------------------------------------
 IAM Conditions
 make IAM policies bit more restricted using Condition element in the JSON
 
@@ -470,54 +470,77 @@ aws:RequestedRegion: restrict the region
 Restrict based on tags : ie can only stop EC2 whose tag include test
 Force MFA: only stop/start EC2 if you have MFA enabled
 
+IAM for S3
+ListBucket permission applies to bucket level permission arn:awn:s3:::test
+GetObject,PutObject,DeleteObject applies to Object level  arn:awn:s3:::test/*
 
+IAM Roles vs Resource Based Policies
+attach a  policy to a resource vs attaching of a using role as proxy
 
+user1 need to access S3 in other account
+Option1:   User1 (Account A)   -- Role (Account B)   S3 (Account B)
+when u assume a role , you give up your original permission and take the 
+permissions assigned to the role
 
+Option2: User1(Account A) --> S3 bucket polices - S3
+ when using a resource based policy , the principal  doesn't have to give up his permission
+hence can do both actions in the Account A and Account B
 
+Resource based policy is used by
+S3, SN S, SQS
 
+IAM Permission Boundaries
 
+IAM permission should be in IAM permission boundary to effect
 
+Create a user: user1
 
+Add Policy
+AdministratorAccess
 
+Add Permission Boundary
+AmazonS3FullAccess 
 
+No user1 can only have S3 full access as this comes under his boundry
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Explicitly deny is most powerful = deny
+Deny Evaluation -> Organization SCP -> Resource based policies -> IAm permission boundaries -> Identity base policies
 ----------------------------------------------------------------------------------------------------------
 
-AWS RESOURCE ACCESS MANAGER
+AWS RESOURCE ACCESS MANAGER (RAM)
 share resources with any AWS account or within your AWS org
+To avoid resource duplication
 eg.
+eg.
+VPC Subnets (shared networking layer with multiple accounts)
+allow to have all resources launched in the same subnet
+must be from same AWS organization
+*** Can't share SG and default VPC as selected resource in RAM
+Participants can manage their own resources there
+Participants can't view modify, delete resources belongs to other participants or owners
 AWS Transit Gateways
-subnets
+Route53 resolver rules
 AWS License manager configurations
 S3 Resolver rules
 it reduced operational overhead and optimized costs
 
+RAM VPC example
+anything deployed in VPC can talk to other resources in the VPC
+applications are accessed easily across accounts using private IP
+
+----------------------------------------------------------------------------------------------------
+
+AWS Single Sign on
+single account to access multiple websites
+centrally manage SSO access to all of your AWS accounts and 3rd party business applcaitons
+** Microsoft AD integration
+SAML 2.0
+** Integration with AWS Organization
+One place  auditing in AWS CloudTrail
+Centralized auditing with CloudTrail
+
+Free service
+------------------------------------------------------------------------------------------------------
 
 AWS TRUSTED ADVISOR
 recommendations for cost optimization, performance, security and fault tolerance

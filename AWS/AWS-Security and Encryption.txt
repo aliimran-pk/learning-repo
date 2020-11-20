@@ -1,0 +1,145 @@
+Security and Encryption
+
+------------------------------Encryption--------------------------------------------
+Data States
+
+Data a rest 
+in device or backup , in DB
+
+Data in Motion/Transit
+being transferred across a network
+eg web page content
+on premise to cloud
+application in VPC talking to DB
+
+In and Out of AWS
+With in AWS
+
+Data in Use
+active data processed in a  non persistent state
+eg. data in RAM
+
+First law of security : Defence in Depth
+encrypt all data 
+also encrypt data in transit b/w apps and db
+
+Symmetric Key Encryptions
+use same key for encryption/decryption
+
+Asymmetric Key Encryption (Public key cryptography)
+public key
+private key
+
+Encrypt data with public key and decrypt using private key
+
+Most Famous Algo is RSA
+
+KMS 
+Key Management Service (a multi tenant service)
+manage cryptographic keys both symmetric and asymmetric
+define key usage permission including cross account access
+track key usage in AWS Cloud Trail (regulations and compliance)
+Integrate will all aws services that need data encryption
+
+Automatically rotate master key once in a year
+Schedule key deletion
+mandatory min wait period 7 days (max 30 days) 
+not directly delete the key (either disable it or schedule key for deletion)
+
+Its a managed service 
+
+Console --> KMS --. Create Key
+Customer Managed keys
+Symmetric
+Name: MyMasterSymmetricKey
+Key Administrator
+Choose the IAM users and roles who can administer this key through the KMS A
+
+Define key usage permissions
+Select the IAM users and roles that can use the CMK in cryptographic operations
+
+Console ->S3 Bucket - Crate Bucket -Properties -
+Default Encryption
+AWS-KMS
+MyMasterSymmetricKey
+
+Server Side Encryption with KMS
+
+1) create a customer master key and map to a AWS service (S3)
+2) Client upload file to S3
+3) S3 ask KMS to provide data keys
+4) KMS use Customer master key and generate a new plain data key and a encrypted data key
+5) S3 received these keys data and encrypted data key
+6) S3 encrypt the data/object using data key with default Encryption Algo
+7) S3 stores encrypted data with the encrypted data key in S3
+8) S3 delete data key
+
+CMK never leaves  KMS
+encryption of data key - KMS using CMK
+Encryption of Data - S3 using data key
+
+
+Decryption
+
+1) S3 send encrypted data key (stored with the encypted data) to KMS
+2) KMS decrypt the data key using SMK and send back plain text data key to S3
+3) S3 use the data key to decrypt the data
+
+This is called Envelop Encryption 
+so KMS use Envelop Encryption 
+
+KMS encrypts small piece of data (data keys < 4KB)
+actual encryption is done by the service
+
+AWS service needs IAM permissions to use the CMK
+
+imp:
+You can associate a key/ map called encryption context with any cryptographic operation
+if encryption key context is different , decryption failed
+
+AWS Cloud HSM
+
+Cloud Hardware Security Module
+managed HA and AS
+FIPS 140-2 level complaint
+it is single tenant
+AWS can't access your encryption master keys in CloudHSM
+use two or more HSMs in separate AZ in production clusters
+AWS KMS can use CloudHSM cluster as "custom key store" to store the keys
+use cloudwatch for monitored and cloud trail for tracking key usage
+web server offload SSL processing
+as certificate authority
+digital rights mgmt
+TDE for oracle db
+if You want a dedicated hardware security module with cloud
+
+All service integrate with KMS and KMS use CloudHSM 
+
+CloudHSM --> Create Cluster
+VPC
+AZs
+
+KMS -Custom key store and connect it with CloudHSM cluster
+
+All AWS services provides HTTPS endpoints
+Encryption is optional with S3 but highly recommend in flight and at rest
+
+Server Side Encryption
+
+SSE-S3
+S3 manages its own keys
+keys rotated every month
+request header
+
+SSE-KMS
+Customer managed keys in KMS
+
+SSE-C
+customer sends the key in every request 
+S3 performs encryption/decryption without storing the key
+Https is must
+
+Client Side Encryption
+Customer send encryption data to AWS service
+Amazon S3 encryption client can be used 
+

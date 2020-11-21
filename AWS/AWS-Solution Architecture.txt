@@ -107,7 +107,7 @@ Application Code: Sample application
 
 It will create an Environment Tier
 
-ASG created mulitple AZ
+ASG created multiple AZ
 EC2 created
 ALB is created multiple AZ , created a Target Groups
 two SG is created , EC2 and ALB
@@ -136,9 +136,8 @@ Delete the environment
 Delete the application
 it will delete EC2 and ELB 
 
-
-
 EBS volumes are created for a specific AZ and can only be attached to one EC2 instance at a time. This will not help make our application stateles
 EFS is a network file system (NFS) and allows to mount the same file system to 100s of EC2 instances. Publishing software updates their allow each EC2 instance to access them. 
 Golden AMI are a standard in making sure you snapshot a state after an application installation so that future instances can boot up from that AMI quickly. 
 
+--------------------------------------------------------------------

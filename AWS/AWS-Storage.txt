@@ -606,7 +606,7 @@ use case: pre-process the data while moving
 
 
 AWS Snowmobile (truck)
-peta byte of data
+petabyte of data
 ** 100 PB storage per truck
 data is automatically encrypted with KMS (AES-256)
 1 EB = 1000 PB = 1000,000 TB
@@ -618,9 +618,11 @@ First import into S3 and then use S3 lifecycle policy
 
 AWS DataSync 
 Transfer file storage to cloud
+Move large amount of data from on-premise to AWS
 secure
 10 X faster of TB to/from AWS over internet or AWS direct connect
-transfer from on premise file storage (NFS,SMB) to S3, FRx
+*Transfer from on premise file storage (NFS,SMB) to S3, EFS,FSz for Windows
+* EFS to EFS  in diff regions using DataSync Agent installed in EC2 instances
 Integration with AWS storage Gateway for ongoing update
 use case: Data Migration,replication and clod data archival
 

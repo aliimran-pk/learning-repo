@@ -1,0 +1,177 @@
+Disaster Recovery 
+is about preparing for and recovering from a disaster
+
+Kind of DR
+on premise->  one data Center one city and other in others expensive
+on premise -> AWS Cloud
+AWS Cloud Region A -> AWS Cloud Region B
+
+RTO (Recovery Time Objective)
+is the maximum length of time after an outage that your company is willing to wait for the recovery process to finish
+downtime
+
+RPO Recovery point objective
+is the maximum amount of data loss your company is willing to accept as measured in time
+
+DR Strategies 
+
+1) Pilot Light (for critical systems)
+a small version of application is always running in cloud
+ie RDS in data replication with on premise database is up
+EC2 via Route53 is stopped
+
+2) Warm Standby
+Full system is up and running in Cloud but at minimize size
+RDS in data replication with on premise database is up
+ALB + ASG +  EC2 via Route53 (using reverse proxy) is running with lowest capacity
+Upon disaster , we can scale to production load
+
+3) Multi Site/ Hot Site Approach (v. expensive)
+Full system is up and running in Cloud as of on premise
+very load RTO 
+RDS in data replication with on premise database is up
+ALB + ASG +  EC2 via Route53 (using reverse proxy) is running with lowest capacity
+Upon disaster , we can scale to production load
+
+Backup and Restore has a potential High RPO and RTO
+
+All AWS Multi Region
+Aurora Global (master)  -> Aurora Global (slave)
+
+DR Tips
+
+1) Backups
+EBS snapshots, RDS automated backups/snapshots
+
+2) High Availability
+use Route53 to migrate DNS over from region to region
+RDS multi AZ , ElasticCache , EFS,S3
+
+3) Replication
+RDS replication (cross region), AWS Aurora + Gloal Databases
+Database replication from on premise to RDS
+
+4) Automation
+CloudFormation / Elastic Beanstalk to re create a whole new environment
+
+) Chaos
+Netflix has "simian-army" , ie they randomly terminate their EC2 in production and check
+
+
+----------- Database Migration Service ---DMS-------------------
+* Migrate databases from on-premise to AWS
+Resilient and self-healing  
+*Source database remains available during migration
+* Continuous data replication using CDC (Change data capture)
+* Must create EC2 instance (running DMS) to pull data from on premise and load to the Target Database
+
+On-premise -> AWS
+AWS -> AWS
+AWS -> On-premise
+Homogenous (Oracle to Oracle) preferred 
+Heterogeneous (Oracle to Aurora)
+free for first 6 months when migrating to Aurora,redshift or DynamoDB
+
+use case: 
+consolidate multiple DB into a single target database
+DMS is for smaller workloads (less than 10TB)
+* continuous data replication for DR
+
+Console -> DMS
+instance Class:   ec2
+multi Instance
+
+Database Migration task
+db source end point
+db target end point
+
+------AWS Schema Conversion Tool --------SCT-------
+It is a part of DMS
+preferred option for migrating data warehouse data to Redshift
+Migrate DB schema if DB engines are different
+OLTP(SQl Server -> Oracle) to Aurora
+OLAP (Teradata or Oracle) --> Amazon Redshift
+
+PostgresSQL on-premise -> RDS PostgresSQL
+No need for SCT as database engines are same
+
+SCT assessment report
+update source code    
+Fan-in (Multiple Source- Single Target) 
+Fan-out (Single Source- Multiple Target)
+SCT is preferred when schema conversion are involved
+SCT is preferred for large data warehouse workloads (migration to Redshift)
+No data replication for DR
+
+
+1) On-Premise Strategy with AWS
+Download Amazon inuz2 AMI as a VM
+
+2) VM import / export
+migrate existing applications into EC2
+can export back VMs from EC2 to on-premise
+
+3) AWS Application Discovery Service
+gather info about your on-premise servers to plan a migration
+server utilizations db dependency mappings
+
+4) AWS Database Migration Service
+
+5) AWS Server Migration Service (SMS)
+increment replication of on-premise live servers to AWS
+AWS Server Migration Service (SMS) is an agent less service which makes it easier and faster for you to migrate thousands of on-premises workloads to AWS
+
+Transfer Large amount of data from On-Premise to AWS
+
+200 TB of data , with 100 MBS internet speed
+
+1)  Over the internet / site to site VPN
+immediate to setup
+185 days to complete
+
+2) Over Direct Connect DX 1 Gbps
+long time setup (over a month)
+18.5 days 
+
+3) Over snowball
+will order 2-3 snowballs in parallel
+takes a week to end to end transfer
+can be combined with DMS
+
+4) for on-going replication
+site-to-site VPN or DX with DMS or DataSync
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

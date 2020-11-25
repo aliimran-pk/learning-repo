@@ -1,0 +1,297 @@
+** AWS Well Architected Framework: 
+https://aws.amazon.com/architecture/well-architected/
+
+---------Well Architect Framework ----------------------
+
+5 PILARS
+are synergy 
+
+
+1) OPERATIONAL EXCELLENCE PILAR
+Includes the ability to run and monitor systems to deliver business values and continually improve processes
+To avoid/minimize effort and problems with
+Provisioning servers
+Deployment
+Monitoring
+Support
+
+Design Principles of OpEx
+
+1) perform operations as code
+2) annotate documentation
+3) make frequently small, reversible changes
+4) refine operations procedure frequently
+5) Anticipate failure
+
+Recommendation
+Use Managed Services (no worry about maintaining server,availability,durability)
+Go serverless (prefer Lambda to EC2)
+Automation with CloudFormation 
+Implement CI/CD to find problems early (codepipeline, codebuild, codedeploy)
+Perform frequent,small reversible changes
+
+3 Stage approach AWS Recommend
+
+a) PREPARE: for failure
+simulate failure 
+game days 
+Disaster recovery exercise
+Implement Standards with AWS config rules
+AWS CloudFormation , AWS Config
+
+b)OPERATE: gather data and metrics
+AWS CloudFormation ,
+Cloudwatch (logs agents)
+config, config rules,
+cloud trail
+VPC flow logs
+X-Rays (tracing)
+
+c) EVLOVE: Get Intelligence
+AWS CloudFormation , use Amazon Elasticsearch to analyse logs
+
+
+2) SECURITY PILAR
+IAM, AWS Shield, WAF,KMS, HSM
+
+Security Design Principles
+
+a. PRINCIPLE OF LEAST PRIVILEGE for least time
+Implement a strong Identity foundation
+use temporary credentials when possible (IAM roles, Instance profiles)
+use IAM groups to simplify IAM management
+Enforce strong password policies
+Enforce MFA
+Rotate credentials regularly
+
+Enable Traceability
+Integrate logs and metrics with system to automatically respond and take action
+
+b. SECURITY IN DEPTH - Apply security in all layers
+VPS and Private subnets
+Security Groups
+NACL
+use hardened EC2 AMIs (Golden Images)
+use CloudFornt with AWS sheild for DDoS
+use WAF with CloudFront and ALB
+Use CloudFormation (enforce security via scripts)
+Protect data in Transit and at rest
+Actively monitor for security issues
+Centralize security policies for multiple AWS accounts
+
+c.Protecting DATA AT REST
+enable versioning 
+enable encryption KMS and Cloud HSM ,(rotate encryption keys)
+
+S3
+SSE-C,  SSE-S3,   SSE-KMS
+
+DynamoDB
+Encryption client, SSE-KMS
+
+Redshift
+KMS and AWS CloudHSM
+
+EBS, SQS and SNS
+KMS
+
+RDS
+KMS, TDE
+
+d.Protecting DATA IN TRANSIT	
+data coming in and out of AWS
+by default All AWS API use https/ssl
+perform client side encryption 
+Ensure your data goes through AWS network as mush as possible
+VPC endpoints and AWS Private link
+
+e: Detect Threats
+actively monitor security issues
+Monitor CloudWatch logs
+use GuadDurty to detect threats and contiguously monitor malicious behaviour 
+use AWS Organization to centralize security policies 	
+
+
+3) RELIABILITY PILAR
+It is about how quickly you recover from Infrastructure and application issues/disruptions
+How quickly you adopt changes demands in load
+mitigate disruptions such as misconfiguration 
+
+Design Principles
+
+Test recovery procedures
+use automation to simulate different failures
+Automate recovery from failure
+health checks and auto scaling
+managed services like RDS  automatically switch to standby
+
+Scale Horizontally
+Maintain redundancy
+multiple Direct Connect connections
+Multiple regions and AZ
+Prefer Serverless
+prefer loosely couple architecture
+SNS,SQS
+
+Stop guessing capacity
+use auto scaling
+
+Distributed system best practices
+API Gateway for throttling requests
+
+Loosely coupled architecture
+ELB
+as users are not tied to EC2
+SQS
+SNS publish subscribe
+Amazon Kinesis
+handle event streams, multiple clients
+
+Troubleshooting on AWS
+
+S3 server access logs
+S2 data request details,request type,date time
+Troubleshoot bucket access issues and data requests
+
+ELB Access Logs
+Client IP,latencies and server response
+analyse traffic pattern and troubleshoot network issues
+
+AWS VPC Flow Logs
+monitor network traffic
+troubleshoot network connectivity and security logs
+
+CloudWatch
+monitor metrics from AWS resources
+
+CloudWatch logs
+logs from various , debug app issues
+
+CloudConfig
+AWS resource inventory, history , rules
+
+AWS CloudTrail
+History of AWS API calls , cli,sdk
+auditing and troubleshooting, who did what and from hwere-
+
+Shared Responsibility Model
+Security and Compliance is shared responsibility b/w AWS and Customer
+
+AWS responsible for  Security OF the cloud
+Customer responsible for  Security IN the cloud
+
+
+using EC2 instance is IAAS 
+AWS only responsible for infrastructure only
+
+Managed Services
+S3,DynamoDB
+AWS Manages Infa,OS and Platform
+
+4) PERFORMANCE PILAR
+meet needs with minimum resources (EFFiciency)
+Use Managed services
+Go Serverless (Lower cost)
+Monitor performance
+CloudWatch Alarms
+
+
+EFFiciency use right solutions
+Compute: EC2 VS Lambda VS Containers
+
+Storage
+Block, File , Objects 
+
+Database
+RDS VS DynamoDB VS Redshift (big data and relationsal)
+
+Caching
+ElastiCache (front end to DB) VS CloudFront (contents server from edge) VS DAX (cache infront of Dynamo DB) VS Read Replics (reporting apps to run) 
+
+Network
+CloudFront, Global Accelerator, Route 53, Placement Groups, VPS endpoints , Direct Connect
+
+Product specific features
+S3 Transfer acceleration , EBS optimised instances
+
+5) COST OPTIMIZATION PILAR
+match supply and demand
+implement auto scaling stop dev and test resources when don't need
+go serverless
+Track you expenditure
+cost explorer
+aws budget 
+use tags on resources, helps in measure ROI
+
+Right Sizing
+Trusted advisor for recommendations
+On demand Vs Reserved VS spot instances
+AVoid expensive sols: MySQL VS Autrora VS Oralce
+AWS Direct Connect (save internet cost)
+CloudFtont  reduce load on backbend system
+
+
+X-Rays traces a request between API Gateway and Lambda functions
+
+Well Architected Tool
+AWS service used to lean,measure and build using architectural best practices
+Define a workload
+name: demo-workload
+Industry type: education
+Environment: Production
+Region- us-east-1
+
+Start Review  (answer questions)
+1) priorities
+Generate Report
+
+-----------------------------------------AWS TRUSTED ADVISOR------------------------------------------------
+High level AWS account assessment
+Recommendations for cost optimization, performance, security and fault tolerance
+All AWS customers get 4 checks free
+** 1) service limits
+2) SG\ having unrestricted access
+3) Proper use of IAM
+4) MFA on Root Account
+
+
+Business or Enterprise AWS support plan provides over 50 checks
+ie
+how much u saved with reserved instances
+resource utilization look like ? are u right sized  for ur load ?
+
+RECOMMENDATIONS BY TRUST ADVISOR
+
+Cost Optimization
+highlight unused resources
+opportunities to reduce costs
+
+Security
+Settings that make sol more secure
+
+Fault tolerance
+Increase resiliency 
+redundancy improvements, over utilized resources
+
+Performance
+Improve speed and responsiveness
+
+*** Service Limits
+identify if service usage > 80% of service limits
+
+Can disable Trusted Advisor using preferences
+weekly email   notification preferences for Trusted advisor status
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+AWS SERVICE QUOTAS
+AWS account has regional-specific default quotas or limits for each service
+aService Quotas allows you to manage your quotas /limits for over 100 AWS services
+from one location
+

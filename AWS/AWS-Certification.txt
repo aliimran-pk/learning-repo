@@ -1,21 +1,8 @@
-10 S3, AWS CLI
-11 S3 and Athena
-12 CloudFront
-13 Storage Extras
-14  SQS
-15 Server less
-16 Server less Solution
-16 Server less Solution
-17 Database in AWS
-18 CloudWatch
-19 IAM Advance)
-20 Security Encryption
-21 VPC
-22 VPC
-23 DR and Migration
-24 More solution Architecture
-25 White papers
-26 Prep
+23 Security Encryption
+24 VPC
+25 VPC
+26 White papers
+27 Prep
 
 ------------------------------
 
@@ -134,6 +121,7 @@ You can enrol for practise tests on the website. https://aws.amazon.com/certific
 The following links provide more information regarding the topics just discussed. Please review the links in preparation for the exam: Amazon Glacier Documentation: https://docs.aws.amazon.com/glacier/index.html#lang/en_us FAQs: Amazon EFS - https://aws.amazon.com/efs/faq/ Amazon S3 - https://aws.amazon.com/s3/faqs/ Amazon Glacier - https://aws.amazon.com/glacier/faqs/ Amazon CloudFront - https://aws.amazon.com/cloudfront/faqs/ Introduction to Amazon S3 Lab – https://amazon.qwiklabs.com/catalog?keywords=Introduction+to+Amazon+Simple+Storage+Service+%28S3%29&format%5B%5D=any&level%5B%5D=any&duration%5B%5D=any&price%5B%5D=any&modality%5B%5D=any&language%5B%5D=any Introduction to Amazon EFS – https://amazon.qwiklabs.com/catalog?keywords=Introduction+to+Amazon+Elastic+File+System+%28EFS%29&format%5B%5D=any&level%5B%5D=any&duration%5B%5D=any&price%5B%5D=any&modality%5B%5D=any&language%5B%5D=any 
 
 ** Must remember the Volume matrix
+
 ** AWS Well Architected Framework: 
 https://aws.amazon.com/architecture/well-architected/ 
 
@@ -203,436 +191,7 @@ https://share.percipio.com/cd/JrXPzVbEL
 
 ---------------------------------------Udemy Ranga AWS Course----------------------------------------------------------------------
 
-
-
-
-
-------------------------Containers Solutions------------------------------------------------------------
-Docker is cloud Neutral
-
-Container Orchestration provides
-Auto scaling (scale container based on demand)
-Service Discovery (helps Microservice find others)
-Self healing (replace failing instances using health check)
-Zero Downtime deployments release new versions without downtime
-
-Container Orchestration Options 
-
-1) Cloud Neutral
-Kubernetes 
-AWS Service = AWS Elastic Kubernetes Service (EKS)
-EKS doesn't have a free tier
-
-2) AWS Specific
-AWS Elastic Container Service ECS
-AWS Fargate (No free tier): Serverless version of AWS ECS
-
-
-
-AWS Elastic Container Service ECS (A regional Service)
-Need to create a cluster of EC2 instance managed by ECS for Microservice
-build using container images
-
-For AWS Fargate 
-No need to manage EC2 instances 
-
-Use case 
-Microservice
-batch processing on ECS using AWS Batch
-
-ECS and Fargate points to Elastic Container Service
-
-Don't Create 
-
-Container definition
-Amazon ECS makes it easy to deploy, manage, and scale Docker containers running applications, services, and batch processes. Amazon ECS places containers across your cluster based on your resource needs and is integrated with familiar features like Elastic Load Balancing, EC2 security groups, EBS volumes and IAM roles
-
-Sample Application
-Container Name: sample-container-Image
-Image: httpd:2.4
-
-
-A task definition is a blueprint for your application, and describes one or more containers through attributes. Some attributes are configured at the task level but the majority of attributes are configured per container.
-
-Define your service
-A service allows you to run and maintain a specified number (the "desired count") of simultaneous instances of a task definition in an ECS cluster.
-
-Service Name: sample-app-service
-Number of desired tasks: 2
-
-Application Load Balancer
-
-Configure your cluster
-The infrastructure in a Fargate cluster is fully managed by AWS. Your containers run without you managing and configuring individual Amazon EC2 instances.
-
-
-For Fargate
-No EC2 instance created
-LB is created
-Target Group is created
-
-A Task is a definition of a container
-Tasks role can also be attached (RDS)
-Task execution IAM role (permission to pull container images)
-
-
-A existing task deification can't be changed
-A tasks has IP and container details
-
-A Service  allows to run and maintain  a specific  no. of tasks  (desired count)
-it brought up new tasks in case of failure
-
-ECS Cluster
-Groping of one or more container instances (EC2 instances) when   u run your taksk
-
-EC2 instances in a cluster running a container agent for communication
-
-ALB features
-Dynamic host port mapping  (multiple task from the same service allowed per EC2 container)
-path based routing multiple services can use same listener port on same ALB and be routed based the path
-
-
-Elastic Beanstalk can run container using Docker as platform but can't create clusters
-
-Amazon EKS 
-recommended if you are already using Kubernetes and want to move workload dto AWS
-
-ECR 
-Elastic Container Registry
-for deploy container images
-
-------------------
-To have more access to EC2 instances for ECS
-ECS --> Cluster-> Create Cluster -- Select cluster template
-
-EC2 Linux + Networking
-Resources to be created:
-Cluster
-VPC
-Subnets
-Auto Scaling group with Linux AMI
-
 -------------------------- Virtual  Private Cloud ----------------READ AGAIN IN DETAIL-----------------------------------------
-
-------------------------------------------Networking -------------------------------------------------------------
-
-VPC is a virtual network or dataset inside AWS for a specific client
-Flat in a building but can't go inside other flat
-logical isolated
-Max 5 VPC in a Region
-200 subnets in a VPC
-200 routing table
-Max 5 Elastic IP in an account (may be extend based on request to AWS)
-
-when we create a VPC the by default below is created automatically
-1) DHCP
-2) Security Group
-3) NACL
-
-VPC is created in a Region and not in AZs
-its all properties are regional
-
-can't use same CIDR in other VPC in the same region
-but for VPC peering (communicate) both CIDR should be different
-
-Subnet is created in AZ and not in regions
-A same subnet can't be used on two AZ
-
-Can a VPC extends to two diff AZs 
-No
-
-Can a Subnet exits in two diff AZs 
-No
-
-Once a VPC is created, you can't change its CIDR block range
-
---------------------------
-Physical Addressing
-
-MAC address 48 bits
-
-Logical Addressing
-eg my home addreess
-IP address
-IPv4 and  IPv6
-
-IPv4
-Public IP and Private IP
-
-32 bit logical address
-4 Octet
-0 to 255 max value in each octet
-
-IP address = Network ID + Host ID
-
-8 bits  8 bits  8 bits  8 bits 
-
-Large Network
-Class A  1.0.0.0 to 126.0.0.0
-N H H H 
-
-Class B  128.0.0.0 to 191.255.0.0
-N N H H 
-Small Network
-Class C  192.0.0.0 to 223.255.255.0
-N N N H 
-
-Class D  224-239 multi cast4
-Class E  240-255 research
-
-Loop Back Address
-127.0.0.0 to check network interface
-
-To find network ID
-
-Network bit = 1
-Host bit 		 = 0
-
-eg.
-115 .0 .0.15
-Class A
-one oct et is reserved
-115.0.0.0  is become the network id
-
-196.10.10.10
-then its network id will be 
-196.10.10.0
-
-Give IP address find its subnet mask
-
-115.10.10.20
-Class A
-255 0 0 0 0 subnet mask
-
-160.10.10.20
-Class B
-255.255 0 .0 is subnet mask
-
-Private IP for LAN no need to buy, can't got to router or internet
-Class A 
-10
-
-Class B
-172.16 to 172.31
-
-Class C
-192168.0.0 to 192.168.255.255
-
-Q: 150 10 20 30
-Class B
-150 10 0 0 Network Id (Identifier of the network)
-150 10 255 255 broadcast IP
-2 (h) - 2 = 2(16) - 2 = 65534 usable computers can be attached
-
-if both IPs results in same network IP then it means that these are part of same network
-
-Subneting 
-network within a network
-or locally division of IP addresses
-
-Router interfaces
-A different network must be on an Router Interface with diff network ID
-
-router is internet-working device
-b/w multiple networks
-
-switch is b/w same network communication
-
-130 10 0  0
-		  1
-		 2
-		 255
-130 10 1  0				 
-130 10 2  0				 
-
-subnet mask = cidr
-
-A = /8
-B = /16
-C  = /24   24 bits for Network
-
-OTHER WISE there is Subneting
-give host bits to network is called Subneting
-dividing  big network into small networks is called Subneting
-
-
-eg
-192  168    1     3      class C  (3N  and1H)
-255   255 255  0       subnet mask 
-Network address of this will be then 
-192   168   1    0       (255= same and 0 = 0)
-
-very good read its screen shots
-https://www.youtube.com/watch?v=q7wNcYliJ1Q
-
-
-CIDR is classless Inter domain routing
-A method for allocating IP addresses 
-
-It is as also a 32-bit address, which includes a special number which represents the number of bits that are present in the Block Id.
-a . b . c . d / n 
-Where, n is number of bits that are present in Block Id / Network Id.
-how many bits are turned as 1s
-
-
-CIDR is 8 for class A by default
-CIDR is 16 for class B by default
-CIDR is 24 for class C by default  (3N  and1H)
--------------------------------------------------------------------------------------------------------------------
-
-Creating own private network in the cloud
-your own isolated network (traffic not visible to other AWS vps)
-you can control all the traffic coming in and out a VPC
-Best practice all resources from ur VPC
-
-To separate public resource (accessible through internet) with private resources 
-
-create public subnet for public resources and like private
-public resources can talk to private 
-
-Each VPC is associated with a Region
-each subnet is created in AZ
-
-eg VPC = us-east-1
-Subnets = us-east-1a,us-east-1b
-
-VPC -> 
-default VPC always created without a name
-default subnets also created 
-
-No. of subnets = No. of AZ
-
-IPv4  32 bit  (allows 4.3 billion address) most popular
-127.255.255.255
-
-IPv6  128 bit alphanumeric
-
-182.82.143.132/32 is a single ip 
-0.0.0.0/0 all
-
-10.88.135.144/30
-means
-2 rasie power (32 -30) = 4 
-
-Each VPChttp://localhost:7080/mep/services/pcs.ctos.lock.unlock.invoice.ext is associated with a CIDR block
-CIDR b;lock can be from /16 (65536 ) to /28 (16) IP addresses
-
-VPC with CIDR block 69.208.0.0/24  69.208.0.0 to 69.208.0.255 
-
-There can't be an overlap of a VPC CIDR block with another connected network
-
-All addresses inside a VPC CIDR range are private addresses
-Sbunet resides in VPC
-
-CIDR block of a subnet must be a subset or the same as CIDR block for VPC
-
-Can VPC spread over two regions ?
-No
-
-Multiple VPC in same region 
-Yes  (default vpc and custom vpc)
-
-Communication b/w tow resources in a VPC is visible outside VPC
-No
-
-Can we allow External access to your resources in a VPC
-Yes (using Internet Gateway)
-
-Can a subnet spread over two regions ?
-No, since subnet is part of VPC and VPC is associated with a single Region
-
-Can a subnet spread over two Availability Zones
-No, A subnet is specific to a particular AZ
-
-Can I have 2 subnets in one AZ
-Yes , 
-
-Can I have subnet in AZ ap-south-1a if its VPC is in region us-east-1
-No, subnet should be on AZ belonging to the VPC's region
-
-
-VPC Main route table
-
-1) each VPC when created has a main route table by default (enable communication b/w resources in all subnets in a VPC)
-2)default roye rule can't be deleted/edited
-
-3)Each subnet can have its route table or share its route tale with VPC
-4) Multiple subnets can share a route table
-5) A subnet can be associated with one route table ONLY
-
-Security Groups
-
-1) a default SG is created when we created a VPC
-allows all outbound traffic
-allows communication b/r resources assigned with default security grop
-Denies all other in bound (other than default SG)
-can be edited but not deleted
-EC2 instance by default are assigned  the default security group of the VPC
-Security Group can have many to many relationship with Resources (in same VPC)
-
-New security  group
-by default No in bound rule
-allows all outbound traffic
-
-ssh : 22
-rdp : 8889
-HTTP :80
-HTTPS  :443
-PostgreSQL/Aurora :5432
-Oracle :1521
-MySQL/Aurora/Maria DB :3306
-MSSQL  Server:1433
-FTP : 21
-SFTP : 22
-
-
-
-1) Can source/destination of a SG be another SG
-Yes
-
-
-2) A new SG is created and assigned to a DB and EC2
-they can't talk as SG doesn't allow inbound traffic by default
-
-3) A default SG is created and assigned to a DB and EC2
-they CAN talk as SG has a rule allowing traffic b/w resources with same SG
-
-NACL Network Access Control Listener
-SG control traffic to specific resources like EC2 ina subnet
-NACL control traffic stopping even entering the subnet
-stateless firewall at subnet level
-Each subnet must be associated with NACL
-default NACL allows all inbound and outbound traffic
-custom crated NACL denies all inbound and outbound traffic by default
-rules have priory no. (lower has high value)
-
-Security Groups
-only allow rules
-stateful, return traffic is automatically allowed
-traffic allowed if there is matching rule
-
-NACL 
-allow rules and deny rules
-stateless, explicitly allow return traffic
-rules are priority , matching rule with highest priority
-
-
-Traffic from outside subnet then NACL will intercept
-Traffic within Subnet SG will intercept
-
-Imp Scenario
-
-EC2 instance can't be accessed from internet
-1) does EC2 have public IP address or an Elastic IP assigned
-2) Check NACL, is inbound and outbound traffic allowed from your IP to the port
-3) Check route table for the subnet, is there a route to internet gateway
-if it a private subnet then can't
-4) Check Security group, all u allowing inbound traffic from ur IP to the port
-
-AWS Service to allow instances in private subnet to connect to internet to download patches
-is using NAT Gateway
-
-A VPC cannot have multiple Internet Gateways
 
 
 ---------------------------------------------IAM -------------------------------------------------------------------------------
@@ -668,8 +227,6 @@ Create Inline policy
 Policy Generator
 Add Statement
 Apply Policy
-
-
 
 cmd
 aws configure  (store aws credentials on the EC2 instance which is not a good practice)
@@ -724,46 +281,6 @@ Its a container (a box) for an IAM role and used to pass role info to the EC2 in
 Instance profile is a simple container for IAM roles
 
 
-------------------- EMR Elastic MapReduce --------------------------------------------------------------
-
-Managed Hadoop service with High availability and durability
-** EMR give access to underlying OS ie u can ssh into it
-Important tools are natively supported
-Pig, Hive , Spark , Presto
-
-use cases
-log processing for insights
-click stream analytics for advertisers
-genomic and life science dataset processing
-
-Storage Types
-
-1) HDFS
-Standard for Hadoop
-Data Storage = EBS or instance (data can lost if instance down)
-Persistence Cluster running 24 X 7
-
-2) EMRFS ( Elastic MapReduce File System)
-Data Storage = S3
-Transient  Cluster running  Infrequent big data jobs (ad-hoc queries)
-can directly run map-reduce  jobs
-
-------------------------------------------------------
-AWS EMR
-For Big data frameworks that needs very large scale data processing and high customizations
-machine learning , graph analytics
-
-AWS Redshift
-Run complex queries against data warehouse,
-housing Structured and Unstructured data
-
-AWS Redshift Spectrum
-Run queries directly against S3 without worrying about loading entries data from S3 into a DWH
-recommended if u are executing quires frequently against Structured data
-You have a huge volume of data in Amazon S3. You would want to run queries against S3 directly instead of moving data to a data warehousing solution
-
-AWS Athena
-Serverless (quick ad-hoc queries without working about provisioning a computer cluster)
 
 ----------------------Data Lakes ------------------------------------------
 simplified big data solutions
@@ -843,27 +360,6 @@ AWS Data Lakes Data Cataloging
 stores format and meta data of the data
 in Hcatalog  , hive catalog
 
-AWS Glue 
-full managed ETL service
-simplify data preparation capture metadata for analytics
-connect AWS Glue to your data on Aurora,RDS,Redshift and S3
-Glue creates a AWS Glue Catalogue with metadata abstracted from  your data
-Run ETL jobs using Spark
-metadata from Glue data catalog can be used from 
-AWS Athena
-AWS EMR
-AWS Redshift Spectrum
-
-Handling Data Streams
-
-Characteristics of Streaming Data
-Continuously Generated
-Small Pieces of data
-Sequenced , associated with time
-
-
-
-
 --------------------------------------------------------------------------
 More Serverless
 
@@ -915,10 +411,6 @@ Full managed solution providing authorization and authentication solutions
 for web/mobile apps
 
 ------------------------------------------------------------------------------
-Amazon API Gateway Features 
-
-
-
 
 ---------------------------VPC Peering--------------------------------------
 connect vps each other belonging to same or diff AWS accounts irrespective of the region of VPC
@@ -1069,109 +561,6 @@ repeatable and Highly available
 Launches required resources and tear them down after execution
 *** It is not for Streaming Data
 
------------------------DevOps----------------------------------------------------
-
-AWS CodeCommit
-private source control (based on Git)
-
-AWS CodePipeLine
-Orchestrate CI/CD pipelines
-
-AWS CodeBuild
-Build and Test code (application packages, containers)
-
-AWS CodeDeploy
-Automate Deployment (EC2,EKS, lambda etc)
-
-Infrastructure as a code IAAC
-treat infra as the same way as application code
-track your infra changes over time (version control)
-being repeatability into your infrastructure
-
-2 key parts
-
-1) Infrastructure Provisioning
-provisioned compute,db,storage,networking
-open source, cloud neutral, Terraform
-AWS service: CloudFormation
-
-1) Configuration management
-Install right software and tools on provisioned resources
-AWS Service: OpsWorks lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2
-
-
----------AWS CloudFormation  -----------------
-
-Automate deployments and modification of AWS resources in a controlled and predictive way
-
-avoiding configuration drift (less error prone)
-all configurations in a simple txt JSON or YAML
-CloudFormaion handles dependencies
-eg. first VPC then subnets and then db
-Automatic Rollback
-Free to use , pay for resources provisioned
-get an automated estimate for your configuration
-
-
-CloudFormation Templates
-JSON/YAML defining multiple resources
-
-Stack
-group of resources that are created from CF template
-
-Change Sets
-to make changes to the stack, update the template
-tells what whould chnage if you execute
-allows u to verify the changes and then execite
-
-Resources
-what u want to create
-One and only mandatory element
-
-Parameters
-values to pass to your template at runtime
-ie "t2.micro"
-
-Mappings
-key value pairs
-configure diff values for diff regions
-
-Outputs
-Return values from execution
-eg. id of resource
-
-
-
-CloudFormation VS Elastic Beanstalk
-
-CloudFormation
-Deleting stack will delete all associated resources 
-except DelitoinPolicy set to "Retain"
-or you caexaecn enable Termination policy for the entire stack
-Template stored in S3
-
-use CloudFormation StackSets to create/update/dele stack across multiple accounts and regions
-with a single operation
-
-Elastic Beanstalk
-like a pre packaged cloudformation template with a user interface
-and in background cloudformation template is created and executed
-
-AWS OpsWorks
-is a Configuration Management Tool
-Managed service based on Chef and Puppet
-eg. copy a file 10 100 servers
-make a change across 100 servers
-both on preimies and on cloud
-
-Configurations resides at 
-Chef recepies/cookbooks
-Puppet manifest
-
-All metric send to CloudWatch
-All configuration mgmt tools can also do
-infrastructure provisions but not recommended
-
 
 -----------------AWS Certification FAQ -------------------
 Understanding Data Transfer Cost
@@ -1201,34 +590,6 @@ Req: need 2 EC2 instances running all the time in single region
 ie place instances in diff subnets
 2 EC2 instance in AZ1 and 2 in Az2 and 2 in Az3
 
-AWS Shield
-shields from distributed denial of service attacks DDoS
-eg. sending million request to the server
-protect Route S3,CloudFront,Global Accelerator,EC2,ELB
-
-AWS Shield Standard 
-Zero cost
-automatically enabled
-layer 3 and 4
-
-AWS Shield Advanced
-paid service
-24X7
-protect your AWS bills from usage spikes
-
-AWS WAF  Web Application Firewall
-protect web applications from OWASP to 10 (Open web application security project)
-most critical and common security risks to web apps
-CVE (common vulnerabilities and exposure)
-can be deployed on CloudFront,ALB,API Gateway
-web traffic filtering, block attacks
-
-
-
-Direct traffic to optimal endpoints oover AWS global network
-Provides two static IPs from AWS edge network
-Distribute traffic across multiple endpoint resources in multiple AWS regions
-works with ALB,EC2,Elastic IP
 
 AWS Elemental MediaConvert
 
@@ -1236,9 +597,6 @@ new video transcoding service
 convert multiple media formats
 high quality video processing workflows
 
-AWS Elastic Transcoder
-create WebM video,Mp3 audio or animated Gif
-For all other video processing use cases, recommanded to use Element MediaConvert
 
 AWS Elemental MediaLive
 For live video processing
@@ -1248,10 +606,6 @@ Fully managed data security and data privacy service
 *Automatically discover,classify and protect sensitive data in S3
 use AI and ML
 
-AWS Workspaces
-Desktop as a Service (DaaS)
-replacement for VDI (virtual Desktop infrastructure)
-provision windows or Linux Desktop in minutes
 
 AWS System Manager Parameter Store
 manage application environment configuration and secrets
@@ -1272,215 +626,6 @@ Simple Workflow Service (SWF)
 background jobs parallel o
 
 
-
-
-
-
----------Well Architect Framework ----------------------
-
-PILARS
-
-1) OPERATIONAL EXCELLENCE PILAR
-To avoid/minimize effort and problems with
-Provisioning servers
-Deployment
-Monitoring
-Support
-
-Recommendation
-Use Managed Services (no worry about managin server,availability,durability)
-Go serverless (prefer Lambda to EC2)
-Automation with CloudFormation 
-Implement CI/CD to find problems early (codepipeline,codebuild,codedeploy)
-Perform frequent,small reversible changes
-
-3 Stage approach AWS Recommend
-
-1) PREPARE: for failure
-simulate failure 
-game days 
-Disaster recovery exercise
-Implement Standards with AWS config rules
-
-2)OPERATE: gather data and metrics
-cloudwatch (logs agents)
-config, config rules,
-cloud trail
-VPC flow logs
-X-Rays (tracing)
-
-3) EVLOVE: Get Intelligence
-
-use Amazon Elasticsearch to analyze logs
-
-2) SECURITY PILAR
-IAM, AWS Shield, WAF,KMS, HSM
-
-a. PRINCIPLE OF LEAST PRIVILEGE for least time
-use temporary credentials when possible (IAM roles, Instance profiles)
-use IAM groups to simplify IAM management
-Enforce strong password policies
-Enforce MFA
-Rotate credentials regularly
-
-b. SECURITY IN DEPTH - Apply security in all layers
-VPS and Private subnets
-Security Groups
-NACL
-use hardened EC2 AMIs (Golden Images)
-use CloudFornt with AWS sheild for DDoS
-use WAF with CloudFront and ALB
-Use CloudFormation (enforce security via scripts)
-Protect data in Transit and at rest
-Actively monitor for security issues
-Centralize security policies for multiple AWS accounts
-
-c.Protecting DATA AT REST
-enable versioning 
-enable encryption KMS and Cloud HSM ,(rotate encryption keys)
-
-S3
-SSE-C,  SSE-S3,   SSE-KMS
-
-DynamoDB
-Encryption client, SSE-KMS
-
-Redshift
-KMS and AWS CloudHSM
-
-EBS, SQS and SNS
-KMS
-
-RDS
-KMS, TDE
-
-d.Protecting DATA IN TRANSIT	
-data coming in and out of AWS
-by default All AWS API use https/ssl
-perform client side encryption 
-Ensure your data goes through AWS network as mush as possible
-VPC endpoints and AWS Private link
-
-e: Detect Threats
-actively monitor security issues
-Monitor CloudWatch logs
-use GuadDurty to detect threats and contiguously monitor malicious behaviour 
-use AWS Organization to centralize security policies 	
-
-
-2) Reliability PILAR
-It is about how quickly you recover from Infrastructure and application issues
-How quickly you adopt changes demands in load
-
-Automate recovery from failure
-health checks and auto scaling
-managed services like RDS  automatically switch to standby
-
-Scale Horizontally
-Maintain redundancy
-multiple Direct Connect connections
-Multiple regions and AZ
-Prefer Serverless
-prefer loosely couple architecture
-SNS,SQS
-
-Distributed system best practices
-API Gateway for throttling requests
-
-Loosely coupled architecture
-ELB
-as users are not tied to EC2
-SQS
-SNS publish subscribe
-Amazon Kinesis
-handle event streams, multiple clients
-
-Troubleshooting on AWS
-
-S3 server access logs
-S2 data request details,request type,date time
-Troubleshoot bucket access issues and data requests
-
-ELB Access Logs
-Client IP,latencies and server response
-analyse traffic pattern and troubleshoot network issues
-
-AWS VPC Flow Logs
-monitor network traffic
-troubleshoot network connectivity and security logs
-
-CloudWatch
-monitor metrics from AWS resources
-
-CloudWatch logs
-logs from various errices, debug app issues
-
-CloudConfig
-AWS resource inventory, history , rules
-
-AWS CloudTrail
-History of AWS API calls , cli,sdk
-auditing and troubleshooting, who did what and from hwere-
-
-Shared Responsibility Model
-Security and Compliance is shared responsibility b/w AWS and Customer
-
-AWS responsible for  Security OF the cloud
-Customer responsible for  Security IN the cloud
-
-
-using EC2 instance is IAAS 
-AWS only responsible for infrastructure only
-
-Managed Services
-S3,DynamoDB
-AWS Manages Infa,OS and Platform
-
-3) PERFORMANCE PILAR
-meet needs with minimum resources (EFFiciency)
-Use Managed services
-Go Serverless (Lower cost)
-Monitor performance
-CloudWatch Alarms
-
-
-EFFiciency use right solutions
-Compute: EC2 VS Lambda VS Containers
-
-Storage
-Block, File , Objects 
-
-Database
-RDS VS DynamoDB VS Redshift (big data and relationsal)
-
-Caching
-ElastiCache (front end to DB) VS CloudFront (contents server from edge) VS DAX (cache infront of Dynamo DB) VS Read Replics (reporting apps to run) 
-
-Network
-CloudFront, Global Accelerator, Route 53, Placement Groups, VPS endpoints , Direct Connect
-
-Product specific features
-S3 Transfer acceleration , EBS optimised instances
-
-4) COST OPTIMIZATION PILAR
-match supply and demand
-implement auto scaling stop dev and test resources when don't need
-go serverless
-Track you expenditure
-cost explorer
-aws budget 
-use tags on resources
-
-Right Sizing
-Trusted advisor for recommendations
-On demand Vs Reserved VS spot instances
-AVoid expensive sols: MySQL VS Autrora VS Oralce
-AWS Direct Connect (save internet cost)
-CloudFtont  reduce load on backbend system
-
-
-X-Rays traces a request between API Gateway and Lambda functions
-
 Certification Reading
 AWS Architecture Center
 ***AWS FAQS
@@ -1490,25 +635,31 @@ Accommodation Type: ESL + 30 mins
 wait for it to approval
 
 
---------Recommendations -----
-Keys parts in questions
-Features: serverless, key value,atuo scaling
-Qualities: cost effective, high available , fault tolerant
+AWS Architecture Center
+https://aws.amazon.com/architecture/
 
+https://aws.amazon.com/solutions/
+
+Well Architectural Labs
+https://www.wellarchitectedlabs.com
+
+Good AWS Samples
+https://github.com/aws-samples
+https://webapp.serverlessworkshops.io/
+https://cicd.serverlessworkshops.io/java.html
+
+
+--------Recommendations and Tips -----
+Eliminate wrong ones
+watch Keys parts in questions
+Features: serverless, key value, auto scaling
+Qualities: cost effective, high available , fault tolerant
+if a solutions seems feasible but highly complicated, its probably wrong
 Skip wrong answer
 
+White Papers
+AWS best practices
+Well Architected Framework
+Disaster recovery
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+FAQ are important

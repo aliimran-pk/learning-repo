@@ -140,4 +140,186 @@ EBS volumes are created for a specific AZ and can only be attached to one EC2 in
 EFS is a network file system (NFS) and allows to mount the same file system to 100s of EC2 instances. Publishing software updates their allow each EC2 instance to access them. 
 Golden AMI are a standard in making sure you snapshot a state after an application installation so that future instances can boot up from that AMI quickly. 
 
---------------------------------------------------------------------
+--------------------------Event Processing in AWS------------------------------------------
+
+SQS  + Lambda
+in case of error msg goes to DLQ set by SQS
+
+SNS + lambda
+in case of error msg goes to DLQ set by Lambda
+
+Fan Out Pattern (deliver to multiple SQS)
+
+1) Application connect to multiple queues
+Application -> SQS
+not reliable
+2) Application -> SNS - SQS
+
+S3 Events
+
+1) S3 event -> SNS - Multiple SQS (fan-out)
+2) S3 event - SQS - lambda
+good if lambda fails , then we can retry
+3) S3 event (asynchronous) -> Lambda -> DLQ
+
+if two writes are made to a single non versioned object at the same time,
+it is possible that only a single event notification will be sent
+
+** if you want to ensure that an event notification is sent for every
+successful write, you can enable versioning on your bucket
+
+------------------------------------Caching Strategies------------------------------------------------------------
+
+Client -> CloudFront (caching with TTL, global service) -> API Gateway (caching, regional service) -> EC2/lambda -> Redis, memcached, DAX -> Database
+Client -> CloudFront -> S3 for static files
+------------------------------------------------------------------------------------------------
+BlockIng an IP address
+
+Client -> NACL (deny rule) -> VPC - SG( ALB)  -> SG(EC2)
+
+we can use WAF with ALB or at CloudFront
+
+
+-------------------High Performance Computing- HPC-------------------------------------------------------------------------
+Cloud is perfect place to perform HPC
+you can create a v. high no. of resources in no time
+
+services help to per HPC
+
+1)Data Management and Transfer
+
+AWS Direct Connect
+Moves Gbs pf data to cloud, over a private secure network
+establish a dedicated network connection from your premises to AWS.
+
+Snowball and snow mobile
+Moves PB of data to cloud
+
+AWS DataSync
+Move large amount of data between on-premise and S3, EFS,FSx for windows
+
+2) Compute and Networking
+
+EC2 instances
+CUP optimized, GPU optimized
+Spot instances/ spot fleets for cost saving + auto scaling
+
+EC2 Placement Groups
+cluster for good network performance 
+low latency 10Gbps network
+ 
+EC2 enhanced networking (SR-IOV)
+higher bandwidth, highest PPP  (packet per second)
+** Option1: ENA Elastic Network Adapter up to 100Gbps
+** Option2: Intel 82599 VP up to 10Gbps, Legacy
+
+Elastic Fabric Adapter (EFA)
+Improved ENA , only for linux
+leverages MPA message passing interface
+by pass OS to provide low latency and reliable trasfport
+
+3) Storage
+
+Instance attached storage
+EBS: scale up to 64000 IOPS with io provisioned IOPS
+Instance Storage : scale too millions of IOPS, linked to EC2
+
+Network Storage
+S3: large blob, not a file system
+EFSL scale  IOPS based on total size
+FScx for lustre: HPC optimized distributed file system, millions of IOPS, backed by S3
+
+4) Automation and Orchestration
+
+AWS Batch
+supports multi-node parallel jobs which enables ou ti run single jobs that span multiple EC2 instances
+easily schedule jobs
+
+AWS parallel Cluster
+open source cluster management tool to deploy HPC on AWS
+configure with text files
+automate creation of VPC, subnets
+
+
+Creating a Highly available EC2 instance
+
+1) User ->Elastic IP -> EC2 active - Monitor -Cloudwatch -> Lambda ->
+start EC2 standby in case of failure and attach elastic IP to it
+
+2) using ASG
+User ->Elastic IP -> ASG -> EC2 
+
+1 min
+1 max
+1 desired
+>=2 AZ
+
+EC2 instance role to Allow API calls to attach the Elastic IP
+
+3) if EC2 having database with EBS and if EC2 down
+using ASG terminate lifecycle hook create EBS snapshot + tag
+now on ASG launch lifecycle hook EBS volume created and attach to it
+
+High Availability for a Bastion Host
+A bastion host is a server whose purpose is to provide access to a private network from 
+an external network, such as the Internet. Because of its exposure to
+potential attack, a bastion host must minimize the chances of penetration
+
+Client 22 - VPC - Bastion Host (public subnet ) --> 22 EC2 (private subnet same or diff AZ)
+
+ For HA 
+ Add NLB (for port 22 )
+ 
+ Client -> NLB - Bastion Host (public subnet) - EC2 (private subnet)
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

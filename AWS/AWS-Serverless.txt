@@ -373,37 +373,35 @@ its a open source
 yaml file with all serverless resources, cloud formation template
 SAM can use CodeDeploy to deploy lambda functions
 
-AWS AppSync
-apps continue to work offline
-data sysnc when connect again
-based on GraphQL (FB framework ) get data from multiple API
-can integrate with nosQL db, rds and lambda
 
 -----------------------------------------AWS Step Functions-------------------------------------------------------
 
+**Build serverless visual workflow to orchestrate your Lambda functions
 build distributed applications using visual workflows
-
+** Represent flow as a JSON state machine
 Crate a serverless workflow in 10 mins using visual approach
 invoke multiple aws services  into serverless workflows
-build workflows as a series of steps
+*build workflows as a series of steps
 retry a step until it succeeded
-max duration is 1 year
+* max duration is 1 year
 integrate with API Gateway to expose it as API
 include human approvals 
 long-running
 machine leaning models
-
 short duration
 iot data ingestion, steam processing
 less code
 recommend for all new workflows , easy and simple cases
+can integrate with EC2,ECS, on-premise servers, API Gateway
 
-AWS SIMPLE WORKFLOW SERVICE (SWF)
+
+AWS Simple Workflow Service (SWF) (older)
 for complex orchestration 
+*** Code runs on EC2 (not serverless)
 bud and run background jobs
 with parallel or sequential steps
 synchronously or asynchronously
-can involved human inputs
+** can involved human inputs, Has built in human intervention step
 use case: order processing
 workflow can run up to 1 year
 
@@ -420,6 +418,9 @@ SWF update workflow history and then schedule another decision task
 until decider to close workflows
 SWF archivers history and close workflow
 
+Step Function is recommended to use for new applications except 
+if u need external signals to intervene in the process
+child process that return values to parent processes
 
 -----------------------------------------------------------------------------------
 ** Mobile Application Scenario

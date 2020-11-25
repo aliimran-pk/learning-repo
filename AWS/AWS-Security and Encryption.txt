@@ -23,37 +23,93 @@ First law of security : Defence in Depth
 encrypt all data 
 also encrypt data in transit b/w apps and db
 
-Symmetric Key Encryptions
-use same key for encryption/decryption
-
-Asymmetric Key Encryption (Public key cryptography)
-public key
-private key
-
-Encrypt data with public key and decrypt using private key
 
 Most Famous Algo is RSA
 
-KMS 
-Key Management Service (a multi tenant service)
+------------- -AWS KMS -----------------------------------------------------------
+** Key Management Service (a multi tenant service) , 
+* Encryption
+* AWS manage keys for us
+Fully integrated with IAM for authorization
 manage cryptographic keys both symmetric and asymmetric
 define key usage permission including cross account access
 track key usage in AWS Cloud Trail (regulations and compliance)
 Integrate will all aws services that need data encryption
-
+Can also use the CLI/SDK with KMS
 Automatically rotate master key once in a year
 Schedule key deletion
 mandatory min wait period 7 days (max 30 days) 
 not directly delete the key (either disable it or schedule key for deletion)
-
+not directly delete the key (either disable it or schedule key for deletion)
+able to audit key usage using cloudTrail
 Its a managed service 
+pay for API call to KMS ($0.03 / 10000 calls)
+KMS can only help in encrypting up to 4KB of data per call
+if data > 4 KB, use envelope encryption
+
+to give access to KMS to someone
+Mare sure the key policy allows the user
+Mare sure the IAM policy allows the API calls
+
+** KMS keys are regional specific  (can' t use same key in other region)
+EBS volume encrypted with KeyA in eu-west-1 to app_southesat-2
+
+1) create snapshot encrypted with KeyA
+2) copy snapshot to other region and encrypt with Key2
+3) create EBS volume encrypted with Key2
+
+KMS Key policies
+control access to KMS keys
+
+Default KMS key policy
+	create automatically if not provided
+	complete access to root user
+	give access to IAM policies to the KMS key
+
+Custom KMS key policy
+define users, roles that can access KMS key
+define who can administer the keys
+cross account access
+
+
+1) Symmetric Key Encryptions (AES-256 keys)
+use same key for encryption/decryption
+AWS services that are integrated with KMS use Symmetric Customer Master Keys (CKM)
+** necessary for envelope encryption
+You never get access to the key encrypted(must call KMS API to use)
+
+2) Asymmetric Key Encryption (Public key cryptography)
+public key
+private key
+Encrypt data with public key and decrypt using private key
+used for encrypt.decrypt or sign/verify operations
+Public key is downloadable but you access the private key unencrypted
+Use case: encryption outside of AWS by users who can't call private key  unencrypted
+
+3 types of Customer Manage keys (CMK)
+
+1) AWS Managed Service Defaukt CMk
+free
+
+2) User keys created in KMS
+1$ / month
+
+3) User keys imported (must be 256 bit symmetric key)
+1$ / month
+
 
 Console --> KMS --. Create Key
-Customer Managed keys
+Customer Managed keys  (pay $1 per month)
+
+Type : Symmetric, Asymmetric 
 Symmetric
 Name: MyMasterSymmetricKey
-Key Administrator
+Key material origin (KMS,External , CloudHSM)
+KMS (means KMS will generate a key for us)
+Alias : tutorial 
+Key Administrators
 Choose the IAM users and roles who can administer this key through the KMS A
+Key rotation : if checked , will rotate the key every year
 
 Define key usage permissions
 Select the IAM users and roles that can use the CMK in cryptographic operations
@@ -70,7 +126,7 @@ Server Side Encryption with KMS
 3) S3 ask KMS to provide data keys
 4) KMS use Customer master key and generate a new plain data key and a encrypted data key
 5) S3 received these keys data and encrypted data key
-6) S3 encrypt the data/object using data key with default Encryption Algo
+6) S3 encrypt the data/object using data key with default Encryption Algorithm
 7) S3 stores encrypted data with the encrypted data key in S3
 8) S3 delete data key
 
@@ -81,12 +137,12 @@ Encryption of Data - S3 using data key
 
 Decryption
 
-1) S3 send encrypted data key (stored with the encypted data) to KMS
+1) S3 send encrypted data key (stored with the encrypted data) to KMS
 2) KMS decrypt the data key using SMK and send back plain text data key to S3
 3) S3 use the data key to decrypt the data
 
 This is called Envelop Encryption 
-so KMS use Envelop Encryption 
+** so KMS use Envelop Encryption 
 
 KMS encrypts small piece of data (data keys < 4KB)
 actual encryption is done by the service
@@ -97,14 +153,96 @@ imp:
 You can associate a key/ map called encryption context with any cryptographic operation
 if encryption key context is different , decryption failed
 
-AWS Cloud HSM
+---------------------------------------SSM  Parameter store-----------------------------------------------------------------------------------
+AWS Systems Manager Parameter Store provides secure, hierarchical storage for configuration 
+data management and secrets management
+serverless , scalable ,easy SDK
+version tracking of configurations/ secrets
+Notifications with cloudwatch events
+integration with cloudFormation
+Parameter Store is an AWS service that stores strings
 
+Applications (plain text configuration/encrypted configuration) -> SSM store -> check IAM
+																																  -> decryption wit AWS KMS
+																																  
+Store Hierarchy
+
+/department-1																																  
+	app1	
+db-url
+			db-pwd
+	app2
+/department-2
+
+GetParametersByPath
+
+Standard Parameters tier
+free
+total no. of parameters  = 10000
+max size = 4KB
+policy = No
+
+Advance Parameters tier
+paid, 0.05 per parameter per month
+total no. of parameters  = 10000
+max size = 8KB
+policy = yes
+Allow  to assign A TTL to a parameter (expiration date ) to force updating or deleting sensitive data
+can assign multiple polices at a time
+
+console - System Manager - Parameter store
+create parameter
+name: /my-app/dev/db_url
+type: string
+value : this is my db sting
+
+aws ssm get-parameters -name  /my-app/dev/db_url --with-decryption  (return the json)
+aws ssm get-parameters -path  /my-app/dev
+
+Get configurations data using Lambda
+Create Lambda function with role (for Cloudwatch logs)
+assign its role to System manager and KMS
+then it will be able to get the data by key name
+
+
+-----------------------------AWS Secrets Manager-----------------------------------------------------------------------------------------
+to store secrets (new service)
+** Capability to force rotation of secrets every x days
+Automated generation of secrets on rotation (use lambda)
+*** Integration with RDS (MySQL, PostgresSQL, Aurora)
+secrets are encrypted using KMS
+mostly meant for RDS integration
+For RDS username/pwd and for other secrets types (it uses key value pair)
+
+Console -> store a new secret
+secret type: if RDS then must select RDS database to map it
+secrets name: my secret
+
+Configure automatic rotation
+rotation interval: 60 days
+Lambda function: (will invoke after 60 days to rotate the secret)
+
+----------------------------------------------AWS CloudHSM----------------------------------------------------------------------------------
+KMS - AWS manages the software for encryption
+CloudHSM - AWS provision encryption hardware
+** you manage your own encryption keys 
+** HSM is a tamper resistant FIPS 140-2 level 3 compliance 
+** use two or more HSMs in separate AZ in production clusters (must setup)
+** supports both symmetric and asymmetric encryption
+No free tier available
 Cloud Hardware Security Module
 managed HA and AS
-FIPS 140-2 level complaint
+**  must use CloudHSM client software
+Redshift supports CloudHSM for db encryption and key management
+** Good option to use with SSE-C encryption
+** AWS can't recover your keys if you loose your credentials
+
+IAM can use for CRUD as HSM cluster
+CloudHSM software manages the keys and users
+
 it is single tenant
 AWS can't access your encryption master keys in CloudHSM
-use two or more HSMs in separate AZ in production clusters
+
 AWS KMS can use CloudHSM cluster as "custom key store" to store the keys
 use cloudwatch for monitored and cloud trail for tracking key usage
 web server offload SSL processing
@@ -112,8 +250,9 @@ as certificate authority
 digital rights mgmt
 TDE for oracle db
 if You want a dedicated hardware security module with cloud
-
 All service integrate with KMS and KMS use CloudHSM 
+
+
 
 CloudHSM --> Create Cluster
 VPC
@@ -142,4 +281,62 @@ Https is must
 Client Side Encryption
 Customer send encryption data to AWS service
 Amazon S3 encryption client can be used 
+
+--------------------------AWS Shield-------------------------------------------
+
+shields from distributed denial of service attacks DDoS
+eg. sending million request to the server
+protect Route S3,CloudFront,Global Accelerator,EC2,ELB
+
+1) AWS Shield Standard 
+Free service
+activated by default
+protect from attacks such as SYN/UDP floods, reflection attacks and layer 3 and 4 attacks
+
+2) AWS Shield Advanced
+paid service, $3000 per month per organization
+** 24X7 access to AWS DDoS response team DRP
+** protect your AWS bills from usage spikes
+more sophisticated attacks on EC2,ELB,CloudFront, Global Accelerator and Route 53
+
+
+-----------------------AWS WAF  Web Application Firewall------------------------------------
+Protect web applications from OWASP to 10 (Open web application security project)
+layer 7 HTTP
+most critical and common security risks to web apps
+CVE (common vulnerabilities and exposure)
+*** can be deployed on CloudFront,ALB,API Gateway
+web traffic filtering, block attacks
+
+Direct traffic to optimal endpoints over AWS global network
+Provides two static IPs from AWS edge network
+Distribute traffic across multiple endpoint resources in multiple AWS regions
+works with ALB,EC2,Elastic IP
+
+Define Web ACL (Web access control list)
+rules can include : IP address, http header , http body or URI string
+protect from SQL injections and Cross Site scripting XSS
+size constraints , geo-match (block countries)
+rate based rules (to count occurrences of event)  for DDoS protection
+
+-------------------------------AWS Firewall Manager ------------------------------------------------
+AWS Firewall Manager to manage firewall rules across org accounts
+** common set of security rules
+WAF rules (ALB,API Gateway, CloudFront)
+AWS Shield Advances (ALB,CLB,Elastic IP, CloudFront)
+Security Groups of EC2 and ENI resources in VPC
+
+-----------------------------------------------------------------------------------------------------------
+Sample Reference Architecture for DDos Protection
+
+Client --> Route 53 (AWS shield) -> CloudFront (AWS shield OR WAF) --> VPC -> ALB(Security Group  AWS Shield) in public subnet -> SG(private subnet)
+
+
+
+
+
+
+
+
+
 

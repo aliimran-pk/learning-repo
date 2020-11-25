@@ -1,0 +1,458 @@
+AWS Other Services
+
+Continuous Integration
+CodeCommit and CodeBuild
+Push code often 
+Get code build and test
+Tell developer results of build
+
+Continuous Delivery
+ensure software can be release reliably whenever needed
+CodeDeploy, Jenkins CD, Spinnakaer
+
+Technology Stack
+
+Code
+AWS Code Commit
+
+Build and Test
+Build and Test code (application packages, containers)
+
+Deploy and Provision
+AWS Elastic Beanstalk
+AWS CodeDeploy , CloudFormation
+Automate Deployment (EC2,EKS, lambda etc)
+
+Orchestration
+AWS CodePipeline CI/CD pipelines
+CodePipeline is a CICD orchestration service, and has an integration with Elastic Beanstalk
+
+
+* When deploying code directly onto EC2 instances or On Premise servers, CodeDeploy is the service to use. You can define the strategy (how fast the rollout of the new code should be)
+* CodeBuild is an alternative to Jenkins
+* AWS Organizations allow you to create multiple AWS accounts and centralize them around a single organization for simplified and unified billing. 
+-----------------------DevOps----------------------------------------------------
+
+Infrastructure as a code IAAC
+treat infra as the same way as application code
+track your infra changes over time (version control)
+being repeatability into your infrastructure
+
+2 key parts
+
+1) Infrastructure Provisioning
+provisioned compute,db,storage,networking
+open source, cloud neutral, Terraform
+AWS service: CloudFormation
+
+1) Configuration management
+Install right software and tools on provisioned resources
+AWS Service: OpsWorks lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2
+
+
+---------AWS CloudFormation  -----------------
+
+Automate deployments and modification of AWS resources in a controlled and predictive way
+It is a declarative way of outlining your AWS infrastructure for any AWS resource
+
+avoiding configuration drift (less error prone)
+all configurations in a simple txt JSON or YAML
+CloudFormaion handles dependencies
+eg. first VPC then subnets and then db
+Automatic Rollback
+Free to use , pay for resources provisioned
+get an automated estimate for your configuration
+
+Benefits
+code can be versioned and changes can be tracked
+each resource in the stack is tagged, so you can easily see how must stack cost you
+In dev, you could automate deletion of templates at 5 PM and recreate it at 10 Am
+Automated generation of diagrams for your templates
+Declarative programming (no need to figure out ordering )
+separation of concerns 
+can leverage existing templates on the web
+
+Templates have to be uploaded in S3 and referenced in CloudFormation
+upload a new version
+deleting a stack will delete all its artifacts
+
+Deploying ClodFormation
+
+1) Manual way
+Edit template in CloudForamtion Designer
+use AWS console to input parametes
+
+2) Automated way (recommended)
+Edit template using YAML
+deploy using CLI
+
+CloudFormation Templates
+JSON/YAML defining multiple resources
+
+Stack
+group of resources that are created from CF template
+
+Change Sets
+to make changes to the stack, update the template
+tells what whould chnage if you execute
+allows u to verify the changes and then execite
+
+Templates Components
+
+1) Resources
+what u want to create
+** One and only mandatory element
+
+2) Parameters
+Dynamic inputs , values to pass to your template at runtime
+ie "t2.micro"
+
+3) Mappings
+key value pairs
+configure diff values for diff regions
+
+4) Outputs
+Return values from execution, references to what has been created
+eg. id of resource
+
+5) Metadata
+
+Template helpers
+1) References
+2) Functions
+
+CloudFormation VS Elastic Beanstalk
+
+CloudFormation
+Deleting stack will delete all associated resources 
+except DelitoinPolicy set to "Retain"
+or you can enable Termination policy for the entire stack
+Template stored in S3
+
+use CloudFormation StackSets to create/update/delete stack across multiple accounts and regions
+with a single operation
+
+Elastic Beanstalk
+like a pre packaged cloud-formation template with a user interface
+and in background cloud-formation template is created and executed
+
+Cloud Formation StackSets
+create/update/delete stacks across multiple accounts and regions with a single operation
+admin creates stacksets
+trusted accounts to create/update/delete stack instances from stackset
+
+Practical
+Console- CloudFormation -Create stack
+upload template file
+
+-------------------------------------------------------------------------------------------------
+------------------------Containers Solutions------------------------------------------------------------
+Docker is cloud Neutral
+
+Container Orchestration provides
+Auto scaling (scale container based on demand)
+Service Discovery (helps Microservice find others)
+Self healing (replace failing instances using health check)
+Zero Downtime deployments release new versions without downtime
+
+Docker 
+Docker is a container technology
+Run a containerised application on any machine with Docker installed
+Containers are isolated from each other
+you can control RAM/CPU allocations to your containers
+Ability to restrict network rules
+Migrate applications (once containerized) to cloud
+
+Container Orchestration Options 
+
+1) Cloud Neutral
+Kubernetes 
+AWS Service = AWS Elastic Kubernetes Service (EKS)
+EKS doesn't have a free tier
+
+2) AWS Specific
+AWS Elastic Container Service ECS (helps to run docker containers on EC2)
+AWS Fargate (No free tier): Serverless version of AWS ECS
+
+AWS Elastic Container Service ECS 
+** A regional Service
+Need to create a cluster of EC2 instance managed by ECS for Microservice
+build using container images
+Amazon ECS makes it easy to deploy, manage, and scale Docker containers running applications, services, and batch processes. Amazon ECS places containers across your cluster based on your resource needs and is integrated with familiar features like Elastic Load Balancing, EC2 security groups, EBS volumes and IAM roles
+
+ECS compose of 
+ECS Core: running ECS on user provisioned EC2 instances
+Fargate: running ECS on AWS provisioned compute (serverless)
+EKS: running ECS on AES powered Kubernetes (running on EC2)
+ECR: Docker container registry hosted by AWS
+
+For AWS Fargate 
+No need to manage EC2 instances 
+
+Use case 
+Microservice
+batch processing on ECS using AWS Batch
+
+ECS and Fargate points to Elastic Container Service
+
+Don't Create 
+Container definition
+Sample Application
+Container Name: sample-container-Image
+Image: httpd:2.4
+
+ECS Cluster
+set  of EC2 instances
+
+ECS Tasks
+containers running to create the application
+A task definition is a blueprint for your application
+Describes one or more containers through attributes. 
+Some attributes are configured at the task level but the majority of attributes  are configured per container.
+
+ECS  IAM Roles
+roles assigned to tasks to interact with AWS
+
+ECS Service
+A service allows you to run and maintain a specified number 
+(the "desired count") of simultaneous instances of a task definition in an ECS cluster.
+
+Service Name: sample-app-service
+Number of desired tasks: 2
+
+Application Load Balancer
+
+Configure your cluster
+The infrastructure in a Fargate cluster is fully managed by AWS. Your containers run without you managing and configuring individual Amazon EC2 instances.
+
+For Fargate
+No EC2 instance created
+LB is created
+Target Group is created
+
+A Task is a definition of a container
+Tasks role can also be attached (RDS)
+Task execution IAM role (permission to pull container images)
+
+
+A existing task deification can't be changed
+A tasks has IP and container details
+
+A Service  allows to run and maintain  a specific  no. of tasks  (desired count)
+it brought up new tasks in case of failure
+
+ECS Cluster
+Groping of one or more container instances (EC2 instances) when   u run your taksk
+
+EC2 instances in a cluster running a container agent for communication
+
+ECS - ALB Direct Integration Feature
+** Dynamic host port mapping  (multiple task from the same service allowed per EC2 container)
+** This allow you to run multiple instances of the same application on the same EC2 machine
+path based routing multiple services can use same listener port on same ALB and be routed based the path
+
+Elastic Beanstalk can run container using Docker as platform but can't create clusters
+
+------------------
+To have more access to EC2 instances for ECS
+ECS --> Cluster-> Create Cluster -- Select cluster template
+
+EC2 Linux + Networking
+Resources to be created:
+Cluster
+VPC
+Subnets
+Auto Scaling group with Linux AMI
+
+----------------------------------------
+
+ECSSetup and Config file
+Run an EC2 instance , install ECS agent with ECS config file
+Or
+use ECS-ready AMI
+
+ECS config file /etc/ecs/ecs.config
+ECS-CLUSTER = mycluster
+ECS_CLUSTER_AUTH_DATA = to fetch images from private registries
+ECS_AVAILABLE_LOGGING_DRIVERS = cloudwatch container logging
+ECS_ENABLE_TASK_IAM_ROLE = true
+
+
+ECR 
+Elastic Container Registry
+for deploy container images
+
+ECS instance (pull images) -> ECR - IAM (for access)
+AWS CodeBuild -> ECR
+
+ECS- IAM Task Roles
+EC2 having ECS agent and running
+Task 1 AppA
+Task 2 AppA
+Task 3 AppB
+
+Not to access ECS  service, EC2 instance should have a IAM role
+But what if AppA needs RDS or App B need to access S3
+
+So IAM task roles to be define, Each ECS task should have
+ECS IAM task role to perform their API calls
+
+AWS Fargate 
+When launching ECS Cluster, we have to create our EC2 instances
+we need to manage the infrastructure our self in case of scale
+* Fargate is serverless
+No need to provisioned EC2
+just create task definitions and AWS will run our containers for us
+* To scale just increase task no.
+
+Amazon EKS (Elastic Kubernetes Service)
+It is a way to manage kubernetes clusters on AWS
+*Recommended if you are already using Kubernetes  on-premises or in different cloud and want to move workload to AWS
+* Its an Alternative to ECS, similar goal but different API 
+EKS supports EC2 and Fargate
+
+------------------- Elastic MapReduce  (EMR) --------------------------------------------------------------
+
+Managed Hadoop service with High availability and durability
+EMR helps creating Hadoop cluster (Big data)  with 100s of EC2 instances
+** EMR give access to underlying OS ie u can ssh into it
+Important tools are natively supported Pig, Hive , Spark , Presto, Hbase, Flink
+Auto scaling and integrated with sot instances
+EMR take care of all provisioning and configuration
+Amazon Elastic MapReduce (Amazon EMR) is a web service that makes it easy to quickly 
+and cost-effectively process vast amounts of data
+Amazon EMR uses Hadoop, an open source framework, to distribute your data and processing
+ across a resizeable cluster of Amazon EC2 instances
+Its big data processing
+use cases
+log processing for insights
+click stream analytics for advertisers
+genomic and life science dataset processing
+
+Storage Types
+
+1) HDFS
+Standard for Hadoop
+Data Storage = EBS or instance (data can lost if instance down)
+Persistence Cluster running 24 X 7
+
+2) EMRFS ( Elastic MapReduce File System)
+Data Storage = S3
+Transient  Cluster running  Infrequent big data jobs (ad-hoc queries)
+can directly run map-reduce  jobs
+
+---------------------------------------------------------------------------------------------------------------------------
+AWS EMR
+For Big data frameworks that needs very large scale data processing and high customizations
+machine learning , graph analytics
+
+AWS Redshift
+Run complex queries against data warehouse,
+housing Structured and Unstructured data
+
+AWS Redshift Spectrum
+Run queries directly against S3 without worrying about loading entries data from S3 into a DWH
+recommended if u are executing quires frequently against Structured data
+You have a huge volume of data in Amazon S3. You would want to run queries against S3 directly instead of moving data to a data warehousing solution
+ 
+AWS Athena
+Serverless (quick ad-hoc queries without working about provisioning a computer cluster)
+
+---------------------------------------------------AWS Glue ------------------------------------------------------------------------
+
+** Full managed ETL service
+** Run ETL jobs using Spark
+** Serverless
+simplify data preparation capture metadata for analytics
+** connect AWS Glue to your data on Source:Aurora,RDS,Redshift and S3    Sink: S3,Redshift etc
+** Automated Code  Generation
+* Crawls data sources and identify data formats (Schema Inference)
+Glue creates a AWS Glue Catalogue with metadata abstracted from  your data (def and schema of source tables)
+
+metadata from Glue data catalogue can be used from 
+AWS Athena
+AWS EMR
+AWS Redshift Spectrum
+
+Handling Data Streams
+
+Characteristics of Streaming Data
+Continuously Generated
+Small Pieces of data
+Sequenced , associated with time
+
+------------------------------AWS OpsWorks-----------------------------------------------------------------
+
+is a Configuration Management Tool
+** Managed service based on Chef and Puppet
+Its an alternative to AWS SSM (AWS Systems Manager is an AWS service that you can use to view and control your infrastructure on AWS)
+
+helps to perform server configuration automatically or repetitive actions
+eg. copy a file 10 100 servers
+make a change across 100 servers
+both on premises and on cloud
+
+Chef/Puppet (open source) help with managing configuration as code
+Configurations resides at 
+Chef recipes/cookbooks
+Puppet manifest
+
+All metric send to CloudWatch
+All configuration mgmt tools can also do
+infrastructure provisions but not recommended
+
+---------------------------------------------AWS Elastic Transcoder--------------------------------------------------------------------------
+Fully managed service to convert media files stored in S3 into various formats
+create WebM video,Mp3 audio or animated Gif
+For all other video processing use cases, recommanded to use Element MediaConvert
+4 components
+
+Jobs: what does the work of the transcoder
+PipeLine: Queue that manages the transcoding job
+Presets: Templates for converting  media 
+Notifications: SNS 
+
+Pay what you use ,scale automatically
+
+-------------------------------------------------AWS Workspaces-------------------------------------------------------------------------
+
+Desktop as a Service (DaaS)
+MANAGED , Secure Cloud Destop
+*** Replacement for VDI (virtual Desktop infrastructure)
+provision windows or Linux Desktop in minutes
+Integrated with Microsoft AD
+
+User -> Virtual Desktop (Linux/Windows) -> AWS Cloud
+																	   -> Corporate data centre
+
+
+--------------------------------------------AWS AppSync-----------------------------------------------------------------------
+* Store and Sync data across mobile and web apps in real time
+apps continue to work offline,  data sync when connect again
+** based on GraphQL (FB framework, mobile technology ) get data from multiple API
+can integrate with NoSQL DB, RDS and lambda
+real time subscriptions
+** Offline data synchronization (replaces Congnito Sync)
+
+-------------------------------------------------------------------------------------------------
+Other Services: Cheat Sheet
+
+Here's a quick cheat-sheet to remember all these services:
+
+CodeCommit: service where you can store your code. Similar service is GitHub
+CodeBuild: build and testing service in your CICD pipelines
+CodeDeploy: deploy the packaged code onto EC2 and AWS Lambda
+CodePipeline: orchestrate the actions of your CICD pipelines (build stages, manual approvals, many deploys, etc)
+CloudFormation: Infrastructure as Code for AWS. Declarative way to manage, create and update resources.
+ECS (Elastic Container Service): Docker container management system on AWS. Helps with creating micro-services.
+ECR (Elastic Container Registry): Docker images repository on AWS. Docker Images can be pushed and pulled from there
+Step Functions: Orchestrate / Coordinate Lambda functions and ECS containers into a workflow
+SWF (Simple Workflow Service): Old way of orchestrating a big workflow.
+EMR (Elastic Map Reduce): Big Data / Hadoop / Spark clusters on AWS, deployed on EC2 for you
+Glue: ETL (Extract Transform Load) service on AWS
+OpsWorks: managed Chef & Puppet on AWS
+ElasticTranscoder: managed media (video, music) converter service into various optimized formats
+Organizations: hierarchy and centralized management of multiple AWS accounts
+Workspaces: Virtual Desktop on Demand in the Cloud. Replaces traditional on-premise VDI infrastructure
+AppSync: GraphQL as a service on AWS
+SSO (Single Sign On): One login managed by AWS to log in to various business SAML 2.0-compatible applications (office 365 etc)

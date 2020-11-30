@@ -151,7 +151,7 @@ https://www.youtube.com/watch?v=q7wNcYliJ1Q
 
 ---------------------------------CIDR------------------------------------------------------
 CIDR is classless Inter domain routing
-Help to define an IP range
+Help to define an IP Range
 A method for allocating IP addresses 
 CIDR are used for Security Groups rules or WS networking in general
 It is as also a 32-bit address, which includes a special number which represents the number of bits that are present in the Block Id.
@@ -177,7 +177,7 @@ subnet mask is of two forms
 255.255.255.0 l=  less common
 /24  = common in AWS
 
-Subnet mask allows part of underlying IP to get additional next values from the base IP
+*** Subnet mask allows part of underlying IP to get additional next values from the base IP
 2^(32 - n )
 /32 allows for 1 IP =  2^(32 - 32) =   2^0 = 1
 /31 allows for 2 IP  = 2^(32 - 31) =   2^1 = 2
@@ -192,7 +192,7 @@ Quick Memo
 /8   = last 3 IP number can change
 /0   = all IP numbers can change
 
-2^(32-24) -2 = 2^8 -2= 256-2 = 254
+2^(32-24) = 2^8 = 256
 
 1) 192.168.0.0/24 ? 
 last IP number can change
@@ -824,8 +824,8 @@ Role: used to send logs to CW
 ----------------------------AWS and On-Premises -------------------
 Are there any programs/projects available for cloud where one can have hands-on experience on real projects working with cloud experts ?
 
-1) AWS MANAGED VPN
-Site to Site VPN 
+1) ---------------AWS MANAGED VPN Site to Site VPN ----------------------------------
+
 IPsec VPN tunnels from VPC to Customer Network over internet
 Customer Gateway(SW or HW) installed at Customer Data Center
 Virtual Private Gateway is configure into AWS at VPC level
@@ -838,25 +838,134 @@ use static internet -routable IP address for your Customer Gateway Device
 if behind a CGW behind NAT , use public IP address of NAT 
 
 
-2) AWS Direct Connect (DC) 
+2) ----------------------AWS Direct Connect (DC) --------------------------------------------
 Private Dedicated Network
-can reduce ISP{ bandwidth costs
-direct line from AWS to your Data Center
-Connection options
-dedicated 1 GBPS or 10 GBPS
-Hosted : shared 50 MBPS to 10 GBPS
+Physical link
+*** Direct Connection must be setup between your DC and AWS Direct Connect Locations
+* You need to setup a Virtual Private Gateway on your VPC
+Access public resources (S3) and private (EC2) on the same connection
 
+Private Connection
+Customer network -> AWS Direct Connect location (customer/partner router) > 
+(AWS Direct Connect endpoint) -> VPC (Virtual private Gateway) 
+
+Public Connection
+Customer network -> AWS Direct Connect location (customer/partner router) > 
+(AWS Direct Connect endpoint) -> S3
+
+Use case
+Increase bandwidth throughput, working with large data sets, lower cost
+more consistent network experience, real time data feed
+Hybrid environments 
+Supports both IPV4 and IPv6
+can reduce ISP  bandwidth costs
+direct line from AWS to your Data Center
+
+
+Direct Connect Connection Types
+
+1)  Dedicated  Connections
+1 GBPS and 10 GBPS
+physical Ethernet port dedicated to a customer
+request made to AWS first then completed by AWS Direct Connect Partners
+
+Console -> Direct Connect
+Name: myConn
+Location:
+port speed: 1Gbps, 10GBps
+
+2) Hosted Connections: 
+shared 50 MBPS to 10 GBPS
+Connection requests are made via AWS Direct Connect Partner
+**Capacity can be added/removed  demand
+1,2,5,10 Gbps available at some AWS direct connect partners
 * Establish DC can takes more than a month
 * Establish redundant DC for max reliability
-* DC doesn't encrypt data , (private connection only)
+*** DC doesn't encrypt data in transit , (private connection only)
 
-AWS Direct Connect  Plus VPN
-IPsec site-to-site VPN tunnel from an direct connect location to
-customer network
+
+Direct Connect Encryption
+
+AWS Direct Connect  + VPN
+IPsec site-to-site VPN tunnel from an direct connect location to customer network
 Traffic is encrypted using IPsec protocol
-
+Good for an extra level of security but slightly more complex to put in place
 On AWS you connect to Direct Connect and then DC to VPN to customer data centre
 
+Customer DC -> VPN - Direct Connect Location
+
+---------------Direct Connect Gateway---------------------------------------
+** if you want to setup a direct connect from on-premise DC to one or more VPC
+in different regions(same account), you must use  Direct Connect Gateway
+-----------------------------------------------------------------
+
+Egress only Internet Gateway
+outgoing only
+only works for IPv6
+similar functions as NAT(allow private instances to access to internet) but NAT is for IPv4
+
+All IPv6 are public addresses
+therefore all our instances with IPv6 are publicly accessible
+**Egress only internet Gateway gives our IPv6 instance access to the internet
+but they won't be directly reachable by the network
+**Must edit route tables, after creating Egress Only internet gateway
+
+Console -VPC
+Egress ONy Gateway
+Select VPC
+Edit Route table
+Destination = ::/0 all IPV6
+Target: egress only gateway
+-----------------------------------------------------------------
+Exposing Services in your VPC to other VPC (using VPC Endpoint Services)
+
+service A in VPC1 can be accessed by App2 in VPC2
+
+Option 1) Service VPC1 -> Public Internet -> Customer VPC with IGW
+but it is risky as it is available to internet
+tough to manage access
+
+Option2) Service VPC1  - Peer Connection(using VPC peering) - Customer VPC
+must create many peering relations (for each VPC)
+**Opens the whole network (not only this app but other apps can be exposed)
+
+Option 3) AWS Private Link VPC Endpoint Service
+ Most secure & scalable way to expose a service to 1000s of VPC(own or other accounts)
+ ** Don't require VPC peering , Internet Gateway , NAT, route tables
+** Requires a NLB at Service VPC and ENI Elastic Network Interface in Customer VPC
+** If NLB is in multiple AZ and ENI in Multiple AZ, then the solution is Fault Tolerant
+
+Service VPC (App Service - NLB) --Private Link --> Customer VPC (ENI - Consumer App)
+
+Console _ VPC - Endpoint Service
+
+-----------------------------------------------------------------------------------------
+EC2-Classic and AWS ClassicLink (deprecated)
+
+EC2-Classic: instances run in a single network shared with other customer b4 VPC
+not used now, its a dis-tractors
+
+-----------------------------AWS VPN CloudHub-------------------------------------------
+when u need network connectivity b/w your multiple branch offices (data centres)
+* low cost hub -and-spoke model for primary or secondary network connectivity b/w locations
+CloudHub can be connect on Direct Connect or via VPN
+install Virtual private Gateway at AWS and Customer Gateways in customer offices
+** Its a VPN connection so it goes over Internet
+
+Customer DC 1 and  Customer DC 2 connect to AWS CloudHub via VPN over internet
+and thus they can access each other
+
+--------------Transit Gateway ------------------------------------------------------
+
+Transitive peering b/w thousands of VPC and on-premise , hub -and-spoke  STAR connection
+It simplify network topology
+** Supports IP multicast (not supported bu any other aws service)
+Regional resource , can work cross region
+share cross account using RAM
+route tables: limit which VPC can talk with other VPC
+works with DC GW and VPN connections
+
+-------------------------------------------
 Software VPN
 Fully managed both sides of AWS VPC connectivity
 Run software VPN appliance in your VPC
@@ -865,10 +974,29 @@ Recommended when u use gateway devices which are not supported by AWS VPN
 u responsible e for patches and updates
 and its become a single point of failure
 
-AWS VPN CloudHub
-when u need network connectivity b/w your multiple branch offices
-CloudHub can be connect on Direct Connect or via VPN
-install Virtual private Gateway at AWS and Customer Gateways in customer offices
-
 VPC Flow Logs
 service helps you to troubleshoot network connectivity issues
+
+--------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

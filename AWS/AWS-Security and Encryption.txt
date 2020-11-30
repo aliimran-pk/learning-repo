@@ -296,7 +296,7 @@ protect from attacks such as SYN/UDP floods, reflection attacks and layer 3 and 
 2) AWS Shield Advanced
 paid service, $3000 per month per organization
 ** 24X7 access to AWS DDoS response team DRP
-** protect your AWS bills from usage spikes
+** protect your AWS bills from usage spikes, AWS bill reimbursement for incurred cost during the attack
 more sophisticated attacks on EC2,ELB,CloudFront, Global Accelerator and Route 53
 
 
@@ -319,6 +319,19 @@ protect from SQL injections and Cross Site scripting XSS
 size constraints , geo-match (block countries)
 rate based rules (to count occurrences of event)  for DDoS protection
 
+
+Console -> WAF & Shield
+create Web ACL 
+5 $ per month
+
+Resource type (ALB and API Gateway , CloudFront) = CloudFront
+Name : myACL
+Add AWS resources = myCloudFront
+
+Add Rules and rule groups
+AWS managed rules
+ClodWatch metric
+
 -------------------------------AWS Firewall Manager ------------------------------------------------
 AWS Firewall Manager to manage firewall rules across org accounts
 ** common set of security rules
@@ -328,8 +341,27 @@ Security Groups of EC2 and ENI resources in VPC
 
 -----------------------------------------------------------------------------------------------------------
 Sample Reference Architecture for DDos Protection
-
 Client --> Route 53 (AWS shield) -> CloudFront (AWS shield OR WAF) --> VPC -> ALB(Security Group  AWS Shield) in public subnet -> SG(private subnet)
+
+-------------------------AWS Shared Responsibility Model------------------------------
+
+Customer responsibility : 
+for EC2 , security patches and updates, firewall and network configurations, IAM
+for RDS: check port/IP , SG, user creation  and permission, parameter groups, encryption setting
+for S3: bucket configuration , policy, IAM user and roles , encryption
+
+--------------------------------------------------------------------------------------------------
+encryption in flight = HTTPS, and HTTPs cannot be enabled without an SSL certificate
+In server side encryption, the decryption also happens on the server (in AWS, we wouldn't be able to decrypt the data ourselves as we can't have access to the corresponding encryption key)
+With client side encryption, the server does not need to know any information about the encryption being used, as the server won't perform any encryption or decryption tasks
+we can use the AWS Managed Service Keys in KMS, therefore we don't need to create our own keys
+SSM Parameter Store has versioning and audit of values built-in directly
+
+
+
+
+
+
 
 
 

@@ -272,54 +272,8 @@ Client 22 - VPC - Bastion Host (public subnet ) --> 22 EC2 (private subnet same 
  
  Client -> NLB - Bastion Host (public subnet) - EC2 (private subnet)
  
- 
- 
- 
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ **We can use a Bastion host to ssh into our private instances
+ The Bastion is in the public subnet which is then connected to all other private subnets
+ Bastion host security Group must be tightened
+ ** make sure the bastion host only has port 22 traffic from the IP you need, not from 
+ the SG of your other instances.

@@ -1,9 +1,9 @@
 ----------------------------------------------EC2-----------------------------------------------------------------------------------
-elastic compute cloud
-ec2 instances are virtual server
+Elastic Compute Cloud
+EC2 instances are virtual server
 billed by second
 EC2 service provisioned EC2 instances/virtual servers
-creates and manage life cycle of ec2 instances,
+creates and manage life cycle of EC2 instances,
 load balancing and auto-scaling ,
 attach storage
 manage network
@@ -18,6 +18,8 @@ t2.micro
 t is instance family (t is General purpose instance)
 2 is generation 
 micro size
+Family Generation Size
+
 nano<micro<small<medium<large<xlarge
 
 1) Change Region to   (close to ur location)
@@ -39,7 +41,6 @@ and download EC2-keypair.perm at
 C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
 
 used for ssh 
-
 Name Tag is visible on the UI
 
 6) Connect
@@ -55,23 +56,23 @@ Add
 HTTP
 AnyWhere
 
-All ICMP ipv4  (used for ping public ip)
+**All ICMP ipv4  (used for ping public ip)
 AnyWhere
 
 
 7)
 Open Command Prompt
 cd C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
-ssh -i "EC2-keypair.pem" ec2-user@ec2-13-234-77-166.ap-south-1.compute.amazonaws.com
+ssh -i "ec2-keypair.pem" ec2-user@ec2-13-234-77-166.ap-south-1.compute.amazonaws.com
 
 
 SSH is used to control a machine remotely from a command line
 
---------  SSH via Max or Linux or windows using Powershell
+--------  SSH via Max or Linux or windows using Power shell
 terminal
 chmod 0400  downloadedPemFile.pem
 for windows add your user to key file in Advance and remove inheritance and others in Permissions  with full control
-ssh  -i downloadedPemFile.pem  ec2-user@ec2-public-ip 
+ssh  -i downloadedPemFile.pem  ec2-user@EC2-public-ip 
 exit
 
 -------- SSH via Windows
@@ -82,13 +83,11 @@ Save private key
 downloadedPemFile.ppk
 Open Putty
 Connection --SSH-Auth-Private key file and give .ppk
-hostname: ec2-user@ec2-public-ip 
+hostname: ec2-user@EC2-public-ip 
 
 -------EC2 instance Connect
 Using browser
-will not work if 22 is not allowed in SG
-
-
+*** will not work if 22 is not allowed in SG
 
 8) 
 sudo su
@@ -107,12 +106,10 @@ get details about EC2 instance
 URL accessible within he EC2 instance only
 http://url/lates/meta-data/
 
-curl http://ec2-13-234-77-166.ap-south-1.compute.amazonaws.com/latest/meta-data/ami-id/
+curl http://EC2-13-234-77-166.ap-south-1.compute.amazonaws.com/latest/meta-data/ami-id/
 curl http://13.234.77.166/latest/meta-data/hostname
 curl http://13.234.77.166/latest/meta-data/instance-id
 curl http://13.234.77.166/latest/meta-data/instance-type
-
-
 
 curl -L http://13.234.77.166/latest/meta-data/
 
@@ -154,10 +151,9 @@ decrypt the pwd using private key and login via RDP
 SSH 22
 RDP 3389
 
-EC2 uses public key cryptography using RSA
+*** EC2 uses public key cryptography using RSA
 public key is stored in EC2 instance
 private key is stored by customer
-
 
 For putty
 create ec2_instance1_KP.ppk using puttygen and coonect to EC2 instance
@@ -171,9 +167,9 @@ They control how traffic is allowed into or out of EC2 Machines
 
 
 ** if there is no rules , no traffic is allowed 
-you can specific only ALLOW RULES , rest is not allowed by default
-can assign up to 5 security groups
-No restart is required for Ec2
+* you can specific only ALLOW RULES , rest is not allowed by default
+* can assign up to 5 security groups
+* No restart is required for EC2
 * Security Group are stateful , if outgoing/incoming is allowed, the incoming  response for it is automatically allowed
 timeout in case of security group not allowed
 
@@ -181,8 +177,9 @@ Any instance can have multiple SG
 A SG can be attached to multiple EC2
 if application is not accessible (timed out, its SG Issue)
 if application gives "connection refused" then its an app error
-All inbound traffic is BLOCKED by default
-All outbound traffic is Authorized by default
+
+** All inbound traffic is BLOCKED by default
+** All outbound traffic is Authorized by default
 
 Referencing Other Security Groups 
 *SG can reference other SG instead of IP ranges 
@@ -193,16 +190,16 @@ this helps guarantee that multi AZ won't all fail at once (due to a meteorologic
 "Organisations" does not exist in IAM
 AM is a global service (encompasses all regions)
 
-You pay for an EC2 instance compute component Only when it is in start state
+**  You pay for an EC2 instance compute component Only when it is in start state
  getting a permission error exception when trying to SSH into your Linux Instance
  The key is missing permissions chmod 0400
  
  SG can reference to 
- IP address
- CIDR block
- Security Group
+ * IP address
+ * CIDR block
+ * Security Group
  
- But not DNS  name
+ * But not DNS  name
 --------------------------------------------------------------------
 
 EC2 IP Addresses
@@ -212,40 +209,31 @@ Public address
 internet addressable
 No two machines can have same public IP
 
-
 Private address
 internal to the corporate network
 IP is unique across the private network
 two diff private networks can have same private IP
 machine connect to www using internet gateway (a proxy)
 
-
-
-All Ec2 instances are assigned to private IP address but public is not assigned automatically
-** Stop/Start EC2 Public IP is changed but private is same 
+** All EC2 instances are assigned to private IP address but public is not assigned automatically
+** Stop/Start EC2 Public IP is changed but private is same and Elastic IP (if assigned)
 ** reboot will not change public IP
 
 SG are specific to the Region and to the VPC
 
-------------Elastic IP-----
-constant IIP
+------------Elastic IP---------------------------------------------------------------------------------------------------------------------
+** Constant IIP
 Normally  where 1 instance is required it is ok
-Elastic IP is a public IPv4 IP you own as long as u don't delete it
-You can attach it to one instance at a time
-Max 5 Elastic IP in your account (can request more)
+** Elastic IP is a public IPv4 IP you own as long as u don't delete it
+*** You can attach it to one instance at a time
+** Max 5 Elastic IP in your account (can request more)
 Better use a random public IP and register a DNS to it
 
-when we do SSH in EC2 we can't use private IP as we
-are not in the same network
-
-If you machine stopped and then started
-Public IP can change but private IP remains same
-But not via restart
-
+when we do SSH in EC2 we can't use private IP as we are not in the same network
 
 ifconfig -a 
 
-Go to Ec2
+Go to EC2
 Elastic IPs
 Allocate an IP
 Action --> Associate with instance
@@ -253,13 +241,13 @@ select instance --> Associate
 
 Action --> Networking --> Disassociate Elastic IP
 
-Now in instance the public IP is associated with the elastic ip
-when instance is stopped even elastic IP is there 
+** Now in instance the public IP is associated with the elastic ip when instance is stopped even elastic IP is there 
 
-*** Elastic IPs can  be switched to other ec2 insce within the SAME region
+*** Elastic IPs can  be switched to other EC2 instance within the SAME region
 they need to be manually detached
-*** If elastic ip is not in used or if ec2 instance associated with it is stopped  then u will be charged
-better is to release the elastic ip
+
+*** If elastic ip is not in used or if EC2 instance associated with it is stopped  then u will be charged
+better is to release the elastic IP
 
 ----------EC2 HTTP Server Setup--------------
 user-data
@@ -267,11 +255,11 @@ script used at launch of the instance
 
 bootstrapping 
 (launching commands at machine startup) 
-run only once , it increse boot time and must use root userso sudo is mandatory
+** run only once , it increase boot time and must use root user sudo is mandatory
 
-install os patches or sofware when ec2 instance is launched
+*** install OS patches or software when EC2 instance is launched
 
-Create another Ec2 instance
+Create another EC2 instance
 
 Add below in the user data
 #!/bin/bash
@@ -279,25 +267,24 @@ yum update -y
 yum install httpd
 systemctl start httpd
 systemctl enable httpd
-echo "EC2 Instance-2 with ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
-
+echo "EC2 Instance-2 with ($(whoami) ) on host ($(hostname)) with IP ($(hostname -i))" > /var/www/html/index.html
 
 sudo su
 yum update -y
 yum install httpd
 systemctl start httpd
 systemctl enable httpd
-echo "EC2 Instance-2 with ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
+echo "EC2 Instance-2 with ($(whoami) ) on host ($(hostname)) with IP ($(hostname -i))" > /var/www/html/index.html
 
 cd C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\LABS
-ssh -i "EC2-keypair.pem" ec2-user@ec2-35-154-93-55.ap-south-1.compute.amazonaws.com
+ssh -i "EC2-keypair.pem" ec2-user@EC2-35-154-93-55.ap-south-1.compute.amazonaws.com
 cat /var/www/html/index.html
 
-http://ec2-35-154-93-55.ap-south-1.compute.amazonaws.com
+http://EC2-35-154-93-55.ap-south-1.compute.amazonaws.com
 
 --------------- EC2 Hibernate  ---------------------------------
 EC2 stop: data on Disk EBS is kept intact in next start
-Terminate: EBS vol destroy
+Terminate: EBS volume destroy
 
 On Start Following happs:
 First Start ; OS boot and EC2 user data scripts
@@ -306,9 +293,8 @@ App Start , cache gets warmed up
 EC2 Hibernate 
 RAM state is preserved in root EB volume must Encrypted
 Instance boot is much faster
-
-Available for On demand and Reserved instances only
-cannot be hibernated more than 60 days
+** Available for On demand and Reserved instances only
+** cannot be hibernated more than 60 days
 Specific instances families supported
 
 --------------EC2 INSTANCE TYPES-----Launch Modes-----------
@@ -316,38 +302,38 @@ Specific instances families supported
 1) EC2 On Demand (come and stay at hotel room)
 pay for what you use
 billing per second, after first minute
-Highest cost but no upfront payment
+** Highest cost but no upfront payment
 No long term commitment
-recommended for shot term and un interrupted 
-ideal for spiky traffic 
-batch program having unpredictable runtime
+** recommended for shot term and un interrupted 
+** ideal for spiky traffic 
+** batch program having unpredictable time
 
-2) EC2 Reserved Instances (plaing ahead and long time)
+2) EC2 Reserved Instances (planing ahead and long time)
 up to 75% discount
-pay upfront with long term commitment
+** pay upfront with long term commitment
 1 or 3 years
 reserve a specific instance type
-recommanded for steady state usage apps (database)
+** recommanded for steady state usage apps (database)
 
 a. Convertible Reserved Instance
-can change instance type
+** can change instance type
 up to 54% discount
 
 b. Scheduled Reserved Instances
-launch within time window 
+** launch within time window 
 when you require a fraction of day/week/month
 its regional specific  
 
 
 3) EC2  Spot Instances (bid for empty room )
-Cheapest up to 90% off But not guarantees compared  to on demand
+** Cheapest up to 90% off But not guarantees compared  to on demand
 Quote the max 
-Most Cost Efficient
+** ** Most Cost Efficient
 
 define max spot price and get the instance while current spot price < max
 You can cancel sport instance requests that are open,active or disabled state
 Cancelling a spot requests does not terminate instances
-**You must cancel a spot request First m then terminate the spot instances
+**You must cancel a spot request First and then terminate the spot instances
 
 spot request contains
 max price
@@ -365,7 +351,7 @@ best practice: stop or hibernate instance on receiving interruption notice as fo
 Spot Fleet
 Request spot instances across multiple instance types(micro,small,large)
 to get better change to have a spot instance
-Spot Fleet = set of spot instances + (optional) on demand instances
+*** Spot Fleet = set of spot instances + (optional) on demand instances
 try to meet target capacity with price constraints
 Define possible launch pools: instance type , OS, AZ
 spot fleet stops launching instances when reaching capacity or max cost
@@ -383,20 +369,19 @@ without interruption
 
 
 4) EC2 Dedicated Hosts (book entire building)
-Most Expensive
-Physical Dedicated EC2 server for your use
+*** Most Expensive
+** Physical Dedicated EC2 server for your use
 Full control on instance placement
 visibility to underlying sockets/physical cores 
 allocated for 3 years
-Recommanded for : complicated licencing model , BYOL, strong complaince requiments
+Recommanded for : complicated licencing model , BYOL, strong compliance requirements
 per host billing
 
-4) EC2 Dedicated Instances
+5) EC2 Dedicated Instances
 instances running on hardware that is dedicated to you
 per instance billing
 may share hardware with other instances with same account
 No control over instance placement
-
 
 EC2 instance Families
 www.ec2instances.info
@@ -423,7 +408,7 @@ t (t2,t3,t3a)
 BRUSTABLE INSTANCES performance
  (accumulated CPU  credits)
 workload with spikes, dev env , small db
-in case of spike , it can brust but it utilize "brust credits"
+in case of spike , it can burst but it utilize "burst credits"
 
 Unlimited mode 
 (spike beyond CPU credit at additional costs) off for t2 but on for t3 by default
@@ -469,17 +454,17 @@ yum update -y
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
-echo "EC2 Instance with ($(whoami) ) on host ($(hostname)) with ip ($(hostname -i))" > /var/www/html/index.html
+echo "EC2 Instance with ($(whoami) ) on host ($(hostname)) with IP ($(hostname -i))" > /var/www/html/index.html
 
 Go to Instances
 Launch Instance from template
 Select MyEC2template
 
-http://ec2-3-7-66-215.ap-south-1.compute.amazonaws.com/
-EC2 Instance with (root ) on host (ip-172-31-14-110.ap-south-1.compute.internal) with ip (172.31.14.110)
+http://EC2-3-7-66-215.ap-south-1.compute.amazonaws.com/
+EC2 Instance with (root ) on host (IP-172-31-14-110.ap-south-1.compute.internal) with IP (172.31.14.110)
 
-http://ec2-13-233-53-139.ap-south-1.compute.amazonaws.com
-EC2 Instance with (root ) on host (ip-172-31-13-231.ap-south-1.compute.internal) with ip (172.31.13.231) 
+http://EC2-13-233-53-139.ap-south-1.compute.amazonaws.com
+EC2 Instance with (root ) on host (IP-172-31-13-231.ap-south-1.compute.internal) with IP (172.31.13.231) 
 
 
 ----------------------------------------------Customised AMI-------------------------------------------------------
@@ -602,6 +587,7 @@ Strategy : Cluster
 
 Launch Instance
 Placement Group: Select my PG
+
 -----------Elastic Network Interface ENI ------------------------------------------
 
 It is logical component in VPC that represents a virtual network interface card
@@ -681,7 +667,6 @@ Services - VPC
 
 A VPC is created default in every region
 
-
 ----------------------------Billing in AWS---------------------------------------------------------------------------------
 
 1) Set Billing Alerts
@@ -712,8 +697,7 @@ monitoring service and trigger alarm
 create alarm
 create topic
 
-
-1) Gto to Budget
+1) Go to to Budget
 2) create a new budget 
 Cost Budget
 MonthlyBudget
@@ -731,42 +715,8 @@ scale out: increase
 Vertical
 increase size of instance
 t2.micro to t2.large
-common to Non disribited databases
+common to Non distributed databases
 scale up/down
 
 High Availability
-run instances for the same applcaiton across mlti AZ
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+run instances for the same application across multi AZ

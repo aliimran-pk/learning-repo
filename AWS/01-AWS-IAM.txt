@@ -51,7 +51,24 @@ policy can be assigned to an individual users as well as on a group
 called Managed policies (ie managed by AWS)
 
 Regions and Zones
+AWS Regions are separate geographic areas that AWS uses to house its infrastructure, 23
+The closer your region is to you, the better, so that you can reduce network latency as much as possible for your end-users.
 A region is a cluster of data centres
+Each Region consists of multiple, isolated locations known as Availability Zones and each Availability Zone runs on its own physically distinct, independent infrastructure
+
+Most Services are Regional ie specific to a particular region
+
+Global Services
+IAM Users, Roles, Groups
+WAF
+CloudFront
+Route53
+
+Availability Zone 
+EBS volumes
+EC2 instance
+Cluster Placement Groups
+
 
 AZ 
 min - 2
@@ -63,7 +80,7 @@ AZ is one or more discrete data centres
 
 1) slow access from other parts of the world (High Latency)
 2) what if that data centre crashes (low availability)
-3) what if entire region go download
+3) what if entire region go down
 
 Most Services are regional services
 region can be changed 
@@ -87,7 +104,7 @@ high bandwidth and ultra-low latency networking b/w AZs
 US West (Oregon) in console = us-west-2 in CLI
 
 Choosing Regions
-availability of the service in that region (most services we require)
+availability of the service in that region (most services we require
 As Each region expose is regional services endpoints 
 latency, cost and data residency (complaint with business contractual requirements)
 
@@ -108,7 +125,7 @@ AWS as Identity provider
 its a managed service 
 single point of failure, high available,
 
-Aws planes of access
+AWS planes of access
 
 Control Plane
 access to aws instances operations
@@ -119,10 +136,11 @@ allow access to aws compute instances
 ------------------------------------------------------------------------------------------------------
 
 AWS Federation
-centrally managed to access AWS resources
+Identity federation is a system of trust between two parties for the purpose of authenticating users and conveying information needed to authorize their access to resources
+**centrally managed to access AWS resources
 single sign on
 SAML security access markup language 
-cross account access
+** cross account access
 OPENid connect (OIDC) tokens 
 AD is a common Identity provider
 
@@ -132,11 +150,11 @@ provide access to AWS console/CLI using temp credential
 * No need to create IAM user for each of your emplSAML) to assume the role which return temp credentials
 c) user use these temp credentials to access S3
 
-** New way is to use AmazonSingle Sign on federation
+** New way is to use Amazon Single Sign-on federation
 
 2) Custom Identity Broker Application
-if your Identity provider is not compatible with SAML 
-it uses STS API, AssumeRole or GetFederationToken
+** if your Identity provider is not compatible with SAML 
+** it uses STS API, AssumeRole or GetFederationToken
 
 user-> Identity Broker -> get temp credentials from STS
 
@@ -145,7 +163,7 @@ Mobile App -- validate from Google > STS
 
 4) Amazon Cognito 
 Provide direct access to AWS resources from client side (mobile,web ap)
-provide temp access to write to S3 using Facebook login with creating IAM users for applcaiton user
+provide temp access to write to S3 using Facebook login with creating IAM users for application user
 
 ------------------------------------------------------------------------------------------------------
 Microsoft Active Directory (AD)
@@ -153,11 +171,13 @@ centralized security management
 objects are organized into trees and a group of trees is a forest
 Each system is connect to domain controller which validates and able to log in from any machine in the same network
 
-AWS Directory Service
+-------------------------AWS Directory Service--------(Again)------------------------------------------------
+AWS Directory Service is a managed service offering, providing directories that contain information about the organization, including users, groups, computers, and other resources
 user data mgmt service
 It provide AWS access to on-premise users without IAM users
 
 Option1: AWS Managed  Microsoft AD
+is a feature-rich managed Microsoft Active Directory hosted on the AWS
 create our own AD in AWS
 * manage users locally
 **supports MFA
@@ -170,10 +190,11 @@ without caching info in the cloud
 small : 500 users
 large: 5000 users
 * users are managed on the on premise AD
-use your existing on-premise directory with AWS cloud services
+**** use your existing on-premise directory with AWS cloud services
 your users use existing credential to access AWS resources
 
 Option3: Simple AD
+least expensive
 less than  than 5000 users
 powered by Samba4
 ** can't joined with  on premise AD
@@ -183,7 +204,7 @@ Doesn't support Trust relationship with other AD domains
 Console -> Directory Service
 
 ----------------------------------------------------------------------------------------
-AWS SSPO can interact with Active directory
+AWS SSO can interact with Active directory
 account name, pwd and email address of root user can be changed 
 
 MFA 
@@ -202,8 +223,7 @@ Activate MFA
 Virtual MFA device
 Install Google Authentication to your mobile
 show the QR code
-after registering the code on the device I need to 
-provide the code
+after registering the code on the device I need to provide the code
 
 
 AWS Support offers four support plans: 
@@ -226,11 +246,12 @@ https://aws.amazon.com/iam/faqs/
 
 Any AWS customer can use IAM. The service is offered at no additional charge.
 user can be an individual, system, or application requiring access to AWS services
-Any AWS resources created by a user are under control of and paid for by its AWS account. A user cannot independently subscribe to AWS services or control resources. 
+Any AWS resources created by a user are under control of and paid for by its AWS account. 
+A user cannot independently subscribe to AWS services or control resources. 
 
-A user can belong to multiple groups.
-Groups cannot belong to other groups.
-Groups can be granted permissions using access control policies
+** A user can belong to multiple groups.
+**Groups cannot belong to other groups.
+**Groups can be granted permissions using access control policies
 You can enable and disable an IAM user's access keys via the IAM APIs, AWS CLI, or IAM console.
 You can organize users and groups under paths, similar to object paths in Amazon S3—for example /mycompany/division/project/joe.
 All limits are on the AWS account as a whole
@@ -241,16 +262,16 @@ You can use the roles to delegate access to users, applications or services that
 https://codingbee.net/aws-csa-associate/aws-iam-groups-and-roles
 
 A better approach is to group together all the permissions. This grouping of permissions is called a  “role”. You need to give this role an appropriate name, e.g. “developers”. You can then assign this role to each of the groups.
-Then there is a conflict like this, then the deny permissions have the final say.
+****Then there is a conflict like this, then the DENY PERMISSIONS have the final say.
 
 We can't assign polices to aws services directly like we did with groups
 if EC2 needs to talk to S3
 Assign a role to EC2 (ie  the role is create for what service, select the AWS service   ) 
-and give policy (select S3 policy Full Acess)to access S3 to that role
+and give policy (select S3 policy Full Access) to access S3 to that role
 Role can be created for Other AWS account, Web Identity or SAML
 
 
-By Default root user access is allowed and IAM user is deined
+***By Default root user access is allowed and IAM user is denied
 Principal (do er)
 user
 an app 
@@ -268,10 +289,9 @@ IAM Scenarios
 ie Dev AWS account , PROD AWS account
 Sol: IAM Role
 
-
 Corporate Directory Federation
-1)user authenticated wit a corporate directory,  send token to IAM and get permissions if SAML 2.o complaint direcpty
-2)for Microsoft AD then ou can use AWS directory Service
+1) user authenticated with a corporate directory,  send token to IAM and get permissions if SAML 2.o complaint directory
+2) for Microsoft AD then you can use AWS directory Service
 3) set up a custom proxy server to translate user identities from enterprise to IAM roles
 
 
@@ -286,26 +306,31 @@ eg open id (Facebook,google)
 authentication token exchanged using STSAssumeRoleWithWebIdentity API
 
 1) Identity Based policies
-attached to IAM User, Group or Role
+**** attached to IAM User, Group or Role
+These policies let you specify what that identity can do (its permissions)
 managed and Inline
 Focus: what resource , what action ?
-eg. 
+eg. User Can list S3 bucket named Bucket1
 
-User Can list S3 bucket named Bucket1
-
-user access resource directly from is aws account user can switch role 
+user access resource directly from his aws account 
+user can switch role 
 All services supported
 
 2) Resource Based Policy
-attached to resource, S3 buckets, SQS, and AWS KMS keys
-Inline Only
+** Attached to resource, S3 buckets, SQS, and AWS KMS keys
+**Inline Only
 Focus: Who (which account, it is public), what action ?
 Account A can read and modify
 Public can read
 cross-account access: user access resource directly from is aws account
 subset of  services supported
 
-IAM Scenarios
+An AWS managed policy is a standalone policy that is created and administered by AWS. Standalone policy means that the policy has its own Amazon Resource Name (ARN) that includes the policy name
+An inline policy is a policy that's embedded in an IAM identity (a user, group, or role). That is, the policy is an inherent part of the identity. You can create a policy and embed it in an identity, either when you create the identity or later.
+
+Good to read the diagram
+https://docs.amazonaws.cn/en_us/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+--------------------------IAM Scenarios-----------------------------------------------------------------------------------------------
 
 1) How to rotate access keys without causing problem
 create a  new access key
@@ -313,50 +338,50 @@ use new access key in all apps
 disable original access key
 test and verify
 delete original key
-SCP
+SCP Service Control Policies
+
 2) Multiple Permission resolved
 By Default Deny (no explicit allow/deny)
-if explicitly deny and no explicit  allow then deny
+if explicitly deny and no explicit allow then deny
 if explicitly allow and no explicit  deny then allow
 
-IMP
-IAM users identities exits until thy are explicit ly deleted (no expiration)
+IMP To KNow
+** IAM users identities exits until thy are explicitly deleted (no expiration)
+
 IAM allow you to create a password policy
 Account Setting --> Set pwd policy
-An IAM role can be added to a already running EC2 instance, immediate effective
-An IAM role is not associated with IAM user
-An IAM role is not associated with long term credentials
 
-when a user , resource or an application Assume a Role, it is provided with temporary credentails
+** An IAM role can be added to a already running EC2 instance, immediate effective
+** An IAM role is not associated with IAM user
+** An IAM role is not associated with long term credentials
 
-
------------------------------------------------------------
+when a user , resource or an application Assume a Role, it is provided with temporary credentials
+-----------------------------------------------------------------------------------
 Amazon STS , Security Token Service
-Allows to grant limited and temporary access to AWS resources
+** Allows to grant limited and temporary access to AWS resources
 Token is valid up to1 hour (must be refreshed)
 
 AssumeRole
 within our account for enhance security
-cross account access: assume rile in target account to perform action there
+cross account access: assume role in target account to perform action there
 
 AssumeRoleWithSAML
-return credentials for users logged with SAML
+** return credentials for users logged with SAML
 
 AssumeRoleWithWebIdentity
-return credentials for user logged with IdP (facebook)
+*** return credentials for user logged with IdP (Facebook)
 AWS recommend Congnito for this
 
 GetSessionToken
 For MFA from a user or AWS account root user
 
-
 **accessing production app in another account (prod) using dev account
 admin create role and provide read/write to S3 in production account
 admin  creates dev group and assign permission to that group in dev account to assume the role
-when user request to access the role, sts return role credentials
+when user request to access the role, STS return role credentials
 user than able to update in production app using this role credentials
 
-STS is good for cross account access
+**STS is good for cross account access
 
 ---------------------------------------------------------------------------
 Manage AWS Accounts
@@ -364,7 +389,7 @@ diff accounts for diff env and diff business units
 centralized management, consolidated billing, security, compliance
 
 AWS ORGANIZATIONS
-Orgs enables you to certainly apply policy based controls across multiple accounts 
+Organizations enables you to certainly apply policy based controls across multiple accounts 
 
 Global service
 The main account is master account, you can't change it 
@@ -383,8 +408,8 @@ RootOU
 
 centralized compliance mgmt for AWS config rules
 Send AWS CloudTrail Data to one S3 bucket (across accounts)
-AWS Firewall Manager to manage firewall rules across org accounts
-WAF,Shield Adv protection, security groups
+**AWS Firewall Manager to manage firewall rules across organization accounts
+WAF,Shield Advance  protection, security groups
 **Service Control policies SCPs to define restrictions across accounts
 eg. 
 prevent users from disabling AWS config or rules
@@ -400,13 +425,17 @@ environment
 better resource isolation VPC ie separate per account service limit
 
 
-Service Control Policies (SCP)
+------------------Service Control Policies (SCP)--------------------------
 used to whitelist/black  IAM actions
-applied at OU or Account Level 
+**** applied at OU or Account Level 
 don't apply to master account
 SCP is applied to all users and roles of the account
 Doesn't  effect service link roles
 SCP must have a explicit allow (does not allow anything by default)
+
+
+***** In terms of policy evaluation, SCPs follow exactly the same policy evaluation logic as IAM does: 
+by default, all requests are denied, an explicit allow overrides this default, and an explicit deny overrides any explicit allows.
 
 use cases: 
 restrict access to certain services(can't use EMR)
@@ -479,38 +508,33 @@ attach a  policy to a resource vs attaching of a using role as proxy
 
 user1 need to access S3 in other account
 Option1:   User1 (Account A)   -- Role (Account B)   S3 (Account B)
-when u assume a role , you give up your original permission and take the 
-permissions assigned to the role
+**** when u assume a role , you give up your original permission and take the permissions assigned to the role
 
 Option2: User1(Account A) --> S3 bucket polices - S3
- when using a resource based policy , the principal  doesn't have to give up his permission
-hence can do both actions in the Account A and Account B
+ *** when using a resource based policy , the principal  doesn't have to give up his permission hence can do both actions in the Account A and Account B
 
 Resource based policy is used by
-S3, SN S, SQS
+S3, SNS, SQS
 
 IAM Permission Boundaries
-
 IAM permission should be in IAM permission boundary to effect
 
 Create a user: user1
-
 Add Policy
 AdministratorAccess
 
 Add Permission Boundary
 AmazonS3FullAccess 
 
-No user1 can only have S3 full access as this comes under his boundry
+No user1 can only have S3 full access as this comes under his boundary
 
 Explicitly deny is most powerful = deny
-Deny Evaluation -> Organization SCP -> Resource based policies -> IAm permission boundaries -> Identity base policies
+***** Deny Evaluation -> Organization SCP -> Resource based policies -> IAm permission boundaries -> Identity base policies
 ----------------------------------------------------------------------------------------------------------
 
 AWS RESOURCE ACCESS MANAGER (RAM)
-share resources with any AWS account or within your AWS org
+share resources with any AWS account or within your AWS Organization
 To avoid resource duplication
-eg.
 eg.
 VPC Subnets (shared networking layer with multiple accounts)
 allow to have all resources launched in the same subnet
@@ -532,7 +556,7 @@ applications are accessed easily across accounts using private IP
 
 AWS Single Sign on
 single account to access multiple websites
-centrally manage SSO access to all of your AWS accounts and 3rd party business applcaitons
+centrally manage SSO access to all of your AWS accounts and 3rd party business application
 ** Microsoft AD integration
 SAML 2.0
 ** Integration with AWS Organization

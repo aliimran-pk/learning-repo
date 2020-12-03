@@ -106,7 +106,7 @@ get details about EC2 instance
 URL accessible within he EC2 instance only
 http://url/lates/meta-data/
 
-curl http://EC2-13-234-77-166.ap-south-1.compute.amazonaws.com/latest/meta-data/ami-id/
+curl http://ec2-13-234-77-166.ap-south-1.compute.amazonaws.com/latest/meta-data/ami-id/
 curl http://13.234.77.166/latest/meta-data/hostname
 curl http://13.234.77.166/latest/meta-data/instance-id
 curl http://13.234.77.166/latest/meta-data/instance-type
@@ -280,7 +280,7 @@ cd C:\Users\AliImran\Box Sync\P52\My-Learning\My-AWS\Architect\in28Minutes-AWS\L
 ssh -i "EC2-keypair.pem" ec2-user@EC2-35-154-93-55.ap-south-1.compute.amazonaws.com
 cat /var/www/html/index.html
 
-http://EC2-35-154-93-55.ap-south-1.compute.amazonaws.com
+http://ec2-35-154-93-55.ap-south-1.compute.amazonaws.com
 
 --------------- EC2 Hibernate  ---------------------------------
 EC2 stop: data on Disk EBS is kept intact in next start
@@ -412,9 +412,8 @@ in case of spike , it can burst but it utilize "burst credits"
 
 Unlimited mode 
 (spike beyond CPU credit at additional costs) off for t2 but on for t3 by default
-It is possible to have "unlimited brust credit balance" 
+It is possible to have "unlimited burst credit balance" 
 you pay extra money if you go over your credit balance, but you don't lose in performance
-
 
 f  (f1) FPGA instances 
 massive parallel processing power as geonomic, data analytics
@@ -460,29 +459,30 @@ Go to Instances
 Launch Instance from template
 Select MyEC2template
 
-http://EC2-3-7-66-215.ap-south-1.compute.amazonaws.com/
+http://ec2-3-7-66-215.ap-south-1.compute.amazonaws.com/
 EC2 Instance with (root ) on host (IP-172-31-14-110.ap-south-1.compute.internal) with IP (172.31.14.110)
 
-http://EC2-13-233-53-139.ap-south-1.compute.amazonaws.com
+http://ec2-13-233-53-139.ap-south-1.compute.amazonaws.com
 EC2 Instance with (root ) on host (IP-172-31-13-231.ap-south-1.compute.internal) with IP (172.31.13.231) 
 
 
 ----------------------------------------------Customised AMI-------------------------------------------------------
 AMI can be built for Linux or windows
-Faster boot time
-active directory out of box
-installing your app ahead of time for faster deploy when auto scale
-use some one else AMU
+** Faster boot time
 *AMI are built for a specific region
-for installing OS patches and software using userdata at the launch of EC2 instance increases bootup time
-also called Hardening an Image customised EC2 images to your ciporate securiyt standards)
+active directory out of box
+**installing your app ahead of time for faster deploy when auto scale
+use some one else AM
+
+for installing OS patches and software using user-data at the launch of EC2 instance increases boot up time
+also called Hardening an Image customised EC2 images to your corporate security standards)
 
 AMI take space and live in S3 but can't see them in S3 console
-you get charge for S3 space
-By default your AMI are private
-you can make AMI public and sahre with others AWS accounts or
+** you get charge for S3 space
+* By default your AMI are private
+you can make AMI public and share with others AWS accounts or
 sell over AWS marketplace
-overall it is quite inexpensive to store private AMI
+* overall it is quite inexpensive to store private AMI
 
 Select a running instance
 Action - Image -- Create Image
@@ -508,27 +508,22 @@ can be shared with other accounts (Permissions -- add account no.)
 AMI are stored in S3 and are region specific, so can be created instances in AZs of that region
 better to backup AMI in other regions for DR (Copy AMI to other regions)
 
-Three AMI sources
+3 AMI sources
+
 1) by AWS
 2) AWS market Place  Per hour billing
 3) Customised AMI
 
-
 AMI - Action -- DeregisterAMI
 SnapShot- Action- Delete
 
-
-If you stopped EC2 instances then still EBS volumes (hard disk) will be there and u will be charged
-
+*** If you stopped EC2 instances then still EBS volumes (hard disk) will be there and u will be charged
 
 You can share AMI with another AWS account
-owner must grant u read permission for storage either EBS snapshot
-or S3 bucket
+owner must grant u read permission for storage either EBS snapshot or S3 bucket
 You can't copy an encrypted AMI unless keys were shared
-**You can't copy an AMI with an associated billingProdut code shared
-with you from another account.to copy shared AMI with billingProduct ,
-launch an EC2 instance in your account using shared AMI and then 
-create AMI from that instance.
+**You can't copy an AMI with an associated billingProduct code shared with you from another account.to copy shared AMI with billingProduct ,
+launch an EC2 instance in your account using shared AMI and then create AMI from that instance.
 
 sharing AMI doesn't affect ownership of AMI
 
@@ -538,13 +533,13 @@ sharing AMI doesn't affect ownership of AMI
 ------------------------Placement Groups-------------------
 Use placement groups to influence the placement of a group of interdependent instances
 
-
 Add instance to placement group = checked
 
-1) Cluster
-low latency network communication (instances on a same RAC),
+1) Cluster Placement Group
+*** Instances on a same RAC
+low latency network communication 
 in single AZ
-** good for high performance computing
+** good for High performance computing
 same hardware
 Not available for t2 types
 Big data Analysis
@@ -553,17 +548,17 @@ Big data Analysis
 Cons: Rack fail, all instances failed
 Use Case: Big data jobs to complete v fast
 
-2) Partition
+2) Partition Placement Group
 create multiple partitions across multiple AZ
 each partition is located on Separate AWS Racks
-partitions are set of Racs
+partitions are set of RACs
 up to 7 partitions  per AZ and 100s of EC2 instance in a partition
 
 A partition failure can affect many EC2 in it but won't affect other partitions
 EC2 instances get access to the partition info as metadata
 Use Case: Distributed jobs, HDFS, hadoop , kafka, cassandara, Big data jobs to complete v fast
 
-3) Spread
+3) Spread Placement Group
 high availability (instance on diff RAC)
 Each instance is located in a separate rack in diff AZ
 High resiliency
@@ -582,18 +577,18 @@ AZ2
 R21 - Intance3
 
 Create a Placement Group
-Name: 
+Name: myPG
 Strategy : Cluster
 
 Launch Instance
-Placement Group: Select my PG
+Placement Group: Select myPG
 
 -----------Elastic Network Interface ENI ------------------------------------------
 
 It is logical component in VPC that represents a virtual network interface card
-Primary ENI is by default and can't be detached
+** Primary ENI is by default and can't be detached
 
-ENI lives in one subnet and thus in a single AZ
+*** ENI lives in one subnet and thus in a single AZ
 1 primary private IPV4 (eth0) and one or more secondary PV4 (eth1)
 1 Elastic IPv4
 1 public IPV4
@@ -602,7 +597,7 @@ A mac address
 
 ** No. of EC2 instances = No. of ENI
 You can create ENI independently and attach them on fly (move them)
-on EC2 instances for failover thus new instance gets IP of old instnace
+on EC2 instances for failover thus new instance gets IP of old instance
 ** ENI are bound to AZ
 
 Also we can create our own ENI
@@ -617,7 +612,8 @@ now it contains eth0 and eth1
 
 A single EC2 instance can now be attached to two ENIs, each one on a distinct subnet. The ENI (not the instance) is now associated with a subnet.
 Also can Detach it and Attach it to other instance as well
-You would use the private network for SSH access, management, logging, and so forth. You can apply different security groups to each ENI so that traffic port 80 is allowed through the first ENI, and traffic from the private subnet on port 22 is allowed through the second ENI.
+You would use the private network for SSH access, management, logging, and so forth. 
+You can apply different security groups to each ENI so that traffic port 80 is allowed through the first ENI, and traffic from the private subnet on port 22 is allowed through the second ENI.
 
 ----------------------------------------------Good EC2 Scenarios------------------------------------------------------
 
@@ -629,9 +625,9 @@ SOL: stop the instance and then change its type
 
 Q3: don't want an EC2 instance to be automatically  terminated 
 ie from Action-Instance Sate- Terminate
-SOL: Change Termination Protection to Enable
+** SOL: Change Termination Protection to Enable
 also can be set during instance creation
-But EC2 Terminal protection is not effective for termination from
+** But EC2 Terminal protection is not effective for termination from
 1) Auto Scaling Groups (ASG)
 2) Spot Instances
 3) OS shutdown
@@ -643,7 +639,7 @@ Q5: create EC2 instances based on on-premise VMs
 SOL: yes, using import/export , you are responsible for licenses
 
 Q6:Changing security group
-SOL: easily change/delete 7) Papa AC=11000  + Car 8000 + Car Token 11013 group to an instance
+SOL: easily change/delete group to an instance
 multiple security group can also be assigned
 
 Q7: Timeout
@@ -656,8 +652,7 @@ SOL:	custom AMI
 Q9: stopped EC2 instance, will I get bill
 SOL:	if u have storage 
 
-Turn On Termination Protection to protect EC2 instances for termination
-as this option will disable terminate menu
+Turn On Termination Protection to protect EC2 instances for termination as this option will disable terminate menu
 
 -------------------------Creating EC2 in different Zones--------------------------------------------------------------------------------------------------------
 
@@ -671,7 +666,7 @@ A VPC is created default in every region
 
 1) Set Billing Alerts
 2) Monitor Every day for first week
-3)
+
 
 My Account
 IAM User and Role Access to Billing Information

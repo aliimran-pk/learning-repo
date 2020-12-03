@@ -981,24 +981,3 @@ service helps you to troubleshoot network connectivity issues
 CIDR not should overlap, and the max CIDR size in AWS is /16
 Route tables must be updated in both VPC that are peered
 S3 and DynamoDB , these two services have a Gateway endpoint (remember it), all the other ones have an interface endpoint (powered by Private Link - means a private IP)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

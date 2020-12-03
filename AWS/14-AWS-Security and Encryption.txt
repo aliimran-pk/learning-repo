@@ -356,19 +356,3 @@ In server side encryption, the decryption also happens on the server (in AWS, we
 With client side encryption, the server does not need to know any information about the encryption being used, as the server won't perform any encryption or decryption tasks
 we can use the AWS Managed Service Keys in KMS, therefore we don't need to create our own keys
 SSM Parameter Store has versioning and audit of values built-in directly
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

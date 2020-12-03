@@ -489,24 +489,3 @@ S3 ingestion bucket -. Lambda -> Athena to Query bucket data -> S3 storage for r
 *Streams enable DynamoDB to get a changelog and use that changelog to replicate data across regions
 **SQS allows you to retain messages for days and process them later, while we take down our EC2 instances
 ** CloudFront Signed URL have security including IP restriction
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

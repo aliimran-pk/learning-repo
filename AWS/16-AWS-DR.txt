@@ -142,38 +142,3 @@ can be combined with DMS
 
 4) for on-going replication
 site-to-site VPN or DX with DMS or DataSync
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

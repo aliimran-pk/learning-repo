@@ -74,13 +74,3 @@ fist 20ms the 40ms and so on
 Retry mechanism
 
 ** You can't attach EC2 IAM roles to on premise servers
-
-
-
-
-
-
-
-
-
-

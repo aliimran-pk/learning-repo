@@ -260,8 +260,6 @@ IP address: 3.112.71.34
 
 now create other 2 health checks
 
-
-
 Route53 as a Registrar
 a domain registrar is an organisation that manages the reservation of internet
 domain names
@@ -276,11 +274,4 @@ A hosted zone tells Route 53 how to respond to DNS queries for a domain such as 
 2) update NS record on 3rd party website to use Route 53 name server
 
 Private hosted zones are meant to be used for internal network queries and are not publicly accessible. Public Hosted Zones are meant to be used for people requesting your website through the public internet. Finally, NS records must be updated on the 3rd party registrar. 
-
-
-
-
-
-
-
 

@@ -1,3 +1,4 @@
+
 ** AWS Well Architected Framework: 
 https://aws.amazon.com/architecture/well-architected/
 
@@ -6,6 +7,7 @@ https://aws.amazon.com/architecture/well-architected/
 5 PILARS
 are synergy 
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1) OPERATIONAL EXCELLENCE PILAR
 Includes the ability to run and monitor systems to deliver business values and continually improve processes
@@ -50,7 +52,7 @@ X-Rays (tracing)
 c) EVLOVE: Get Intelligence
 AWS CloudFormation , use Amazon Elasticsearch to analyse logs
 
-
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 2) SECURITY PILAR
 IAM, AWS Shield, WAF,KMS, HSM
 
@@ -111,11 +113,12 @@ Monitor CloudWatch logs
 use GuadDurty to detect threats and contiguously monitor malicious behaviour 
 use AWS Organization to centralize security policies 	
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 3) RELIABILITY PILAR
-It is about how quickly you recover from Infrastructure and application issues/disruptions
-How quickly you adopt changes demands in load
-mitigate disruptions such as misconfiguration 
+** It is about how quickly you recover from Infrastructure and application issues/disruptions
+** How quickly you adopt changes demands in load
+** mitigate disruptions such as misconfiguration 
 
 Design Principles
 
@@ -150,7 +153,7 @@ handle event streams, multiple clients
 Troubleshooting on AWS
 
 S3 server access logs
-S2 data request details,request type,date time
+S3 data request details,request type,date time
 Troubleshoot bucket access issues and data requests
 
 ELB Access Logs
@@ -172,7 +175,7 @@ AWS resource inventory, history , rules
 
 AWS CloudTrail
 History of AWS API calls , cli,sdk
-auditing and troubleshooting, who did what and from hwere-
+auditing and troubleshooting, who did what and from where-
 
 Shared Responsibility Model
 Security and Compliance is shared responsibility b/w AWS and Customer
@@ -180,13 +183,14 @@ Security and Compliance is shared responsibility b/w AWS and Customer
 AWS responsible for  Security OF the cloud
 Customer responsible for  Security IN the cloud
 
-
 using EC2 instance is IAAS 
 AWS only responsible for infrastructure only
 
 Managed Services
 S3,DynamoDB
-AWS Manages Infa,OS and Platform
+AWS Manages Infra,OS and Platform
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 4) PERFORMANCE PILAR
 meet needs with minimum resources (EFFiciency)
@@ -203,16 +207,18 @@ Storage
 Block, File , Objects 
 
 Database
-RDS VS DynamoDB VS Redshift (big data and relationsal)
+RDS VS DynamoDB VS Redshift (big data and relational)
 
 Caching
-ElastiCache (front end to DB) VS CloudFront (contents server from edge) VS DAX (cache infront of Dynamo DB) VS Read Replics (reporting apps to run) 
+ElastiCache (front end to DB) VS CloudFront (contents server from edge) VS DAX (cache in-front of Dynamo DB) VS Read Replica (reporting apps to run) 
 
 Network
 CloudFront, Global Accelerator, Route 53, Placement Groups, VPS endpoints , Direct Connect
 
 Product specific features
 S3 Transfer acceleration , EBS optimised instances
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 5) COST OPTIMIZATION PILAR
 match supply and demand
@@ -224,12 +230,11 @@ aws budget
 use tags on resources, helps in measure ROI
 
 Right Sizing
-Trusted advisor for recommendations
+** Trusted advisor for recommendations
 On demand Vs Reserved VS spot instances
-AVoid expensive sols: MySQL VS Autrora VS Oralce
+Avoid expensive solutions: MySQL VS Aurora VS Oracle
 AWS Direct Connect (save internet cost)
 CloudFtont  reduce load on backbend system
-
 
 X-Rays traces a request between API Gateway and Lambda functions
 
@@ -246,14 +251,13 @@ Start Review  (answer questions)
 Generate Report
 
 -----------------------------------------AWS TRUSTED ADVISOR------------------------------------------------
-High level AWS account assessment
+**  High level AWS account assessment
 Recommendations for cost optimization, performance, security and fault tolerance
 All AWS customers get 4 checks free
-** 1) service limits
-2) SG\ having unrestricted access
+** 1) Service Limits
+2) SG having unrestricted access
 3) Proper use of IAM
 4) MFA on Root Account
-
 
 Business or Enterprise AWS support plan provides over 50 checks
 ie
@@ -282,16 +286,8 @@ identify if service usage > 80% of service limits
 Can disable Trusted Advisor using preferences
 weekly email   notification preferences for Trusted advisor status
 
-
-
-
-
-
-
-
---------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
 AWS SERVICE QUOTAS
 AWS account has regional-specific default quotas or limits for each service
-aService Quotas allows you to manage your quotas /limits for over 100 AWS services
-from one location
+A Service Quotas allows you to manage your quotas /limits for over 100 AWS services from one location
 

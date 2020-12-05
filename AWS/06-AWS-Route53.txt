@@ -46,10 +46,10 @@ eg     dumy.in28minutes.com to www.example.com
 53 specific extension : Alias records
 
 route traffic to select AWS resources like S3,ELB,CloudFront 
-Alias records can be create for root and non root domains
+
+** Alias records can be create for root and non root domains
 ie in28minutes.com   or API.in28minutes.com
-if you want to route domain to an AWS resource then what u need to make of 
-use Alias records
+if you want to route domain to an AWS resource then what u need to make of use Alias records
 
 ** CNAME records only be created for non root domains 
 The DNS protocol does not allow you to create a CNAME record for the top node of a DNS namespace (mycoolcompany.com), also known as the zone apex
@@ -66,7 +66,7 @@ ROUTE 53 POLICIES
 1) Simple Routed Policy
 maps a domain name to an IP address
 use when you redirect to a single resource
-You can't attach health checks to simple routing policy
+** You can't attach health checks to simple routing policy
 if multiple values are returned , a random one is chosen by the client browser called client site load balancing
 
 Record SetName: simple
@@ -97,10 +97,10 @@ Side ID : B
 weighted.learnaws.com
 
 3) Latency Routed Policy
-Users to AWS region
+** Users to AWS region
 choose option with min latency
 latency b/w host on internet can be change over time
-provides u which region gives u low latency 
+** provides u which region gives u low latency 
 minimize response time
 ** Latency will evaluate the latency results and help your users get a DNS response that will minimize their latency (e.g. response time)
 
@@ -137,11 +137,9 @@ value: Ip address EC2
 Routing Policy = Multi value health check
 enable health check
 
-
-Geoproximity Routed Policy
+7) Geoproximity Routed Policy
 choose nearest resource (geographic distance) to ur user
 Routing policies will route to the nearest resource by geographic distance to your user?
-
 
 **record set for smallest geographic region has priority
 
@@ -169,9 +167,9 @@ Now myfirstrecord.stephenrheteacher.com goes to Route53 will redirect it to 11.2
 
 nslookup myfirstrecord.stephenrheteacher.com will gives 11.22.33.44
 
-Create a EC2 isnsatce and add user data into it
+Create a EC2 instance and add user data into it
 Amazon EC2 Instances have metadata they can access. 
-They get it by accessing a web server on a link-local address, 169.254.169.254
+** They get it by accessing a web server on a link-local address, 169.254.169.254
 
 
 #!/bin/bash
@@ -189,10 +187,10 @@ Hello World from ip-172-31-42-165.ap-northeast-1.compute.internal in AZ ap-north
 
 So create 3 EC2 instances in different regions with above user data
 
-Public IP   				Region
+Public IP   					Region
 34.255.122.73			eu-west-1
-3.86.116.186			us-east-1
-3.112.71.34 			ap-northeast-1
+3.86.116.186				us-east-1
+3.112.71.34 				ap-northeast-1
 
 Also create a ALB in eu-west-1 pointing to EC2 instance there
 
@@ -261,8 +259,7 @@ IP address: 3.112.71.34
 now create other 2 health checks
 
 Route53 as a Registrar
-a domain registrar is an organisation that manages the reservation of internet
-domain names
+a domain registrar is an organisation that manages the reservation of internet domain names
 eg GoDaddy, google domains
 
 Domain Registrar is not like DNS
@@ -273,5 +270,6 @@ A hosted zone tells Route 53 how to respond to DNS queries for a domain such as 
 
 2) update NS record on 3rd party website to use Route 53 name server
 
-Private hosted zones are meant to be used for internal network queries and are not publicly accessible. Public Hosted Zones are meant to be used for people requesting your website through the public internet. Finally, NS records must be updated on the 3rd party registrar. 
+Private hosted zones are meant to be used for internal network queries and are not publicly accessible. 
+Public Hosted Zones are meant to be used for people requesting your website through the public internet. Finally, NS records must be updated on the 3rd party registrar. 
 

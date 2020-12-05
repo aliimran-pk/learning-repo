@@ -49,14 +49,13 @@ manage scalable wordpress website
 access and display pictures upload
 data in mysql globaly
 
-
 Store Image
 a. to EC2 instances
 issue with reading as image is stored on only one instance
 
 b. EC2-> ENI -> EFS
 
-EBS is cheaper than EFS
+** EBS is cheaper than EFS
 
 4) Instantiating Applications quickly
 
@@ -67,21 +66,22 @@ Golden AMI , install apps , dependencies beforehand
 4) EBS:  restore from snapshot
 
 -----Elastic Beanstalk --------------------------------------------
+
 Managed Service
 simplest way to deploy and scale web apps in AWS
 It is a developer centric view of deploying application on AWS
 it uses all components like EC2,ASG,ELB,RDS etc
 but still have full control over configuration
 
-supports Java,.NET,NODE.JS,PHP,PYTHON,GO ,Rubbyand docker apps
+supports Java,.NET,NODE.JS,PHP,PYTHON,GO ,Rubby and docker apps
 Also custom platform
 Its free but charges for resource being consumed
 
-automatic LB
+Automatic LB
 Auto scaling
 platform update health monitoring
 
-* Elastic Beanstalk is not EBS (Elastic bean store)
+* Elastic Beanstalk is not EBS (Elastic block store)
 
 An application can have multiple environments to be created
 An  application can have multiple versions (stored in S3)
@@ -117,8 +117,8 @@ Web Server environment (for web apps)
 Worker environment (for batch )
 
 You can retain FULL control over ASWS resources created
-It is ideal for simple web applications
-Not ideal for Microservice architectures
+*** It is ideal for simple web applications
+*** Not ideal for Microservice architectures
 access server logs without logging into the server
 logs can be stored in S3 or in ClodwWatch
 can configure SNS based on health
@@ -143,10 +143,10 @@ Golden AMI are a standard in making sure you snapshot a state after an applicati
 --------------------------Event Processing in AWS------------------------------------------
 
 SQS  + Lambda
-in case of error msg goes to DLQ set by SQS
+***  in case of error msg goes to DLQ set by SQS
 
 SNS + lambda
-in case of error msg goes to DLQ set by Lambda
+*** in case of error msg goes to DLQ set by Lambda
 
 Fan Out Pattern (deliver to multiple SQS)
 
@@ -189,7 +189,7 @@ services help to per HPC
 1)Data Management and Transfer
 
 AWS Direct Connect
-Moves Gbs pf data to cloud, over a private secure network
+Moves GBS of data to cloud, over a private secure network
 establish a dedicated network connection from your premises to AWS.
 
 Snowball and snow mobile
@@ -201,7 +201,7 @@ Move large amount of data between on-premise and S3, EFS,FSx for windows
 2) Compute and Networking
 
 EC2 instances
-CUP optimized, GPU optimized
+CPU optimized, GPU optimized
 Spot instances/ spot fleets for cost saving + auto scaling
 
 EC2 Placement Groups
@@ -214,9 +214,9 @@ higher bandwidth, highest PPP  (packet per second)
 ** Option2: Intel 82599 VP up to 10Gbps, Legacy
 
 Elastic Fabric Adapter (EFA)
-Improved ENA , only for linux
+Improved ENA , only for Linux
 leverages MPA message passing interface
-by pass OS to provide low latency and reliable trasfport
+by pass OS to provide low latency and reliable transport
 
 3) Storage
 
@@ -227,19 +227,18 @@ Instance Storage : scale too millions of IOPS, linked to EC2
 Network Storage
 S3: large blob, not a file system
 EFSL scale  IOPS based on total size
-FScx for lustre: HPC optimized distributed file system, millions of IOPS, backed by S3
+FSx for lustre: HPC optimized distributed file system, millions of IOPS, backed by S3
 
 4) Automation and Orchestration
 
 AWS Batch
-supports multi-node parallel jobs which enables ou ti run single jobs that span multiple EC2 instances
+supports multi-node parallel jobs which enables run single jobs that span multiple EC2 instances
 easily schedule jobs
 
 AWS parallel Cluster
 open source cluster management tool to deploy HPC on AWS
 configure with text files
 automate creation of VPC, subnets
-
 
 Creating a Highly available EC2 instance
 
@@ -262,8 +261,7 @@ now on ASG launch lifecycle hook EBS volume created and attach to it
 
 High Availability for a Bastion Host
 A bastion host is a server whose purpose is to provide access to a private network from 
-an external network, such as the Internet. Because of its exposure to
-potential attack, a bastion host must minimize the chances of penetration
+an external network, such as the Internet. Because of its exposure to potential attack, a bastion host must minimize the chances of penetration
 
 Client 22 - VPC - Bastion Host (public subnet ) --> 22 EC2 (private subnet same or diff AZ)
 
@@ -275,5 +273,4 @@ Client 22 - VPC - Bastion Host (public subnet ) --> 22 EC2 (private subnet same 
  **We can use a Bastion host to ssh into our private instances
  The Bastion is in the public subnet which is then connected to all other private subnets
  Bastion host security Group must be tightened
- ** make sure the bastion host only has port 22 traffic from the IP you need, not from 
- the SG of your other instances.
+ ** make sure the bastion host only has port 22 traffic from the IP you need, not from  the SG of your other instances.

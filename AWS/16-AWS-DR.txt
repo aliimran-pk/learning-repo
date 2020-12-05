@@ -4,8 +4,8 @@ Disaster Recovery
 is about preparing for and recovering from a disaster
 
 Kind of DR
-on premise->  one data Center one city and other in others expensive
-on premise -> AWS Cloud
+on premise					 ->  one data Center one city and other in others expensive
+on premise 					-> AWS Cloud
 AWS Cloud Region A -> AWS Cloud Region B
 
 RTO (Recovery Time Objective)
@@ -18,19 +18,19 @@ is the maximum amount of data loss your company is willing to accept as measured
 DR Strategies 
 
 1) Pilot Light (for critical systems)
-a small version of application is always running in cloud
+* a small version of application is always running in cloud
 ie RDS in data replication with on premise database is up
 EC2 via Route53 is stopped
 
 2) Warm Standby
-Full system is up and running in Cloud but at minimize size
+* Full system is up and running in Cloud but at minimize size
 RDS in data replication with on premise database is up
 ALB + ASG +  EC2 via Route53 (using reverse proxy) is running with lowest capacity
 Upon disaster , we can scale to production load
 
 3) Multi Site/ Hot Site Approach (v. expensive)
 Full system is up and running in Cloud as of on premise
-very load RTO 
+very low RTO 
 RDS in data replication with on premise database is up
 ALB + ASG +  EC2 via Route53 (using reverse proxy) is running with lowest capacity
 Upon disaster , we can scale to production load
@@ -43,29 +43,30 @@ Aurora Global (master)  -> Aurora Global (slave)
 DR Tips
 
 1) Backups
-EBS snapshots, RDS automated backups/snapshots
+* EBS snapshots, RDS automated backups/snapshots
 
 2) High Availability
-use Route53 to migrate DNS over from region to region
-RDS multi AZ , ElasticCache , EFS,S3
+* use Route53 to migrate DNS over from region to region
+* RDS multi AZ , ElasticCache , EFS,S3
 
 3) Replication
-RDS replication (cross region), AWS Aurora + Gloal Databases
+* RDS replication (cross region), AWS Aurora + Global Databases
 Database replication from on premise to RDS
 
 4) Automation
-CloudFormation / Elastic Beanstalk to re create a whole new environment
+* CloudFormation / Elastic Beanstalk to re create a whole new environment
 
-) Chaos
+5) Chaos
 Netflix has "simian-army" , ie they randomly terminate their EC2 in production and check
 
 
 ----------- Database Migration Service ---DMS-------------------
+
 * Migrate databases from on-premise to AWS
 Resilient and self-healing  
 *Source database remains available during migration
 * Continuous data replication using CDC (Change data capture)
-* Must create EC2 instance (running DMS) to pull data from on premise and load to the Target Database
+* * Must create EC2 instance (running DMS) to pull data from on premise and load to the Target Database
 
 On-premise -> AWS
 AWS -> AWS
@@ -88,8 +89,8 @@ db source end point
 db target end point
 
 ------AWS Schema Conversion Tool --------SCT-------
-It is a part of DMS
-preferred option for migrating data warehouse data to Redshift
+*  It is a part of DMS
+*  preferred option for migrating data warehouse data to Redshift
 Migrate DB schema if DB engines are different
 OLTP(SQl Server -> Oracle) to Aurora
 OLAP (Teradata or Oracle) --> Amazon Redshift
@@ -102,9 +103,8 @@ update source code
 Fan-in (Multiple Source- Single Target) 
 Fan-out (Single Source- Multiple Target)
 SCT is preferred when schema conversion are involved
-SCT is preferred for large data warehouse workloads (migration to Redshift)
+* SCT is preferred for large data warehouse workloads (migration to Redshift)
 No data replication for DR
-
 
 1) On-Premise Strategy with AWS
 Download Amazon inuz2 AMI as a VM
@@ -120,11 +120,9 @@ server utilizations db dependency mappings
 4) AWS Database Migration Service
 
 5) AWS Server Migration Service (SMS)
-increment replication of on-premise live servers to AWS
-AWS Server Migration Service (SMS) is an agent less service which makes it easier and faster for you to migrate thousands of on-premises workloads to AWS
-
+*  increment replication of on-premise live servers to AWS
+* AWS Server Migration Service (SMS) is an agent less service which makes it easier and faster for you to migrate thousands of on-premises workloads to AWS
 Transfer Large amount of data from On-Premise to AWS
-
 200 TB of data , with 100 MBS internet speed
 
 1)  Over the internet / site to site VPN

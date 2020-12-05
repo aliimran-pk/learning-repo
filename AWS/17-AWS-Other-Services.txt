@@ -1,20 +1,19 @@
 AWS Other Services
 
-Continuous Integration
-CodeCommit and CodeBuild
+* Continuous Integration
+* CodeCommit and CodeBuild
 Push code often 
 Get code build and test
 Tell developer results of build
 
 Continuous Delivery
 ensure software can be release reliably whenever needed
-CodeDeploy, Jenkins CD, Spinnakaer
+* CodeDeploy, Jenkins CD, Spinnakaer
 
 Technology Stack
 
 Code
 AWS Code Commit
-
 Build and Test
 Build and Test code (application packages, containers)
 
@@ -31,6 +30,7 @@ CodePipeline is a CICD orchestration service, and has an integration with Elasti
 * When deploying code directly onto EC2 instances or On Premise servers, CodeDeploy is the service to use. You can define the strategy (how fast the rollout of the new code should be)
 * CodeBuild is an alternative to Jenkins
 * AWS Organizations allow you to create multiple AWS accounts and centralize them around a single organization for simplified and unified billing. 
+
 -----------------------DevOps----------------------------------------------------
 
 Infrastructure as a code IAAC
@@ -41,46 +41,47 @@ being repeatability into your infrastructure
 2 key parts
 
 1) Infrastructure Provisioning
-provisioned compute,db,storage,networking
+* provisioned compute,db,storage,networking
 open source, cloud neutral, Terraform
-AWS service: CloudFormation
+* AWS service: CloudFormation
 
 1) Configuration management
 Install right software and tools on provisioned resources
-AWS Service: OpsWorks lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2
+AWS Service: OpsWorks 
+lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2
 
 
 ---------AWS CloudFormation  -----------------
 
-Automate deployments and modification of AWS resources in a controlled and predictive way
+* Automate deployments and modification of AWS resources in a controlled and predictive way
 It is a declarative way of outlining your AWS infrastructure for any AWS resource
 
 avoiding configuration drift (less error prone)
 all configurations in a simple txt JSON or YAML
-CloudFormaion handles dependencies
+* CloudFormaion handles dependencies
 eg. first VPC then subnets and then db
-Automatic Rollback
-Free to use , pay for resources provisioned
+* Automatic Rollback
+* Free to use , pay for resources provisioned
 get an automated estimate for your configuration
 
 Benefits
-code can be versioned and changes can be tracked
-each resource in the stack is tagged, so you can easily see how must stack cost you
+* code can be versioned and changes can be tracked
+* each resource in the stack is tagged, so you can easily see how must stack cost you
 In dev, you could automate deletion of templates at 5 PM and recreate it at 10 Am
 Automated generation of diagrams for your templates
 Declarative programming (no need to figure out ordering )
 separation of concerns 
 can leverage existing templates on the web
 
-Templates have to be uploaded in S3 and referenced in CloudFormation
+* Templates have to be uploaded in S3 and referenced in CloudFormation
 upload a new version
-deleting a stack will delete all its artifacts
+* deleting a stack will delete all its artifacts
 
 Deploying ClodFormation
 
 1) Manual way
 Edit template in CloudForamtion Designer
-use AWS console to input parametes
+use AWS console to input parameters
 
 2) Automated way (recommended)
 Edit template using YAML
@@ -94,8 +95,8 @@ group of resources that are created from CF template
 
 Change Sets
 to make changes to the stack, update the template
-tells what whould chnage if you execute
-allows u to verify the changes and then execite
+tells what would change if you execute
+allows u to verify the changes and then execute
 
 Templates Components
 
@@ -129,8 +130,7 @@ except DelitoinPolicy set to "Retain"
 or you can enable Termination policy for the entire stack
 Template stored in S3
 
-use CloudFormation StackSets to create/update/delete stack across multiple accounts and regions
-with a single operation
+use CloudFormation StackSets to create/update/delete stack across multiple accounts and regions with a single operation
 
 Elastic Beanstalk
 like a pre packaged cloud-formation template with a user interface
@@ -145,7 +145,7 @@ Practical
 Console- CloudFormation -Create stack
 upload template file
 
--------------------------------------------------------------------------------------------------
+
 ------------------------Containers Solutions------------------------------------------------------------
 Docker is cloud Neutral
 
@@ -155,11 +155,10 @@ Service Discovery (helps Microservice find others)
 Self healing (replace failing instances using health check)
 Zero Downtime deployments release new versions without downtime
 
-Docker 
 Docker is a container technology
 Run a containerised application on any machine with Docker installed
 Containers are isolated from each other
-you can control RAM/CPU allocations to your containers
+* you can control RAM/CPU allocations to your containers
 Ability to restrict network rules
 Migrate applications (once containerized) to cloud
 
@@ -168,7 +167,7 @@ Container Orchestration Options
 1) Cloud Neutral
 Kubernetes 
 AWS Service = AWS Elastic Kubernetes Service (EKS)
-EKS doesn't have a free tier
+*  EKS doesn't have a free tier
 
 2) AWS Specific
 AWS Elastic Container Service ECS (helps to run docker containers on EC2)
@@ -178,7 +177,8 @@ AWS Elastic Container Service ECS
 ** A regional Service
 Need to create a cluster of EC2 instance managed by ECS for Microservice
 build using container images
-Amazon ECS makes it easy to deploy, manage, and scale Docker containers running applications, services, and batch processes. Amazon ECS places containers across your cluster based on your resource needs and is integrated with familiar features like Elastic Load Balancing, EC2 security groups, EBS volumes and IAM roles
+Amazon ECS makes it easy to deploy, manage, and scale Docker containers running applications, services, and batch processes. 
+Amazon ECS places containers across your cluster based on your resource needs and is integrated with familiar features like Elastic Load Balancing, EC2 security groups, EBS volumes and IAM roles
 
 ECS compose of 
 ECS Core: running ECS on user provisioned EC2 instances
@@ -225,24 +225,23 @@ Application Load Balancer
 Configure your cluster
 The infrastructure in a Fargate cluster is fully managed by AWS. Your containers run without you managing and configuring individual Amazon EC2 instances.
 
-For Fargate
-No EC2 instance created
-LB is created
-Target Group is created
+* For Fargate
+* No EC2 instance created
+* LB is created
+* Target Group is created
 
 A Task is a definition of a container
 Tasks role can also be attached (RDS)
 Task execution IAM role (permission to pull container images)
 
-
 A existing task deification can't be changed
-A tasks has IP and container details
+* A tasks has IP and container details
 
 A Service  allows to run and maintain  a specific  no. of tasks  (desired count)
 it brought up new tasks in case of failure
 
 ECS Cluster
-Groping of one or more container instances (EC2 instances) when   u run your taksk
+Groping of one or more container instances (EC2 instances) when u run your tasks
 
 EC2 instances in a cluster running a container agent for communication
 
@@ -319,11 +318,11 @@ EMR helps creating Hadoop cluster (Big data)  with 100s of EC2 instances
 Important tools are natively supported Pig, Hive , Spark , Presto, Hbase, Flink
 Auto scaling and integrated with sot instances
 EMR take care of all provisioning and configuration
-Amazon Elastic MapReduce (Amazon EMR) is a web service that makes it easy to quickly 
-and cost-effectively process vast amounts of data
+**  Amazon Elastic MapReduce (Amazon EMR) is a web service that makes it easy to quickly  and cost-effectively process vast amounts of data
 Amazon EMR uses Hadoop, an open source framework, to distribute your data and processing
  across a resizeable cluster of Amazon EC2 instances
 Its big data processing
+
 use cases
 log processing for insights
 click stream analytics for advertisers
@@ -333,7 +332,7 @@ Storage Types
 
 1) HDFS
 Standard for Hadoop
-Data Storage = EBS or instance (data can lost if instance down)
+** Data Storage = EBS or instance (data can lost if instance down)
 Persistence Cluster running 24 X 7
 
 2) EMRFS ( Elastic MapReduce File System)
@@ -352,7 +351,7 @@ housing Structured and Unstructured data
 
 AWS Redshift Spectrum
 Run queries directly against S3 without worrying about loading entries data from S3 into a DWH
-recommended if u are executing quires frequently against Structured data
+**** recommended if u are executing quires frequently against Structured data
 You have a huge volume of data in Amazon S3. You would want to run queries against S3 directly instead of moving data to a data warehousing solution
  
 AWS Athena
@@ -402,7 +401,7 @@ All configuration mgmt tools can also do
 infrastructure provisions but not recommended
 
 ---------------------------------------------AWS Elastic Transcoder--------------------------------------------------------------------------
-Fully managed service to convert media files stored in S3 into various formats
+****  Fully managed service to convert media files stored in S3 into various formats
 create WebM video,Mp3 audio or animated Gif
 For all other video processing use cases, recommanded to use Element MediaConvert
 4 components
@@ -417,7 +416,7 @@ Pay what you use ,scale automatically
 -------------------------------------------------AWS Workspaces-------------------------------------------------------------------------
 
 Desktop as a Service (DaaS)
-MANAGED , Secure Cloud Destop
+MANAGED , Secure Cloud Desktop
 *** Replacement for VDI (virtual Desktop infrastructure)
 provision windows or Linux Desktop in minutes
 Integrated with Microsoft AD
@@ -456,3 +455,4 @@ Organizations: hierarchy and centralized management of multiple AWS accounts
 Workspaces: Virtual Desktop on Demand in the Cloud. Replaces traditional on-premise VDI infrastructure
 AppSync: GraphQL as a service on AWS
 SSO (Single Sign On): One login managed by AWS to log in to various business SAML 2.0-compatible applications (office 365 etc)
+

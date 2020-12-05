@@ -1,7 +1,7 @@
 --------------------- Routing and Content Delivery -------------------------------------
-CDN Content delivery network
-distribute content to multiple edge locations around the world
-200+ edge locations
+*** CDN Content delivery network
+*** distribute content to multiple edge locations around the world
+*** 200+ edge locations
 High availability and performance
 its a content distribution system (used to distribute contents to outside world)
 
@@ -9,33 +9,33 @@ Amazon CloudFront
 serve users from nearest edge loc based on user location
 ** Improved read performance, content is cached at the edge.
 source content can  be S3,EC2, ELB and external websites
-if no content found at edge, it will retriever from the origin server and cached at the edge location
+*** if no content found at edge, it will retriever from the origin server and cached at the edge location
 can use multiple edge locations
 provides features to protect your private content
 integrates  AWS shield to protect DDos attacks
 integrates  AWS WAF web app firewall to protect SQL Injection, cross site scripting
 
 use cases
-static/dynamic websites, audio/video and software downloads , HTTP and rtmp
+static/dynamic websites, audio/video and software downloads , HTTP and RTMP (Real-Time Messaging Protocol)
 
 cost benefits
-0 cost of data transfer b/w S3 and CloudFront 
+** 0 cost of data transfer b/w S3 and CloudFront 
 reduce compute workload for your EC2 instances
 
-DNS domain name: which endures can access
-Origin: where you get the content from S3,EC2
+DNS domain name: which end users can access
+** Origin: where you get the content from S3,EC2
 Cache Control : TTL = 24 hrs. default
 configure HTTPS only (default support for both HTTP and HTTPS)
-can redirect from HTTP to HTTPS
-configure different cloud front behaviour for different URL path patterns from same origion
+** can redirect from HTTP to HTTPS
+configure different cloud front behaviour for different URL path patterns from same origin
 path pattern: *.php
 
 Signed URLs used for
-RTMP distribution (media streaming)
+** RTMP distribution (media streaming)
 Application downloads (individual files)
 situations where cookies are not supported
 
-Singed cookies using key pairs
+** Singed cookies using key pairs
 Multiple files (you have a subscriber website )
 doesn't need any change in application URL
 
@@ -64,7 +64,7 @@ Security group of EC2 must allow all IPs of Edge locations
 Security group of ALB must allow all IPs of Edge locations
 Security group of EC2 must allow SG of ALB
 
-CloudFront is a global service
+** CloudFront is a global service
 
 Console -->CloudFront
 Delivery Method --> Web 
@@ -73,23 +73,22 @@ Default object: index.html
 86400 secs = 24 hours
 create distribution  (15 to 20 mins)
 
-the contents will be automatically expire after TTL from the edge locations if not used
-InvalidationAPI - to remove object from cache (from all edge locations) for emergencies 
+** the contents will be automatically expire after TTL from the edge locations if not used
+** InvalidationAPI - to remove object from cache (from all edge locations) for emergencies 
 
 use versioning in object path name
 
-Don't use CloudFront for 
+** ** Don't use CloudFront for 
 when all requests from a single location 
 when all requests from corporate VPN
 
 Scenario: Restrict content to users in certain countries
-enable CloudFront Geo restriction
+** enable CloudFront Geo restriction
 whitelist(allowed countries)
 blacklist(blocked countries)
 
-
-* CloudFront is great for static content that must be available everywhere
-* S3 Cross Region replication is great for dynamic content that needs to be available at low latency in few regions
+** * CloudFront is great for static content that must be available everywhere
+***  S3 Cross Region replication is great for dynamic content that needs to be available at low latency in few regions
 
 Practical
 Create a bucket b1
@@ -117,17 +116,16 @@ private content (for years)
 
 **Signed Cookie = access to multiple files (one signed cookie for many files)
 
-
 Client -> Custom App -> AWS SDK to get Singed URL -> Edge location
 Client -.> using singed URL -> CloudFront
 
-CloudFront Signed URL
-allows access to a path,  no matter the origin (s3,ec2,http)
+** **  CloudFront Signed URL
+** allows access to a path,  no matter the origin (s3,ec2,http)
 can leverage caching features
-account wide key-pair , only root can manage
+** account wide key-pair , only root can manage
 
-S3 pre-signed URL
-Issue a requet as the person who pre-signed the url
+** S3 pre-signed URL
+Issue a request as the person who pre-signed the url
 limited life time
 use IAM key of the singing IAM principal
 
@@ -156,7 +154,7 @@ only 2 external ip need to be whitelisted
 DDos protection using AWS shield
 
 
-CloudFront VS Global Accelerator
+**  CloudFront VS Global Accelerator
 
 both uses AWS global network and its edge locations around the world
 both services integrate with AWS shield for DDos protection
@@ -166,8 +164,8 @@ improves performance both cacheable contents images and videos and dynamic conte
 
 Global Accelerator
 improves performance over TCP or UDP
-good for non http use caes like gaming(UDP),IOT(MQTT) or voice over IP
-good for http use caes that required static IP and fast regional faiolver
+**  good for non http use cases like gaming(UDP),IOT(MQTT) or voice over IP
+good for http use cases that required static IP and fast regional failover
 
 Practical 
 ** Accelerator is not Free
@@ -196,8 +194,7 @@ type: EC2
 provide instance id
 add end point  of EC2 in ap-south-1
 
-Two static IP will be created by the Accelerator
-
+**  Two static IP will be created by the Accelerator
 
 **CloudFront Signed URL are commonly used to distribute paid content through dynamic CloudFront Signed URL generation. 
 ** S3 CRR allows you to replicate the data from one bucket in a region to another bucket in another region

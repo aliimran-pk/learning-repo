@@ -1,23 +1,23 @@
 -----------------------------------------------S3 Fundamentals--------------------------------------------------------------------------------------
 Simple Storage Service
-inexpensive 
-store large objects with key value approach
-also called Object StorageProvides REST API 
+*** inexpensive 
+*** store large objects with key value approach
+*** also called Object StorageProvides REST API 
 unlimited storage
-objects are replicated in a single region across  multiple AZ
+*** objects are replicated in a single region across  multiple AZ
 
 Buckets (directories) are fundamental container in S3
 
 S3 -> Create Bucket
-bucket name should be using  across AWS accounts (unique)
+*** bucket name should be using  across AWS accounts (unique)
 no space and special or upper case char in Name and become part of object URL ,IP
 * must start with lower case letter or number
 enabling object lock automatically enables Bucket versioning 
 * S3 is a global service 
 however a bucket is created in a region
 every object is access using key value pair
-* max  size of an object in  a bucket is 5 TB
-must use multi part upload for uploading more than 5GB
+*** max  size of an object in  a bucket is 5 TB
+*** must use multi part upload for uploading more than 5GB
 No hierarchy of buckets,sub buckets or folders
 
 key is full path
@@ -62,19 +62,17 @@ https://my-s3-bucket-1.s3-eu-west-1.amazonaws.com/2030/10/course2.png
 Bucket Level Property
 
 VERSIONING 
-Versioning is at Bucket level must be enabled first
+*** Versioning is at Bucket level must be enabled first
 increment the version by same key
-any file that is not versioned prior to enable versioning will have version "null"
+*** any file that is not versioned prior to enable versioning will have version "null"
 But if suspend versioning the previous version files will not delete and new vision will not create
-But if we delete a specific versioned then it will delete permanently
+*** But if we delete a specific versioned then it will delete permanently
 
 my-s3-bucket-1 -> Properties -> Versioning
-
 Enable Versioning
 
-
 All old objects will have a version of null
-We can't turn off the versioning once set
+*** We can't turn off the versioning once set
 
 WARNING! BILLING ALERT! Do NOT Enable Access Logging For Your Buckets
 Enable Logging 
@@ -95,7 +93,7 @@ Permissions
 
 2) Edit  Block public access
 
-3) Bucket policy ()resource based policy , give cross account access)
+3) Bucket policy (resource based policy , give cross account access)
 
 Documentation https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html
 Granting Read-Only Permission to an Anonymous User
@@ -123,23 +121,22 @@ using cloud trail
 
 
 ------------- S3 ENCRYPTION-------------------------
-None 
-
 Four methods for encrypting objects in S3
 
-1)  SSE_S3:
+1)  SSE-S3
 server side encryption
-Encrypt S3 objects using keys handled & managed by AWS
-AES-256 encryption type
-Must set header:  "x-amz-server-side -encryption":"AES256"
+S3 encrypts object using its own managed data key and put  the encrypted obj in the bucket
+*** Encrypt S3 objects using keys handled & managed by AWS
+*** AES-256 encryption type
+*** Must set header:  "x-amz-server-side -encryption":"AES256"
 example:
 pass http/https request with above header to S3
-S3 encrypts object using its own managed data key and put  the encrypted obj in the bucket
+
 
 2) SSE-KMS (key management service)
 server side encryption
 Leverage AWS key management service (AWS-KMS) to manage encryption keys
-Must set header:  "x-amz-server-side -encryption":"aws:kms"
+** Must set header:  "x-amz-server-side -encryption":"aws:kms"
 ** KMS uses CMK Customer master key for encryption 
 ** With SSE-KMS you let AWS manage the encryption keys but you have full control of the key rotation policy
 
@@ -163,7 +160,7 @@ S3 provides both http/https  but https is recommend
 using Bucket Properties we can  set Default encryption
 it is being applied event it is set none using upload a file
 
-1)None
+1)  None
 2) AEC-256
 3) AWS-KMS
 
@@ -181,7 +178,7 @@ Effect : Allow / Deny
 eg. 
 Grant public access to the bucket
 Force objects to be encrypted at upload
-rant access to another account (Cross account)
+grant access to another account (Cross account)
 
 Object Access - ACL - fine grain
 Bucket Access - ACL - less common
@@ -195,22 +192,21 @@ there's no explicit DENY
 
 ***Explicit DENY in an IAM policy will take precedence over a bucket policy permission
 
-
 Support VPC endpoint 
 S3 access logs can be stored in other S3 bucket
-API calls can be logged ni AWS cloudTrail
-MFA for delete objects
-Pre-singed URLS for a limited time
+API calls can be logged in AWS cloudTrail
+** MFA for delete objects
+** Pre-singed URLS for a limited time
 
 Bucket --> Management --> Bucket Policy
-We acan leverage S3 bucket policy generator
+We can leverage S3 bucket policy generator
 https://awspolicygen.s3.amazonaws.com/policygen.html
 
 * Also Block public access to the bucket at the account level 
 
-*** Object Lock  (same asa Glacier Vault lock)
-prevents object from being deleted fpr a specified amount of time 
-Enable only at the time of creation bucket in advance setting, also versioning enabled
+*** Object Lock  (same as Glacier Vault lock)
+prevents object from being deleted for a specified amount of time 
+** Enable only at the time of creation bucket in advance setting, also versioning enabled
 after that we can't delete objects from bucket eg. for regulatory constrains
 adopt WORM (write once read many) model
 
@@ -236,33 +232,34 @@ if u get 403 forbidden error, make sure the bucket policy allows public reads
 1) Disable Block access 
 2) Create a bucket policy
 
-Transfer acceleration
+S3 Transfer acceleration
 to improve speed of data transfer 
-not free
+** not free
 
 Requester Pays
 In general, bucket owners pay for all Amazon S3 storage and data transfer costs associated with their buckets. 
+
 With Requester Pays buckets
 - The requester instead of the bucket owner pays the cost of the request and the data download from the bucket
+
 The bucket owner always pays the cost of storing data.
 when this is enabled
 anonymous access to the bucket is disabled
 
 Events
-Notifications to Lambda fns
+Notifications to Lambda functions
 
 Event Sources
-new obj created,removal
+new objects created,removal
 RRS object lost events
 replication across events
 
 Events Destination
 SNS Topic
 SQS queue
-Lambda Fn
+Lambda Functions
 
-
-Versioning CANNOT be configured at an individual object level?
+** Versioning CANNOT be configured at an individual object level?
 S3 Life Cycle Configuration allows you to move files between different S3 Storage Classes?    
 ACLs are primarily used to grant permissions to the public and other AWS accounts
 
@@ -316,14 +313,14 @@ Different origin
 http://example.com
 http://otherexample.com
 
-The request won't fullfiled unless the other origin allows for the request using
-CORS headers (ex:Access-Control-Allow)
+*** The request won't fulfilled unless the other origin allows for the request using
+** CORS headers (ex:Access-Control-Allow)
 
 S3 CORS
 if a client does a cross-origin request to our S3 bucket with enabled website , we 
 need to enable correct CORS headers
 ** You can allow for a specific origin or use * fro all origins
-CORS headers must be defined at the other bucket (tow whome first origin want to send the request )
+** CORS headers must be defined at the other bucket (to whom first origin want to send the request )
 when it allowed access for CORS then browser can be able to request for that site
 
 
@@ -331,9 +328,9 @@ Create a new bucket
 same region
 make it public
 Permission -> add bucket policy
-enable static web shosting
+enable static web hosting
 Permission -> CORS configuration
-add the configuration file with full URL of the origion in AllowedOrigin
+add the configuration file with full URL of the origin in AllowedOrigin
 
 
 ** Block Public Access is at Highest level than access control and bucket policy
@@ -350,7 +347,7 @@ IMP
 ACL are primarily used to grant permissions to public or other user accounts
 
 -------------S3 MFA -Delete ---------------------------------------------------------------
-To use MFA delete, enable versioning on S3
+**  To use MFA delete, enable versioning on S3
 
 You will need MFA to restrict
 * permanently delete an object version
@@ -364,9 +361,8 @@ list delete versions
 * MFA-Delete currently can only be enabled using CLI
 
 -------------S3 Access Logs -----
-for audit purpose , any request made to S3 from any account autorized or denied 
-will be loged into another S3 bucket
-* Don't set your logging bucket to be the monitoring bucket, (infinite loging loop)
+for audit purpose , any request made to S3 from any account authorized or denied will be logged into another S3 bucket
+* Don't set your logging bucket to be the monitoring bucket, (infinite logging loop)
 
 create bucket 
 S3AccessLog
@@ -382,19 +378,21 @@ old way to enable default encryption was to use bucket policy and refuse any
 http command without proper header
 But
 New way is to use "default encryption" option in S3
-** Bucket Policies are evaluated before "default encryption"
+
+** ** Bucket Policies are evaluated before "default encryption"
 
 --------------------------S3 Storage Classes-----------------------
 wide variety of data
 huge variations in access pattern
 S3 storage classes help to optimise your cost  while meeting access time needs
-durability 11 9's
+
+**  Durability 11 9's
 
 when we upload the file in Bucket t, then storage classes option comes
 we can change storage class of a object
 
 
-Standard S3 - General Purpose
+1) Standard S3 - General Purpose
 * Frequently access data
 * High Durability 
 * data replicated in at least 3 AZs
@@ -404,7 +402,7 @@ use cases:
 Big data analytics,mobile and gaming , content sharing
 
 
-S3 Standard-1A
+2) S3 Standard-1A
 * long lived, infrequently access data  (eg backups for DR)
 * data replicated in at least 3 AZs
 Encryption = Optional
@@ -414,9 +412,9 @@ use cases:
 data store for DR and backups
 ** Minimum storage duration is 30 days
 
-S3 One Zone-1A
-Non Critical data
-long lived, infrequently access data  (data that can be easily generated again)
+3) S3 One Zone-1A
+** Non Critical data
+**  long lived, infrequently access data  (data that can be easily generated again)
 * data replicated in only 1 AZs
 Encryption = Optional
 per GB cost = 0.0144
@@ -425,24 +423,24 @@ storing secondary backup copies of on-premise data or storing data that you can 
 eg. thumb nails from image 
 
 
-S3- Intelligent-Tiering
+4) S3- Intelligent-Tiering
 same low latency and high throughput performance as of S3 standard
 small monthly  monitoring and auto Tiering fee
-automatically moves objects b/w two access tiers based on changing access patterns
+** automatically moves objects b/w two access tiers based on changing access patterns
 Long lived data with changing or unknown access 
 multiple zone for resiliency
 AWS choose storage classes standard or standard1A
 Encryption = Optional
 ** Minimum storage duration is 30 days
 
-Amazon Glacier
-v low cost 
-10s of years
-alternative to on-premise magnetic tape
-Each item in Glacier is called "Archive" file upto 40TB
+5) Amazon Glacier
+** v low cost 
+** 10s of years
+** alternative to on-premise magnetic tape
+Each item in Glacier is called "Archive" file up to 40TB
 Archives are stored in "Vaults"
 Archive data with retrieval times ranging from minutes to hour
-Encryption = Mandatory
+**  Encryption = Mandatory
 0.005
 
 ** 3 retrieval options
@@ -451,17 +449,18 @@ Encryption = Mandatory
 3) Bulk (5 to 12 hours)
 ** Minimum storage duration is 90 days
 
-Glacier Deep Archive
+6) Glacier Deep Archive
 Archive data with that  rarely retrieval times ranging from hours  to days
-Encryption = Mandatory
+** Encryption = Mandatory
 0.002
+
 
 1) Standard (12 hours)
 2) Bulk (48 hours)
 ** Minimum storage duration is 180 days
 
 
-For durability All S3 classes are 11 9s
+** ** **  For durability All S3 classes are 11 9s, same durability
 
 You can switch storage class of an object in a  bucket or during file upload
 
@@ -479,12 +478,12 @@ Move to Glacier for archiving after 6 months
 EXPIRATION ACTIONS
 delete obj eg after one month
 can be used to delete old versions of files if versioning is enabled
-ca be used to delete incomplete multip part uplods
+ca be used to delete incomplete multi  part uploads
 rules can be created for a certain prefix  ie /mp3/*
 
 Storage Classes -> Management -> Lifecycle Rules
-Life Cycle Rules is NOT FREE
-S3 Cross-Region Replication is NOT FREE
+**  Life Cycle Rules is NOT FREE
+** S3 Cross-Region Replication is NOT FREE
 
 ------- S3 Replication  --------------- 
 *Can  be in same region and multiple region
@@ -493,7 +492,7 @@ Access to destination is provided using IAM policy
 *Versioning should be enabled on BOTH source and destination
 Only new objects are replicated 
 
-CRR Cross region replication
+CRR Cross Region Replication
 compliance , lower latency access , replication across accounts
 
 SRR Same region replication
@@ -533,9 +532,9 @@ DELETE 200 --> GET 200
 ** There is no way to request or API "strong consistency"
 so u need to wait a while after updating an object 
 
------------------------------------------------------------
-S3 Pre signed URL
-Grant time limited permission (few hours to 7 days) to download objects
+---------------S3 Pre signed URL-------------------------------------------------------------------------------------------------------
+
+*** Grant time limited permission (few hours to 7 days) to download objects
 Avoid web site scraping and unintended access
 using AWS SDK API
 input 
@@ -546,9 +545,9 @@ pre signed url
 for downloads : easy can use CLI
 for upload : harder, must use SDK
 
-default valid for 1 hour
+*** default valid for 1 hour
 can change it TIME_BY_SECONDS argument
-users given a presiged URL inherits the permissions of the person who generated the URL
+*** users given a presiged URL inherits the permissions of the person who generated the URL
 
 example:
 allow only certification permium users to download video from S3
@@ -563,10 +562,10 @@ this results in a URL which is accessible in 5 minutes
 S3 Access Points
 
 simplify bucket policy configuration
-access specific vpc to a specific bucket
-create application specific access points with an application specifi policy
+access specific VPC to a specific bucket
+create application specific access points with an application specific policy
 
-for App1 we can set different kind of action and for App2 diff action on the same bucket
+*** for App1 we can set different kind of action and for App2 diff action on the same bucket
 
 Bucket -- Access points
 one for each application to access
@@ -581,44 +580,43 @@ Data  Transfer into S3
 Data  Transfer from  S3 to CloudFront
 Data  Transfer from  S3 to Services in the same region (EC2, lambda Fn in same region)
 
-S3 Security Scenarios
+***  S3 Security Scenarios
 
 Prevent Object from being deleted or overwritten
-Use S3 Object Lock
+***  Use S3 Object Lock
 
 Protect against accidental deletion
-Use  Versioning
+*** Use  Versioning
 
 Avoid Content Scraping
 Pre-Signed URL also called Query String Authentication
 
 Enable Cross Domain request to S3 hosted web site
-Use CORS
+*** Use CORS
 
 S3 Cost Scenarios
 
 1) Reduce cost 
-use proper storage classes  and configure life-cycle management
+*** use proper storage classes  and configure life-cycle management
 
 2)  analyse storage access patterns and decide  right SC
-use Intelligent Tiering 
+*** use Intelligent Tiering 
 use storage class analysis report
 
 3) Move data automatically b/w SC
 use lifecycle rules
 
 4) Remove objects from bucket after a specified time period
-use life cycle rules and configure expiration policy
+*** use life cycle rules and configure expiration policy
 
 
 ------------ S3 PERFORMANCE SCENARIOS------------------
 
-S3 is serverless
+***  S3 is serverless
 recommended for large objects
 
 1) Improve S3 bucket performance
 S3 automatically scales to high request rates, latency 100-200 ms
-
 
 Use S3 prefix
 supports up to 3500 request per second to add data (PUT/COPY/POST/DELETE)
@@ -629,30 +627,28 @@ bucket/folder1/sub1/file  = object path
 folder1/sub1/ = prefix
 
 2) Upload large objects to S3
-use multipart upload API
+*** use multipart upload API
 quick recovery from a network issue
 pause and resume object upload
-* recommend for files > 100MB and Must for files > 5GB
+*** * recommend for files > 100MB and Must for files > 5GB
 
-3 )Get some part of the object
-
-Use Byte-Range_fetches
+3) Get some part of the object
+***  Use Byte-Range_fetches
 
 4) EC2 (Region A) accessing S3 bucket(region B)
 Not recommend , reduce network latency and data transfer cost
-
 
 5) How make user pay for S3 storage
 Requester pays
 
 6) Create inventory of S3 objects 
-use S3 inventory report
+***  use S3 inventory report
 
 7) Need S3 bucket access logs
 enable S3 Server Access logs (default:off)
 
 
-8) change object metadata or tags or acl or invoke lambda functions for billions of objects in S3
+8) change object metadata or tags or ACL or invoke lambda functions for billions of objects in S3
 Generate S3 inventory report and Perform S3 Batch operations using it
 
 9)  Need S3 Object bucket Access logs
@@ -667,7 +663,7 @@ Count towards KMS quota per second
 (5500,10000,30000 req/sec based on region)
 can't request quota increase for KMS
 
-TRANSFER ACCELERATION (fast/secure file transfer to/from bucket )
+***  TRANSFER ACCELERATION (fast/secure file transfer to/from bucket )
 * only for upload
 increase transfer speed by transferring file to edge location
 eg
@@ -677,8 +673,7 @@ S3 BYTE RANGE FETCHES
 parallelize GETs by requesting specific byte ranges 
 better resilience in case of failure
 can be used to speed up downloads from S3
-can be used to retrience only partial data ie first 50 bytes
-
+can be used to retrieve only partial data ie first 50 bytes
 
 S3 Notifications
 process streaming data
@@ -686,13 +681,13 @@ S3:ObjectCreated, S3:ObjectRemoved
 Object name filtering possible (*.jpg)
 use case: generate thumbnails of images uploaded in S3
 eg. take image and customise it with lambda function for different devices in S3
+
 S3 to Lambda is using S3 notification
 SNS,SQS or trigger functions on S3 objects
-at bucket levels
+*** at bucket levels
 using prefix and sufix
 cost effective 
-*** If you want to ensure that an event notification is sent for every successful write, you can enable
-versioning on your bucket
+*** If you want to ensure that an event notification is sent for every successful write, you can enable versioning on your bucket
 Go to events -> 
 name = SQS
 All object create
@@ -706,8 +701,7 @@ and flexible storage for data backup and archival
 As  a replacement for magnetic tapes
 High durability 11 9's
 High security as encryption is must
-Cannot upload objects to glacier using management console but using 
-REST API, AWS CLI, AWS SDK
+Cannot upload objects to glacier using management console but using REST API, AWS CLI, AWS SDK
 
 S3
 object are stored in buckets
@@ -745,12 +739,13 @@ Enable Notification
 SNS topic 
 
 ------------------------AWS Athena ------------------------
+** Query Engine over S3
+***  uses SQL language 
 Serverless service to perform analytics directly against S3 files
 ** Used to analyse data on S3 with out loading into any DB and directly from S3
-Query Engine over S3
-uses SQL language 
+
 Has JDBC/ODBC driver
-charged per query and of data scanned
+** charged per query and of data scanned
 support scv,json,avro and parquet
 pay per query 
 

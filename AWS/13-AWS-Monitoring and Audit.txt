@@ -1,32 +1,34 @@
 ---------------------------------------------CloudTrail , Config and CloudWatch ------------------------
 Cloud Watch Metrics
-provides metrics for each service in AWS
-Metric is a variable to monitor (CPUUtilization, Networking)
+**  provides metrics for each service in AWS
+Metric is a variable to monitor (CPU Utilization, Networking)
 Metric belongs to a namespace(category)
-Dimension  is an attribute of a metric (Instance id, environment)
-Up to 10 dimensions per metric
+**  Dimension  is an attribute of a metric (Instance id, environment)
+** Up to 10 dimensions per metric
 Metric have timestamps
 can create CloudWatch Dashboards of metrics
 
 * EC2 Memory usage is by default not pushed (must be pushed from inside the instance as custom metric)
 Possibility  to define and send your own custom metrics to CloudWatch
 Metric resolution
-standard: 1 min
+** standard: 1 min
 High resolution: up to 1 sec (StorageResolution API parameter) , Higher cost
 use API call PutMetricData
 
 ** The number of instances in an ASG cannot go below the minimum, even if the alarm would in theory trigger an instance termination
 
 ------- AWS CloudTrail-----------------------------------
-Provides governance , compliance and audit for your AWS Account
-CloudTrail is enabled by defauly
-Can put logs from Cloudtrail into CloudWatch logs
-who made the request
-what action performed
-what parameter used
-what was end result
 
-its like a change log 
+**  Provides governance , compliance and audit for your AWS Account
+**  CloudTrail is enabled by default
+Can put logs from Cloud trail into CloudWatch logs
+
+** who made the request
+** what action performed
+** what parameter used
+** what was end result
+
+**  its like a change log 
 use case: 
 compliance with regulator standards
 troubleshooting
@@ -49,7 +51,7 @@ Log files are automatically encrypted with AWS S3 (SSE server side encryption)
 S3 life cycle rules can be configure to archive/delete logs
 supports log integrity (cant be altered by anyone)
 
-Services - CloudTrail  (its not in the free tier)
+** Services - CloudTrail  (its not in the free tier)
 
 Trails -Create trail
 name: cloudtrail_mgmgt_events1
@@ -62,29 +64,31 @@ Do NOT enable AWS Config and Config Rules if you want to stay in FREE TIER!
 
 ----------------AWS Config--------------------------------------------------------
 Auditing 
-creates a complete inventory of our AWS resources
-helps record configurations and changes over time
-find how resource was configured at any time
+**  creates a complete inventory of our AWS resources
+** helps record configurations and changes over time
+** find how resource was configured at any time
 configuration of deleted resources would be maintained
-history file to s3 bucket every 6 hour
+** history file to s3 bucket every 6 hour
 take configuration snapshot when needed
 * AWS config is a per-region service
 can be aggregated across regions and accounts
+
 You can receive alerts SNS for any changes
 customize config rules for specific resources or for entire aws account
 evaluate compliance against desired configuration
 SNS notification on configuration change
 Group Config rules and remediation actions into conformance packs
 can create lambda functions with custom rules
-can setup auto remediation for each rule (delete elastic ip which is not used, stop ec2 isntance without a TAG)
+** can setup auto remediation for each rule (delete elastic IP which is not used, stop ec2 instance without a TAG)
 Config rules examples (80+ available and custom can be created)
 can make custom config rules
 rules can have auto remediation
+
 Questions that can be solved by AWS config
 Do my buckets have public access
 How my ALB configurations changed over time
 Is there unrestricted SSH access to my SG
-Config rules are not free, $2 per active rule per region per month
+** Config rules are not free, $2 per active rule per region per month
 
 alb-HTTP-HTTPS-redirection-check
 Is HTTP to HTTPS redirection is configured on all HTTP listener of ALB
@@ -99,14 +103,13 @@ encrypted-volumes
 EC2 attached with EBS encrypted volumes
 
 eip-restricked
-are elastic ip used
+are elastic IP used
 
 restricted-ssh
 security groups use disallow unrestricted incoming ssh traffic
 
-AWS Config is not free
-more rules = more cost
-
+** AWS Config is not free
+** more rules = more cost
 
 Console - AWS Config
 Settings
@@ -117,8 +120,6 @@ select config rule
 restricted -ssh   (don't allow 22 port)
 Resources: EC2: Security Group
 
-
-
 ---------------------AWS CloudWatch ---------------------
 
 AWS CloudTrail
@@ -128,7 +129,7 @@ AWS Config
 What did my AWS resource look like a year back
 enables you to assess, audit, and evaluate the configuration of your AWS resources
 
-AWS CloudWatch is all about Mornington and observability service
+AWS CloudWatch is all about Monitoring and observability service
 informs of logs,metrics and events
 set alarms , visualize logs , take automated actions and troubleshot issues
 
@@ -187,7 +188,7 @@ near read-time stream of systems events that describe changes in AWS resources
 schedule: cron jobs
 event pattern: rules eg CodePipeline state changes
 related to resources and sends notifications out to targets
-Event creates a small JSON document to give info about the chnage
+Event creates a small JSON document to give info about the change
 eg. 
 trigger when someone stop an ec2 instance
 call lambda when EC2 starts
@@ -202,11 +203,11 @@ Event type: CodePipeLine execution state change
 specific state: FAILED
 Target - SNS Topic
 
-AWS CloudTrail only records API calls for future references But cloud watch events allow you to take actois
+AWS CloudTrail only records API calls for future references But cloud watch events allow you to take actions
 
 X-Ray is used to trace your application
 CloudWatch is used to monitor your application
-Cloudwatch SeviceLens monitors issues with Microservice based applications
+*** Cloudwatch SeviceLens monitors issues with Microservice based applications
 unified access 
 
 Container Insight
@@ -226,7 +227,7 @@ sudo yum install -y awslogs
 etc/awslogs/awscli.confg (change region to current region)
 sudo  systemctl start awslogsd
 
-CloudWatch Unified Agent
+*** CloudWatch Unified Agent
 logs at lot more granularity level
 **Newer version of agent
 **Collect additional system level metrics such as Ram, Processes t
@@ -249,7 +250,7 @@ Track SG rules for LB
 ensure SSL certificate is always assigned t LB for compliance
 
 CloudTrail
-track who made any chnages to LB with API calls
+track who made any changes to LB with API calls
 
 
 

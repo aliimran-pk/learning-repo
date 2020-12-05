@@ -22,22 +22,21 @@ notification broadcast
 Simple Queuing Service SQS
 Full Managed, reliable ,scalable Message Queue Service
 Unlimited scaling 
-Low cost (pay for use , no. of msgs)
+** Low cost (pay for use , no. of msgs)
 
-max message size = 256KB
+** max message size = 256KB
 can configure SSE server account encryption
 Lambda trigger can set
 consumer receivers and process messages in parallel 
-and consumer delete messages after processing it
+**  and consumer delete messages after processing it
 
-Standard Queue
-**Unlimited throughput
-No order guarantee
-No guarantee of exactly one processing 
-can have duplicate messages but at least once delivery
+1) Standard Queue
+** Unlimited throughput
+** No order guarantee
+** No guarantee of exactly one processing , can have duplicate messages
 limitation = 256KB per msg sent
 
-FIFO Queue
+2) FIFO Queue
 Limitation: lower throughput 300 msg per seconds
 **Order guarantee
 ** Guarantee of exactly one processing 
@@ -59,15 +58,15 @@ send msg  with message group id
 Message Life Cycle
 
 Start -> Ready ->   Being processed -> Done
-delay second = if configure, the msg will be ready after that time 
-if msg is not processed by the consumer after expiry of visibility timeout, then again 
+**  delay second = if configure, the msg will be ready after that time 
+**  if msg is not processed by the consumer after expiry of visibility timeout, then again 
 moves to Ready state and to Dead letter queue in case of max Retry policy 
 
 SQS Auto Scaling
 SQS scale Automatically 
 
 SQS -> CW Alarm -> AutScaling -> EC2
-use target tracking scaling policy
+**  use target tracking scaling policy
 use SQS metric like ApproximateNumberOfMessages
 
 EC2 instances are associated with ASG
@@ -76,25 +75,25 @@ It will trigger CloudWatch Alarm which send info to ASG to increase/decrease EC2
 
 SQS IMPORTANT CONFIGURATIONS
 
-1) Visibility Timeout
+1) **  Visibility Timeout
 After a message is pulled by consumer, it will be become invisible to other consumers during that time
 other consumers will not received a messages being processed for that time
-default 30 sec up to  12 hrs
+** default 30 sec up to  12 hrs
 means that the message needs to be processed in 30 sec
 can be changed by call API ChangeMessageVisibility to get more time
 ** if visibility timeout is too high , and consumer crash, re-processing takes much time
-if visibility timeout is too low , we may get duplicates
+**  if visibility timeout is too low , we may get duplicates
 
 2) Delivery Delay
-time period before a msg is visible on the queue
+** time period before a msg is visible on the queue
 delays a message (consumer don't see it immediately) up to 15 mins 
-default 0 sec , max 15 mins
+** default 0 sec , max 15 mins
 Can be set on queue creation or update using setQueuAttribute
-can override the default on send using DelaySeconds param
-use case: if your consumers need additional time to process messages, you can delay each new message coming to the queu
+can override the default on send using DelaySeconds parameter
+use case: if your consumers need additional time to process messages, you can delay each new message coming to the queue
 
 3) Message Retention period
-max period a msg can be on a queue if no one consume it
+**  max period a msg can be on a queue if no one consume it
 *default = 4 days
 *min 60 secs  ie 
 *max 14 days
@@ -150,7 +149,7 @@ aws sqs send-message --queue-url=QUEUEURL --message-body="MyMsgfrom cmd line"
 Purge Queue
 Delete all messages from that Queue
 
-SQS Scenarios
+**  SQS Scenarios
 
 Receiver wants to handle the msg without looking msg body
 configure message attributes
@@ -191,7 +190,7 @@ send SMS to mobile users
 send emails
 
 *** SNS Subscribers can be 
-SQS,http/https,Lambda,emails,sms msg,mobile notifications
+SQS,http/https,Lambda,emails,SMS msg,mobile notifications
 
 SNS integrates with a lot of AWS services
 CloudWatch - alarms
@@ -214,7 +213,7 @@ works with GOOGLE GCM, APLE APNS and AMAZON ADM
 call allow access to other AWS accounts using SNS policy
 can enable encryption SSE
 
-can configure retry policy
+**  can configure retry policy
 can log deliver status
 configure roles
 
@@ -253,9 +252,10 @@ SNS security is similar to SQS
 SNS + SQS : Fan Out
 Push once in SNS receive in all SQS queues that are subscribers
 make sure your SQS queue access policy allows for SNS to write
-* SNS can't send message to SQS FIFO queues (AWS limitation)
+** * SNS can't send message to SQS FIFO queues (AWS limitation)
 
 ------------------------AWS Kinesis --------------------------------------
+
 Kinesis is a managed alternative to Apache Kafka
 great for app logs, iot, clickstreams
 ** great for "real-time" big data
@@ -264,7 +264,7 @@ great for streaming processing frameworks (Spark, Nifi)
 
 1) ** Kinesis Data Streaming
 Primary handle Streaming data with low latency
- recommended for ETL jobs
+**  recommended for ETL jobs
 Data retention is 1 day by default up to 7 days
 ** Ability to reprocess/replay data as compared to SQS
 multiple apps can consume same stream like SNS
@@ -296,7 +296,7 @@ in flight encryption  using Https endpoints
 encryption at rest using KMS
 * VPC endpoints available for Kinesis to access within VPC
 
-Kinesis is not in free tier
+**  Kinesis is not in free tier
 
 Practical 
 Console -> Kinesis
@@ -318,7 +318,7 @@ aws kenisis get-records --shard-iterator 002121212
 will gives the data but data is in base64 
 
 2) AWS Kinesis Analytics
-*perform real-time analytics on stream using SQL
+**  perform real-time analytics on stream using SQL
 you can write SQL queries and build Java apps to continuously analyse streaming data
 * Data coming via Kinesis Firehose and Kinesis Data Streams
 auto scaling 
@@ -327,9 +327,10 @@ pay for actual  consumption rate
 
 
 3) AWS Kinesis Data Firehose
-*store  to S3,Elastic search ,Redshift and splunk
-managed service , serverless
 *Data Ingestion for streaming data
+**  store  to S3,Elastic search ,Redshift and splunk
+**  managed service , serverless
+
 Delivery stream
 receive
 near rear time ie 60 latency
@@ -341,15 +342,13 @@ KPL, Kinesis Agent, Kinesis Data stream, cloudwatch events  -->
 Kinesis Data Firehose (biotransformation using lambda ) --> 
 Amazon S3,Redshift, ElasticSearch,Splunk
 
-
 AWS kinesis Video Streams
 monitor video streams from web cams and generate real time alerts
-
 
 Producers:
 putting data in that stream
 eg.
-kinesis Agent (java client)
+kinesis Agent (Java client)
 AWS SDK
 (KPL) Kinesis Producer library
 
@@ -370,7 +369,7 @@ data storage 1 to 7 days ,replay, multi consumer
 
 Full managed, send to S3,splunk,redshift,elasticSearch
 near real time 1 min
-serverless data transformation using lambda
+*** serverless data transformation using lambda
 automated scaling and No storage
 
 
@@ -394,7 +393,7 @@ Amazon MQ = SQS + SNS but with restricted scalability
 *Amazon MQ runs on a dedicated machine can run in HA for failover
 * MQ has both queue (SQS) and topic (SNS) features
 
-supports traditional APIS (JMS) and protocols AMQP,MQTT,OpenWire,STOMP
+***  supports traditional APIS (JMS) and protocols AMQP,MQTT,OpenWire,STOMP
 ** easy to migrate on premises
 start Amazon MQ as first step and slowly redesign app to SQS/SNS
 
@@ -412,10 +411,3 @@ add port 8162 in SG
 --------------------------------------------------
 send a message to 3 different applications all using SQS.
 This is a common pattern as only one message is sent to SNS and then "fan out" to multiple SQS queues
-
-
-
-
-
-
-

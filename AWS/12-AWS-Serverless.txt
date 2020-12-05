@@ -1,5 +1,5 @@
 ---------------------------ServerLess-----------------------------------------
-A new paradigm in which the developers don't have to manage/provision servers anymore
+A new paradigm in which the developers don't have to manage/provision servers any more
 
 You don't worry about  infrastructure
 flexible scaling and automated high availability
@@ -52,7 +52,7 @@ Lambda function creates a thumbnail
 Push thumbnail to another S3 or meta data to DynamoDB
 
 2) Serverless CRON Job
-CloudWatch events -> \trigger Every one hour --> Lambda Function to perform a task
+CloudWatch events -> trigger Every one hour --> Lambda Function to perform a task
 
 AWS lambda Pricing 
 
@@ -110,9 +110,10 @@ Enable it
 Matrix using AWS cloudwatch (monitoring and log)
 
 
-basic setting
-MEMORY = the more memory the more CPU
-Price proportional to Memory 
+BASIC SETTING
+
+***  MEMORY = the more memory the more CPU
+***  Price proportional to Memory 
 
 TimeOut  of lambda function  = 3 seconds is default 
 ** max timeout = 15 mins 
@@ -125,13 +126,13 @@ Allocate memory in 64MB increments from 128MB to 3 GB
 
 **Execution limits
 
-1) memory allocation : 128 MB - 3008 MB (64 MB increment)
-2) Max execution time : 900 secs or 15 mins
-3) environment variables: 4KB
-4) disk capacity : 512 MB in /tmp
-5) concurrency executions : 1000 (can be increase)
+*** 1) memory allocation : 128 MB - 3008 MB (64 MB increment)
+*** 2) Max execution time : 900 secs or 15 mins
+*** 3) environment variables: 4KB
+*** 4) disk capacity : 512 MB in /tmp
+*** 5) concurrency executions : 1000 (can be increase)
 
-** Deportment Limits
+** Deployment Limits
 1) deployment size : 50 MB compressed
 2) un compressed: 250 MB
 3) can use /tmp to load other files at startup
@@ -141,36 +142,36 @@ Allocate memory in 64MB increments from 128MB to 3 GB
 Rest API Challenges Management of Rest API is not easy
 authentication and authorization
 Rate limits (quotas)
-support for web sockets protocol
+*** support for web sockets protocol
 handle different environments
 create API keys, handle request throttling (too many unwanted request)
 Swagger/open API to define APIs
 transformation and validation  of request/response
 Cache API responses
-Can  Run Multiple Versions of API and multiple environments
+*** Can  Run Multiple Versions of API and multiple environments
 Monitor API callsCache API requests
 API keys for third party developers  to monitor usage
 
-lambda + API Gateway = No infra to manage
+***  Lambda + API Gateway = No infra to manage
 
-Warning: don't use API keys for authorisation
+*** Warning: don't use API keys for authorisation
 
-Full Managed Service
-Serverless offering by AWS
-Life cycle management for REST APIs
-Enable Caching for API call with TTL
+*** Full Managed Service
+*** Serverless offering by AWS
+*** Life cycle management for REST APIs
+***  Enable Caching for API call with TTL
 protect backed by throttling request
 publish , maintain , monitoring and securing APIs
 
-Integrate with Lambda, EC2, ECS,  or any publicly addressable web service
-easy way to expose Rest API backed by lambda function 
+***  Integrate with Lambda, EC2, ECS,  or any publicly addressable web service
+*** easy way to expose Rest API backed by lambda function 
 
 Integrate with  CloudWatch, CloudTrails
-supports HTTP(s) and web sockets
+*** supports HTTP(s) and web sockets
 expose http endpoints , internal http on premise Http API
 
 It is serverless 
-Expose any AWS API through API Gateway
+***  Expose any AWS API through API Gateway
 ie start AWS step function workflow, post msg to SQS
 
 API Gateway: Endpoint Types
@@ -284,11 +285,14 @@ User call API wit token --> API gateway -> pass it to Lambda Authorizer -> Evalu
 
 ---------------------------------3) Amazon Cognito------------------------------------------------------------
 
-Fully manages user lifecycle
+Amazon Cognito provides authentication, authorization, and user management for your web and mobile apps. 
+Your users can sign in directly with a user name and password, or through a third party such as Facebook, Amazon, Google or Apple. 
+
+*  Fully manages user lifecycle
 we want to give our users an identity to that they can interact with our application
 authenticate mobile and web-apps
 want to integrate with web identity providers google, Facebook
-MFA ,phone and email versification
+MFA ,phone and email verification
 support for SAML
 
 
@@ -333,18 +337,19 @@ if ok, it gets a token
 3) identity pool validates it via STS and creates temp access keys,secret key and session token
 4) app send a request with these credentials to AWS service
 
-
 Cognito Sync
 synchronize data from device to Cognito
-May be deprectead and replaced with AppSync
+May be deprecated and replaced with AppSync
+
+
 --------------------------------------Lambda@Edge---------------------------------------------------------
 
-running lambda functions at end location
+* running lambda functions at end location
 to run a global AWS Lambda alongside
-how to implement request filtering before reaching your application
+* how to implement request filtering before reaching your application
 lowest network latency for end users
 deploy  lambda functions alongside your CloudFtont CDN
-pay only what you use
+*  pay only what you use
 
 use case: search engine optimisation SEO, A/B testing , intelligent  routing
 Dynamic web application at Edge
@@ -357,15 +362,15 @@ Can be trigger on AWS cloudFront Events
 * Viewer request- trigger when request arrive at edge location
 * Origin request- just before sending request to origin when  obj is not in cache
 * Origin response-After edge loc receive response back from origin
-* Viewer Response: just before response is end  back from edge to user
+* Viewer Response: just before response is send  back from edge to user
 
 * you can also generate responses to viewer without ever sending the request to the origin
 
 Limitations
-only supports node.js and python
-No free tier and more expensive than lambda
+*  only supports node.js and python
+* No free tier and more expensive than lambda
 
-** ServerLess Application Model(SAM)
+** ServerLess Application Model (SAM)
 SAM is a framework for developing and deploying serverless applications
 All configurations in YAML code
 ** how to test serverless projects with lambda,API gateway and dynaDB in local
@@ -380,7 +385,7 @@ SAM can use CodeDeploy to deploy lambda functions
 build distributed applications using visual workflows
 ** Represent flow as a JSON state machine
 Crate a serverless workflow in 10 mins using visual approach
-invoke multiple aws services  into serverless workflows
+*  invoke multiple aws services  into serverless workflows
 *build workflows as a series of steps
 retry a step until it succeeded
 * max duration is 1 year
@@ -395,7 +400,7 @@ recommend for all new workflows , easy and simple cases
 can integrate with EC2,ECS, on-premise servers, API Gateway
 
 
-AWS Simple Workflow Service (SWF) (older)
+-----------------AWS Simple Workflow Service (SWF) (older)---------------------------
 for complex orchestration 
 *** Code runs on EC2 (not serverless)
 bud and run background jobs
@@ -418,12 +423,11 @@ SWF update workflow history and then schedule another decision task
 until decider to close workflows
 SWF archivers history and close workflow
 
-Step Function is recommended to use for new applications except 
-if u need external signals to intervene in the process
-child process that return values to parent processes
+*  Step Function is recommended to use for new applications except 
+* if u need external signals to intervene in the process
+* child process that return values to parent processes
 
------------------------------------------------------------------------------------
-** Mobile Application Scenario
+---------------------------------** Mobile Application Scenario--------------------------------------------------
 
 1) Rest API
 Mobile Client (Https) -> API Gateway (invoke ) -> AWS Lambda  (query)-> DynamoDB
@@ -466,7 +470,7 @@ Distributed paid content
 want to send links of our videos to premium user ie who paid amount
 application should be global and want full serverless
 
-Client (get Premium URL) -> API Gateway (invoke Lambda) -> Lambda (verify preimum user)-> DynamoDb 
+Client (get Premium URL) -> API Gateway (invoke Lambda) -> Lambda (verify premium user)-> DynamoDb 
 Lambda  (generate url)> AWS CloudFront (using OAI) - S3
 
 ** S3 signed URL are not efficient for global access
@@ -474,18 +478,17 @@ Lambda  (generate url)> AWS CloudFront (using OAI) - S3
 Software Updates Offloading
 caching at the edge
 use cloudFront
-CloudFront is easy way to make an existing application more scalable and chepre
+** CloudFront is easy way to make an existing application more scalable and cheaper
 
 Client --> CloudFront --> ALB --> ASG (EC2) --> Elastic File System (software updates)
 
 ** Big Data Ingestion Pipeline
 should be fully serverless
 
-
 IOT Devices -> AWS IoT Core -> Kinesis Data Stream -> Kinesis Firehose -> S3 ingestion bucket
 S3 ingestion bucket -. Lambda -> Athena to Query bucket data -> S3 storage for reporting
 -> Aws QuickSight (AWS business intelligence tool)
 
-*Streams enable DynamoDB to get a changelog and use that changelog to replicate data across regions
-**SQS allows you to retain messages for days and process them later, while we take down our EC2 instances
+*   Streams enable DynamoDB to get a changelog and use that changelog to replicate data across regions
+** SQS allows you to retain messages for days and process them later, while we take down our EC2 instances
 ** CloudFront Signed URL have security including IP restriction

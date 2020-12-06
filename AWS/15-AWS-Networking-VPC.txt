@@ -13,13 +13,13 @@ when we create a VPC the by default below is created automatically
 2) Security Group
 3) NACL
 
-VPC is created in a Region and not in AZs
-its all properties are regional
+** VPC is created in a Region and not in AZs
+** its all properties are regional
 
-can't use same CIDR in other VPC in the same region
+** can't use same CIDR in other VPC in the same region
 but for VPC peering (communicate) both CIDR should be different
 
-Subnet is created in AZ and not in regions
+** Subnet is created in AZ and not in regions
 A same subnet can't be used on two AZ
 
 Can a VPC extends to two diff AZs 
@@ -28,7 +28,7 @@ No
 Can a Subnet exits in two diff AZs 
 No
 
-Once a VPC is created, you can't change its CIDR block range
+** Once a VPC is created, you can't change its CIDR block range
 
 --------------------------
 Physical Addressing
@@ -110,9 +110,9 @@ Class B
 
 if both IPs results in same network IP then it means that these are part of same network
 
-Subneting 
-network within a network
-or locally division of IP addresses
+** Subneting 
+** network within a network
+** or locally division of IP addresses
 
 Router interfaces
 A different network must be on an Router Interface with diff network ID
@@ -152,9 +152,9 @@ https://www.youtube.com/watch?v=q7wNcYliJ1Q
 ---------------------------------CIDR------------------------------------------------------
 CIDR is classless Inter domain routing
 Help to define an IP Range
-A method for allocating IP addresses 
+** A method for allocating IP addresses 
 CIDR are used for Security Groups rules or WS networking in general
-It is as also a 32-bit address, which includes a special number which represents the number of bits that are present in the Block Id.
+** It is as also a 32-bit address, which includes a special number which represents the number of bits that are present in the Block Id.
 a . b . c . d / n 
 Where, n is number of bits that are present in Block Id / Network Id.
 n i called  IP network prefix
@@ -178,7 +178,7 @@ subnet mask is of two forms
 /24  = common in AWS
 
 *** Subnet mask allows part of underlying IP to get additional next values from the base IP
-2^(32 - n )
+2^ (32 - n )
 /32 allows for 1 IP =  2^(32 - 32) =   2^0 = 1
 /31 allows for 2 IP  = 2^(32 - 31) =   2^1 = 2
 /16 allows 65536 IP = 2^(32-16) = 65536
@@ -218,7 +218,7 @@ CIDR is 24 for class C by default  (3N  and1H)
 Private IP can only allow certain values by IANA (Internet Assigned Numbers Authority)
 
 10.0.0.0 - 10.255.255.255.255 (10.0.0.0/8)   = in Big networks
-172.16.0.0 - 172.31.255.255 (172.16.0.0/12) = default AWS
+** ** 172.16.0.0 - 172.31.255.255 (172.16.0.0/12) = default AWS
 192.168.0.0 - 192.168.255.255 (192.168.0.0/16) = home network
 
 All rest are Public IPs
@@ -228,20 +228,19 @@ All rest are Public IPs
 Creating own private network in the cloud
 your own isolated network (traffic not visible to other AWS VPC)
 you can control all the traffic coming in and out a VPC
-Best practice all resources from ur VPC
+** Best practice all resources from ur VPC
 
-Default VPC
+** Default VPC
 all new accounts have a default VPC
-new instances are launched in to default VPC if no Subnet is specified
+** new instances are launched in to default VPC if no Subnet is specified
 Default VPC have internet connectivity and all instances have public IP
 We also get public and private DNS name
- Following will create automatically with a default VPC
+ **  Following will create automatically with a default VPC
 1) Subnets
 2) Route Table (main)
 3) Internet Gateway
 4) Network ACL
 5) DHCP
-
 
 You can have multiple VPC in a region (max 5 - soft limit)
 Each VPC is associated with a CIDR block
@@ -250,19 +249,18 @@ For each CIDR
 min size /28 = 16 IP addresses  = 2^ (32-28) = 2^4=16
 max size 16 = 65536 IP addresses
 
-AS VPC is private , only private IP ranges are allowed
+** AS VPC is private , only private IP ranges are allowed
 
 10.0.0.0 - 10.255.255.255.255 (10.0.0.0/8)   = in Big networks
-172.16.0.0 - 172.31.255.255 (172.16.0.0/12) = default AWS
+** 172.16.0.0 - 172.31.255.255 (172.16.0.0/12) = default AWS
 192.168.0.0 - 192.168.255.255 (192.168.0.0/16) = home network
 
-There can't be an overlap of a VPC CIDR block with another connected network
+** There can't be an overlap of a VPC CIDR block with another connected network
 
 All addresses inside a VPC CIDR range are private addresses
 Subnet resides in VPC
 
 CIDR block of a subnet must be a subset or the same as CIDR block for VPC
-
 
 To separate public resource (accessible through internet) with private resources 
 create public subnet for public resources and like private
@@ -278,7 +276,7 @@ VPC ->
 default VPC always created without a name
 default subnets also created 
 
-No. of subnets = No. of AZ
+**  No. of subnets = No. of AZ
 
 IPv4  32 bit  (allows 4.3 billion address) most popular
 127.255.255.255
@@ -314,7 +312,7 @@ IPv4 CIDR block = 10.0.0.0/24  (2(32-24 = 256 address)
 									10.0.0.0 - 10.0.0.255
 									available IPs = 251
 								
-AWS reserves 5 IPs (firs 4 and last 1) in each subnet
+***** AWS reserves 5 IPs (firs 4 and last 1) in each subnet
 									
 Name : 	publicSubnet B
 VPC: 		demoVPC
@@ -339,7 +337,7 @@ IPv4 CIDR block = 10.0.32.0/20  (2(32-20 = 4096 address)
 
 
 Example:
-if CIDR block is 10.0.0.0/24 then reserved IPs are 
+**  if CIDR block is 10.0.0.0/24 then reserved IPs are 
 10.0.0.0 : Network address
 10.0.0.1 : Reserved by AWS for VPC router
 10.0.0.3 : Reserved by AWS for  mapping AES DNS
@@ -362,9 +360,9 @@ it got a private IP of
 when i ssh it is timeout , seems pubic internet Gateway and route table is not configured
 
 -----Internet Gateway-------------------------
- IGW helps our VPC instances connect with the internet
+ ** IGW helps our VPC instances connect with the internet
 scale horizontally and HA and redundant
-Must be created separately from VPC
+**  Must be created separately from VPC
 *** one VPC can only be attached to one IGW and vice versa
 IGW is also a NAT for the instance that have public IPV4
 ** IGW own their own don't allow internet access, Route tables must also be edited
@@ -394,8 +392,8 @@ Associate both private subnets with the route table
 
 VPC Main route table
 
-1) each VPC when created has a main route table by default (enable communication b/w resources in all subnets in a VPC)
-2) default route rule can't be deleted/edited
+** 1) each VPC when created has a main route table by default (enable communication b/w resources in all subnets in a VPC)
+** 2) default route rule can't be deleted/edited
 3) Each subnet can have its route table or share its route table with VPC
 4) Multiple subnets can share a route table
 ** 5) A subnet can be associated with one route table ONLY
@@ -406,7 +404,7 @@ Security Groups
 allows all outbound traffic
 allows communication b/w resources assigned with default security group
 Denies all other in bound (other than default SG)
-can be edited but not deleted
+** can be edited but not deleted
 EC2 instance by default are assigned  the default security group of the VPC
 Security Group can have many to many relationship with Resources (in same VPC)
 
@@ -427,7 +425,7 @@ SFTP : 22
 
 -----------NAT Instances Network Address Translation----------
 
-resources in our private subnet unable to connect to internet, if they
+Resources in our private subnet unable to connect to internet, if they
 use Internet gateway to access internet, then they will expose to the 
 world which is not required.
 
@@ -436,18 +434,18 @@ NAT comes in 2 flavours
 2) NAT Gateway
 
 1) NAT instances
-Allow instances in the private subnets to connect to the internet
-NAT instance must be launched in a public subnet
+***Allow instances in the private subnets to connect to the internet
+***NAT instance must be launched in a public subnet
 *** Must disable EC2 flag: source/destination check
-NAT instance must have Elastic IP attached to it
+***NAT instance must have Elastic IP attached to it
 NAT instance uses public route table to connect to internet gateway for internet traffic
 Route table must be configured to route traffic from private subnets to NAT instance
 EC2 in private subnet connect to private subnet route table which is connected to NAT instance
 Amazon Linux AMI pre-configured are available
-No HA/resilient setup out of box
+***No HA/resilient setup out of box
 need to create ASG in muti AZ and resilient user-data script
 **Need to manage SG and inbound/outbound rules
-bandwidth depneds on EC2 instance
+***bandwidth depends on EC2 instance
 
 Practical 
 
@@ -485,16 +483,16 @@ go to Private Route table
 Add Route
 Destination : 0.0.0.0/0
 Target : NAT instance Id
-every time we private any IP which is not private , talk to NAT instance
+every time we ping any IP which is not private , talk to NAT instance
 
 2) NAT Gateway
-Better alternative to NAT instances
-AWS managed NAT, higher bandwidth , better availability , no admin
+** Better alternative to NAT instances
+** AWS managed NAT, higher bandwidth , better availability , no admin
 pay by the hour for usage and bandwidth
-NAT is created in a specific AZ uses EIP, It is resilient within a single AZ
+** NAT is created in a specific AZ uses EIP, It is resilient within a single AZ
 ** Must create multiple NAT Gateway in multiple AZ for fault-tolerance
 can't be used by an instance in that subnet (only from other subnets)
-Requires Internet Gateway (Private subnet -> NAT -> IGW)
+** Requires Internet Gateway (Private subnet -> NAT -> IGW)
 5 Gbps with auto scaling up to 45Gbps
 **No SG required and managed
 
@@ -557,35 +555,36 @@ NACL outbound rules stateless(need to evaluate)
 ** for NACL both inbound and outbound rules always evaluated
 ** for SG if inbound is allowed , no outbound evaluated
 
-
 NACL Network Access Control List
-NACL are like a firewall which control traffic from and to subnet
+** NACL are like a firewall which control traffic from and to subnet
 **Default NACL allows all inbound and outbound traffic
 **  Each subnet must be associated with one NACL
 new subnets are assigned the default NACL
 NACL control traffic stopping even entering the subnet
 stateless firewall at subnet level
-Automatically applies to all instances in the subnets its associated with
+** Automatically applies to all instances in the subnets its associated with
 
-custom crated NACL denies all inbound and outbound traffic by default
+** custom created NACL denies all inbound and outbound traffic by default
 rules have priory no. (lower has high value)
 
 Security Groups
 works at instance level
 supports allow rules only
 SG control traffic to specific resources like EC2 in a subnet
-only allow rules
+** only allow rules
 stateful, return traffic is automatically allowed
 traffic allowed if there is matching rule
 ** All rules evaluated in SG
 
 NACL  Rules
-rules have a numbers(1- 32766) and lower no having Higher precedence
+** rules have a numbers(1- 32766) and lower no having Higher precedence
 rules are priority , matching rule with highest priority
 last rule is an * and denies a request in case of no rule match
 AWS recommends adding rules by increment of 100
-allow rules and deny rules
-stateless, explicitly allow return traffic
+** allow rules and deny rules
+stateless 
+Explicitly allow return traffic
+
 ** Newly created NACL will deny everything
 ** NACL are great way of blocking specific IP at the subnet level
 
@@ -613,13 +612,13 @@ is using NAT Gateway
 
 A VPC cannot have multiple Internet Gateways
 
-Can VPC spread over two regions ?
+Can	a VPC spread over two regions ?
 No
 
 Multiple VPC in same region 
 Yes  (default vpc and custom vpc)
 
-Communication b/w tow resources in a VPC is visible outside VPC
+Communication b/w two resources in a VPC is visible outside VPC
 No
 
 Can we allow External access to your resources in a VPC
@@ -629,7 +628,7 @@ Can a subnet spread over two regions ?
 No, since subnet is part of VPC and VPC is associated with a single Region
 
 Can a subnet spread over two Availability Zones
-No, A subnet is specific to a particular AZ
+** No, A subnet is specific to a particular AZ
 
 Can I have 2 subnets in one AZ
 Yes , 
@@ -646,11 +645,13 @@ they can't talk as SG doesn't allow inbound traffic by default
 3) A default SG is created and assigned to a DB and EC2
 they CAN talk as SG has a rule allowing traffic b/w resources with same SG
 
+ When you create a subnet, you specify the CIDR block for the subnet, which is a subset of the VPC CIDR block
+ 
 ---------------------------VPC Peering--------------------------------------
-Connect two VPC  each other belonging to same or diff AWS accounts irrespective of the region of VPC
+**  Connect two VPC  each other belonging to same or diff AWS accounts irrespective of the region of VPC
 Allow private communication b/w connected VPC
 request / accept protocol
-owner of  requesting VPC send a request
+Owner of  requesting VPC send a request
 Owner of Peer VPC has one week to accept
 
 * Peering is not transitive A-B-C so not A-C
@@ -733,12 +734,11 @@ on subnet route tables as well
 
 ----------------VPC Endpoint ----------------------
 
-VPC endpoints make it possible to access AWS services like S3, CloudWatch, DynamoDB 
+*** VPC endpoints make it possible to access AWS services like S3, CloudWatch, DynamoDB 
 within a private network (private subnet) instead of public www network
 Securely connect your VPC to another service
 ** they scale horizontally and are redundant
 ** they removed the need for IGW,NAT etc to access AWS services
-
 
 1) VPC Gateway Endpoint
 securely connect to S3 and DynamoDB
@@ -747,7 +747,8 @@ endpoint serves as target in your route table for traffic
 2) VPC  Interface Endpoint
 **securely connect to Aws services other than S3 and DynamoDB
 powered by PrivateLink (keep traffic within AWS network)
-**need ENI (private IP) as entry point for traffic , must attach security Group
+**need ENI (private IP) as entry point for traffic , 
+** must attach security Group
 
 Avoid DDoS, as traffic not go through internet
 Simple, Don't need Internet Gateway, VPN and NAT
@@ -781,9 +782,9 @@ make sure region must be same in CLI as of console
 
 
 ------------------------------------------VPC Flow Logs ---------------------------------------------
-Monitor network traffic
+*** Monitor network traffic
 Capture info about IP traffic going into your interfaces
-1)VPC flow logs (logs collected at VPC level)
+1) VPC flow logs (logs collected at VPC level)
 2) Subnet Flow logs
 3) Elastic Network Interface flow logs
 
@@ -822,13 +823,14 @@ Role: used to send logs to CW
 
 
 ----------------------------AWS and On-Premises -------------------
-Are there any programs/projects available for cloud where one can have hands-on experience on real projects working with cloud experts ?
+
 
 1) ---------------AWS MANAGED VPN Site to Site VPN ----------------------------------
 
-IPsec VPN tunnels from VPC to Customer Network over internet
-Customer Gateway(SW or HW) installed at Customer Data Center
-Virtual Private Gateway is configure into AWS at VPC level
+***IPsec VPN tunnels from VPC to Customer Network over internet
+*** Customer Gateway(SW or HW) installed at Customer Data Center
+*** Virtual Private Gateway is configure into AWS at VPC level
+
 Site to Site VPN connection is created b/wCustomer Gateway and Virtual Private Gateway 
 Encrypted using IPsec protocol
 VPN gateway to connect one VPC to customer Network
@@ -839,10 +841,11 @@ if behind a CGW behind NAT , use public IP address of NAT
 
 
 2) ----------------------AWS Direct Connect (DC) --------------------------------------------
+
 Private Dedicated Network
-Physical link
+*** Physical link
 *** Direct Connection must be setup between your DC and AWS Direct Connect Locations
-* You need to setup a Virtual Private Gateway on your VPC
+**** You need to setup a Virtual Private Gateway on your VPC
 Access public resources (S3) and private (EC2) on the same connection
 
 Private Connection
@@ -854,7 +857,7 @@ Customer network -> AWS Direct Connect location (customer/partner router) >
 (AWS Direct Connect endpoint) -> S3
 
 Use case
-Increase bandwidth throughput, working with large data sets, lower cost
+*** Increase bandwidth throughput, working with large data sets, lower cost
 more consistent network experience, real time data feed
 Hybrid environments 
 Supports both IPV4 and IPv6
@@ -900,8 +903,8 @@ in different regions(same account), you must use  Direct Connect Gateway
 -----------------------------------------------------------------
 
 Egress only Internet Gateway
-outgoing only
-only works for IPv6
+*** outgoing only
+***only works for IPv6
 similar functions as NAT(allow private instances to access to internet) but NAT is for IPv4
 
 All IPv6 are public addresses
@@ -947,7 +950,7 @@ not used now, its a dis-tractors
 
 -----------------------------AWS VPN CloudHub-------------------------------------------
 when u need network connectivity b/w your multiple branch offices (data centres)
-* low cost hub -and-spoke model for primary or secondary network connectivity b/w locations
+* low cost HUB -AND-SPOKE model for primary or secondary network connectivity b/w locations
 CloudHub can be connect on Direct Connect or via VPN
 install Virtual private Gateway at AWS and Customer Gateways in customer offices
 ** Its a VPN connection so it goes over Internet
@@ -959,7 +962,7 @@ and thus they can access each other
 
 Transitive peering b/w thousands of VPC and on-premise , hub -and-spoke  STAR connection
 It simplify network topology
-** Supports IP multicast (not supported bu any other aws service)
+** Supports IP multicast (not supported by any other aws service)
 Regional resource , can work cross region
 share cross account using RAM
 route tables: limit which VPC can talk with other VPC

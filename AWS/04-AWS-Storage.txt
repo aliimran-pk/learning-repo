@@ -385,7 +385,7 @@ can't do directly
 
 13) how to automate the complete lifecycle
 creation, retention and deletion  of EBS snapshots
-use EBS- Amazon Data LifeCycle Manager
+***** use EBS- Amazon Data LifeCycle Manager
 
 --------------------------EFS--------------------------------------------------------
 

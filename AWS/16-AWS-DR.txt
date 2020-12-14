@@ -36,6 +36,8 @@ ALB + ASG +  EC2 via Route53 (using reverse proxy) is running with lowest capaci
 Upon disaster , we can scale to production load
 
 Backup and Restore has a potential High RPO and RTO
+This is the lowest cost DR approach that simply entails creating online backups of all data and applications
+
 
 All AWS Multi Region
 Aurora Global (master)  -> Aurora Global (slave)

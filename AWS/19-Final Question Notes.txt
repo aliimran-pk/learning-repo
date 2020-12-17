@@ -1,7 +1,7 @@
 Origin access 
 Questions
 GeoLocation vs Geoproximety4
----------------------------------------------------------
+----------------------------------------------------------------------------------------------------1 -----------------------------------------------------------------------------------------------------------------------
 Use ElastiCache Memcached for
 Low maintenance simple caching solution
 Easy horizontal scaling with auto-discovery
@@ -26,7 +26,7 @@ Signed Cookies are recommended for
 
 SQS
 Visibility timeout
-Other consumers will not receive a message being processed for the configured time period
+Visibility timeout is a period during which Amazon SQS prevents OTHER consumers from receiving and processing a given message. 
 default - 30 seconds, min - 0, max - 12 hours
 
 DelaySeconds
@@ -36,17 +36,17 @@ Message retention period
 The maximum period a message can be on the queue
 Default - 4 days, Min - 60 seconds, Max - 14 days
 
-To restrict access to S3 buckets only from cloudfront, create a special user OAI and associate
-with CloudFront Distribution, configure S3 bucket policy to allow access only to OAI
+To restrict access to S3 buckets only from CloudFront, create a special user OAI and associate with CloudFront Distribution, 
+Configure S3 bucket policy to allow access only to OAI
 
 If the application does not delete the message from the queue, after the visibility timeout, the message will be available in the queue again.
 
 DynamoDB Streams help you to trigger real-time events from changes to DynamoDB tables (in time-sequenced order)
 
-The maximum allowed time for lambda execution is 900 seconds (15 mins  max)(default - 3 seconds).
+The maximum allowed time for Lambda execution is 900 seconds (15 mins  max)(default - 3 seconds).
 
-De-registration delay ensures that the Load Balancer gives in-flight requests a chance to complete execution.
-It can be 0 to 3600 seconds (default 300 seconds or 5 mins). Also called Connection Draining.
+De-registration delay  (Connection Draining.) ensures that the Load Balancer gives in-flight requests a chance to complete execution.
+It can be 0 to 3600 seconds (default 300 seconds or 5 mins). 
 
 Keep the servers that need to be secured in a private subnet so that they are not directly accessible from the internet.
 Keep the NAT Gateway in the public subnet and allow the servers in the private subnet to connect to the internet (to download software patches).
@@ -57,7 +57,7 @@ Use Intelligent-Tiering for Long-lived data with changing or unknown access patt
 Lambda@Edge can help you block unwanted bots at the edge, and let the authorized traffic go through.
 
 Elastic Fabric Adapter (EFA)
-Ideal for High-Performance Computing (HPC) applications like weather modeling
+Ideal for High-Performance Computing (HPC) applications like weather modelling
 EFA = ENA + OS-bypass
 
 You want the application to connect to the database instance using IAM based authentication using an authentication token? 
@@ -92,10 +92,10 @@ Who made the request? - What action was performed? - What are the parameters use
 Amazon RDS Proxy efficiently manages database connections. It sits between client applications (including lambdas) and RDS.
 
 Amazon CloudFront integrates with
-- AWS Shield to protect from DDoS attacks
-- AWS Web Application Firewall (WAF) to protect from SQL injection, Cross-Site Scripting, etc
+- 1) AWS Shield to protect from DDoS attacks
+- 2) AWS Web Application Firewall (WAF) to protect from SQL injection, Cross-Site Scripting, etc
 
-Serve users from nearest edge location (based on user location)
+CF serve users from nearest edge location (based on user location)
 Source content can be from S3, EC2, ELB, and External Websites
 
 Creating a Static Website using Amazon S3 helps in reducing the load on EC2 instances but it does NOT help with improving latency.
@@ -156,9 +156,7 @@ PUT /key-prefix/cool-file.jpg 200
 PUT /key-prefix/cool-file.jpg 200 (new content)
 GET /key-prefix/cool-file.jpg 200
 
-
 S3 Data is highly distributed across multiple AZs and (possibly) multiple regions:
-
 You will never get partial or inconsistent data
 
 Amazon FSx for Lustre is optimized for performance
@@ -177,10 +175,10 @@ You can store streaming data to S3, Elasticsearch, Redshift, and Splunk.
 
 Creating an IAM role in the PROD AWS Account and adding DEV AWS Account as a trusted account is the recommended approach. 
 
-Cold HDD 								  - Infrequent access use cases (minimum cost)
-Throughput Optimized HDD  - Frequently accessed, large sequential operations with high throughput (cost-sensitive)
 General Purpose SSD 		  - System boot volumes and transactional workloads
 Provisioned IOPS SSD 		  - Transactional workloads needing very high IOPS (up to 64,000 IOPS per volume)
+Throughput Optimized HDD  - Frequently accessed, large sequential operations with high throughput (cost-sensitive)
+Cold HDD 						  - Infrequent access use cases (minimum cost)
 
 Redshift Workload Management
 WLM can be configured to PRIORITIZE QUEUES
@@ -196,23 +194,21 @@ use ENI
 
 The process of splitting a CIDR block into smaller CIDR is called Subnetting
 
-Questions
+---------------------------------------------------------------------------------------------------- 2 -----------------------------------------------------------------------------------------------------------------------
 
-AWS global acceerlatator vs S3 Trasfer acceerlaerator
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Create a Virtual Private Gateway on the AWS side of the VPN and a Customer Gateway on the on-premises side of the VPN
 Amazon VPC provides the facility to create an IPsec VPN connection (also known as site-to-site VPN) between remote customer networks and their Amazon VPC over the internet. 
 
-Virtual private gateway: A Virtual Private Gateway (also known as a VPN Gateway) is the endpoint on the AWS VPC side of your VPN connection.
+Virtual Private Gateway: A Virtual Private Gateway (also known as a VPN Gateway) is the endpoint on the AWS VPC side of your VPN connection.
 VPN connection: A secure connection between your on-premises equipment and your VPCs.
 VPN tunnel: An encrypted link where data can pass from the customer network to or from AWS.
 Customer Gateway: An AWS resource that provides information to AWS about your Customer Gateway device.
 Customer Gateway device: A physical device or software application on the customer side of the Site-to-Site VPN connection.
 
-Using AWS Glue involves significant development efforts to write custom migration scripts to copy the database data into Redshift.
+Using AWS Glue (ETL) involves significant development efforts to write custom migration scripts to copy the database data into Redshift.
 Using EMR involves significant infrastructure management efforts to set up and maintain the EMR cluster. Additionally this option involves a major development effort to write custom migration jobs to copy the database data into Redshift.
-, you should use an IAM role to manage temporary credentials for applications that run on an EC2 instance. When you use a role, you don't have to distribute long-term credentials (such as a username and password or access keys) to an EC2 instance. 
+
+You should use an IAM role to manage temporary credentials for applications that run on an EC2 instance. When you use a role, you don't have to distribute long-term credentials (such as a username and password or access keys) to an EC2 instance. 
 The role supplies temporary permissions that applications can use when they make calls to other
 
 Type of AC		Account Level control   User level control
@@ -221,14 +217,13 @@ IAM policies 				No									Yes
 ACL							Yes									No
 Bucket Policies			Yes									Yes	
 
-
 IAM policies are attached to the users, enabling centralized control of permissions for users under your AWS Account to access buckets or objects. 
 With IAM policies, you can only grant users within your own AWS account permission to access your Amazon S3 resources
 
 With ACLs, you can only grant other AWS accounts (not specific users) access to your Amazon S3 resources
 
-
 Dedicated Hosts enable you to use your existing server-bound software licenses like Windows Server and address corporate compliance and regulatory requirements.
+
 Dedicated instances may share hardware with other instances from the same AWS account that are not dedicated instances. 
 Dedicated instances cannot be used for existing server-bound software licenses
 Neither on-demand instances nor reserved instances can be used for existing server-bound software licenses.
@@ -237,9 +232,12 @@ Amazon Aurora Global Database is designed for globally distributed applications,
 It replicates your data with no impact on database performance, enables fast local reads with low latency in each region, and provides disaster recovery from region-wide outage
 
 AWS Storage Gateway is a hybrid cloud storage service that gives you on-premises access to virtually unlimited cloud storage. 
-The service provides three different types of gateways – Tape Gateway, File Gateway, and Volume Gateway 
+The service provides three different types of gateways – 
+Tape Gateway
+File Gateway
+Volume Gateway 
 
-- Amazon EFS is a file storage service for use with Amazon EC2. Amazon EFS provides a file system interface, file system access 
+Amazon EFS is a file storage service for use with Amazon EC2. Amazon EFS provides a file system interface, file system access 
 These are different storage systems and EFS is not backed by S3
 
 *** The Auto Scaling group ASG is using EC2 based health check and the Application Load Balancer  is using its in-built health check
@@ -250,14 +248,13 @@ That makes heterogeneous migrations a two-step process.
 First use the AWS Schema Conversion Tool to convert the source schema and code to match that of the target database, 
 and then use the AWS Database Migration Service to migrate data from the source database to the target database
 
-just remember that the original Snowball device had 80TB of storage space.
+Just remember that the original Snowball device had 80TB of storage space.
 Basic Schema Copy is great for doing a test migration, or when you are migrating databases heterogeneously e.g. Oracle to MySQL or SQL Server to Oracle. 
 Basic Schema Copy will not migrate secondary indexes, foreign keys or stored procedures. 
 
-ALB uses  routing based on the content of the request
-
 Classic Load Balancer is intended for applications that were built within the EC2-Classic network.
 Network Load Balancer or Classic Load Balancer cannot be used to route traffic based on the content of the request
+ALB uses routing based on the content of the request
 
 NAT instance can be used as bastion server but not NAT GW
 NAT instance supports port forwarding  but not NAT GW
@@ -267,8 +264,7 @@ Amazon RDS uses several different technologies to provide failover support. Mult
 SQL Server DB instances use SQL Server Database Mirroring (DBM) or Always On Availability Groups (AGs)
 Multi-AZ means the URL is the same, the failover is automated, and the CNAME will automatically be updated to point to the standby database.
 
-The CloudWatch recovery option works only for system check failures, not for instance status check failures. Also, if you terminate your instance, then it can't be recovered.
-
+The CloudWatch recovery option works only for SYSTEM CHECK FAILURES, not for instance status check failures. Also, if you terminate your instance, then it can't be recovered.
 
 Kinesis will be great for event streaming from the IoT devices,
 SNS is a notification service and will be perfect for this use case.
@@ -277,7 +273,8 @@ Kinesis is better for streaming data since queues aren't meant for real-time str
 Amazon Kinesis with Simple Email Service (Amazon SES) 
 It is an email service and not a notification service as is the requirement in the current use case.
 
-Snowball Edge Storage Optimized is the optimal choice if you need to securely and quickly transfer dozens of terabytes to petabytes of data to AWS. It provides up to 80 TB of usable HDD storage
+Snowball Edge Storage Optimized is the optimal choice if you need to securely and quickly transfer dozens of terabytes to petabytes of data to AWS. 
+It provides up to 80 TB of usable HDD storage
 You can't directly copy data from Snowball Edge devices into AWS Glacier.
 
 Direct Connect involves significant monetary investment and takes more than a month to set up
@@ -293,9 +290,10 @@ You can't convert an existing standard queue into a FIFO queue. To make the move
 A permissions boundary can be used to control the maximum permissions employees can grant to the IAM principals (that is, users and roles) that they create and manage
 As a best practice, the root user should not access the AWS account to carry out any administrative procedures.
 
-The EC2 instances that are part of the ASG are the ones accessing the database layer. The correct response is to add a rule to the security group attached to Aurora authorizing the EC2 instance's security group.
+The EC2 instances that are part of the ASG are the ones accessing the database layer. 
+The correct response is to add a rule to the security group attached to Aurora , authorizing the EC2 instance's security group.
 
-AWS Security Hub gives you a comprehensive view of your high-priority security alerts and security posture across your AWS accounts
+AWS Security Hub gives you a comprehensive view of your HIGH-PRIORITY SECURITY ALERTS AND SECURITY POSTURE across your AWS accounts
 AWS Firewall Manager is a security management service that allows you to CENTRALLY CONFIGURE and manage firewall rules across your accounts and applications in AWS Organization. 
 
 In general, when your object size reaches 100 MB, you should consider using multipart uploads instead of uploading the object in a single operation.
@@ -307,17 +305,24 @@ Amazon S3 Transfer Acceleration can speed up content transfers to and from Amazo
 AWS Global Accelerator is a service that improves the availability and performance of your applications with local or global users. 
 It provides static IP addresses that act as a fixed entry point to your application endpoints in a single or multiple AWS Regions, such as your Application Load Balancers, Network Load Balancers or Amazon EC2 instances. 
 
-As mentioned earlier, the minimum storage duration is 30 days before you can transition objects from S3 Standard to S3 One Zone-IA or S3 Standard-IA,
+As mentioned earlier, the MINIMUM STORAGE duration is 30 days before you can transition objects from 
+S3 Standard to S3 One Zone-IA 
+or 
+S3 Standard to  S3 Standard-IA,
+
 S3 One Zone-IA is for data that is accessed less frequently, but requires rapid access when needed.
 Unlike other S3 Storage Classes which store data in a minimum of three Availability Zones (AZs), 
 S3 One Zone-IA stores data in a single AZ and costs 20% less than S3 Standard-IA. 
-S3 One Zone-IA is ideal for customers who want a lower-cost option for infrequently accessed and re-creatable 
+S3 One Zone-IA is ideal for customers who want a lower-cost option for infrequently accessed and RE-CREATABLE 
 
-The core of Amazon Neptune is a purpose-built, high-performance graph database engine optimized for storing billions of relationships and querying the graph with milliseconds latency. Neptune powers graph use cases such as recommendation engines, fraud detection, knowledge graphs, drug discovery, and network security.
+The core of Amazon Neptune is a purpose-built, high-performance graph database engine optimized for storing billions of relationships and querying the graph with milliseconds latency. 
+Neptune powers graph use cases such as recommendation engines, fraud detection, knowledge graphs, drug discovery, and network security.
 
-Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL. Athena is serverless,
+Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL. 
+Athena is serverless,
 
-A launch template is similar to a launch configuration, in that it specifies instance configuration information such as the ID of the Amazon Machine Image (AMI), the instance type, a key pair, security groups, and the other parameters that you use to launch EC2 instances. 
+A launch template is similar to a launch configuration, in that it specifies instance configuration information such as the ID of the Amazon Machine Image (AMI), the instance type, a key pair, security groups, 
+and the other parameters that you use to launch EC2 instances. 
 Also, defining a launch template instead of a launch configuration allows you to have multiple versions of a template.
 
 A launch configuration is an instance configuration template that an Auto Scaling group uses to launch EC2 instance
@@ -332,11 +337,14 @@ A VPC endpoint services powered by AWS PrivateLink without requiring an internet
 The AWS Transit Gateway allows customers to connect their Amazon VPCs and their on-premises networks to a single gateway. 
 With AWS Transit Gateway, you only have to create and manage a single connection from the central gateway into each Amazon VPC, on-premises data center, or remote office across your network. 
 AWS Transit Gateway acts as a hub that controls how traffic is routed among all the connected networks, which act like spokes
+hub -and-spoke  STAR connection
+Supports IP multicast (not supported by any other aws service)
 
-The Transit VPC can be used to enable connectivity between various VPC’s in different regions and customer data centers. 
-You can use this to connect multiple VPCs that are geographically disparate and/or running in separate AWS accounts, to a common VPC that serves as a global network transit center
+The Transit VPC can be used to enable connectivity between various VPC’s in different regions and customer data centres. 
+You can use this to connect multiple VPCs that are geographically disparate and/or running in separate AWS accounts, to a common VPC that serves as a global network transit centre
 
-User data of an instance can be used to perform common automated configuration tasks or run scripts after the instance starts. User data, cannot, however, be used to install the application.
+User data of an instance can be used to perform common automated configuration tasks or run scripts after the instance starts. 
+User data, cannot, however, be used to install the application.
 
 To analyse any API calls made within an AWS account, CloudTrail is used.
 Cognito is the best technology choice for managing mobile user accounts.
@@ -344,7 +352,7 @@ IAM cannot be used to manage mobile user accounts.
 
 The Amazon VPC console wizard provides the following four configurations: 
 
-1)VPC with a single public subnet 
+1) VPC with a single public subnet 
 The configuration for this scenario includes a virtual private cloud (VPC) with a single public subnet, and an internet gateway to enable communication over the internet
 We recommend this configuration if you need to run a single-tier, public-facing web application
 
@@ -352,18 +360,17 @@ We recommend this configuration if you need to run a single-tier, public-facing 
 The configuration for this scenario includes a virtual private cloud (VPC) with a public subnet and a private subnet.
 We recommend this scenario if you want to run a public-facing web application while maintaining back-end servers that aren't publicly accessible. 
 A common example is a multi-tier website, with the web servers in a public subnet and the database servers in a private subnet
-database server is connected to  NAT Gateway which is in Public subnet
+Database server is connected to NAT Gateway which is in Public subnet
 
 3) VPC with public and private subnets and AWS Site-to-Site VPN access
 It includes a public subnet and a private subnet, and a virtual private gateway to enable communication with your network over an IPsec VPN tunnel. 
 We recommend this scenario if you want to extend your network into the cloud and also directly access the Internet from your VPC. 
 Multi-tiered application with a scalable web front end in a public subnet and to house your data in a private subnet that is connected to your network by an IPsec AWS Site-to-Site VPN connection.
 
-4)VPC with a private subnet only and AWS Site-to-Site VPN access
+4) VPC with a private subnet only and AWS Site-to-Site VPN access
 A virtual private cloud (VPC) with a single private subnet, and a virtual private gateway to enable communication with your network over an IPsec VPN tunnel
 There is no Internet gateway to enable communication over the Internet. 
 We recommend this scenario if you want to extend your network into the cloud using Amazon's infrastructure without exposing your network to the Internet.
-
 
 If you have multiple AWS Site-to-Site VPN connections, you can provide secure communication between sites using the AWS VPN CloudHub. 
 
@@ -372,7 +379,8 @@ therefore this option cannot be used to send and receive data between the remote
 
 A NAT instance or a NAT Gateway can be used in a public subnet in your VPC to enable instances in the private subnet to initiate outbound IPv4 traffic to the Internet.
 
-----------------------------
+----------------------------------------------------------------------------------------------------3 -----------------------------------------------------------------------------------------------------------------------
+
 Amazon Kinesis Data Streams enables real-time processing of streaming big data.
 It provides ordering of records, as well as the ability to read and/or replay records in the same order to multiple Amazon Kinesis Applications. 
 when you want both applications to consume data from the same stream concurrently and independently.
@@ -381,13 +389,16 @@ SNS is a notification service and cannot be used for real-time processing of dat
 
 Use VPC sharing to share one or more subnets with other AWS accounts belonging to the same parent organization from AWS Organizations
 
-VPC sharing (part of Resource Access Manager) allows multiple AWS accounts to create their application resources such as EC2 instances, RDS databases, Redshift clusters, and Lambda functions, into shared and centrally-managed Amazon Virtual Private Clouds 
+VPC sharing (part of Resource Access Manager) allows multiple AWS accounts to create their application resources such as EC2 instances, RDS databases, Redshift clusters, and Lambda functions, 
+into shared and centrally-managed  VPC 
 VPC peering does not facilitate centrally managed VPCs. 
-an AWS owner account cannot share the VPC itself with another AWS account
+AWS owner account cannot share the VPC itself with another AWS account
 
-You can share Amazon VPCs to leverage the implicit routing within a VPC for applications that require a high degree of interconnectivity and are within the same trust boundaries. This reduces the number of VPCs that you create and manage while using separate accounts for billing and access control.
+You can share Amazon VPCs to leverage the implicit routing within a VPC for applications that require a high degree of interconnectivity and are within the same trust boundaries. 
+This reduces the number of VPCs that you create and manage while using separate accounts for billing and access control.
 
-Amazon FSx for Lustre makes it easy and cost-effective to launch and run the world’s most popular high-performance file system. It is used for workloads such as machine learning, high-performance computing (HPC), video processing, and financial modeling
+Amazon FSx for Lustre makes it easy and cost-effective to launch and run the world’s most popular high-performance file system. 
+It is used for workloads such as machine learning, high-performance computing (HPC), video processing, and financial modeling
 FSx for Lustre provides the ability to both process the 'hot data' in a parallel and distributed fashion as well as easily store the 'cold data' on Amazon S3
 
 FSx for Windows does not allow you to present S3 objects as files and does not allow you to write changed data back to S3
@@ -403,7 +414,8 @@ Dedicated Instances - Dedicated Instances are Amazon EC2 instances that run in a
 
 A Network Load Balancer functions at the fourth layer of the Open Systems Interconnection (OSI) mode
 Traffic is routed to instances using the primary private IP address specified in the primary network interface for the instance
-f you specify targets using an instance ID, traffic is routed to instances using the primary private IP address specified in the primary network interface for the instance. The load balancer rewrites the destination IP address from the data packet before forwarding it to the target instance.
+if you specify targets using an instance ID, traffic is routed to instances using the primary private IP address specified in the primary network interface for the instance. 
+The load balancer rewrites the destination IP address from the data packet before forwarding it to the target instance.
 
 S3 Glacier Deep Archive offers the lowest cost storage in the cloud
 S3 Glacier Deep Archive is up to 75% less expensive than S3 Glacier and provides retrieval within 12 hours
@@ -424,7 +436,8 @@ AWS Lambda cannot be used for buffering.
 With Amazon API Gateway, you can run a fully managed REST API that integrates with Lambda to execute your business logic and includes traffic management, 
 authorization and access control, monitoring, and API versioning.
 
--------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------4 -----------------------------------------------------------------------------------------------------------------------
+
 S3 Standard-IA which provides immediate access and 99.9% availability.
 The S3 One Zone-IA tier provides immediate access, but the availability is lower at 99.5%
 The Glacier storage class does not provide immediate access. You can retrieve within hours or minutes, but you do need to submit a job to retrieve the data.
@@ -441,8 +454,6 @@ Amazon RedShift Spectrum is a feature of Amazon Redshift that enables you to run
 However, RedShift nodes run on EC2 instances, so for infrequent queries this will not minimize infrastructure costs.
 
 Redshift Spectrum pushes many compute-intensive tasks, such as predicate filtering and aggregation, down to the Redshift Spectrum layer. Thus, Redshift Spectrum queries use much less of your cluster's processing capacity than other queries
-
-
 
 Amazon FSx for Windows File Server provides fully managed, highly reliable file storage that is accessible over the industry-standard Server Message Block (SMB) protocol
 Amazon FSx is built on Windows Server
@@ -546,7 +557,8 @@ Aurora Replicas
 Low latency and fast regional failover
 Multiple regions behind ALB and use AWS Global Accelerator
 
------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 5 -----------------------------------------------------------------------------------------------------------------------
+
 You can passthrough encrypted traffic with an NLB and terminate the SSL on the EC2 instances,
 
 Recreate the API using API Gateway which will allow the customer to only pay for what they use. 
@@ -567,8 +579,6 @@ A NAT Gateway is used by instances in private subnets to access the Internet and
 
 You can use a network address translation (NAT) instance in a public subnet in your VPC to enable instances in the private subnet to initiate outbound IPv4 traffic to the Internet or 
 other AWS services, but prevent the instances from receiving inbound traffic initiated by someone on the Internet.
-
-
 
 If you do not want to manage EC2 instances you must use the AWS Fargate launch type which is a serverless infrastructure managed by AWS. 
 Fargate only supports container images hosted on Elastic Container Registry (ECR) or Docker Hub.
@@ -593,7 +603,8 @@ Dashboard, visualization, and business intelligence (BI) tools that execute repe
 The CloudFormation:TemplateURL, lets you specify where the CloudFormation template for a stack action, such as create or update, resides and enforce that it be used.
 The CloudFormation API accepts a ResourceTypes parameter. In your API call, you specify which types of resources can be created or updated
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 6 -----------------------------------------------------------------------------------------------------------------------
+
 In a case where multiple consumer applications have total reads exceeding the per-shard limits, you need to increase the number of shards in the Kinesis data stream.
 You cannot increase the number of read transactions per shard. Read throttling is enabled by default for Kinesis data streams
 
@@ -641,7 +652,8 @@ An Aurora Replica is both a standby in a Multi-AZ configuration and a target for
 You can use the CloudWatch agent to collect both system metrics and log files from Amazon EC2 instances and on-premises servers. The agent supports both Windows Server and Linux, and enables you to select the metrics to be collected, including sub-resource metrics such as per-CPU core.
 CloudWatch agent  capture SwapUtilization metrics and send them to CloudWatch. This is the best way to get memory utilization metrics from Amazon EC2 instnaces
 
-------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 7 -----------------------------------------------------------------------------------------------------------------------
+
 Launch Configurations are used with Auto Scaling Groups.
 Launch templates enable you to store launch parameters so that you do not have to specify them every time you launch an instance. 
 When you launch an instance using the Amazon EC2 console, an AWS SDK, or a command line tool, you can specify the launch template to use.
@@ -833,7 +845,7 @@ You backup EBS volumes by taking snapshots. This can be automated via the AWS CL
 
 The EBS Data Lifecycle Manager (DLM) can automate all of these actions for you and this can be performed centrally from within the management console
 
---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 8 -----------------------------------------------------------------------------------------------------------------------
 
 AWS customers are welcome to carry out security assessments or penetration tests against their AWS infrastructure without prior approval for some  services. (8)
 
@@ -937,7 +949,8 @@ Cross-zone load balancing is an ELB feature
 You can specify which subnets Auto Scaling will launch new instances into. Auto Scaling will try to distribute EC2 instances evenly across AZs. 
 If only one subnet has EC2 instances running in it the first thing to check is that you have added all relevant subnets to the configuration.
 
------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 9 -----------------------------------------------------------------------------------------------------------------------
+
 Field-level encryption adds an additional layer of security that lets you protect specific data throughout system processing so that only certain applications can see it.
 Object invalidation is a method to remove objects from the cache.
 An RTMP distribution is a method of streaming media using Adobe Flash.
@@ -1181,7 +1194,8 @@ When a Kinesis data stream is configured as the source of a Firehose delivery st
 and Kinesis Agent cannot write to Firehose delivery stream directly. 
 Data needs to be added to the Kinesis data stream through the Kinesis Data Streams PutRecord and PutRecords operations instead
 
------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 10  -----------------------------------------------------------------------------------------------------------------------
+
 Amazon RDS does not offer auto scaling capability
 Amazon Aurora is not  a complete auto scaling solution and neither is it fully managed like Aurora serverless
 Amazon Aurora Serverless is an on-demand, auto-scaling configuration for Amazon Aurora (MySQL-compatible and PostgreSQL-compatible editions), where the database will automatically start-up, shut down, and scale capacity up or down based on your application's needs.
@@ -1193,7 +1207,7 @@ If you create a delay queue, any messages that you send to the queue remain invi
 Dead-letter queues can be used by other queues (source queues) as a target for messages that can't be processed (consumed) successfully.
 Dead-letter queues are useful for debugging your application or messaging system because they let you isolate problematic messages to determine why their processing doesn't succeed
 
-Visibility timeout is a period during which Amazon SQS prevents OTHER consumers from receiving and processing a given message. The default visibility timeout for a message is 30 seconds. The minimum is 0 seconds. The maximum is 12 hours.
+
 
 A recovered instance is identical to the original instance, including the instance ID, private IP addresses, Elastic IP addresses, and all instance metadata
 If your instance has a public IPv4 address, it retains the public IPv4 address after recover
@@ -1313,5 +1327,10 @@ By default, EC2 instances run on a shared-tenancy basis.
 If either Launch Configuration Tenancy or VPC Tenancy is set to dedicated, then the instance tenancy is also dedicated
 You can only change the tenancy of an instance from dedicated to host, or from host to dedicated after you've launched it
  
+ 
+Cloudformation template is a JSON or YAML-format
+CloudFormation templates cannot be used to deploy the same template across AWS accounts and regions.
+CloudFormation stack is a set of AWS resources that are created and managed as a single unit when AWS CloudFormation instantiates a template. A stack cannot be used to deploy the same template across AWS accounts and regions.
 
-  
+----------------------------------------------------------------------------------------------------11 -----------------------------------------------------------------------------------------------------------------------
+

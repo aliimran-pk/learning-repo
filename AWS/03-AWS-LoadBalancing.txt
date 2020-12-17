@@ -437,7 +437,8 @@ wait for EC2 instance to start for this time
 more complex policy
 +5 if CPU utilisation > 80%
 -3 if CPU utilisation < 60%
-waits for cool down period before triggering additional actions
+ 
+ ** waits for cool down period before triggering additional actions
 
 3) Step Scaling (adding steps)
 +1 if CPU utilisation between 70% and 80%
@@ -458,7 +459,7 @@ CloudWatch --> Alarms
 
 
 ***  ASG Launch Configuration is legacy
-** ASG  Launch template is latest versioned
+**   ASG  Launch template is latest versioned
 provisioned for both on-demand and spot instances
 can use T2 unlimited burst feature
 
@@ -489,7 +490,6 @@ MyLiifeCycle
 3) which instance is terminated first when scale in
 based on termination policy
 default is distribute instances across AZ then based on old instance
-
 
 EC2 -> Auto Scaling groups -> MyEC2AutoScalingGroupASG 
 Advance configurations
@@ -637,7 +637,6 @@ warm attach = attaching ENI with EC2 instance is stopped
 
 * spot is the cheapest
 * on demand is the costly
-
 
 ------------------------------------------------------------------------------------------------
 Monitoring EC2 instances

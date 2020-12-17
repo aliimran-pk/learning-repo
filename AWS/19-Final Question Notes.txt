@@ -261,7 +261,7 @@ Network Load Balancer or Classic Load Balancer cannot be used to route traffic b
 
 NAT instance can be used as bastion server but not NAT GW
 NAT instance supports port forwarding  but not NAT GW
-SG can be associated with NAT instance  but not NAT GW
+Security Group can be associated with NAT instance for Control both Inbound and Outbound traffic  but can't with  NAT GW
 
 Amazon RDS uses several different technologies to provide failover support. Multi-AZ deployments for MariaDB, MySQL, Oracle, and PostgreSQL DB instances use Amazon's failover technology. 
 SQL Server DB instances use SQL Server Database Mirroring (DBM) or Always On Availability Groups (AGs)
@@ -269,10 +269,6 @@ Multi-AZ means the URL is the same, the failover is automated, and the CNAME wil
 
 The CloudWatch recovery option works only for system check failures, not for instance status check failures. Also, if you terminate your instance, then it can't be recovered.
 
-You can create an Amazon CloudWatch alarm that monitors an Amazon EC2 instance and automatically recovers the instance if it becomes impaired due to an underlying hardware failure or a problem that requires AWS involvement to repair. 
-Terminated instances cannot be recovered. A recovered instance is identical to the original instance
-The recover action is supported only on instances that have EBS volumes configured on them, 
-instance store volumes are not supported for automatic recovery by CloudWatch alarms.
 
 Kinesis will be great for event streaming from the IoT devices,
 SNS is a notification service and will be perfect for this use case.
@@ -349,16 +345,32 @@ IAM cannot be used to manage mobile user accounts.
 The Amazon VPC console wizard provides the following four configurations: 
 
 1)VPC with a single public subnet 
+The configuration for this scenario includes a virtual private cloud (VPC) with a single public subnet, and an internet gateway to enable communication over the internet
 We recommend this configuration if you need to run a single-tier, public-facing web application
 
 2) VPC with public and private subnets (NAT)
+The configuration for this scenario includes a virtual private cloud (VPC) with a public subnet and a private subnet.
 We recommend this scenario if you want to run a public-facing web application while maintaining back-end servers that aren't publicly accessible. 
+A common example is a multi-tier website, with the web servers in a public subnet and the database servers in a private subnet
+database server is connected to  NAT Gateway which is in Public subnet
 
-3)VPC with a private subnet only and AWS Site-to-Site VPN access
+3) VPC with public and private subnets and AWS Site-to-Site VPN access
+It includes a public subnet and a private subnet, and a virtual private gateway to enable communication with your network over an IPsec VPN tunnel. 
 We recommend this scenario if you want to extend your network into the cloud and also directly access the Internet from your VPC. 
-This scenario enables you to run a multi-tiered application with a scalable web front end in a public subnet and to house your data in a private subnet that is connected to your network by an IPsec AWS Site-to-Site VPN connection.
+Multi-tiered application with a scalable web front end in a public subnet and to house your data in a private subnet that is connected to your network by an IPsec AWS Site-to-Site VPN connection.
 
-Question 33
+4)VPC with a private subnet only and AWS Site-to-Site VPN access
+A virtual private cloud (VPC) with a single private subnet, and a virtual private gateway to enable communication with your network over an IPsec VPN tunnel
+There is no Internet gateway to enable communication over the Internet. 
+We recommend this scenario if you want to extend your network into the cloud using Amazon's infrastructure without exposing your network to the Internet.
+
+
+If you have multiple AWS Site-to-Site VPN connections, you can provide secure communication between sites using the AWS VPN CloudHub. 
+
+VPC peering facilitates a connection between two VPCs within the AWS network, 
+therefore this option cannot be used to send and receive data between the remote branch offices of the company.
+
+A NAT instance or a NAT Gateway can be used in a public subnet in your VPC to enable instances in the private subnet to initiate outbound IPv4 traffic to the Internet.
 
 ----------------------------
 Amazon Kinesis Data Streams enables real-time processing of streaming big data.
@@ -372,6 +384,8 @@ Use VPC sharing to share one or more subnets with other AWS accounts belonging t
 VPC sharing (part of Resource Access Manager) allows multiple AWS accounts to create their application resources such as EC2 instances, RDS databases, Redshift clusters, and Lambda functions, into shared and centrally-managed Amazon Virtual Private Clouds 
 VPC peering does not facilitate centrally managed VPCs. 
 an AWS owner account cannot share the VPC itself with another AWS account
+
+You can share Amazon VPCs to leverage the implicit routing within a VPC for applications that require a high degree of interconnectivity and are within the same trust boundaries. This reduces the number of VPCs that you create and manage while using separate accounts for billing and access control.
 
 Amazon FSx for Lustre makes it easy and cost-effective to launch and run the world’s most popular high-performance file system. It is used for workloads such as machine learning, high-performance computing (HPC), video processing, and financial modeling
 FSx for Lustre provides the ability to both process the 'hot data' in a parallel and distributed fashion as well as easily store the 'cold data' on Amazon S3
@@ -550,6 +564,11 @@ This is the most secure option as traffic does not need to traverse the Internet
 Internet Gateways are used by instances in public subnets to access the Internet and this is less secure than an VPC endpoint.
 A proxy instance will also use the public Internet and so is less secure than a VPC endpoint
 A NAT Gateway is used by instances in private subnets to access the Internet and this is less secure than an VPC endpoint.
+
+You can use a network address translation (NAT) instance in a public subnet in your VPC to enable instances in the private subnet to initiate outbound IPv4 traffic to the Internet or 
+other AWS services, but prevent the instances from receiving inbound traffic initiated by someone on the Internet.
+
+
 
 If you do not want to manage EC2 instances you must use the AWS Fargate launch type which is a serverless infrastructure managed by AWS. 
 Fargate only supports container images hosted on Elastic Container Registry (ECR) or Docker Hub.
@@ -974,6 +993,9 @@ Each instance that you launch has an associated root device volume, either an Am
 You can use block device mapping to specify additional EBS volumes or instance store volumes to attach to an instance when it’s launched. You can also attach additional EBS volumes to a running instance.
 You cannot use a block device mapping to specify a snapshot, EFS volume or S3 bucket.
 
+A Spot Instance is an unused EC2 instance that is available for less than the On-Demand price. 
+Because Spot Instances enable you to request unused EC2 instances at steep discounts, you can lower your Amazon EC2 costs significantly. 
+You cannot use spot instances types to pre-warm the instances.
 Spot is more suited to short term jobs that can afford to be interrupted and offer the lowest price of all options.
 for a stable process that will run constantly on an ongoing basis Reserved Instances will be the most affordable solution
 
@@ -1018,11 +1040,14 @@ There are no S3 data transfer charges when data is transferred in from the inter
 
 With target tracking scaling policies, you select a scaling metric and set a target value.
 Neither step scaling nor simple scaling can be configured to use a target metric for CPU utilization, hence both these options are incorrect.
-you can use target tracking scaling to:
-Configure a target tracking scaling policy to keep the average aggregate CPU utilization of your Auto Scaling group at 50 percent.
+you can use target tracking scaling to keep the average aggregate CPU utilization of your Auto Scaling group at 50 percent.
+
+Use a target tracking scaling policy based on a custom Amazon SQS queue metric
+If you use a target tracking scaling policy based on a custom Amazon SQS queue metric, dynamic scaling can adjust to the demand curve of your application more effectively.
 
 Scheduled scaling allows you to set your own scaling schedule
 As the given use-case requires exactly 10 instances to be available during the peak hour, so we must set the desired capacity to 10.
+
 
 You can connect to Amazon EFS file systems from EC2 instances in other AWS regions using an inter-region VPC peering connection, and from on-premises servers using an AWS VPN connection.
 
@@ -1125,7 +1150,6 @@ Firehose  is a fully managed service that automatically scales to match the thro
 
 AWS supports six types of policies: identity-based policies, resource-based policies, permissions boundaries, Organizations SCPs, ACLs, and session policies
 
-
 s3:ListBucket is applied to buckets, so the ARN is in the form "Resource":"arn:aws:s3:::mybucket", without a trailing / 
 s3:GetObject is applied to objects within the bucket, so the ARN is in the form "Resource":"arn:aws:s3:::mybucket/*", with a trailing /* to indicate all objects within the bucket mybucket
 
@@ -1141,6 +1165,10 @@ RAM. RAM eliminates the need to create duplicate resources in multiple accounts,
 You can create resources centrally in a multi-account environment, and use RAM to share those resources across accounts in three simple steps: create a Resource Share, specify resources, and specify accounts. RAM is available to you at no additional charge.
 The correct solution is to share the subnet(s) within a VPC using RAM
 
+AWS Resource Access Manager (RAM) is a service that enables you to easily and securely share AWS resources with any AWS account or within your AWS Organization
+Resource Access Manager cannot be used to deploy the same template across AWS accounts and regions.
+
+
 By default, security groups allow all outbound traffic
 Security groups are stateful
 PostgreSQL port = 5432 HTTP port = 80 HTTPS port = 443
@@ -1153,4 +1181,137 @@ When a Kinesis data stream is configured as the source of a Firehose delivery st
 and Kinesis Agent cannot write to Firehose delivery stream directly. 
 Data needs to be added to the Kinesis data stream through the Kinesis Data Streams PutRecord and PutRecords operations instead
 
+-----------------------------------------------------------------------------------------------------------------
+Amazon RDS does not offer auto scaling capability
+Amazon Aurora is not  a complete auto scaling solution and neither is it fully managed like Aurora serverless
+Amazon Aurora Serverless is an on-demand, auto-scaling configuration for Amazon Aurora (MySQL-compatible and PostgreSQL-compatible editions), where the database will automatically start-up, shut down, and scale capacity up or down based on your application's needs.
 
+
+Delay queues let you POSTPONE THE DELIVERY OF NEW MESSAGES TO A QUEUE for several seconds, for example, when your consumer application needs additional time to process messages.
+If you create a delay queue, any messages that you send to the queue remain invisible to consumers for the duration of the delay period. The default (minimum) delay for a queue is 0 seconds. The maximum is 15 minutes.
+
+Dead-letter queues can be used by other queues (source queues) as a target for messages that can't be processed (consumed) successfully.
+Dead-letter queues are useful for debugging your application or messaging system because they let you isolate problematic messages to determine why their processing doesn't succeed
+
+Visibility timeout is a period during which Amazon SQS prevents OTHER consumers from receiving and processing a given message. The default visibility timeout for a message is 30 seconds. The minimum is 0 seconds. The maximum is 12 hours.
+
+A recovered instance is identical to the original instance, including the instance ID, private IP addresses, Elastic IP addresses, and all instance metadata
+If your instance has a public IPv4 address, it retains the public IPv4 address after recover
+
+You can create an Amazon CloudWatch alarm that monitors an Amazon EC2 instance and automatically recovers the instance if it becomes impaired due to an underlying hardware failure or a problem that requires AWS involvement to repair. 
+Terminated instances cannot be recovered. A recovered instance is identical to the original instance
+The recover action is supported only on instances that have EBS volumes configured on them, 
+instance store volumes are not supported for automatic recovery by CloudWatch alarms.
+
+During instance recovery, the instance is migrated during an instance reboot, and any data that is in-memory is lost.
+
+Using Auto Scaling Group (ASG) with capacity 0 implies that you will not have any running instances when there is no traffic
+
+
+Use AWS CloudFormation StackSets to deploy the same template across AWS accounts and regions
+AWS CloudFormation StackSet extends the functionality of stacks by enabling you to create, update, or delete stacks across multiple accounts and regions with a single operation.
+
+AWS Step Functions (LATEST )lets you coordinate and orchestrate multiple AWS services such as AWS Lambda and AWS Glue into serverless workflows. 
+The Step Function can ensure that the Glue ETL job and the lambda functions execute in order and complete successfully as per the workflow defined in the given use-case. 
+
+AWS Batch is a set of batch management capabilities that enables developers, scientists, and engineers to easily and efficiently run hundreds of thousands of batch computing jobs on AWS. 
+AWS Batch dynamically provisions the optimal quantity and type of compute resources (e.g., CPU or memory optimized instances) based on the volume and specific resource requirements of the batch jobs submitted.
+
+AWS SWF helps developers build, run, and scale background jobs that have parallel or sequential step
+Although Amazon SWF provides you complete control over your orchestration logic, it increases the complexity of developing applications.
+
+Step Function is preferred over SWF
+
+
+By default, queues use short polling. With short polling, Amazon SQS sends the response right away, even if the query found no messages. With long polling, Amazon SQS sends a response after it collects at least one available message
+Using long polling can reduce the cost of using SQS because you can reduce the number of empty receives.
+
+Visibility timeout is a period during which Amazon SQS prevents other consumers from receiving and processing a given messag 
+if you send a message with a 60-second timer, the message isn't visible to consumers for its first 60 seconds in the queue. 
+
+Amazon Kinesis Data Streams is recommended when you need the ability for multiple applications to consume the same stream concurrently.
+. It provides ordering of records, as well as the ability to read and/or replay records in the same order to multiple Amazon Kinesis Applications
+
+Amazon Kinesis Data Firehose is the easiest way to load streaming data into data stores and analytics tools
+Amazon Kinesis Data Analytics is the easiest way to analyze streaming data in real-time
+. Kinesis Data Analytics enables you to easily and quickly build queries and sophisticated streaming applications in three simple steps: setup your streaming data sources, write your queries or streaming applications and set up your destination for processed dat
+
+** Please remember that Kinesis Data Firehose is used to load streaming data into data stores (Amazon S3, Amazon Redshift, Amazon Elasticsearch Service, and Splunk) 
+whereas Kinesis Data Streams provides support for real-time processing of streaming data. It provides ordering of records, as well as the ability to read and/or replay records in the same order to multiple 
+downstream Amazon Kinesis Applications.
+
+
+Amazon Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service. Amazon Route 53 effectively connects user requests to infrastructure running in AWS – such as Amazon EC2 instances – and can also be used to route users to infrastructure outside of AW
+By default, Route 53 Resolver automatically answers DNS queries for local VPC domain names for EC2 instances
+Create an inbound endpoint on Route 53 Resolver and then DNS resolvers on the on-premises network can forward DNS queries to Route 53 Resolver via this endpoint
+Create an outbound endpoint on Route 53 Resolver and then Route 53 Resolver can conditionally forward queries to resolvers on the on-premises network via this endpoint
+Metadata, which can be included with the object, is not encrypted while being stored on Amazon S3. Therefore, AWS recommends that customers not place sensitive information in Amazon S3 metadata.
+
+Firehose does not support Amazon EMR as a target for delivering the streaming data.
+
+Amazon FSx for Windows File Server is a fully managed, highly reliable file storage that is accessible over the industry-standard Server Message Block (SMB) protocol
+File Gateway Configuration of AWS (Storage Gateway)  enables you to store and retrieve objects in Amazon S3 using file protocols such as Network File System (NFS) and Server Message Block (SMB).
+EFS uses the Network File System protocol. EFS does not support SMB protocol.
+EBS does not support SMB protocol
+S3 does not support SMB protocol.
+
+DataSync is natively integrated with Amazon S3, Amazon EFS, Amazon FSx for Windows File Server, Amazon CloudWatch, and AWS CloudTrail, 
+A single DataSync agent is capable of saturating a 10 Gbps network link.
+
+AWS Storage Gateway is a hybrid cloud storage service that gives you on-premises access to virtually unlimited cloud storage. 
+The service provides three different types of gateways – Tape Gateway, File Gateway, and Volume Gateway – that seamlessly connect on-premises applications to cloud storage, caching data locally for low-latency access. 
+
+- If your application is already integrated with the Amazon S3 API, and you want higher throughput for transferring large files to S3, S3 Transfer Acceleration can be used
+Transfer Acceleration and DataSync  cannot facilitate ongoing updates to the migrated files from the on-premises applications.
+
+The combination of DataSync and File Gateway is the correct solution. 
+AWS DataSync enables you to automate and accelerate online data transfers to AWS storage services. 
+File Gateway then provides your on-premises applications with low latency access to the migrated data (online updates)
+
+With AWS Database Migration Service, you can continuously replicate your data with high availability and consolidate databases into a petabyte-scale data warehouse by streaming data to Amazon Redshift and Amazon S3.
+Using AWS Glue involves significant development efforts to write custom migration scripts to copy the database data into Redshift
+Using EMR involves significant infrastructure management efforts to set up and maintain the EMR cluster.
+
+Use AZ ID to uniquely identify the Availability Zones across the two AWS Accounts
+To coordinate Availability Zones across accounts, you must use the AZ ID, which is a unique and consistent identifier for an Availability Zone. For example, usw2-az2 is an AZ ID for the us-west-2 region and it has the same location in every AWS account.
+a VPC spans an AWS region, it cannot be used to uniquely identify an Availability Zone
+A subnet is a range of IP addresses in your VPC. A subnet spans an Availability Zone of an AWS region. 
+The default subnet representing the Availability Zone us-west-2a for one AWS account might not be the same location as us-west-2a for another AWS accoun
+
+Therefore neither Subnet nor Route Table can be used for Network Address Translation.
+
+An Internet Gateway serves two purposes: to provide a target in your VPC route tables for internet-routable traffic and to perform network address translation (NAT) for instances that have been assigned public IPv4 addresses. Therefore, for instance E1, the Network Address Translation is done by Internet Gateway I1.
+
+if you send a message with a 60-second timer, the message isn't visible to consumers for its first 60 seconds in the queue.
+
+You cannot use visibility timeout to postpone the delivery of certain messages to the queue by one minute.
+The default visibility timeout for a message is 30 seconds. The minimum is 0 seconds. The maximum is 12 hours
+
+Delay queues let you postpone the delivery of all new messages to a queue for several seconds,
+Spot Instance runs whenever capacity is available, there is no guarantee that the weekly job will be executed during the defined time window
+Glue is not for  database rollover script.
+Scheduled Reserved Instances option allows you to use reserve capacity on a recurring daily, weekly, and monthly schedules. Scheduled Reserved Instances are available for one-year terms 
+
+If a user or role has an IAM permission policy that grants access to an action that is either not allowed or explicitly denied by the applicable SCPs, the user or role can't perform that action
+SCPs affect all users and roles in attached accounts, including the root user
+SCPs do not affect service-linked role
+
+AZa= 1 and AZb = 4 EC2 instances
+When cross-zone load balancing (Distribute the load across among AZs instances) is enabled, each load balancer node distributes traffic across the registered targets in all enabled Availability Zones. 
+Therefore, one instance in Availability Zone A receives 20% traffic and four instances in Availability Zone B receive 20% traffic each.
+
+When cross-zone load balancing is disabled, each load balancer node distributes traffic only across the registered targets in its Availability Zone. 
+Therefore, one instance in Availability Zone A receives 50% traffic and four instances in Availability Zone B receive 12.5% traffic each.
+
+A launch configuration is an instance configuration template that an Auto Scaling group uses to launch EC2 instances. When you create a launch configuration, you specify information for the instances. Include the ID of the Amazon Machine Image (AMI), the instance type, a key pair, one or more security groups
+By default, basic monitoring is enabled when you create a launch template or when you use the AWS Management Console to create a launch configuration. Detailed monitoring is enabled by default when you create a launch configuration using the AWS CLI or an SDK
+
+You can change the tenancy of an instance from dedicated to host
+
+You can change the tenancy of an instance from host to dedicated
+By default, EC2 instances run on a shared-tenancy basis.
+If either Launch Configuration Tenancy or VPC Tenancy is set to dedicated, then the instance tenancy is also dedicated
+You can only change the tenancy of an instance from dedicated to host, or from host to dedicated after you've launched it
+ 
+
+  

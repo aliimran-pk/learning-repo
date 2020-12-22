@@ -1,8 +1,8 @@
 
 
 T   =  Notes
-W  = 23 ND + 1 
-T   = 24 ND + 1
+W  = Notes +  ND 2  
+T   = ND 4
 F   = 25 Final Notes +Final Questions + ND 
 
 
@@ -1191,3 +1191,457 @@ recommanded for Compliance as you need to manage both sides of the connection
 Recommended when u use gateway devices which are not supported by AWS VPN
 u responsible e for patches and updates
 and its become a single point of failure
+
+-------------------------------------------------------------------------------------------------------------
+
+
+---------Route 53 -----------
+* It is a Global Service 
+
+Route53 = Domain Registrar + DNS
+ie 
+
+Hosted Zone
+Is a container for records containing DNS records routing traffic for a specific domain
+
+Route53 can do
+Load Balancing (through DNS called client load balancing)
+health checks can be linked to Route53 DNS queries
+Routing Policies (simple, failover,...)
+
+Not for free tier
+you pay 0.05 $ per month per hosted zone
+
+Route53 as a Registrar
+a domain registrar is an organisation that manages the reservation of internet domain names
+eg GoDaddy, google domains
+
+
+COMMON/ STANDARD DNS RECORDS
+
+Type
+A	: hostname to IPV4 address
+AAAA	: hostname to IPV6 address
+
+CNAME   : hostname1 to hostname2 mapping 
+only be created for non root domains  
+Only for Non root domain like yourapp.yourdomain.com
+
+
+Alias   : hostname to AWS resource
+** Alias records can be create for root and non root domains
+ie in28minutes.com   or API.in28minutes.com
+if you want to route domain to an AWS resource then what u need to make of use Alias records
+
+
+
+AWS Route 53 routing policy determines how AWS would respond to the DNS queries and provides multiple Routing policy options
+
+ROUTE 53 POLICIES
+
+1) Simple Routed Policy
+maps a domain name to an IP address
+use when you redirect to a single resource                 
+You can't attach health checks to simple routing policy
+if multiple values are returned , a random one is chosen by the client browser called client site load balancing
+
+
+2) Weighted Routed Policy
+Maps a single DNS name to multiple weighted resources, 10% to A, 30% to b (useful for Canary deployments)
+helpful to split traffic b/w two Regions
+robability of any one resource record set being selected depends on its weight as a proportion of the total weight
+
+
+3) Latency Routed Policy
+** Users location to AWS region with Min Latency
+provides u which region gives u low latency 
+Latency-based Routing Policy enables Route 53 to respond to the DNS query based on which data center gives the user the lowest network latency
+choose option with min latency
+used when there are multiple resources performing the same function 
+Latency resource record set can be created for the EC2 resource in each region that hosts the application. When Route 53 receives a query for the corresponding domain, it selects the latency resource record set for the EC2 region that gives the user the lowest latency
+
+
+4) Failover Routed Policy
+active passive failover , ie use DR is primary health check fails
+If health check primary fails then requested will be routed to secondary only
+health check is mandatory
+Failover routing policy is applicable for Public hosted zones only
+
+5) Geolocation Routed Policy
+choose based on user location
+ie from Pakistan should go to this IP
+** should create create a "default" policy in case there is no match
+restrict distribution of content to only the locations in which you have distribution rights.
+Geolocation routing policy allows geographic locations to be specified by continent, country, or by state 
+
+7) Geoproximity Routed Policy
+choose nearest resource (geographic distance) to ur user
+Routing policies will route to the nearest resource by geographic distance to your user?
+**record set for smallest geographic region has priority
+
+**record set for smallest geographic region has priority
+
+--------------------------------------------------------------------------------------------------------------------
+----S3 Fundamentals--
+Simple Storage Service
+3 is an Object level storage (not a Block level storage) and cannot be used to host OS or dynamic websites
+ store large objects with key value approach
+
+100 buckets (soft limit) and maximum of 1000 buckets can be created in each of AWS account
+
+*** bucket name should be using  across AWS accounts (unique)
+no space and special or upper case char in Name and become part of object URL ,IP
+* must start with lower case letter or number
+
+* S3 is a global service  however a bucket is created in a region
+objects are replicated in a single region across  multiple AZ
+
+*** max  size of an object in  a bucket is 5 TB
+*** must use multi part upload for uploading more than 5GB
+
+key is full path
+keys is composed of Prefix + Object Name
+s3://my-bucket/myFolder1/fileName1.txt
+
+
+PATH
+s3://bucketName/key
+s3://my-s3-bucket-1/2030/10/course2.jpg
+
+Versioning is at Bucket level must be enabled first
+ any file that is not versioned prior to enable versioning will have version "null"
+But if we delete a specific versioned then it will delete permanently
+We can't turn off the versioning once set
+
+S3 website endpoints do not support HTTPS.
+
+Server-side encryption encrypts only the object data. Any object metadata is not encrypted.
+
+Four methods for encrypting objects in S3
+
+1)  SSE-S3 (S3-Managed Keys)
+
+S3 encrypts object using its own managed data key and put  the encrypted object in the bucket
+SSE-S3 encrypts the Data key with a master key that is regularly rotated.
+AES-256 encryption type
+*** Must set header:  "x-amz-server-side -encryption":"AES256"
+
+2) SSE-KMS (key management service)
+
+** Must set header:  "x-amz-server-side -encryption":"aws:kms"
+KMS uses customer master keys (CMKs) to encrypt the S3 objects.
+** With SSE-KMS you let AWS manage the encryption keys but you have full control of the key rotation policy
+
+3) SSE-C
+manage your own encryption keys
+using data keys fully managed by customer outside of AWS
+S3 doesn't store that encryption key
+** Https is mandatory
+encryption key must be provided in the header for each request
+Here you have full control over the encryption keys, and let AWS do the encryption
+   
+
+4) Client Side Encryption
+encrypt the data before uploading to S3
+client libraries like S3 Encryption client can be used
+customer fully manages the keys and encryption cycle
+
+Encryption in transit/flight is SSL/TLS
+S3 provides both http/https  but https is recommend
+
+Bucket owner is the AWS account that created a bucket
+Object owner is the AWS account that uploads the object to a bucket
+
+S3 SECURITY
+
+1) User based
+IAM policies, which API should be allowed for a specific user from IAM
+User based policies use IAM with S3 to control the type of access a user or group of users has to specific parts of an S3 bucket the AWS account owns
+User based policy is always attached to an User, Group or a Role,
+
+2) Resource Based- 
+Bucket policies and Access control lists (ACLs) are resource-based because they are attached to the  S3 resources
+
+------Bucket policy ---
+Bucket wide rules from S3 console To allow cross account
+Bucket policy can be used to grant cross-account access to other AWS accounts or IAM users in other accounts for the bucket and objects in it.
+
+If the Bucket and Object is owned by the same AWS account, Bucket policy can be used to manage the permissions
+
+JSON based , Resources: buckets and objects
+Action: set of API to allow or deny
+Effect : Allow / Deny
+eg.
+Grant public access to the bucket
+Force objects to be encrypted at upload
+grant access to another account (Cross account
+Only the bucket owner is allowed to associate a policy with a bucket
+
+Access Control Lists (ACLs)
+Each bucket and object has an ACL associated with it.
+ACLs are used to grant basic read/write permissions on resources to other AWS accounts.
+
+Bucket ACL
+Only way you can grant necessary permissions to the Log Delivery group is via a bucket ACL
+
+Object ACL 
+is the only way to manage permission to an object in the bucket not owned by the bucket owner 
+When bucket owner is diff from object owner
+
+** Bucket ACL / Object ACL don't have conditions but Bucket polices can have Conditions
+
+An IAM principal can access S3 object if 
+the user IAM permission allow it 
+OR
+The resource policy Allows 
+AND 
+there's no explicit DENY
+
+Explicit DENY in an IAM policy will take precedence over a bucket policy permission
+
+
+----------------MFA Delete---------------
+* Only the bucket owner (root account) can enable/disable MFA delete
+* MFA-Delete currently can only be enabled using CLI
+
+You will need MFA to restrict
+* permanently delete an object version
+* suspend versioning on the bucket
+To use MFA delete, enable versioning on S3
+
+
+
+** Pre-singed URLS for a limited time
+Also Block public access to the bucket at the account level 
+
+Object Lock  (same as Glacier Vault lock) with versioing 
+prevents object from being deleted for a specified amount of time 
+** Enable only at the time of creation bucket in advance setting, and with versioning Must enabled
+
+All files in S3 are encrypted by default
+
+S3 Access Logs
+It logs all the requests made to buckets, 
+and Athena can then be used to run serverless analytics on top of the logs files
+* Don't set your logging bucket to be the monitoring bucket, (infinite logging loop)
+
+S3 LifeCycle Rules
+Automate the transition of S3 objects between their different tiers
+
+
+S3 Transfer Acceleration
+Amazon S3 Transfer Acceleration enables fast, easy, and secure transfers of files over long distances between your client and an S3 bucket. 
+
+To improve speed of data transfer 
+** not free
+
+Events Destination
+SNS Topic , SQS queue and Lambda Functions
+
+
+Versioning CANNOT be configured at an individual object level?
+
+S3 Prefix
+search for keys starting with a certain prefix
+Used in IAM and Bucket polices to restrict access to a specific files or group of files
+
+CORS
+its a web browser based mechanism to allow request to other origins while visiting  main origin
+
+Different origin
+http://example.com
+http://otherexample.com
+
+*** The request won't fulfilled unless the other origin allows for the request using
+** CORS headers (ex:Access-Control-Allow)
+
+
+Block Public Access is at Higher level than Object ACL (B + O) and Bucket Policy (B)
+
+S3 Default encryption vs Bucket Policies
+
+---------------------------------------------------
+S3 Default encryption vs Bucket Policies (old way )
+
+New way is to use "Default encryption" option in S3
+** ** Bucket Policies are evaluated before "default encryption"
+
+-------------------------S3 Storage Classes-----------------------
+
+For durability All S3 classes are 11 9s, same durability
+All S3 storage classes support SSL encryption of data in transit and data encryption at rest
+Encryption is only Mandatory for Galcier and Glaicer Deep archieve
+S3 One Zone-1A is not multi AZ (only 1 AZs)
+
+High Availability
+S3 Standard (High HA) 99.99% a
+S3 One Zone 1A (Lowest HA) 99.5%
+Rest all have 99.9% HA
+
+1) Standard S3 - General Purpose (Default)
+* Frequently access data
+  Data replicated in at least 3 AZs
+  per GB cost = 0.025
+use cases: 
+best performance and frequently accessed
+Big data analytics,mobile and gaming , content sharing
+
+
+2) S3 Standard-1A
+ long lived, infrequently access data  (eg backups for DR)
+ Data replicated in at least 3 AZs
+Objects are available for real-time access.
+per GB cost = 0.018
+lower than S3 standard
+use cases: 
+data store for DR and backups
+** Minimum storage duration is 30 days
+ greater availability and resiliency than the One Zone-1A
+ 99.9%
+
+3) S3 One Zone-1A
+ Non Critical data
+  long lived, infrequently access data  (data that can be easily generated again)
+*** but available for millisecond
+Objects are available for real-time access.
+* Data replicated in only 1 AZs (Data is not resilient ) , Hense Less exensive than 1A
+per GB cost = 0.0144
+use cases:
+storing secondary backup copies of on-premise data or storing data that you can easily re create
+eg. thumb nails from image 
+
+4) S3- Intelligent-Tiering
+same low latency and high throughput performance as of S3 standard
+small monthly  monitoring and auto Tiering fee
+** automatically moves objects b/w two access tiers based on changing access patterns
+Long lived data with changing or unknown access 
+99.9% availability 
+One tier for frequent access
+One tier for low cost access infrequent
+
+Multiple zone for resiliency
+AWS choose storage classes standard or standard1A
+** Minimum storage duration is 30 days
+
+5) Amazon Glacier
+** v. low cost
+** 10s of years
+** alternative to on-premise magnetic tape
+Each item in Glacier is called "Archive" file up to 40TB
+Archives are stored in "Vaults"
+Archive data with retrieval times ranging from minutes to hour
+**  Encryption = Mandatory
+0.005
+99.9% 
+
+** 3 retrieval options
+1) Expedited (1 to 5 mins)
+2) Standard (3 to 5 hours)
+3) Bulk (5 to 12 hours)
+** Minimum storage duration is 90 days
+
+6) Glacier Deep Archive
+lowest cost data
+Archive data with that  rarely retrieval times ranging from hours  to Days
+** Encryption = Mandatory
+0.002
+
+
+1) Standard (12 hours)
+2) Bulk (48 hours)
+** Minimum storage duration is 180 days
+99.9%
+
+**  Life Cycle Rules is NOT FREE
+** S3 Cross-Region Replication is NOT FREE
+* ReplicationCan  be in same region and multiple region also can be cross account
+* Versioning must be enabled for replication
+
+
+* after activating S3 replication, only new objects replicated
+* If you delete with/without version id , delete marker will NOT replicated
+* No Channing ie B1-B2-B3 then not B1 to B2 automatically
+
+** S3 CONSISTENCY MODEL
+1) READ AFTER WRITE FOR PUTS of new object
+means when u create a new objects, it is immediately available
+
+2) EVENTUAL CONSITENCY for Overwrite DELETES and PUTS
+means no guarantee, you might get a previous version of data immediately after an object is updated
+
+** There is no way to request or API "strong consistency"
+
+
+-------S3 Pre signed URL----------
+Grant time limited permission (few hours to 7 days) to download objects default= 1 hour
+users given a presiged URL inherits the permissions of the person who generated the URL
+
+S3 Access Points
+Access points can simplify things interms of porvisioing access to different users
+Each user can have a dedicated access point on a bucket and each of these access point has its
+own policy
+useful when u have a large dataset on a bucket that are accesssed by different users or  applcations
+Access point Can also restrict a particular VPC 
+*** for App1 we can set different kind of action and for App2 diff action on the same bucket
+
+Prevent Object from being deleted or overwritten
+***  Use S3 Object Lock
+
+Protect against accidental deletion
+*** Use  Versioning
+
+Avoid Content Scraping
+Pre-Signed URL also called Query String Authentication
+
+Enable Cross Domain request to S3 hosted web site
+*** Use CORS
+
+Remove objects from bucket after a specified time period
+*** use life cycle rules and configure expiration policy
+
+Move data automatically b/w Storage classes
+use lifecycle rules
+
+S3 is serverless
+S3 automatically scales to high request rates, latency 100-200 ms
+Use S3 prefix for perfromance
+
+use multipart upload API
+Recommend for files > 100MB and Must for files > 5GB
+
+Get some part of the object
+***  Use Byte-Range_fetches
+
+Create inventory of S3 objects 
+***  use S3 inventory report
+
+change object metadata or tags or ACL or invoke lambda functions for billions of objects in S3
+Generate S3 inventory report and Perform S3 Batch operations using it
+
+Enable S3 Server Access Logs for bucket/object access log and 
+
+S3 Transfer accelerator used fast/secure trasfer only for upload
+
+If you want to ensure that an event notification is sent for every successful write, you can enable versioning on your bucket
+
+S3 Glacier is a separate Regional Service 
+
+S3
+WORM write once read many times = Enable object lock policy
+
+S3 Glacier 
+WORM write once read many times = Enable Vault lock policyAsynchronous 2 steps 
+
+------------------------------------------------------------------------------------------------------------------
+
+------------------------AWS Athena ------------------------
+Serverless service to perform analytics directly against S3 files
+** Query Engine over S3
+***  uses SQL language 
+** Used to analyse data on S3 with out loading into any DB and directly from S3
+** charged per query and of data scanned
+support scv,json,avro and parquet
+pay per query 
+
+
+

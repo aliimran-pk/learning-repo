@@ -25,7 +25,6 @@ keys is composed of Prefix + Object Name
 s3://my-bucket/myFolder1/fileName1.txt
 
 key = myFolder1/fileName1.txt
-
 Objects are files 
 
 S3 --> Create Bucket
@@ -57,7 +56,6 @@ s3://my-s3-bucket-1/2030/10/course2.jpg
 
 OBJECT URL
 https://my-s3-bucket-1.s3-eu-west-1.amazonaws.com/2030/10/course2.png
-
 
 Bucket Level Property
 
@@ -125,7 +123,7 @@ Four methods for encrypting objects in S3
 
 1)  SSE-S3
 server side encryption
-S3 encrypts object using its own managed data key and put  the encrypted obj in the bucket
+S3 encrypts object using its own managed data key and put  the encrypted object in the bucket
 *** Encrypt S3 objects using keys handled & managed by AWS
 *** AES-256 encryption type
 *** Must set header:  "x-amz-server-side -encryption":"AES256"
@@ -169,8 +167,8 @@ S3 SECURITY
 1) User based
 IAM policies, which API should be allowed for a specific user from IAM
 
-2) Resource Based
-Bucket policies - bucket wide rules from S3 console- allow cross account
+2) Resource Based- Bucket policies
+ - bucket wide rules from S3 console- allow cross account
 JSON based 
 Resources: buckets and objects
 Action: set of API to allow or deny
@@ -206,15 +204,17 @@ https://awspolicygen.s3.amazonaws.com/policygen.html
 
 *** Object Lock  (same as Glacier Vault lock)
 prevents object from being deleted for a specified amount of time 
-** Enable only at the time of creation bucket in advance setting, also versioning enabled
+** Enable only at the time of creation bucket in advance setting, and with  versioning Must enabled
 after that we can't delete objects from bucket eg. for regulatory constrains
 adopt WORM (write once read many) model
 
 **MFA Delete forces users to use MFA tokens before deleting objects. It's an extra level of security to prevent accidental deletes
 ** all your files in S3 to be encrypted by default
 Enable Default encryption on S3
+
 ** S3 Access Logs log all the requests made to buckets, and Athena can then be used to run serverless analytics on top of the logs files
-**  automate the transition of S3 objects between their different tiers?
+
+**  Automate the transition of S3 objects between their different tiers?
 use S3 LifeCycle Rules
 
 S3 Tags
@@ -263,7 +263,6 @@ Lambda Functions
 S3 Life Cycle Configuration allows you to move files between different S3 Storage Classes?    
 ACLs are primarily used to grant permissions to the public and other AWS accounts
 
-
 Create a lambda function
 S3NotificationLambda
 
@@ -303,7 +302,7 @@ http://my-s3-bucket-1.s3.amazonaws.com/?prefix=2030/10
 CORS
 cross origin resource sharing
 origin is a scheme consisted of protocol + host+ port
-its a web browser based mechanism to allow request to other origins while visiting  main origion
+its a web browser based mechanism to allow request to other origins while visiting  main origin
 
 same origin
 http://example.com/app1 
@@ -328,21 +327,21 @@ Create a new bucket
 same region
 make it public
 Permission -> add bucket policy
+
 enable static web hosting
 Permission -> CORS configuration
 add the configuration file with full URL of the origin in AllowedOrigin
 
-
 ** Block Public Access is at Highest level than access control and bucket policy
+
 Bucket level is a policy at bucket level
-
 Access Control List is at bucket and object levels
-
 Use Object ACL when bucket owner is not the object owner
+
 need diff permissions for different objects in the same bucket
 
 IMP
-** Bucket / Object ACL don't have conditions but polices can have
+** Bucket ACL / Object ACL don't have conditions but Bucket polices can have Conditions
 
 ACL are primarily used to grant permissions to public or other user accounts
 
@@ -388,9 +387,8 @@ S3 storage classes help to optimise your cost  while meeting access time needs
 
 **  Durability 11 9's
 
-when we upload the file in Bucket t, then storage classes option comes
+when we upload the file in Bucket  then storage classes option comes
 we can change storage class of a object
-
 
 1) Standard S3 - General Purpose
 * Frequently access data
@@ -603,7 +601,7 @@ S3 Cost Scenarios
 *** use Intelligent Tiering 
 use storage class analysis report
 
-3) Move data automatically b/w SC
+3) Move data automatically b/w Storage classes
 use lifecycle rules
 
 4) Remove objects from bucket after a specified time period
@@ -647,11 +645,10 @@ Requester pays
 7) Need S3 bucket access logs
 enable S3 Server Access logs (default:off)
 
-
 8) change object metadata or tags or ACL or invoke lambda functions for billions of objects in S3
 Generate S3 inventory report and Perform S3 Batch operations using it
 
-9)  Need S3 Object bucket Access logs
+9)  Need S3 Object  Access logs
 Enable S3 Server Access Logs
 
 S3 KMS limitation

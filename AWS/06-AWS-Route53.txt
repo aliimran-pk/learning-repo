@@ -47,12 +47,14 @@ eg     dumy.in28minutes.com to www.example.com
 
 route traffic to select AWS resources like S3,ELB,CloudFront 
 
+** CNAME records only be created for non root domains 
+The DNS protocol does not allow you to create a CNAME record for the top node of a DNS namespace (mycoolcompany.com), also known as the zone apex
+
+
 ** Alias records can be create for root and non root domains
 ie in28minutes.com   or API.in28minutes.com
 if you want to route domain to an AWS resource then what u need to make of use Alias records
 
-** CNAME records only be created for non root domains 
-The DNS protocol does not allow you to create a CNAME record for the top node of a DNS namespace (mycoolcompany.com), also known as the zone apex
 
 Route 53 - Routing 
 based on user requests
@@ -271,5 +273,6 @@ A hosted zone tells Route 53 how to respond to DNS queries for a domain such as 
 2) update NS record on 3rd party website to use Route 53 name server
 
 Private hosted zones are meant to be used for internal network queries and are not publicly accessible. 
-Public Hosted Zones are meant to be used for people requesting your website through the public internet. Finally, NS records must be updated on the 3rd party registrar. 
+Public Hosted Zones are meant to be used for people requesting your website through the public internet. 
+Finally, NS records must be updated on the 3rd party registrar. 
 

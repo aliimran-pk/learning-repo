@@ -8,7 +8,6 @@ No of requests
 duration of requests
 memory consume
 
-
 Lambda is virtual functions
 limited by time , short executions
 run on  demand
@@ -17,14 +16,14 @@ pay per request and compute time
 integrate with whole  suite of services
 easy to get more resource per functions (up to 3GB of RAM)
 
-
 Language support
 Node.js
 python
 Java 8
 C#
 Golang
-C# powershell
+C# 
+powershell
 Ruby
 Custom Runtime API (rust)
 
@@ -149,7 +148,8 @@ Swagger/open API to define APIs
 transformation and validation  of request/response
 Cache API responses
 *** Can  Run Multiple Versions of API and multiple environments
-Monitor API callsCache API requests
+Monitor API calls 
+Cache API requests
 API keys for third party developers  to monitor usage
 
 ***  Lambda + API Gateway = No infra to manage
@@ -175,6 +175,7 @@ It is serverless
 ie start AWS step function workflow, post msg to SQS
 
 API Gateway: Endpoint Types
+
 3 ways to deploy API Gateway
 
 1) Edge-Optimized (default) 
@@ -294,7 +295,6 @@ authenticate mobile and web-apps
 want to integrate with web identity providers google, Facebook
 MFA ,phone and email verification
 support for SAML
-
 
 a) Cognito - USER POOLS  (CUP)
 * manage your own user pool (can be backed by Facebook, google etc)
@@ -452,7 +452,7 @@ Client (interact with edge loc) --> AWS CloudFront -> S3
 to communicate securely with S3
 
 Client (interact with edge loc) --> AWS CloudFront (OAI) -> S3(bucket policy)
-to send welcome email
+to send welcome email 
 
 DynamoDB (stream changes) -> DynamoDB Stream(invoke Lambda) -> Lambda (SDK to send email) -> SES Simple email service
 

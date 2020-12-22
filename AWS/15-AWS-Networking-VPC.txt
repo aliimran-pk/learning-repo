@@ -70,7 +70,7 @@ Loop Back Address
 To find network ID
 
 Network bit   = 1
-Host bit 		 = 0
+Host bit 	   = 0
 
 eg.
 115 .0 .0.15
@@ -228,7 +228,7 @@ All rest are Public IPs
 Creating own private network in the cloud
 your own isolated network (traffic not visible to other AWS VPC)
 you can control all the traffic coming in and out a VPC
-** Best practice all resources from ur VPC
+** Best practice to access all resources from ur VPC
 
 ** Default VPC
 all new accounts have a default VPC
@@ -263,7 +263,7 @@ Subnet resides in VPC
 CIDR block of a subnet must be a subset or the same as CIDR block for VPC
 
 To separate public resource (accessible through internet) with private resources 
-create public subnet for public resources and like private
+create public subnet for public resources  like private
 public resources can talk to private 
 
 ** Each VPC is associated with a Region
@@ -430,6 +430,7 @@ use Internet gateway to access internet, then they will expose to the
 world which is not required.
 
 NAT comes in 2 flavours
+
 1) NAT Instances (outdated)
 2) NAT Gateway
 
@@ -441,6 +442,8 @@ NAT comes in 2 flavours
 NAT instance uses public route table to connect to internet gateway for internet traffic
 Route table must be configured to route traffic from private subnets to NAT instance
 EC2 in private subnet connect to private subnet route table which is connected to NAT instance
+
+NAT instance AMI
 Amazon Linux AMI pre-configured are available
 ***No HA/resilient setup out of box
 need to create ASG in muti AZ and resilient user-data script
@@ -484,6 +487,7 @@ Add Route
 Destination : 0.0.0.0/0
 Target : NAT instance Id
 every time we ping any IP which is not private , talk to NAT instance
+-------------------------------------------------------------------------------------------------------------------
 
 2) NAT Gateway
 ** Better alternative to NAT instances
@@ -492,7 +496,7 @@ pay by the hour for usage and bandwidth
 ** NAT is created in a specific AZ uses EIP, It is resilient within a single AZ
 ** Must create multiple NAT Gateway in multiple AZ for fault-tolerance
 can't be used by an instance in that subnet (only from other subnets)
-** Requires Internet Gateway (Private subnet -> NAT -> IGW)
+** Requires Internet Gateway (Private subnet -> NAT GW -> IGW)
 5 Gbps with auto scaling up to 45Gbps
 **No SG required and managed
 
@@ -547,7 +551,7 @@ dig demo.foobar.internal
 
 **** NACL and SG
 
-request -> NACL (subnet level ) check NACL inbound rules -> SG of EC2 check SG Inbound rules
+Request -> NACL (subnet level ) check NACL inbound rules -> SG of EC2 check SG Inbound rules
 
 SG outbound is stateful (if inbound passes, then outbound automatically passed)
 NACL outbound rules stateless(need to evaluate)
@@ -657,7 +661,7 @@ Owner of Peer VPC has one week to accept
 * Peering is not transitive A-B-C so not A-C
 * Peer VPCs Can't have overlapping address ranges
 * CIDR block of each VPC is complete different
-* Must update route tables in each VPC's subnets to ensure intsnaces can communicate
+* Must update route tables in each VPC's subnets to ensure instances can communicate
 * VPC  peering can work inter-region (cross region)
 * VPC  peering can work cross -account
 
@@ -897,7 +901,7 @@ On AWS you connect to Direct Connect and then DC to VPN to customer data centre
 
 Customer DC -> VPN - Direct Connect Location
 
----------------Direct Connect Gateway---------------------------------------
+---------------Direct Connect Gateway----(multiple VPC in diff Regions)-----------------------------------
 ** if you want to setup a direct connect from on-premise DC to one or more VPC
 in different regions(same account), you must use  Direct Connect Gateway
 -----------------------------------------------------------------
@@ -967,6 +971,7 @@ Regional resource , can work cross region
 share cross account using RAM
 route tables: limit which VPC can talk with other VPC
 works with DC GW and VPN connections
+
 
 -------------------------------------------
 Software VPN

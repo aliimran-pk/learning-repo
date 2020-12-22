@@ -1682,15 +1682,15 @@ If you have an existing Identity Provider (IdP), you can use an API Gateway Lamb
 Identity pools provide AWS credentials to grant your users access to other AWS services. To enable users in your user pool to access AWS resources, you can configure an identity pool to exchange user pool tokens for AWS credentials.
 
 To help optimize your application’s performance and security while effectively managing cost, AWS recommends that you also set up Amazon CloudFront to work with your S3 bucket to serve and protect the content.
- 
+
 Use Amazon Transcribe to convert audio files to text. Run analysis on these text files using Amazon Athena to understand the underlying customer sentiments - Amazon Transcribe is an automatic speech recognition (ASR) service that makes it easy to convert audio to text. One key feature of the service is called speaker identification, which you can use to label each individual speaker when transcribing multi-speaker audio file
 
 Amazon Quicksight is for the visual representation of data through Dashboards, graphs and various other modes.
- AWS DMS supports specifying Amazon S3 as the source and streaming services like Kinesis and Amazon Managed Streaming of Kafka (Amazon MSK) as the target. AWS DMS allows migration of full and change data capture (CDC) files to these services. AWS DMS performs this task out of box without any complex configuration or code development
-  SNS cannot directly send messages to Kinesis Data Streams.
-  
-  DNS hostnames and DNS resolution are required settings for private hosted zone
-  
+AWS DMS supports specifying Amazon S3 as the source and streaming services like Kinesis and Amazon Managed Streaming of Kafka (Amazon MSK) as the target. AWS DMS allows migration of full and change data capture (CDC) files to these services. AWS DMS performs this task out of box without any complex configuration or code development
+SNS cannot directly send messages to Kinesis Data Streams.
+
+DNS hostnames and DNS resolution are required settings for private hosted zone
+
 
 If you have an EC2 Auto Scaling group (ASG) with running instances and you choose to delete the ASG, the instances will be terminated and the ASG will be deleted
 EC2 Auto Scaling groups can span Availability Zones, but not AWS regions 
@@ -1715,14 +1715,17 @@ VPC Peering can now span inter-region
 VPC Endpoints – Regional     You cannot create an endpoint between a VPC and an AWS service in a different region.
 A security group is tied to a region and can be assigned only to instances in the same region.
 
- An Egress-only internet gateway is an Internet Gateway that supports IPv6 traffic,
- 
- Unlike NAT Gateway, NAT instances are not a managed service, it has to be managed and maintained by the customer.
- 
- When different application processes simultaneously request a cache key, get a cache miss, and then each hits the same database query for data, it results in the database getting swamped with identical queries. The solution is to prewarm the cache4
- 
- With AWS Transit Gateway, you only have to create and manage a single connection from the central gateway into each Amazon VPC, on-premises data center, or remote office across your network. AWS Transit Gateway acts as a hub that controls how traffic is routed among all the connected networks, which act like spok
- Use Centralized VPC Endpoints for connecting with multiple VPCs, also known as shared services VPC
- 
- Amazon EC2 Instance store for maximum performance, Amazon S3 for durable data storage, and Amazon S3 Glacier for archival storage - 
- For high I/O performance, instance store volumes are a better option.
+An Egress-only internet gateway is an Internet Gateway that supports IPv6 traffic,
+
+Unlike NAT Gateway, NAT instances are not a managed service, it has to be managed and maintained by the customer.
+
+When different application processes simultaneously request a cache key, get a cache miss, and then each hits the same database query for data, it results in the database getting swamped with identical queries. The solution is to prewarm the cache4
+
+With AWS Transit Gateway, you only have to create and manage a single connection from the central gateway into each Amazon VPC, on-premises data center, or remote office across your network. AWS Transit Gateway acts as a hub that controls how traffic is routed among all the connected networks, which act like spok
+Use Centralized VPC Endpoints for connecting with multiple VPCs, also known as shared services VPC
+
+Amazon EC2 Instance store for maximum performance, Amazon S3 for durable data storage, and Amazon S3 Glacier for archival storage - 
+For high I/O performance, instance store volumes are a better option
+
+
+

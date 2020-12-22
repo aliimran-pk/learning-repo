@@ -26,6 +26,7 @@ also encrypt data in transit b/w apps and db
 Most Famous Algo is RSA
 
 ------------- -AWS KMS -----------------------------------------------------------
+
 ** Key Management Service (a multi tenant service) , 
 * Encryption
 * AWS manage keys for us
@@ -34,7 +35,7 @@ Fully integrated with IAM for authorization
 manage cryptographic keys both symmetric and asymmetric
 define key usage permission including cross account access
 track key usage in AWS Cloud Trail (regulations and compliance)
-* Integrate will all aws services that need data encryption
+* Integrate with all aws services that need data encryption
 Can also use the CLI/SDK with KMS
 Automatically rotate master key once in a year
 * Schedule key deletion
@@ -74,7 +75,7 @@ cross account access
 1) Symmetric Key Encryptions (AES-256 keys)
 * use same key for encryption/decryption
 AWS services that are integrated with KMS use Symmetric Customer Master Keys (CKM)
-** necessary for envelope encryption
+** SKE is Must for envelope encryption
 You never get access to the key encrypted(must call KMS API to use)
 
 2) Asymmetric Key Encryption (Public key cryptography)
@@ -85,7 +86,7 @@ used for encrypt.decrypt or sign/verify operations
 Public key is downloadable but you access the private key unencrypted
 *  Use case: encryption outside of AWS by users who can't call private key  unencrypted
 
-3 types of Customer Manage keys (CMK)
+3 types of Customer Master keys (CMK)
 
 1) AWS Managed Service Default CMK
 free
@@ -119,7 +120,7 @@ MyMasterSymmetricKey
 
 Server Side Encryption with KMS
 
-1) create a customer master key and map to a AWS service (S3)
+1) create a Customer master key and map to a AWS service (S3)
 2) Client upload file to S3
 3) S3 ask KMS to provide data keys
 4) KMS use Customer master key and generate a new plain data key and a encrypted data key
@@ -354,9 +355,3 @@ In server side encryption, the decryption also happens on the server (in AWS, we
 With client side encryption, the server does not need to know any information about the encryption being used, as the server won't perform any encryption or decryption tasks
 we can use the AWS Managed Service Keys in KMS, therefore we don't need to create our own keys
 SSM Parameter Store has versioning and audit of values built-in directly
-
-
-
-
-
-

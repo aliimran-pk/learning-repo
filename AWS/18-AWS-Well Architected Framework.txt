@@ -74,7 +74,7 @@ VPS and Private subnets
 Security Groups
 NACL
 use hardened EC2 AMIs (Golden Images)
-use CloudFornt with AWS sheild for DDoS
+use CloudFornt with AWS shield for DDoS
 use WAF with CloudFront and ALB
 Use CloudFormation (enforce security via scripts)
 Protect data in Transit and at rest
@@ -122,27 +122,26 @@ use AWS Organization to centralize security policies
 
 Design Principles
 
-Test recovery procedures
+a) Test recovery procedures
 use automation to simulate different failures
 Automate recovery from failure
 health checks and auto scaling
 managed services like RDS  automatically switch to standby
 
-Scale Horizontally
+b) Scale Horizontally
 Maintain redundancy
-multiple Direct Connect connections
+Multiple Direct Connect connections
 Multiple regions and AZ
 Prefer Serverless
-prefer loosely couple architecture
-SNS,SQS
+Prefer loosely couple architecture  SNS,SQS
 
-Stop guessing capacity
+c)Stop guessing capacity
 use auto scaling
 
-Distributed system best practices
+d) Distributed system best practices
 API Gateway for throttling requests
 
-Loosely coupled architecture
+e) Loosely coupled architecture
 ELB
 as users are not tied to EC2
 SQS
@@ -150,7 +149,7 @@ SNS publish subscribe
 Amazon Kinesis
 handle event streams, multiple clients
 
-Troubleshooting on AWS
+e) Troubleshooting on AWS
 
 S3 server access logs
 S3 data request details,request type,date time
@@ -200,7 +199,7 @@ Monitor performance
 CloudWatch Alarms
 
 
-EFFiciency use right solutions
+Use right solutions Efficiently
 Compute: EC2 VS Lambda VS Containers
 
 Storage
@@ -236,10 +235,9 @@ Avoid expensive solutions: MySQL VS Aurora VS Oracle
 AWS Direct Connect (save internet cost)
 CloudFtont  reduce load on backbend system
 
-X-Rays traces a request between API Gateway and Lambda functions
-
 Well Architected Tool
 AWS service used to lean,measure and build using architectural best practices
+
 Define a workload
 name: demo-workload
 Industry type: education

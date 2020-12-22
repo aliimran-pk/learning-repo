@@ -29,11 +29,10 @@ Instance Settings -- Attach IAM Roles
 
 ***  aws s3 ls s3://mys3bucket1
 
-aws s3 mb s3://mys3bucket2 will be error as we only provides read only access to IAM role assigne to EC2
+aws s3 mb s3://mys3bucket2 will be error as we only provides read only access to IAM role assign to EC2
 
-** Apply  S3 policy may take some times as it replicates
-
-**A role can be assigned to multiple EC2 instances
+** Apply S3 policy may take some times as it replicates
+** A role can be assigned to multiple EC2 instances
 ** But each EC2 instance can have only one role
 
 aws s3 cp help

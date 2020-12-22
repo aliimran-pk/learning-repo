@@ -15,7 +15,8 @@ Metric resolution
 High resolution: up to 1 sec (StorageResolution API parameter) , Higher cost
 use API call PutMetricData
 
-** The number of instances in an ASG cannot go below the minimum, even if the alarm would in theory trigger an instance termination
+** The number of instances in an ASG cannot go below the minimum, 
+even if the alarm would in theory trigger an instance termination
 
 ------- AWS CloudTrail-----------------------------------
 

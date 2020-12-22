@@ -543,7 +543,7 @@ must be from same AWS organization
 Participants can manage their own resources there
 Participants can't view modify, delete resources belongs to other participants or owners
 AWS Transit Gateways
-Route53 resolver rules
+Route53 resolver rules\
 AWS License manager configurations
 S3 Resolver rules
 it reduced operational overhead and optimized costs

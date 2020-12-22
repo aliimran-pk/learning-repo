@@ -1,5 +1,4 @@
 
-
 Disaster Recovery 
 is about preparing for and recovering from a disaster
 
@@ -35,7 +34,7 @@ RDS in data replication with on premise database is up
 ALB + ASG +  EC2 via Route53 (using reverse proxy) is running with lowest capacity
 Upon disaster , we can scale to production load
 
-Backup and Restore has a potential High RPO and RTO
+4) Backup and Restore has a potential High RPO and RTO
 This is the lowest cost DR approach that simply entails creating online backups of all data and applications
 
 
@@ -94,7 +93,7 @@ db target end point
 *  It is a part of DMS
 *  preferred option for migrating data warehouse data to Redshift
 Migrate DB schema if DB engines are different
-OLTP(SQl Server -> Oracle) to Aurora
+OLTP(SQl Server or Oracle) to Aurora
 OLAP (Teradata or Oracle) --> Amazon Redshift
 
 PostgresSQL on-premise -> RDS PostgresSQL

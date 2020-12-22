@@ -27,8 +27,11 @@ AWS CodePipeline CI/CD pipelines
 CodePipeline is a CICD orchestration service, and has an integration with Elastic Beanstalk
 
 
-* When deploying code directly onto EC2 instances or On Premise servers, CodeDeploy is the service to use. You can define the strategy (how fast the rollout of the new code should be)
+* When deploying code directly onto EC2 instances or On Premise servers, CodeDeploy is the service to use. 
+You can define the strategy (how fast the roll-out of the new code should be)
+
 * CodeBuild is an alternative to Jenkins
+
 * AWS Organizations allow you to create multiple AWS accounts and centralize them around a single organization for simplified and unified billing. 
 
 -----------------------DevOps----------------------------------------------------
@@ -129,8 +132,7 @@ Deleting stack will delete all associated resources
 except DelitoinPolicy set to "Retain"
 or you can enable Termination policy for the entire stack
 Template stored in S3
-
-use CloudFormation StackSets to create/update/delete stack across multiple accounts and regions with a single operation
+Use CloudFormation StackSets to create/update/delete stack across multiple accounts and regions with a single operation
 
 Elastic Beanstalk
 like a pre packaged cloud-formation template with a user interface
@@ -183,7 +185,7 @@ Amazon ECS places containers across your cluster based on your resource needs an
 ECS compose of 
 ECS Core: running ECS on user provisioned EC2 instances
 Fargate: running ECS on AWS provisioned compute (serverless)
-EKS: running ECS on AES powered Kubernetes (running on EC2)
+EKS: running ECS on AWS powered Kubernetes (running on EC2)
 ECR: Docker container registry hosted by AWS
 
 For AWS Fargate 
@@ -316,7 +318,7 @@ Managed Hadoop service with High availability and durability
 EMR helps creating Hadoop cluster (Big data)  with 100s of EC2 instances
 ** EMR give access to underlying OS ie u can ssh into it
 Important tools are natively supported Pig, Hive , Spark , Presto, Hbase, Flink
-Auto scaling and integrated with sot instances
+Auto scaling and integrated with spot instances
 EMR take care of all provisioning and configuration
 **  Amazon Elastic MapReduce (Amazon EMR) is a web service that makes it easy to quickly  and cost-effectively process vast amounts of data
 Amazon EMR uses Hadoop, an open source framework, to distribute your data and processing
@@ -332,7 +334,7 @@ Storage Types
 
 1) HDFS
 Standard for Hadoop
-** Data Storage = EBS or instance (data can lost if instance down)
+** Data Storage = EBS or instance store (data can lost if instance down)
 Persistence Cluster running 24 X 7
 
 2) EMRFS ( Elastic MapReduce File System)
@@ -351,7 +353,7 @@ housing Structured and Unstructured data
 
 AWS Redshift Spectrum
 Run queries directly against S3 without worrying about loading entries data from S3 into a DWH
-**** recommended if u are executing quires frequently against Structured data
+**** Recommended if u are executing quires frequently against Structured data
 You have a huge volume of data in Amazon S3. You would want to run queries against S3 directly instead of moving data to a data warehousing solution
  
 AWS Athena
@@ -397,8 +399,7 @@ Chef recipes/cookbooks
 Puppet manifest
 
 All metric send to CloudWatch
-All configuration mgmt tools can also do
-infrastructure provisions but not recommended
+All configuration mgmt tools can also do infrastructure provisions but not recommended
 
 ---------------------------------------------AWS Elastic Transcoder--------------------------------------------------------------------------
 ****  Fully managed service to convert media files stored in S3 into various formats

@@ -1,11 +1,12 @@
 
 
 T   =  Notes
-W  = Notes +  ND 2  
-T   = ND 4
-F   = 25 Final Notes +Final Questions + ND 
-
-
+W  = 
+T   = Notes + Revision of Questions
+F   = ND 3 + 1SP
+S   = ND3 + 1SP
+S   
+M
 
 --------------------------------------------------------------------------
 
@@ -17,7 +18,7 @@ Http to Https
 RTMP
 
 Signed URL = apps download, shared content to premium user, one URL one file
-Singed cookie = key values airs, mutliple files, no URL chnage , one cookie many files
+Singed cookie = key values airs, multiple files, no URL change , one cookie many files
 
 CloudFront is great for static content that must be available everywhere
 CloudFront Geo restriction for restrict contents to users in certain countries
@@ -1233,8 +1234,6 @@ Alias   : hostname to AWS resource
 ie in28minutes.com   or API.in28minutes.com
 if you want to route domain to an AWS resource then what u need to make of use Alias records
 
-
-
 AWS Route 53 routing policy determines how AWS would respond to the DNS queries and provides multiple Routing policy options
 
 ROUTE 53 POLICIES
@@ -1642,6 +1641,934 @@ Serverless service to perform analytics directly against S3 files
 ** charged per query and of data scanned
 support scv,json,avro and parquet
 pay per query 
+
+** EBS is cheaper than EFS
+
+-----Elastic Beanstalk --------------------------------------------
+Managed Service
+supports Java,.NET,NODE.JS,PHP,PYTHON,GO ,Rubby and docker apps
+You can retain FULL control over ASWS resources created
+*** It is ideal for simple web applications
+*** Not ideal for Microservice architectures
+
+SQS  + Lambda
+***  in case of error msg goes to DLQ set by SQS
+
+SNS + lambda
+*** in case of error msg goes to DLQ set by Lambda
+
+-------------High Performance Computing- HPC-----------
+
+1) Data Management and Transfer
+
+AWS Direct Connect
+Snowball and snow mobile
+AWS DataSync
+Move large amount of data between on-premise and S3, EFS,FSx for windows
+
+2) Compute and Networking
+Spot instances/
+EC2 Placement Groups 10GB/s
+
+higher bandwidth, highest PPP
+ ENA Elastic Network Adapter  100GBps
+Elastic Fabric Adapter (EFA) only for Linux
+
+3) Storage
+EBS: scale up to 64000 IOPS with io provisioned IOPS
+Instance Storage : scale too millions of IOPS, linked to EC2
+
+Network Storage
+FSx for lustre , millions of IOPS backed by S3
+EFSL scale
+
+4) Automation and Orchestration
+AWS Batch
+supports multi-node parallel jobs which enables run single jobs that span multiple EC2 instances
+easily schedule jobs
+
+AWS parallel Cluster
+open source cluster management tool to deploy HPC on AWS
+
+
+High Availability for a Bastion Host
+**We can use a Bastion host to ssh into our private instances
+
+
+IAAS   EC2 to deploy
+PAAS   Elastic Beanstalk
+CAAS   ECS
+FAAS   AWS Fargate
+
+Each zone has at least two AZs
+AZ consists of data centres
+
+Region
+ap-south-1
+
+Availability Zone (ends regions with a alphabet)
+ap-south-1a,  ap-south-1b, ap-south-1c
+
+Control Plane:  Access to aws instances operations via aws API 
+Data Plane :    Allow access to aws compute instances
+
+----------AWS Federation-----------------------------------
+
+1) SAML 2.0 Federation (old way) (not recommended by aws)
+ To integrate Active Directory or ADFS (any SAML 2.0)
+No need to create IAM user 
+
+** New way is to use Amazon Single Sign-on Federation
+
+2) Custom Identity Broker Application
+** if your Identity provider is not compatible with SAML 
+** it uses STS API, AssumeRole or GetFederationToken
+
+3) Web Identity Federation AssumeRoleWithWebIdentity (not recommended by aws)
+authenticate users using web identities 
+eg open id (Facebook,google)
+
+4) Amazon Cognito 
+Provide direct access to AWS resources from client side (mobile,web ap)
+provide temp access to write to S3 using Facebook login with creating IAM users for application user
+
+----AWS Directory Service-----------------
+It provide AWS access to on-premise users without IAM users
+
+Option1: AWS Managed  Microsoft AD
+Microsoft Active Directory hosted on the AWS
+* manage users locally and supports MFA
+> 5000 users
+Trust relationship needed b/s AWS and on-premise directory
+
+Option2: AD Connector
+Directory Gateway (proxy) to redirect  directory requests to on premise AD
+ users are managed on the on premise AD
+500 -> 5000
+
+Option3: Simple AD
+least expensive
+< 5000 users , SAMBA4 , can't joined with  on premise AD
+** can't joined with  on premise AD
+Doesn't support Trust relationship with other AD domains
+
+AWS Support offers four support plans: 
+Basic, Developer, Business, and Enterprise.
+
+One IAM user per physical person
+One IAM role per application
+
+** A user can belong to multiple groups.
+**Groups cannot belong to other groups.
+**Groups can be granted permissions using access control policies
+
+You can use the roles to delegate access to users (temporarily security credentials), applications or services that generally do not have access to your AWS resources.
+there is a conflict like this, then the DENY PERMISSIONS have the final say
+
+The role is create for what service, select the AWS service and attach policies then attach role
+
+By Default root user access is allowed and IAM user is denied
+
+
+
+cross account Access = use role
+
+
+1) Identity Based policies
+ Attached to IAM User, Group or Role
+These policies let you specify what that identity can do (its permissions)
+All services supported
+eg User Can list S3 bucket 
+
+
+2) Resource Based Policy
+** Attached to resource, S3 buckets, SQS, and AWS KMS keys
+**Inline Only ,  the policy is an inherent part of the identity.
+Focus: Who (which account, it is public), what action ?
+Account A can read and modify, Public can read
+cross-account access: user access resource directly from is aws account
+subset of  services supported
+
+
+Explicit Allow overrides Implicit (by Defauy) Deny
+Explicit Deny overrides everything
+By default, all requests are denied. This is called an implicit deny. 
+Explicitly deny is most powerful = deny
+
+***** Deny Evaluation -> Organization SCP -> Resource based policies -> IAm permission boundaries -> Identity base policies
+
+ IAM users identities exits until thy are explicitly deleted (no expiration)
+
+** An IAM role can be added to a already running EC2 instance, immediate effective
+** An IAM role is not associated with IAM user and not for  long term credentials
+when a  resource or an application Assume a Role, it is provided with temporary credentials
+
+AssumeRoleWithSAML
+** return credentials for users logged with SAML
+
+AssumeRoleWithWebIdentity
+*** return credentials for user logged with IDP (Facebook)
+AWS recommend Congnito for this
+
+Amazon STS , Security Token Service
+** Allows to grant limited and temporary access to AWS resources
+Token is valid up to1 hour (must be refreshed)
+**STS is good for cross account access
+
+
+AWS ORGANIZATIONS (Global service)
+Apply Policy based Controls Across Multiple Accounts , Centralized compliance mgmt 
+The main account is master account, you can't change it 
+Organize accounts into Organizational UnitsOU 
+
+RootOU
+	Master Account
+
+
+**AWS Firewall Manager 
+To manage firewall rules Across Organization Accounts
+WAF,Shield Advance  protection, security groups
+
+------------------Service Control Policies (SCP)--------------------------
+
+**Service Control policies SCPs to define restrictions across accounts
+used to whitelist/black  IAM actions
+
+eg. 
+prevent users from disabling AWS config or rules
+EC2 is always of specific typ
+restrict access to certain services(can't use EMR)
+enforce PCI compliance 
+
+
+**** applied at OU or Account Level 
+SCP don't apply to master account
+
+By default, all requests are denied
+** Precedence at higher level takes over the lower level element
+
+AWS RESOURCE ACCESS MANAGER (RAM)
+share resources with any AWS account or within your AWS Organization
+eg.
+VPC Subnets (shared networking layer with multiple accounts)
+allow to have all resources launched in the same subnet
+
+ Can't share SG and default VPC as selected resource in RAM
+
+AWS Single Sign on (Free)
+single account to access multiple websites
+** Integration with AWS Organization
+
+IAM Conditions
+make IAM policies bit more restricted using Condition element in the JSON
+restrict the client IP, region, based on tags
+
+user1 need to access S3 in other account
+Option1:   User1 (Account A)   -- Role (Account B)   S3 (Account B)
+**** when u assume a role , you give up your original permission and take the permissions assigned to the role
+
+Option2: User1(Account A) --> S3 bucket polices - S3
+ *** when using a resource based policy , the principal  doesn't have to give up his permission hence can do both actions in the Account A and Account B
+
+Resource based policy is used by
+S3, SNS, SQS
+
+IAM Permission Boundaries
+AWS supports permissions boundaries for IAM entities (users or roles). A permissions boundary is an advanced feature in which you use a managed policy to set the maximum permissions that an identity-based policy can grant to an IAM entity. When you set a permissions boundary for an entity, the entity can perform only the actions that are allowed by the policy. 
+
+
+---------------EC2------------
+
+Billed by seconds
+
+
+For Enable Ping
+ICMP ipv4
+
+t2.micro
+t is Instance Family (t is General purpose instance)
+2 is Generation 
+micro is size (Family Generation Size)
+
+Instance Type: on-demand
+
+nano<micro<small<medium<large<xlarge
+
+
+
+*** EC2 uses public key cryptography using RSA
+public key is stored in EC2 instance
+private key is stored by customer
+
+--------------- Security Group ---------------
+Virtul Firewall outside the EC2
+specific only ALLOW RULES
+No Rule , No Traffic allowed , No EC2 restart
+
+** All inbound traffic is BLOCKED by default
+
+**  You pay for an EC2 instance compute component Only when it is in start state
+Allo permissions chmod 0400  to key 
+
+ SG can reference to 
+ * IP address
+ * CIDR block
+ * Security Group
+ * But not DNS  name
+
+** All EC2 instances are assigned to private IP address but public is not assigned automatically
+** Stop/Start EC2 Public IP is changed but private is same and Elastic IP (if assigned)
+** reboot will not change public IP
+
+SG are specific to the Region and to the VPC
+
+
+------------Elastic IP------------
+** Elastic IP is a public IPv4 IP you own as long as u don't delete it
+*** You can attach it to one instance at a time
+** Max 5 Elastic IP in your account (can request more)
+*** Elastic IPs can  be switched to other EC2 instance within the SAME region,they need to be manually detached
+*** If elastic ip is not in used or if EC2 instance associated with it is stopped  then u will be charged
+better is to release the elastic IP
+
+------------------------------------------
+
+Terminate: EBS volume destroy
+EC2 Hibernate available Only for On demand and Reserved instances
+** cannot be hibernated more than 60 days
+
+
+-----------------------------------------------------------
+Costly   :  EC2 Dedicated , On-Demand
+Cheapest :  Spot
+
+--------------EC2 INSTANCE TYPES-----Launch Modes-----------
+
+1) EC2 On Demand (come and stay at hotel room)
+pay for what you use
+billing per second, after first minute
+** Highest cost but no upfront payment
+** recommended for shot term and un interrupted 
+** ideal for spiky traffic 
+** batch program having unpredictable time
+
+2) EC2 Reserved Instances (planing ahead and long time)
+
+3  types of Reserved Instances
+
+a: Standard Reserved Instance
+** 1 or 3 years
+up to 75% discount
+
+** pay upfront with long term commitment
+Instance family , OS or tenancies (shared/dedicated) CAN'T be changed
+instance sizes within the same instance family ie t2.micro to t2.small,large
+reserve a specific instance type
+** recommanded for steady state usage apps (database)
+
+b. Convertible Reserved Instance with  some flexibility
+Instance family , OS or tenancies (shared/dedicated) CAN be changed
+instance sizes within the same instance family ie t2.micro to t2.small,large
+up to 54% discount
+
+c. Scheduled Reserved Instances
+** launch within time window 
+when you require a fraction of day/week/month
+its regional specific 
+restriction: available in few instance types C2,R3,C4,M4 in few regions  
+5% to 10% Discount
+You can also sell reserved on AWS reserved instance marketplace
+ if you don't want to use your reservation.
+
+all upfront < partial upfront < No upfront
+
+3) EC2  Spot Instances (bid for empty room )
+** Cheapest up to 90% off But not guarantees compared  to on demand
+Quote the max 
+** ** Most Cost Efficient
+
+Cancelling a spot requests does not terminate instances
+**You must cancel a spot request First and then terminate the spot instances
+* Not for critical apps, non time-critical workloads
+for batch jobs,data analytics which are resilient to failure
+new model: quote your max price,based on long term trends
+Can a terminated with a 2 min notice
+Best practice: Stop or Hibernate instance on receiving interruption notice as for 
+terminate a new instance will be allocated
+
+** Completely close a spot request  in the following order for best practice
+1) cancel spot request  (only this can't terminate active spot instances)
+2) terminate all spot instances
+
+a: Spot Fleet
+Request spot instances across multiple instance types(micro,small,large)
+to get better change to have a spot instance
+*** Spot Fleet = Set of spot instances + (optional) On-demand instances
+Spot fleet stops launching instances when reaching capacity or max cost
+Spot Fleets allow us to automatically request spot instances with the lowest price
+Load balancing workloads Launch instances of the same size, in any Availability Zone. 
+Good for running web services
+
+b: Spot Block
+Request spot instances for a specific duration (1 to 6 hrs) without interruption
+Defined duration workloads Launch instances into a Spot block for 1 to 6 hours
+
+4) EC2 Dedicated Hosts (Book entire building)
+*** Most Expensive
+** Physical Dedicated EC2 server for your use
+Full control on instance placement
+** visibility to underlying sockets/physical cores 
+Allocated for 3 years
+Recommanded for : complicated licencing model , BYOL, strong compliance requirements
+Per Host billing
+Instance family  can't change
+
+5) EC2 Dedicated Instances
+instances running on hardware that is dedicated to you
+Per instance billing
+** May share hardware with other Instances with same account
+No control over instance placement
+Instance family  can't change
+
+EC2 instance Families
+
+r (r4,r5,r5a,r5n) Memory Ram  optimized
+c (c4,c5,c5n ) Compute optimised High performance
+m ( m4,m5,m6 General purpose)
+i (i3,de)  storage optimised
+g (g3,g4) GPU optimised 
+t (t2,t3,t3a) 
+
+
+
+
+Brustable Instances 
+workload with spikes, dev env , small db
+in case of spike , it can burst but it utilize "burst credits"
+
+Unlimited mode 
+(spike beyond CPU credit at additional costs) 
+off for t2 but on for t3 by default
+It is possible to have "unlimited burst credit balance" 
+you pay extra money if you go over your credit balance, but you don't lose in performance
+
+f  (f1) FPGA instances 
+massive parallel processing power as geonomic, data analytics
+
+inf (inf1) Machine learning ASIC instances
+image,speech,nlp recognition 
+
+--Launch Template ---------------
+Use launch templates to automate instance launches
+and enforce best practices across your organization
+
+-------Customised AMI------
+AMI can be built for Linux or windows
+** Faster boot time
+**installing your app ahead of time for faster deploy when auto scale
+ Hardening an Image 
+
+AMI take space and live in S3 but can't see them in S3 console
+** you get charge for S3 space
+* By default your AMI are private, can share them
+With  user-data at the launch of EC2 instance increases boot up time
+AMI Image have root volume also attach non root volumes
+
+*** If you stopped EC2 instances then still EBS volumes (hard disk) will be there and u will be charged
+Owner must grant u read permission for storage either EBS snapshot or S3 bucket
+
+You can't copy an encrypted AMI unless keys were shared
+You can't copy an AMI with an associated billingProduct code shared with you
+
+AMI is region locked and Same Id can't be used across regions
+
+------------------------Placement Groups-------------------
+Use placement groups to influence the placement of a group of interdependent instances
+
+Add instance to placement group = checked
+
+1) Cluster Placement Group
+*** Instances on a same RAC (same hardware)
+Single AZ
+low latency network communication 
+** good for High performance computing
+Not available for t2 types
+***  Pros: Great Network 10Gbps
+Cons: Rack fail, all instances failed
+Use Case: Big data jobs to complete v fast,Big data Analysis
+
+
+2) Partition Placement Group
+create multiple partitions across Multiple AZ
+each partition is located on Separate AWS Racks
+partitions are set of RACs
+up to 7 partitions  per AZ and 100s of EC2 instance in a partition
+A partition failure can affect many EC2 in it but won't affect other partitions
+
+Use Case: Distributed jobs, HDFS, hadoop , kafka, cassandara, Big data jobs to complete v fast
+
+3) Spread Placement Group
+High Availability (instance on diff RAC), High resiliency
+Each instance is located in a separate rack in diff AZ
+*** Critical applications
+Cons: 7 instances per AZ per placement group
+Use Case: Apps need High Availability
+where each instance must be isolated from failure from each other
+
+----------- ENI --(virtual network interface card)----------------------------------------
+
+Elastic Network Interface is logical component in VPC that represents a virtual network interface card
+** Primary ENI is by default and can't be detached
+*** ENI lives in one subnet and thus in a single AZ (ENI are bound to AZ)
+
+** No. of EC2 instances = No. of ENI
+You can create ENI independently and attach them on fly (move them)
+on EC2 instances for failover thus new instance gets IP of old instance
+
+Also we can create our own ENI
+
+A single EC2 instance can now be attached to two ENIs, each one on a distinct subnet. 
+Also can Detach it and Attach it to other instance as well
+
+You can apply different security groups to each ENI so that traffic port 80 is allowed through the first ENI, and traffic from the private subnet on port 22 is allowed through the second ENI.
+
+----------------------------------------------Good EC2 Scenarios------------------------------------------------------
+
+Q1:  identify all instances belonging to a project, to an environment
+SOL: tags
+
+Q2: Change instance type
+SOL: stop the instance and then change its type
+
+Q3: don't want an EC2 instance to be automatically  terminated 
+** SOL: Change Termination Protection to Enable
+
+** But EC2 Terminal protection is not Effective for termination from
+1) Auto Scaling Groups (ASG)
+2) Spot Instances
+3) OS shutdown
+
+
+Q4: Update EC2 instance to a new AMI with latest patches
+SOL:create/relaunch a new instance with updated AMI
+
+Q5: create EC2 instances based on on-premise VMs
+SOL: yes, using import/export , you are responsible for licenses
+
+Q7: Timeout
+SOL:inbound rule for security group to check
+
+Q8: Installing a lot of software sing userdata that slowing down instance launch
+how to make it faster
+SOL:	custom AMI/Golden AMi
+
+Q9: stopped EC2 instance, will I get bill
+SOL: No, But incase if u have storage 
+
+--------------------------------------------------------------------
+SCALABILITY = Handle greater load
+
+Horizontal Scale 
+increase no. of instances
+scale out: increase
+
+Vertical Scale 
+increase size of instance
+t2.micro to t2.large
+common to Non distributed databases
+scale up/down
+
+High Availability = Multi AZ
+
+Run instances for the same application across multi AZ
+
+Route53(for multiple regions)
+ ELB can be public (accessible over internet ) or private to aws network
+distribute load for EC2 which can be in Multiple AZ within A region
+LB error 503  at capacity or no registered target
+
+
+1) CLASSIC LOAD BALANCER----Layer 4 (TCP/TLS & UDP) -----------------
+Limiation as One CLB per Application
+used when  existing application running in the EC2-Classic network.
+
+** To stop accessing EC2 directly without LB
+Open SG of EC2 and put Source : My-LB-Security-Group
+*** Classic LB doesn't support multiple target groups
+
+2) APPLICATION LOAD BALNCER  (LAYER 7)
+supports web sockets HTTP/HTTPS
+** scale automatically
+** it is a managed service but we are responsible of scaling EC2 instances
+** it can also LB with container apps  on same machine /Lambdas /Web app
+
+Load balancing to multiple Http applications across machines (target groups)
+**  Routing tables to diff target groups
+Based on URL example.com/users to TG1 and  example.com/accounts t TG2
+Based on QueryString and Headers
+It has port mapping feature to redirect to a dynamic port in ECS
+it is great for Microservice and container based applications
+** Cross Zone LB is enabled default
+
+1 Target Group = 1 ALB
+
+** One ALB can support multiple Microservice
+*** Create a separate target group for each Microservice
+
+Listener Rules
+configure multiple listener rules for the same listener
+Each Lister have (protocol + port)
+Rules are executed in the Same Order they are configured
+Default rule executed at the end
+Add Rule
+if Path /a/*  THEN forward it to TargetGroup-MicroserviceA
+
+Lister Rules possibilities
+1) based  on path = test.com/a to target group A`
+2) based  on Host = a.abc.com  to target group A`
+3) HTTP header and methods (GET/POST)
+4) Query String   (/microservice?name=A)  o target group A , (/microservice?name=B)  o target group B
+5) Based on IP all request from a range of IP to a TG A, other to TG B
+
+Deleting LB and Target groups
+
+1) Delete ALB
+2) ASG Delete (will automatically delete the instances)
+3) Delete Target Groups
+
+
+-------3)--NETWORK LOAD BALANCER---------LAYER 4 UDP-----------------
+*** A static / Elastic IP can be assigned with NLB
+can load balance EC2, ECS (container- appl, web apps using IP address)
+*No support for Lambdas
+handles millions of request per seconds
+Less latency 100ms  (400 ms for ALB)
+
+* It has one static IP per AZ  and supports assigning Elastic IP
+Not included in Free Tier
+
+** There is no Security Groups at the NLB
+
+Attributes that can be changed 
+Delete Protection
+
+------------------------------------------------------------------------
+*** Cross Zone load balancing
+If enabled , each load balancer instance in a AZ will distribute load evenly to all registered instances in all AZs
+CLB (Disabled by Default and No charges  for inter AZ data)
+ALB (Enabled by Default  and can't disabled it and No charges  for  inter AZ data)
+NLB (Disabled by Default and Pay for changers inter AZ data)
+
+* Both ALB and NLB supports sticky sessions
+
+1)  Delete NLB : My-Network-LB
+2)  Delete TargetGroup : TargetGroupForNLB
+3)  Terminates all instances
+
+Target Group
+Target Group (used to group EC2 instances / lambdas/ or set of IP ) for LB to distribute load)
+
+De-registration delay
+*** How long should ELB wait before de-registering a target.
+This setting ensure that the load balancer gives in-flight requests a chance to complete execution
+Default is 300 seconds/ 5 mins up to an hour , also called Connection draining
+eg .it will not entertain new request but wait for 300 sec and then de register the ec2 instance
+
+Slow start duration
+when a target is ready 
+eg. 10 sec after 10 sec it will send request to newly instance
+
+Algorithm
+Round robin 1 by 1
+Least outstanding request 
+
+Stickiness
+enable  (for session mgmt, send all request by a same user to the same instance
+implemented using cookie (stickiness enable unless cookie expired)
+Stickiness supported by both ALB and CLB
+use case: make sure user doesn't lose his session data
+-------------------------------
+Register Targets
+If you register a target in an enabled Availability Zone, the load balancer starts routing requests to the targets as soon as the registration process completes and the target passes the initial health checks.
+
+
+---------------------------AUTO SCALING GROUPS`------------------------------------------------------------
+scale in and scale out automatically to adjust load
+ASG can launch On-demand, Spot OR both
+** Best practice: use Launch template with ASG
+** ALB can adjust and distribute load to healthy instance
+
+AS Can use T2 unlimited burst feature
+
+*** ASG based on CloudWatch Alarms which monitors a  matrix(CPU utilisation)
+***ASG use launch Configurations or Launch Templates (newer)
+** IAM role attached to ASG will get assigned to EC2 instances
+** ASG is free, you pay for underlying resources
+**ASG can terminate instances marked as unhealthy by an ALB
+
+To update ASG, must provide a  new launch template
+
+*** Configure group size and scaling policies
+Desired Capacity   = 2  (optional , if not the DC= Min)  how many we want , Desired capacity or size is the ideal number of instances in that auto scaling group
+Min Capacity 		 = 1
+Max Capacity 		 = 3
+
+basic monitoring for ASG is 300 secs from console and is free
+detailed monitoring for ASG is 60 secs from console and is not free
+
+Can put EC2 instance manually to stand by (still part of ASG and changed but no traffic will come to it, use for software upgrade)
+**ASG doesn't perform Health Check on instances on stand by state
+
+* Cool down period
+Helps to ensure that your ASG doesn't launch or terminate additional instances before the previous scaling activity takes effect
+A scaling specific cool down period overrides the default cool down period
+
+It is always recommended to create a scale-in event for every scale out event
+** Launch Configuration once created can't be edited 
+
+*** Even  if policy indicates, ASG ensure the desired capacity 
+**ASG uses Alarms and Policies to determine scaling
+
+MANUAL SCALING
+
+1) maintained current instance levels at all times
+min=max=desired == CONSTANT
+when always there is constant load expected
+
+2) Scale Manual
+change desired capacity as needed
+you need complete control over scaling 
+
+3) Scale based on schedule / predictive scaling/cyclic 
+programs with regular schedules
+Create Schedule Action
+
+4) Dynamic/Automatic Scaling 
+On demand Scale for unpredicable load
+
+
+TYPES OF DYNAMIC SCALING
+
+1) Target Tracking
+Modify current capacity based on the target value for a specific metric
+
+Need to keep/maintain CPU utilisation at 70%
+Example of AC  
+I need temp to be maintained at 20%
+
+Cool down  period
+ignore alarms within this time duration and will not create a new ec2 instance
+
+Warm up period
+wait for EC2 instance to start for this time
+
+
+2) Simple Scaling
+more complex policy
++5 if CPU utilisation > 80%
+-3 if CPU utilisation < 60%
+
+** waits for cool down period before triggering additional actions
+
+3) Step Scaling (adding steps)
++1 if CPU utilisation between 70% and 80%
++3 if CPU utilisation between 80% and 100% 
+- 1 if CPU utilisation between 40% and 50% 
+
+Warm up time can be configured for each instance.
+
+** Here cool down period will Not work in Step Scaling Policy
+
+* Because the ASG has been configured to leverage the ALB health checks, unhealthy instances will be terminated
+* The metric "requests per minute" is not an AWS metric, hence it needs to be a custom metric
+* Network Load Balancers expose a public static IP, whereas an Application or Classic Load Balancer exposes a static DNS (URL)
+* SNI (Server Name Indication) is a feature allowing you to expose multiple SSL certs if the client supports it.
+* The Default Termination Policy for ASG. It tries to balance across AZ first, and then delete based on the age of the launch configuration. 
+
+---------------- AUTO SCALING SCENARIOS----------------------------
+
+1) change instance type or size of ASG instances
+OR 
+roll out a new security patch (new AMI) to all ASG instances.
+Sol:
+*** launch configuration or launch template cannot be edited
+create a new version and ASG use that  version
+Terminate instances in small groups to make sure application is available
+
+2)  Perform actions before instance added/remove
+Create a lifecycle hook , 
+configure cloudwatch to trigger actions based on it
+
+3) which instance is terminated first when scale in
+based on termination policy
+default is distribute instances across AZ then based on old instance
+
+4) Prevent Frequent scale up/down
+**Adjust cool down period to a high value (default 300 sec /  5 mins)
+
+5) I want to protect newly launched instance from scale-in (terminate)
+Enable instance scaling protection
+if enabled then all new instances from this ASG will not be scale in
+
+*** To scale a resource other than EC2, you can use the Application Auto Scaling API, 
+which allows you to define scaling policies to automatically scale your AWS resources or schedule one-time or recurring scaling actions.
+
+AWS Auto Scaling is enabled by Amazon CloudWatch, so service fees apply for CloudWatch and your application resources (such as Amazon EC2 instances, Elastic Load Balancing load balancers, etc.).
+
+*** ASG Termination Policy
+1) Find AZ which has most no. of instances
+2) If there are multiple instances in a AZ, delete the one with oldest configurations
+
+
+------------------------------------Availability-------------------------------------------------------------
+
+Are applications are available when users need them
+Percentage of time
+99.99% is four 9s availability
+
+99.95% 	22 mins down time in a month
+99.99%   	4.5 mins
+99.9995 	26 seconds 
+
+To achieve Availability
+
+1) use LB
+2) deploy EC2 instances to multiple AZ's
+3) use cross Zone LB
+4) Deploy to multiple region
+5) configure EC2 and ELB health checks
+
+*** ALB by default enabled Cross Zone LB
+CLB and NLB it need to be enabled
+
+
+----------------Elastic Load Balancer Advance------------------------------------------------------------------
+
+-------------SSL/TLS - basis-------------------------------
+
+SSL Certificate (in-flight encryption)
+TLS Transport Layer Security , is new version of SSL
+SSL certificates are issued by CA ie Symantec,Comodo
+
+for Https we need to install ssl or tls certificates on the server
+in AWS SSL certificates can be managed using AWS Certificate Manager
+
+** ELB requires X.509 certificates (ssl/tsl)
+
+Client -> ELB 		HTTPS
+ELB -> EC2          HTTP
+
+Network LB TLS Termination
+Client -> NLB  TLS
+NLB -> EC2    TCP
+
+-------------Server Name Indication----------------------------------
+** Allows multiple SSL certificates onto one web server to sever multiple websites
+newer protocol and require client to indicate the hostname of the target server in the initial SSL handshake
+
+Client 
+ALB (SSL1, SSL2) based on request will get the appropriate certificate 
+ie for each rule we can have different certificate
+
+** SNI Only works for ALB and NLB
+
+Each listener in ALB can be associated with multiple SSL certificates (one for each website)
+and SNI ServerName Indication is automatically enabled
+its extension to TLS
+
+--Monitoring ELB logs and Headers -------------------------------
+
+ELB --> Action
+Edit LB attributes
+Access logs 
+
+** NLB allows EC2 instances to see client details like IP but not ALB in request header
+
+X-Forwarded-For      Client IP
+X-Forwarded-Proto   Originating protocol
+X-Forwarded-Port     Originating port
+
+**** IMP ALB VS NLB VS CLB read again
+
+----------ELB Connection Draining --------------------
+*** It is the time to complete "In-Flight Requests " while the instance is de-registering or unhealthy
+
+For CLB it is Connection Draining
+For ALB and NLB , Its De-registration Delay at Target Group
+
+
+-------------IMP LB SCENARIOS --------------------------------------------------------------------------------------
+
+1)maintain sticky session
+enable stickiness on ELB (cookie name normally: AWSELB)
+
+2)distribute load only yo healthy instances
+configure health
+
+3) configure load among 2 AZ in the same region
+Enable cross zone load balancing
+
+4)  in-flight request to unhealthy instances to given opportunity to complete
+*** Enable connection draining 
+
+5) warm up time to EC2 instances before getting load
+configure health check Grace Period
+
+6) protect EBL from web attacks, sql injection, cross-site-scripting
+* integrate ELB with WAF web application Firewall
+
+7) Protect web app from DDoS attacks 
+* by default ELB provide it
+
+-----------Architectural Considerations ----------------------------------------
+
+Security
+use security groups to restrict traffic
+EC2 instances in private VPC (should not accessible out side AWS network)
+Use dedicated hosts when u have regulatory needs
+
+Performance
+right instance family
+appropriate placement groups
+prefer custom AMI to install software using user data 
+choose right ELB for you use case
+
+Cost
+optimal no. and type of EC2 instance family
+use right mix of 
+saving , reserved , on demand , spot instances
+
+* Resiliency (how quickly u recover)
+health checks
+cloudwatch for monitoring
+DR , ami copied to multiple regions
+
+warm attach = attaching ENI with EC2 instance is stopped
+
+* spot is the cheapest
+* on demand is the costly
+
+Monitoring EC2 instances
+using 
+CloudWatch
+basic monitoring every 5 mins Free
+CPU,Disk,Network are tracked by cloudwatch
+
+** CW doesn't have access to OS system metric like memory consumption
+
+1) install cloudwatch agent on ec2
+2) use cloudwatch collected plug-in
+---------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 

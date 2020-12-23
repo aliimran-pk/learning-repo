@@ -17,8 +17,7 @@ compute CPU,GPU
 t2.micro
 t is instance family (t is General purpose instance)
 2 is generation 
-micro size
-Family Generation Size
+micro size (Family Generation Size)
 
 nano<micro<small<medium<large<xlarge
 
@@ -103,8 +102,8 @@ curl -s http://13.234.77.166/latest/dynamic/instance-identity/document > /var/ww
 1) EC2 instance metadata service 
 get details about EC2 instance
 
-URL accessible within he EC2 instance only
-http://url/lates/meta-data/
+URL accessible within the EC2 instance only
+http://url/latest/meta-data/
 
 curl http://ec2-13-234-77-166.ap-south-1.compute.amazonaws.com/latest/meta-data/ami-id/
 curl http://13.234.77.166/latest/meta-data/hostname
@@ -184,7 +183,6 @@ if application gives "connection refused" then its an app error
 Referencing Other Security Groups 
 *SG can reference other SG instead of IP ranges 
 
-AZ are in is
 this helps guarantee that multi AZ won't all fail at once (due to a meteorological disaster for example). 
 
 "Organisations" does not exist in IAM
@@ -424,10 +422,10 @@ image,speech,nlp recognition
 ----------------------------------------------Launch Template userdata-------------------------------------------------------
 
 Use launch templates to automate instance launches, simplify permission policies, 
-and enforce best practices across your organization. Save launch parameters in a template 
-that can be used for on-demand launches and with managed services, including 
-EC2 Auto Scaling and EC2 Fleet. Easily update your launch parameters by creating a 
-new launch template version.
+and enforce best practices across your organization. 
+Save launch parameters in a template  that can be used for on-demand launches and with managed services, including 
+EC2 Auto Scaling and EC2 Fleet. 
+Easily update your launch parameters by creating a new launch template version.
 
 EC2 --> Launch templates --> Create launch template
 

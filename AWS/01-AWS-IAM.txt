@@ -13,7 +13,7 @@ You are responsible for
 
 PAAS (platform as a service)
 use a PLATFORM provided by cloud
-eg EBS Elastic Beanstalk
+eg Elastic Beanstalk
 
 alternative to PAAS
 CAAS (container as service)container instead of applications
@@ -54,7 +54,8 @@ Regions and Zones
 AWS Regions are separate geographic areas that AWS uses to house its infrastructure, 23
 The closer your region is to you, the better, so that you can reduce network latency as much as possible for your end-users.
 A region is a cluster of data centres
-Each Region consists of multiple, isolated locations known as Availability Zones and each Availability Zone runs on its own physically distinct, independent infrastructure
+Each Region consists of multiple, isolated locations known as Availability Zones and each Availability Zone runs on its own
+ physically distinct, independent infrastructure
 
 Most Services are Regional ie specific to a particular region
 
@@ -136,7 +137,8 @@ allow access to aws compute instances
 ------------------------------------------------------------------------------------------------------
 
 AWS Federation
-Identity federation is a system of trust between two parties for the purpose of authenticating users and conveying information needed to authorize their access to resources
+Identity federation is a system of trust between two parties for the purpose of authenticating users and conveying
+ information needed to authorize their access to resources
 **centrally managed to access AWS resources
 single sign on
 SAML security access markup language 
@@ -256,7 +258,8 @@ You can enable and disable an IAM user's access keys via the IAM APIs, AWS CLI, 
 You can organize users and groups under paths, similar to object paths in Amazon S3—for example /mycompany/division/project/joe.
 All limits are on the AWS account as a whole
 
-A role does not have long term security credential, i.e., password or security key. Instead, if the user uses a role, temporarily security credentials are created and provided to the user.
+A role does not have long term security credential, i.e., password or security key. 
+Instead, if the user uses a role, temporarily security credentials are created and provided to the user.
 You can use the roles to delegate access to users, applications or services that generally do not have access to your AWS resources.
 
 https://codingbee.net/aws-csa-associate/aws-iam-groups-and-roles
@@ -265,6 +268,7 @@ A better approach is to group together all the permissions. This grouping of per
 ****Then there is a conflict like this, then the DENY PERMISSIONS have the final say.
 
 We can't assign polices to aws services directly like we did with groups
+
 if EC2 needs to talk to S3
 Assign a role to EC2 (ie  the role is create for what service, select the AWS service   ) 
 and give policy (select S3 policy Full Access) to access S3 to that role
@@ -325,11 +329,18 @@ Public can read
 cross-account access: user access resource directly from is aws account
 subset of  services supported
 
-An AWS managed policy is a standalone policy that is created and administered by AWS. Standalone policy means that the policy has its own Amazon Resource Name (ARN) that includes the policy name
-An inline policy is a policy that's embedded in an IAM identity (a user, group, or role). That is, the policy is an inherent part of the identity. You can create a policy and embed it in an identity, either when you create the identity or later.
+An AWS managed policy 
+is a standalone policy that is created and administered by AWS. 
+Standalone policy means that the policy has its own Amazon Resource Name (ARN) that includes the policy name
+
+An inline policy is a policy that's embedded in an IAM identity (a user, group, or role). 
+That is, the policy is an inherent part of the identity. 
+You can create a policy and embed it in an identity, either when you create the identity or later.
 
 Good to read the diagram
 https://docs.amazonaws.cn/en_us/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+
+
 --------------------------IAM Scenarios-----------------------------------------------------------------------------------------------
 
 1) How to rotate access keys without causing problem
@@ -352,10 +363,9 @@ IAM allow you to create a password policy
 Account Setting --> Set pwd policy
 
 ** An IAM role can be added to a already running EC2 instance, immediate effective
-** An IAM role is not associated with IAM user
-** An IAM role is not associated with long term credentials
+** An IAM role is not associated with IAM user and not for  long term credentials
 
-when a user , resource or an application Assume a Role, it is provided with temporary credentials
+when a  resource or an application Assume a Role, it is provided with temporary credentials
 -----------------------------------------------------------------------------------
 Amazon STS , Security Token Service
 ** Allows to grant limited and temporary access to AWS resources
@@ -375,7 +385,7 @@ AWS recommend Congnito for this
 GetSessionToken
 For MFA from a user or AWS account root user
 
-**accessing production app in another account (prod) using dev account
+**Accessing production app in another account (Prod Account) using Dev account
 admin create role and provide read/write to S3 in production account
 admin  creates dev group and assign permission to that group in dev account to assume the role
 when user request to access the role, STS return role credentials
@@ -408,8 +418,10 @@ RootOU
 
 centralized compliance mgmt for AWS config rules
 Send AWS CloudTrail Data to one S3 bucket (across accounts)
+
 **AWS Firewall Manager to manage firewall rules across organization accounts
 WAF,Shield Advance  protection, security groups
+
 **Service Control policies SCPs to define restrictions across accounts
 eg. 
 prevent users from disabling AWS config or rules
@@ -565,4 +577,17 @@ Centralized auditing with CloudTrail
 
 Free service
 ------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 

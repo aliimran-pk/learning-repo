@@ -229,7 +229,7 @@ S3: large blob, not a file system
 EFSL scale  IOPS based on total size
 FSx for lustre: HPC optimized distributed file system, millions of IOPS, backed by S3
 
-4) Automation and Orchestration
+ 
 
 AWS Batch
 supports multi-node parallel jobs which enables run single jobs that span multiple EC2 instances

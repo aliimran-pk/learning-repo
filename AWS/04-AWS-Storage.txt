@@ -22,6 +22,7 @@ Amazon FSx for Luster (high performance use cases)
 
 
 EC2 instances support two types for block level storage 
+
 1) Amazon Elastic Block Store 
 2) Instance store
 
@@ -136,71 +137,7 @@ HDD Hard Disk Drive
 low cost
 Large streaming or big data workloads
 Not recommended for boot volumes
-
------- EBS SSD Types---------------
-*** IO performance increases with size
-IOPS increases per GB up to a limit 
-
-1) General Purpose SSD (gp2)
-** cheap
-** balance price and performance for transactional workloads
-small/medium DB dev env
-recommended for most workloads
-** system boot volumes
-virtual desktops
-** low latency interactive apps
-1 GB - 16TB (16386 GB)
-burst IOPS to 3000
-Max IOPS 16000
-
-*** IOPS are decrease/increased with value of Size
-**  3 IOPS per GB
-
-2) Provisioned IOPS SSD (io1)
-** expensive
-** critical business application
-more than 16000 IOPS per volume, max 32000
-*** 4GB to 16TB
-low latency transactional workloads
-large relational or nosql db
-** high performance at high cost
-
-Lower latency refers to a minimal delay in the processing of computer data over a network connection.
-Latency is the amount of time a message takes to traverse a computer network. It is typically measured in milliseconds
-
-EBS HDD Types
-
-1) Throughput Optimised HDD (st1)
-** Frequently accessed,
-** Throughput intensive sequential workloads
-**  MapRequce,Kafka, log processing , DWH and ETL
-500 GB - 16TB , 500 MB/s throughput
-
-2) Cold HDD (sc1)
-*** infrequent data access, eg very low transaction databases
-lower cost
-250 GB - 16TB , 250 MB/s
-
-Imp
-196. Step 12 - Comparing Four EBS Storage Types
-
-IOPS = input output operations per second
-Is the standard unit of measurement for the maximum number of reads and writes
-
-I/O is the number of accesses to the disk
-IOPS is I/O per second.
-Throughput is the amount of info you read in each I/O
-
-if you have a big mouth (big throughput), then you will need less bites and less I/O
-Use cases:
-
-Work loads -> usually General Purpose Volume
-Databases -> usually IOPS (small data but frequently retrieved)
-Big Data / Data warehouses -> usually Throughput ( big data files)
-Cold HDD -> Cold File Servers (lowest IOPS before moving to Magnetic)
-
-* Only gp2 and io1 can be used as boot volume
-
+O
 
 --------------- EBS SNAPSHOT------------------------------------
 

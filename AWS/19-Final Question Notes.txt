@@ -1727,5 +1727,629 @@ Use Centralized VPC Endpoints for connecting with multiple VPCs, also known as s
 Amazon EC2 Instance store for maximum performance, Amazon S3 for durable data storage, and Amazon S3 Glacier for archival storage - 
 For high I/O performance, instance store volumes are a better option
 
+--------------------------DATABASES--------------------------------------------
+
+**Create snapshot from standby DB so that performance will not impact
+
+99.95% 22 mins in a month
+99.99% 4 9's 4 and .5  mins in a month
+99.999% 5 9's 26 sec in a month
+11 9's durability means store 1 million files for 10 million years, you would expect to lose 1 file
+
+Increase Availability
+standbys in Multiple AZ and Multiple Regions
+
+Increase Durability 
+Multiple copies of data (standby,transaction logs, replicas) in multiple Az and Regions
+
+very small data loss (RPO 1 min)
+very small data loss (RTO 5 min)
+Hot Standby (automatically sync data, failover),standby ready
+
+very small data loss (RPO 1 min)
+downtime can be tolerate (RTO 15 min)
+Warm Standby (automatically sync data,standby with min infra)
+
+Data is critical (RPO 1 min)
+
+
+Scenario 
+
+Create read replica in multiple regions
+
+Consistency 
+data is updated simultaneously in (standbys and replicas)
+
+Strong Consistency
+sync replication to all replicas , will be slow if u have multiple replicas/standbys
+
+Eventual Consistency
+
+Amazon RDS 
+***  Recommended AWS Service Aurora (based on PostgreSQL)
+
+OLAP
+*** analyse petabytes of data
+*** Recommended AWS Service  Redshift based on PostgreSQL
+*** use columnar storage
+
+Document Databases
+*** data stored as set of documents (whole json)
+schema-less   semi structure data
+adv. horizontal scaleable to TB with ms response million of TPS
+***  Recommended AWS Service  DynamoDB
+
+*** Key-value
+use simple key-value pair 
+key is unique, value can be obj or simple data values
+adv. horizontal scaleable to TB with ms response million of TPS
+***  Recommended AWS Service  DynamoDB
+useCase: shopping cart,gaming apps, v. high traffic web apps
+
+Graph DB
+store and navigate data with complex relationships
+eg fraud detection , fb, social networking data 
+***  Recommended AWS Service  Neptune
+
+In Memory Databases
+*** microsecond latency
+storing persistent data in memory
+Recommended AWS Service
+*** Redis  for persistent data
+Memcached for simple cache
+use cases: session management, geospatial apps
+
+DB Scenarios
+
+***  A start up with quickly evolving tables  ElastiCache
+DynamoDB
+
+*** Transaction app need to process millions of TPS
+DynamoDB
+
+Very high consistency of data required while  processing thousands of TPS
+*** RDS
+
+Cache data from db for a web app
+ElastiCache
+
+Relational DB for analytical processing of Petabyte of data
+***  RedShift
+
+--------- Amazon RDS--------------------------------------------------------------------------
+RDS is a managed service
+** Multi AZ deployments (standby in another AZ) for DR
+Storage backed by EBS
+But you can't ssh in the underlying EC2 of RDS
+
+* Amazon Aurora (postgreSQL + MySQL) not for free tier
+PostgresSQL
+MYSQL (InnoDB storage engine full support)
+MariaDB (enhanced mysql for enterprises)
+Oracle DB
+Microsoft SQL Server
+
+** Read Replica
+Same AZ, Multi AZ, Cross Region
+Auto scaling storage
+
+Automated backup
+
+You cannot 
+** ssh in db ec2 instance or setup custom software
+
+*  ----------- Multi AZ Deployments ------------------
+Mainly used for Disaster Recovery
+** Standby created in a diff AZ with one DNS name  for failover
+Synchronous replication ** No downtime when DB is converted to MultiAz
+apply patches at standby and then switch primary with standby
+** standby is automatically deleted when u delete the DB
+* Read Replicas can be setup as Multi AZ for DR
+
+* ----------------- Read Replicas ------------------------------
+RR used to scale your read
+use case: reporting, DWH
+** can be in same AZ , diff AZ or diff Region
+Can Create read replicas of a read replica
+** use Async replication (eventually consistency ie with delay)
+** Read Replicas and Manual Snapshots are Not deleted when DB is deleted , needs to delete it manually
+** Must to enable automatic backups before creating read replicas
+
+Max No of replicas
+* MySQL,mariaDB,PostgresSQL, Oracle = 5
+Aws Aurora = 15
+SQL Server not supported read replicas
+
+** There is Network Cost when data goes from one AZ to another AZ
+DB and Read Replica  if  Within same  AZ  = Free
+
+RDS -Security and Encryption
+
+1) At Rest Encryption
+** through IAM and SG
+	encrypt master and read replica with AWS KMS - AEC-256 encryption
+** Encryption has to be defined at launch time
+* If master is not encrypted, the read replica can't be encrypted
+Transparent Data Encryption TDE is available for Oracle and SQL server
+
+2) In flight Encryption
+SSL certificates to encrypt data to RDS  in flight
+To enforce SSL
+PostgresSQL : rds.force_ssl=1
+MySQL : GRANT USAGE ON *.* TO 'mysqluser'@'%' REQUIRE SSL;
+
+* when Encryption is enabled data in database ,automated backups, read replicas and snapshots are all Encrypted
+
+**  snapshots (backups) of un-encrypted RDS databases are un-encrypted
+** snapshots (backups) of encrypted RDS databases are encrypted
+
+To Encrypt an un-encrypted RDS database
+create a snapshot of  un-encrypted  db
+copy the snapshot and enable encryption for the snapshot
+restore the database from encrypted snapshot
+migrate application to new db and delete old db
+
+** RDS databases are usually deployed within a private subnet
+*** ** IAM policies help control who can manage AWS RDS through RDSAPI ie 
+who can create db, delete db
+
+IAM Authentication
+** works with MySQL and PostgreSQL only
+no need password, just a token obtained through IAM and RDS API calls
+valid for 15 mins
+
+RDS Costs
+
+1) DB instance hours
+**  2) Storage per GB per month  , you provisioned and not usage
+
+
+----------------------------------RDS-Amazon Aurora ------------------------------------------
+
+** It is propriety of AWS and not open sourced
+AWS cloud optimized and claim 5X performance over MySQL and 3X over Postgres
+** Storage automatically grow inclemently of 10GB up to 64GB
+** 15 replicas
+Instance failover
+** Cost is 20% less than RDS but is efficient
+
+** it maintains 6 copies of  your data across 3 AZ
+* Read Replicas can be Global 
+*** replication + self healing + auto expanding  
+it creates cluster of volumes spread across multiple AZ 
+***Primary instance  read/write to cluster vol and Replicas read from cluster volume
+
+***provides Global database options (multiple regions)
+
+Aurora Support for Cross Region replication
+
+use case:
+same as RDS but with less maintenance / more flexibility / more performance
+
+Deployment Option
+
+3) Aurora Serverless
+Automated DB instantiation and auto scaling
+***No need to provide the size and capacity planing
+* good for infrequent, irregular and unpredictable workloads
+*** pay per second and can be more cost effective
+
+GLOBAL  AURORA
+
+1) Cross Region Read replicas
+use for DR
+
+
+***2) Aurora Global Database (recommended)
+
+1  Primary Region (read + write)
+up to 5 secondary (read-only ) regions, replication lag < 1 second
+up to 6 read replicas per secondary region
+*** RTO < 1 min for DR in other region
+
+--------------------------------------------------------------------------------------------------
+
+RDS Scaling
+* Normally manual scale up to 64TB 
+
+Autonomic backup during backup windows in S3 , default retain 7 days, max 35 days
+***Achieve RPO up to 5 mins
+
+When to use RDS
+***1) pre-defined schema
+***2) where strong transactional capabilities and complex queries required
+
+RDS is Not  recommend for 
+Highly scalable massive read/write eg. millions of writes/sec  (go for DynamoDB)
+Upload files using Get/PUT Rest API (use S3)
+Heavy customisation for DB or need to access underlying EC2 (Go for custom DB installation)
+
+*** Migrate on-premise database to cloud database of same type
+AWS Database Migration Service
+
+Migrate data from one DB engine to other
+*** use AWS Schema Conversion tool
+
+reduce Global latency and improve DR
+***use multi region read replica
+
+Billed if DB is stopped 
+*** Only for storage, IOPS , backups and snapshots
+Not billed for DB instance hours
+
+Need RDS for an year, reduce cost 
+*** use RDS reserved instances
+
+Efficiently manage DB connections
+*** use AWS RDS Proxy
+sits b/w client app (including lambda) and RDS
+
+------------------AWS ElasticCache-------------------------------------------
+
+Managed Service
+* Highly scalable and low latency in-memory KeyValue data store (* can't use SQL)
+*sub millisecond latency
+** u can store in memory data in EC
+
+** Must provision an EC2 instance type , NOT serverless
+
+* WRITE scaling using sharding
+* READ scaling using Read Replicas
+
+* Multi AZ with failover as a distributed caching solution
+*point in time restore feature
+ 
+ *** Don't support IAM authentication
+  ElasticCache supports  Redis AUTH
+  can you enhance the security of your Redis cache to force users to enter a password?
+ can set password/token when u create a redis cluster
+  
+** Redis and Memcached are two Custer engine for ElasticCache
+ 
+1) Redis (in memory persistence data store)
+* Multi AZ deployments with automatic failover
+* durability using AOF persistence
+*  supports backup (in S3) and restore
+* Can be used as database
+
+In case of Failure:
+Primary node is replaced, if Multi-AZ replication group is enabled, read replica is promoted to primary
+
+* publish subscribe messaging  (act as a  message broker)
+read replicas and failover support
+encryption support
+
+2) Memcached (pure caching sol)
+** Non persistent cache
+distributed , Multi Node for partitioning of data (sharding)
+** ideal for front end for data stores like RDS and DynamoDB
+can be used as a Transient  session store
+create up to 20 cache nodes
+Low maintenance simple caching solution
+Easy auto scaling
+Cluster Engine : Memcached
+
+Limitations
+** No backup or  restore supported
+** No encryption or replication or snapshot
+** when node fails, all data in that node is lost 
+reduce impact of failure by using Large no. of small small nodes
+
+Patterns for ElasticCache
+
+1) Lazy Loading
+all read data is cached, data can become stale in cache
+
+2) Write Through
+add or update data in cache when written to DB (No stale data)
+
+3) Session Store
+store temporary session data in cache using TTL feature
+
+
+------------------------ AWS DynamoDB --------------------------------------------------------
+
+Fully managed , HA, fast, scalable DISTRIBUTED  NoSQL DB for any scale
+** schema less ** NoSQL key value and document based
+** 3 replica in a single region
+
+Single-digit millisecond latency at any scale.
+millions of requests per seconds and trillions of rows , 100s TB of storage
+Low cost and auto scaling capability
+No need to create  a Database
+** Here create a table directly and configure RCU and WCU Read capacity unit
+max item size = 400KB
+Provides a expensive serverless  mode
+** Application which required milli second latency but at v high scale
+
+** Enables event driven programming with DynamoDB streams
+Throughput can be extended temporary using "burst credits"
+"ProvisionedThroughputException" when burst credits are empty so it is advised to do exponential back-off retry
+* can only query on primary key, sort key or indexes
+*** Can replace ElasticCache as key/value store for storing session data
+
+** DynamoDB NewFeatures
+
+1) Supports Transactions across multiple tables
+include up to 10 unique items or up to 4 MB of data
+
+2) On Demand
+**  2.5X more expensive than provisioned capacity
+useful in case of un predictable spikes or application is v low throughput
+
+Security 
+VPC endpoints available to access DynamoDB without internet
+Access controlled by IAM 
+Encryption at rest KMS, Encryption in Transit SSL/TSL
+
+Backup and restore
+** point in time restore like RDS
+
+Migrate to Dynamo DB using DMS (from MongoDB Oracle,MySWL,S3)
+
+** Global Tables
+**  Enable you to use DynamoDB as fully managed , multi region, multi-master database to create global table , 
+** Must enabled dynamoDB streams for creating Global tables
+
+Active Active replication , in many regions
+useful for DR 
+CRUD in one Global table automatically reflected in to other table of different region and vice versa
+
+** connect DynamoDB streams to Lambda functions whenever an item in the table is modified , a new
+
+** partition key is mandatory for search
+can't search using only sort key
+
+partition key + sort key = composite pk
+
+DynamoDB Indexes
+
+Local Secondary Index
+Same partition key  as of Primary Key but different sort key
+Should be created at the table creation
+
+Global Secondary Index
+Partition and sort keys are diff from Primary Key
+Can be added or removed at any point in time
+stored separately from original table
+
+Query VS Scan
+
+Query
+search using partition key (PK or Index) and a distinct value to search
+Max 1 MB result returned
+
+SCAN
+read every item in a table
+** expensive 
+
+Consistency Levels
+** Eventually consistent (1 sec lag by default)
+
+
+** **  In DynamoDB, strongly consistent reads are expensive than eventually consistent reads
+
+Provisioned
+** Recommended
+** provision read and write capacity
+** Billed for provisioned capacity  irrespective of whether you used it or not
+
+On Demand
+** Truly serverless and expensive
+For unknown workloads or traffic with Huge spikes
+
+** Dynamo DB RCU and WRC
+Capacity used depends on size of item, read consistency , transnational etc
+
+** On Demand RCU is 8 times the cost of Provisioned RCU
+
+IAM and Encryption
+Server side encryption with KMS keys is Always enabled (automatically encrypt tables, streams and backups)
+
+Client Side encryption
+DynamoDB Encryption Client
+
+Use IAM roles to provide EC2 instances or AWS services access to DynamoDB tables
+
+DynaymoDB
+** milli sec latency with millions TPS but lower Consistency
+Difficult to run complex queries
+** No upper limit
+
+RDS
+** stronger consistency and transactional capabilities
+SQL Queries
+** Good to run complex queries
+** upper Limit 64TB
+
+-----------------** DynamoDB Accelerator (DAX)----------------------------------------------------------------------------
+
+** In memory cache for DynamoDB
+microsecond response time
+
+Applications --> DAX -->. DynamoDB
+
+can reduce your costs by saving our read capacity units (lambda reads from DAX rather than hitting DynamoDB)
+solves Hot key problem (too many reads)
+*** 5 mins TTL
+Multi AZ min 3 
+Secure , encryption at rest via KMS,VPC,IAM,cloudTrail
+
+Not Recommanded
+if u need strongly consistent reads
+application is write intensive with very few reads
+
+DynamoDB -> DAX 
+create cluster
+*** Encryption is recommended
+
+-------------------** DynamoDB Streams--------------------------------------------------------------------------
+
+Changes in DynamoDB (Create,update,delete) can end up in a DynamoDB stream
+** each event from DynamoDB  (in a time sequenced order) is buffered  in a stream near real-time
+This  stream can be read from AWS lambda 
+* could implement cross region replication using streams
+* streams has 24 hrs of data retention
+
+EC2 -> DynamoDB -> DynamoDB Streams -> Lambda -> SNS
+use case: send email when user registered
+
+--------------------------------------------------------------------------------------------
+S3 is a key/value store for objects like a DB
+Great for big objects (5 TB) and not for small objects
+serverless
+--------------------------------------------Neptune----------------------------------------------------------
+
+Fully managed Graph database
+High relationship data 
+social networking , Wikipedia
+HA across 3 AZ with 15 read replica
+
+ ----------------------Redshift----( Relational database)----------------------
+
+Redshift is a petabyte-scale distributed data ware house  
+*based on PostgresSQL
+*  Redshift is a
+*OLAP 
+10X better performance than other DW
+pay as you go based on instances provisioned
+from 1 node to 128 nodes, up to 160GB per node
+
+* Redshift spectrum: perform queries directly against S3 (but not server less like Athena)
+* Redshift Enhanced VPC routing, copy/unload goes through VPC and not internet
+
+*1) MPP massive parallel processing
+storage and processing b/w multiple nodes
+*2) Columnar data storage
+*3) High data compression
+ie city column
+
+A single row data might be stored across multiple nodes
+* A query to redshift leader  node is distributed to multiple compute nodes
+
+** supports standard SQL
+* automatic replication (3 copies of data)
+* automatic backup (S3 , default retention 1 day, max 35 day)
+** Configure Redshift to automatically copy snapshot of a cluster to another Region
+
+Redshift cluster
+
+*Leader node
+received sql queries and distributed to compute nodes
+
+* Compute Nodes
+can be in multiple AZ
+no direct access to leader nodes
+
+
+* Loading data in Redshift
+
+Simple
+SQL insert queries using ODBC and JDBC
+
+Efficient
+*  Redshift COPY command to load data from S3,DynamoDB, EMR
+
+On premise data
+* user Storage gateway or import/export data into S3 
+COPY data from S3
+
+Recommendation
+prefer COPY over INSERT for bulk operations as COPY is parallel and INSERT is sequential
+prefer COPY from multiple files. split into multiple small input files
+
+Managing Redshift workload (WLM)
+used to categorize your queries 
+create queues and put  queries in it
+
+Redshift Security
+
+integrates with AWS KMS or AWS Cloud HSM
+
+IAM to manage user permission for cluster operations
+
+** Redshift Spectrum
+Run sql queries against datasets in S3 Without loading it
+*Query is then submitted to thousands of Redshift Spectrum Nodes
+** Must have a Redshift cluster available to start unlike Athena
+Avro,parquet, csv,json formats supported
+
+** Eliminate expensive data transfer from S3 to data warehousing solutions (cost effective) 
+Integrates with AWS Athena
+Query against EMR
+
+--------------------AWS Elasticsearch-----------------------------------------------------------------------------------------------------------
+
+Managed service around Elasticsearch
+support ELK stack
+Elasticsearch
+logstach to inject data
+Kibana for dashboard visualization
+use case: 
+fast search
+app/server  monitoring get intelligence from you logs
+
+eg. In DynamoDB we only search by PK or indexes
+With ElastiSearch, you can search any field , even partial matches
+
+
+---IIMP--------------***   RDS for Solution Architect w.rt  well Architected 5 pillars-------------------------------------------------------------------------------
+
+1) Operations
+small downtime when failover happ
+scaling in read replicas/ec2 instance
+DynamoDB:No ops needed, auto scaling and serverless
+S3: No operation required
+Athena: serverless
+Redshift: same as of RDS
+Neptune: same as of RDS
+ElasticSearch:  same as of RDS
+
+2) Security
+OS security by AWS
+we will do setting KMS SmG,IAM polices , SSL
+ElastiCache: use Redis Auth 
+DynamoDB:IAM,KMS,SSL
+S3: IAM,Bucket Policy,ACL,Encryption
+Athena: IAM + S3 security
+Redshift: same as of RDS
+Neptune: same as of RDS + IAM
+ElasticSearch: Cognito, IAM,VPC,KMS, SSL
+
+3) Reliability
+Multi AZ , failover in case of failure
+Aurora: Serverless 
+ElastiCache: Multi AZ,Clustering
+DynamoDB:Multi AZ,Backup
+S3: high durability and availability , multi AZ and CRR
+Athena: managed service, use Presto engine, High available
+Redshift: HA and Auto healing features
+Neptune: Multi AZ, Clustering
+ElasticSearch: multi AZ, clustering
+
+4) Performance
+depends on EC2 instance type, EBS volume type 
+ability to Read replica
+Doesn't auto scale 
+Aurora: 5X faster up to 15 Read Replica
+ElastiCache: sub millisecond, in memory, read replicas for sharding
+DynamoDB: single digit millisecond, DAX for caching reads
+S3: scales to thousands of read/writes, Transfer acceleration , multi part for big files
+Athena:query scale based on size
+Redshift: 10X faster than other DWH solutions, support Compressions
+Neptune: best for graph clustering 
+ElasticSearch: open source, petabyte scale
+
+5) Cost
+Pay per hour based on EC2 and EBS
+\Aurora: pay per hour based on EC2, cost less than enterprise db like Oracle
+ElastiCache:  Pay per hour based on EC2 and EBS
+DynamoDB: Pay per capacity and storage unit, no need to guess capacity in advance
+S3: pay per storage,network cost , no. of requests
+Athena:pay per query/per TB data scanned, serverless
+Redshift: pay per node provisioned, 1/10 of cost vs other DWS
+Neptune: pay per node as RDS
+ElasticSearch: pay per node as RDS
+
 
 

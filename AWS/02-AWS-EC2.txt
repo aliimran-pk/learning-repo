@@ -713,3 +713,45 @@ scale up/down
 
 High Availability
 run instances for the same application across multi AZ
+
+
+
+---------------------EC2 Reserved instances ------------------------------
+Reserve E2 instances ahead of time
+
+when u have constant workloads that run all the time
+3 types
+
+1) STANDARD
+In a region, i reserve EC2 instance with a specific platform,instance type for a term of 1 or 3 years.
+**can switch to other instance sizes within the same instance family ie t2.micro to t2.small,large
+AZ can also be changed
+Instance family , OS or tenancies (shared/dedicated) CAN'T be changed
+up to 75% off
+
+2) CONVERTIBLE (with  some flexibility)
+
+In a region, i reserve EC2 instance for a term of 1 or 3 years.
+can switch to other instance sizes within the same instance family ie t2.micro to t2.small,large
+AZ can also be changed
+Instance family , os or tenancies (shared/dedicated) CAN be changed
+up to 54%
+
+3) SCHEDULED
+in a region, i reserve an EC2 instance par-time for a year, x hour every month/week/day at a specific time
+*** restriction: available in few instance types C2,R3,C4,M4 in few regions 
+use case: bill are generated on the first day of month
+5 to 10%
+
+** You can also sell reserved on AWS reserved instance marketplace if you don't want to use your reservation.
+
+PAYMENT
+1) 0 upfront, pay monthly instalment
+2) partial upfront ,
+3) All upfront, 0 instalment 
+all upfront < partial upfront < No upfront (a diff up-to 5 %)
+
+Saving Plans
+Constant workloads that 
+
+https://www.ec2instances.info/

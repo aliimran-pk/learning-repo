@@ -28,37 +28,6 @@ Auto Scale Group
 Distribute load : ELB , Route53(for multiple regions)
 ELB is managed so no need to think about its scaling
 
-Tenancy Options
-shared vs dedicated
-
-default is shared
-
-EC2 dedicated instances
-** virtualised instances on hardware dedicated to a customer
-no visibility into the hardware of underlying host
-billing per instance
-
-**EC2 dedicated hosts
-**physical servers dedicated to one customer
-regular needs, high security
-**billing per host
-server bound software licences like windows server, sql server
-
-Elastic Network Interface (ENI)
-like a virtual network interface card
-**primary ENI is by default and can't be detached
-ENI lives in one subnet and thus in a single AZ
-one primary private IPV4 and one or more secondary PV4
-one Elastic IPv4
-one public IP IPV4
-one or more security groups mac address
-ipv6
-
-No. of EC2 instances = No. of ENI
-
-EC2 Partition Placement Group
-In large distributed and replicated workloads (HDFS, HBase, and Cassandra), EC2 instances need to be divided into multiple groups.
-
 -----------------------------------------------------------------------------------
 Load Balancers are the servers that forward internet traffic to multiple servers
 single point of entry DNS
@@ -176,63 +145,6 @@ Your load balancer routes requests to the targets in this target group using the
 ***Note that each target group can be associated with only one load balancer
 
 
---------TARGET GROUP------------------------------------------------------------------------------------------------------------
-
-Target Group (used to group EC2 instances / lambdas/ or set of IP ) for LB to distribute load)
-name: My-EC2-Target-Group1
-type: instances
-
-De-registration delay
-*** How long should ELB wait before de-registering a target.
-This setting ensure that the load balancer gives in-flight requests a chance to complete execution
-default is 300 seconds up to an hour , also called Connection draining
-eg .it will not entertain new request but wait for 300 sec and then de register the ec2 instance
-
-slow start duration
-when a target is ready 
-eg. 10 sec after 10 sec it will send request to newly instance
-
-Algorithm
-Round robin 1 by 1
-Least outstanding request 
-
-Stickiness
-enable  (for session mgmt, send all request by a same user to the same instance
-implemented using cookie (stickiness enable unless cookie expired)
-supported by ALB and CLB
-use case: make sure user doesn't lose his session data
--------------------------------
-
-Security Group : My-LB-Security-Group
-
-Register Targets
-Register targets with your target group. 
-If you register a target in an enabled Availability Zone, the load balancer starts routing requests to the targets as soon as the registration process completes and the target passes the initial health checks.
-
-select all instances - Create
-DNS Name
-http://My-Application-LB-284230688.ap-south-1.elb.amazonaws.com
-
-
-To restrict traffic of EC2 instances directly instead of Load Balancer
-
-Select EC2 instance 
-Edit Security Group
-Inbound Rule
-Add Load Balancer Security group
-
-Add a new Listener
-port 8080
-response 200
-fixed response
-
-Security Group of LB
-add inbound
-8080
-
-http://My-Application-LB-284230688.ap-south-1.elb.amazonaws.com:8080
-
-
 --------------------User data for Microservice-----------------------------------------------------------------------------------------------
 
 ** One ALB can support multiple Microservice
@@ -325,6 +237,65 @@ Access log eg. sent to S3
 3)  Terminates all instances
 
 * Both ALB and NLB supports sticky sessions
+
+
+--------TARGET GROUP------------------------------------------------------------------------------------------------------------
+
+Target Group (used to group EC2 instances / lambdas/ or set of IP ) for LB to distribute load)
+name: My-EC2-Target-Group1
+type: instances
+
+De-registration delay
+*** How long should ELB wait before de-registering a target.
+This setting ensure that the load balancer gives in-flight requests a chance to complete execution
+default is 300 seconds up to an hour , also called Connection draining
+eg .it will not entertain new request but wait for 300 sec and then de register the ec2 instance
+
+slow start duration
+when a target is ready 
+eg. 10 sec after 10 sec it will send request to newly instance
+
+Algorithm
+Round robin 1 by 1
+Least outstanding request 
+
+Stickiness
+enable  (for session mgmt, send all request by a same user to the same instance
+implemented using cookie (stickiness enable unless cookie expired)
+supported by ALB and CLB
+use case: make sure user doesn't lose his session data
+-------------------------------
+
+Security Group : My-LB-Security-Group
+
+Register Targets
+Register targets with your target group. 
+If you register a target in an enabled Availability Zone, the load balancer starts routing requests to the targets as soon as the registration process completes and the target passes the initial health checks.
+
+select all instances - Create
+DNS Name
+http://My-Application-LB-284230688.ap-south-1.elb.amazonaws.com
+
+
+To restrict traffic of EC2 instances directly instead of Load Balancer
+
+Select EC2 instance 
+Edit Security Group
+Inbound Rule
+Add Load Balancer Security group
+
+Add a new Listener
+port 8080
+response 200
+fixed response
+
+Security Group of LB
+add inbound
+8080
+
+http://My-Application-LB-284230688.ap-south-1.elb.amazonaws.com:8080
+
+
 
 ---------------------------AUTO SCALING GROUPS`------------------------------------------------------------
 
@@ -649,81 +620,5 @@ CPU,Disk,Network are tracked by cloudwatch
 1) install cloudwatch agent on ec2
 2) use cloudwatch collected plug-in
 
----------------Launch A spot instance ---------------------------------
-
-EC2  --> Choose instance type --> configure instance
-
-Purchasing option --> Request Spot instances
-
-Maximum price: 	
-The maximum price you are willing to pay per instance hour. 
-Your instance runs when your maximum price is greater than the Spot Price
-
-Persistence request: 
-Ensures that your request will be submitted every time your Spot Instance is terminated. 
-
-EC2 > Spot Requests > Request Spot Instances 
-
-for spot block use below option
-Defined duration workloads Launch instances into a Spot block for 1 to 6 hours.
-
-for spot fleet use below option
-Load balancing workloads Launch instances of the same size, in any Availability Zone. Good for running web services.
-
-Fleet request settings
-
-EC2 Linux Spot instances - Pricing
-
-Zero charge if terminated or stopped by Amazon EC2 in the first instance hour (60 mins)
-otherwise u will be changed by seconds
-
-terminated/stopped after 50 mins by Amazon = you pay 0
-terminated/stopped after 50 mins by you = you pay for 50 mins
-terminated/stopped after 70 mins by you/Amazon = you pay for 70 mins
 
 
-when interrupted, spot instances can be terminated (default),stopped and hibernated
-
-** Completely close a spot request  in the following order for best practice
-1) cancel spot request  (only this can't terminate active spot instances)
-2) terminate all spot instances
-
----------------------EC2 Reserved instances ------------------------------
-Reserve E2 instances ahead of time
-
-when u have constant workloads that run all the time
-3 types
-
-1) STANDARD
-In a region, i reserve EC2 instance with a specific platform,instance type for a term of 1 or 3 years.
-**can switch to other instance sizes within the same instance family ie t2.micro to t2.small,large
-AZ can also be changed
-Instance family , OS or tenancies (shared/dedicated) CAN'T be changed
-up to 75% off
-
-2) CONVERTIBLE (with  some flexibility)
-
-In a region, i reserve EC2 instance for a term of 1 or 3 years.
-can switch to other instance sizes within the same instance family ie t2.micro to t2.small,large
-AZ can also be changed
-Instance family , os or tenancies (shared/dedicated) CAN be changed
-up to 54%
-
-3) SCHEDULED
-in a region, i reserve an EC2 instance par-time for a year, x hour every month/week/day at a specific time
-*** restriction: available in few instance types C2,R3,C4,M4 in few regions 
-use case: bill are generated on the first day of month
-5 to 10%
-
-** You can also sell reserved on AWS reserved instance marketplace if you don't want to use your reservation.
-
-PAYMENT
-1) 0 upfront, pay monthly instalment
-2) partial upfront ,
-3) All upfront, 0 instalment 
-all upfront < partial upfront < No upfront (a diff up-to 5 %)
-
-Saving Plans
-Constant workloads that 
-
-https://www.ec2instances.info/

@@ -2444,6 +2444,39 @@ CLB and NLB it need to be enabled
 
 ----------------Elastic Load Balancer Advance------------------------------------------------------------------
 
+When ELB is detached, it enters the Removing state while deregistering the instances in the group.
+Instances remain running after they are deregistered from the ELB
+
+When one AZ becomes unhealthy or unavailable, Auto Scaling launches new instances in an unaffected AZ
+Elastic Load balancer can be setup to distribute incoming requests across EC2 instances in a single AZ or multiple AZs within a region
+
+Auto Scaling group can be associated with a load balancer enabled to use the Elastic Load Balancing health check, 
+Auto Scaling determines the health status of the instances by checking the results of both EC2 instance status and Elastic Load Balancing instance health.
+After registering one or more load balancers with the Auto Scaling group, Auto Scaling group can be configured to use ELB metrics (such as request latency or request count) to scale the application automatically
+
+Auto Scaling marks an instance unhealthy and launches a replacement if
+
+    the instance is in a state other than running,
+    the system status is impaired, or
+    Elastic Load Balancing reports the instance state as OutOfService.
+
+When the instance is terminated, any associated Elastic IP addresses are disassociated and are not automatically associated with the new instance.
+Elastic IP addresses must be associated with the new instance manually.
+Similarly, when the instance is terminated, its attached EBS volumes are detached and must be attached to the new instance manually
+
+
+When this situations occur, Auto Scaling chooses the policy that has the greatest impact i.e. provides the largest capacity for both scale out and scale in on the Auto Scaling group for e.g. 
+if two policies are triggered at the same time and Policy 1 instructs to scale out the instance by 1 while Policy 2 instructs to scale out the instances by 2, 
+Auto Scaling will use the Policy 2 and scale out the instances by 2 as it has a greater impact
+
+Note that if an instance becomes unhealthy, Auto Scaling does not wait for the cooldown period to complete before replacing the unhealthy instance.
+
+Instance protection controls whether Auto Scaling can terminate a particular instance or not.
+Instance protection can be enabled on a Auto Scaling group or an individual instance as well, at any time
+
+When the instance is in the standby state, instance can be updated or used for troubleshooting
+If a load balancer is associated with Auto Scaling, the instance is automatically deregistered when the instance is in Standby state and registered again when the instance exits the Standby state
+
 -------------SSL/TLS - basis-------------------------------
 
 SSL Certificate (in-flight encryption)
@@ -2559,6 +2592,440 @@ CPU,Disk,Network are tracked by cloudwatch
 1) install cloudwatch agent on ec2
 2) use cloudwatch collected plug-in
 ---------------------------------------------------------------------------------------------------------
+
+------------STORAGE----------------
+
+Types of Storage 
+
+1) Block Storage
+One or multiple different block storage  device can be connected to one virtual server
+Direct Attached Storage: like HD, SAN
+High speed network
+ie used by DB , oracle and SQL server
+
+2) File Storage
+* Shared with multiple virtual servers, Many to Many
+user need a  quick way to share files 
+Amazon Elastic file server EFS (Linux instances)
+Amazon Elastic file server EFx (Windows instances)
+Amazon FSx for Luster (High performance use cases)
+
+--------------------------------------------------------------------------------------------
+
+EC2 instances support two types for block level storage 
+
+1) Instance Store
+2) EBS
+
+-------------1) Instance stores-----------------------------------------------
+
+*** Physical attached to the host computer where EC2 instances are available
+** data lost when hardware/instance fail or instance stop/terminate and not on Reboot
+used for temporary data (Ephemeral Storage), cache or scratch files
+Only some EC2 instance types supports Instance store, c5 dlarge
+
+Advantages
+v fast I/o,  No extra cost  , ideal for storing temporary info
+
+DisAdvantages
+** Can't resize the instance store, *** Size is fixed based on instance type
+Low boot up up to 5 mins
+Cannot take a snapshot or restore
+Cannot attach/detach to other EC2 instance
+
+
+---------------2) Elastic Block Store (EBS)-----------------------------------------------
+
+** Network Storage (not a physical device)
+**  Attached to EC2 instance as a network drive
+More durable *** EBS volumes preserve their data through instance stops and terminations, 
+Provisioned capacity, Highly Flexible increase size when u need
+Can be  attach/detach to other EC2 instance
+*** 999s availability and replicated within same AZ
+**  EBS is Locked to a AZ , to move volume across to other AZ , you first need to snapshot it
+*** EBS Volumes in an availability zone CAN ONLY be attached to EC2 instances in the SAME AZ
+
+***UseCase: run your own database
+***Require Network to communicate to the instance , means a little latency
+*** We billed for provisioned capacity (GBs and IOPS)  and Not for usage
+root volume is where OS is stored and it is available by default
+multiple volumes can be attached to an EC2 instance
+
+
+**  A volume to be deleted needs to be first detached But we can't detached a root volume
+
+
+SSD Solid State Drive
+**  Transactional workloads
+** recommended for boot volumes
+
+HDD Hard Disk Drive
+** Good at  small,random I/O
+low cost
+Large streaming or big data workloads
+Not recommended for boot volumes
+
+-------------------------------------------------------
+
+------------------------------ EBS SSD Types---------------
+
+1) General Purpose SSD (gp2)
+** cheap  balance price and performance for transactional workloads
+** system boot volumes
+** low latency interactive apps
+
+small/medium DB , Dev env
+recommended for most workloads
+
+1 GB - 16TB 
+burst IOPS to 3000 , Max IOPS 16000
+
+*** IOPS are decrease/increased with value of Size
+**  3 IOPS per GB
+
+2) Provisioned IOPS SSD (io1)
+** Expensive
+** Critical business application
+more than 16000 IOPS per volume, max 32000
+*** 4GB to 16TB
+low latency transactional workloads
+Large relational or nosql db
+** high performance at high cost
+
+------------------------------ EBS HDD Types---------------
+
+1) Throughput Optimised HDD (st1)
+** Frequently accessed,
+** Throughput intensive sequential workloads
+**  MapRequce,Kafka, log processing , DWH and ETL
+500 GB - 16TB , 500 MB/s throughput
+
+2) Cold HDD (sc1)
+*** infrequent data access, eg very low transaction databases
+lower cost
+250 GB - 16TB , 250 MB/s
+
+
+IOPS Is the standard unit of measurement for the maximum number of reads and writes per second
+Throughput is the amount of info you read in each I/O
+if you have a big mouth (big throughput), then you will need less bites and less I/O
+Use cases:
+
+Work loads -> usually General Purpose Volume
+Databases -> usually IOPS (small data but frequently retrieved)
+Big Data / Data warehouses -> usually Throughput ( big data files)
+Cold HDD -> Cold File Servers (lowest IOPS before moving to Magnetic)
+
+* SSD, Only gp2 and io1 can be used as boot volume
+
+--------------- EBS SNAPSHOT------------------------------------
+
+** backup of EBS volume
+Can Cnahge Volume type and size even it is attached with an EC2 instance
+Point-in-time snapshots (stored in S3) Aysnc process but Can't accessed directly from S3 but from EC2 API
+
+** Snapshots are incremental
+*** We can't loose data if we delete older snapshot
+*** snapshot can be shared with other accounts / public
+*** max 100,000 snapshots per account
+** can make Images AMI from snapshot
+
+EBS Migration
+*** EBS Volumes are constrained to  AZs
+So to move a volume to another Region, create snapshot of it,copy it to other region,create volume from this copied snapshots in that new region
+
+*** LifeCycle Manager (automated backup solution for EBS volumes) 
+Schedule and manage creation and deletion of EBS snapshots
+
+----EBS Encryption-----------
+
+using AWS KMS ** AES-256
+
+Turning on encryption automatically encrypts
+Data at rest
+data vols, boot vols and snapshots
+Data in Transit
+b/w EC2 and EBS
+b/w EBS and EBS snapshots
+
+Enable encryption at 
+*** When EC2 instance is created you can 
+*** When copy a snapshot 
+** when copy an AMI
+
+When you create an encrypted EBS volume
+data at rest is encrypted inside the volume
+all data in flight moving b/w instance and vol is encrypted
+all snapshots are encrypted
+all volumes created from those snapshots are encrypted
+
+Encryption has minimal impact on latency
+
+*** How to encrypt an unencrypted volume
+create EBS snapshot of this vol
+Encrypt the snapshot using copy (in same region or in order region)
+create new EBS vol from this snapshot (which is now encrypted)
+attach this encrypted volume to the original instance
+
+Getting faster I/O Performance b/w EC2 and EBS
+
+1) Launch EC2 as "EBS Optimised Instances" during instance creation
+2) Enhanced Networking through "ENA Elastic Network Adapter" , increase throughput
+3) Using EFA "Elastic Fabric Adapter" , HPC, Only for Linux
+
+EC2 Life Cycle
+Hibernate  max 60 days
+data in memory is persisted in EBS volume
+Only ebs backbend instances can be stopped or hibernated
+
+ ----------EBS Raid Options -------------
+
+RAID
+redundant array of independent disks
+raid is possible as long as your OS supports it
+
+**RAID 0 (to increase performance)
+** Higher IOPS or storage is required
+combining 2 or more volumes and getting the total disk space 
+
+use when I/O performance is more important
+** Using this we can have a very big disk with lot of IOPS
+eg. for a database which has already replication enabled
+
+Dis Adv
+When fault tolerance is not reburied
+issue is,  data  can be lost if one disk fail
+
+eg two 500 GB EBS io1 vol with 4000 IOPS can create
+1000GB RAID 0 with available bandwidth 8000 IOPS and 100 MB/s throughput
+
+RAID 1 (to increase fault tolerance)
+when Higher Durability is required
+Data is duplicated as data write to both volumes called Mirroring
+use case: 
+eg two 500 GB EBS io1 vol with 4000 IOPS can create
+500GB RAID 1 with available bandwidth 4000 IOPS and 500 MB/s throughput
+
+RAID 5 and RAID 6 is not recommended for EBS
+
+-------- EBS SCENARIO-------------------------------------------------------------------------
+
+1) use an AMI belonging to a different AWS account or in diff region
+a) Owner of AMI provides read permission to AMI
+b) for encrypted AMI, owner should share encryption keys
+c) copy AMI to the other regions
+
+If u don't have permissions to copy AMI but have permission to use it 
+Sol:  
+create EC2 instance from that AMI 
+create new AMI from EC2 instance and copy it 
+
+***  2) Can I attach EBS volume in us-east-1a to EC2 instance in us-east-1b (Diff AZ in same region)
+No, it should be in SAME AZ as of EC2 instance
+
+3) Attach multiple EBS volume to an EC2 instance
+Yes
+
+*** 4) Attach an EBS volume to two EC2 instances (at the same time)
+No
+
+5) Switch EBS vol from EC2 to another EC2
+** Yes, detach and attach
+
+6) Will an EBS volume be immediately available when attached to an EC2 instance ?
+**Yes, however , by default data is lazily loaded
+
+7) How to endure EBS vol is deleted when EC2 is terminated
+Enable delete on termination
+
+8) Retain EBS vol even if EC2 backed instance fail
+On termination all data on root is lost even if EBS backed
+so detach EBS vol before terminating the instance and recover data by connecting 
+it to another EC2 instance
+use snapshot
+
+9) How to Create EBS volume from EBS volume in diff AZ in same region
+**create snapshot
+create EBS volume from that snapshot and select diff AZ
+
+10) How to Create EBS volume from EBS volume in diff Region 
+take a snapshot
+copy snapshot to other region
+create EBS volume in other region
+
+11) Lowest cost option to maintain snapshots with EBS
+*** store just latest snapshot and delete others
+
+12) how to encrypt and unencrypted EBS volume
+can't do directly
+*** create a snapshot from this volume
+***create vol from this snapshot with encryption
+
+13) how to automate the complete lifecycle
+***** use EBS- Amazon Data LifeCycle Manager
+creation, retention and deletion  of EBS snapshots
+
+--------------------------EFS--------------------------------------------------------
+
+ELASTIC FILE SYSTEM
+
+Network File System for Linux instances , POSIX filesystem
+*** Can attach a EFS with multiple EC2 (May be in diff Az ) but in a single Region
+Petabyte scale , Auto scaling shared file system
+Highly available , Highly Scalable more Expensive (3 X gp2), pay per use
+** Compatible with Amazon EC2 LINUX based instances only
+uses NFS v4.1 protocol
+Uses SG to control access to EFS
+Encryption at rest using KMS
+use "Max I/O Mode" for higher throughput (with small latency) 
+use case: home dirs, file share, content mgmt, media workflows
+
+EFS -Performance and Storage Classes
+
+EFS Scale
+1000s of concurrent of NFS clients , 10GB/throughput
+General  purpose (default) , web server, CMS
+Max.I/O higher latency, throughput, high parallel (big data , media processing)
+
+Storage Tiers (lifecycle management feature- move file after n days)
+
+(EFS-IA ) EFS Infrequent Access  
+Cost saving , cost to retrieve files , lower price to store
+
+1) Amazon FSx Windows (File Server)
+** fully managed windows file system share drive
+** SMB service message block and NTFS protocol 
+Microsoft AD integration
+*** File system data is automatically encrypted at rest and in-transit
+*All File sharing options are accessible on AWS or on premises
+can be  configured to be Multi AZ (for HA)
+Data is backed up daily to S3
+build on SSD
+
+*** 2) AMAZON FSx FOR LUSTRE (Linux and cluster)
+*** its a File system Optimised for Performance
+** HPC high performance computing
+machine learning, media processing , Financial modelling
+** Seamless Integrates with S3
+POSIX complicit
+File system data is automatically encrypted at rest and in-transit
+can be used from on premise servers
+
+
+----------------EBS VS EFS ----------------------------------
+** EBS is mount to single AZ, attached to one instance at a time
+** EFS is mount to multiple AZ
+In EBS for auto scaling , you need to provisioned disk and charge for it
+In EFS just add files and charged for those files like S3
+
+
+-----------------------Storage Gateway -------------------------------------------------
+
+AWS Storage Gateway is a Hybrid cloud storage service that gives you on-premises access to virtually unlimited cloud storage
+
+Storage Gateway is the Bridge b/w on-premise and cloud data in S3
+Unlimited storage with good performance
+VM Image with storage gateway software deployed on-premises
+
+Storage Gateway and S3 glacier encrypt data by default
+
+3 types of Storage Gateway
+
+1) *Storage File Gateway
+2) *Storage Tape Gateway
+3) *Storage Volume Gateway
+
+
+1) AWS Storage  File Gateway
+** Store Files as object in S3 with a Local Cache
+** File share (NFS or SMB)  + It benefits from S3 features and integrations
+
+File Gateway deployed as VM on premises
+Bucket access using IAM roles for each File Gateway
+Application feels that they are accessing file system locally but it was S3 using FGW
+
+2) AWS Storage Volume Gateway
+
+*** Move Block Storage to cloud
+** Block storage using iSCSI protocol backed by S3
+Backed by EBS snapshots
+
+** mostly for backup and DR
+migration of application data
+reduce cost
+Backed by EBS snapshots which can help restore on-premise volumes
+
+a) Cached volumes
+**  Primary data stored at AWS S3, on premise cache store frequently accessed data
+
+b) Stored Volume
+High Performance
+** Primary data (entire dataset) store at On premise
+async copy to AWS
+stored as EBS snapshots
+for DR and restore EBS volumes
+
+3) AWS Storage Tape Gateway
+used for archives
+**backup data using existing tape based processes using iSCI
+**VTL Virtual Tape Library backed by S3 and Glacier
+** no need to change tape backup infrastructure
+backup data to virtual tapes ie S3 and glacier 
+
+scenarios: want to use an AMI belonging to a diff AWS account or a diff Region
+** AMI are restricted to a region
+
+File Storage used for HPC High performance computing  is Amazon FSx for Lustre
+
+File gateway- Hardware Appliance
+** helpful for daily NFS backups in small data centres
+
+----------------------------------------------- Moving Data b/w AWS and on-premises------------------------------------------------------------------------------
+
+1) S3 transfer Acceleration
+*** when transferring less data up to few TB
+***basic option
+***uses cloudFront edge locations
+Enable S3 transfer acceleration and use endpoints
+
+2) AWS Snowball
+Transfer dozes of TB to Petabyte from on-premises
+***physical shipping
+KMS 256 bit encryption
+(80 TB usable) per appliance
+*** choose snowball if data transfer takes more than a week based on your network connection
+data loaded in S3 and snowball is completely wiped
+
+3) Snowball Edge
+*** supports custom lambda function*** add Computational capability to the device
+compute optimised / storage optimized
+use case: pre-process the data while moving
+
+4) AWS Snow Mobile (truck)
+petabyte of data
+** 100 PB storage per truck
+data is automatically encrypted with KMS (AES-256)
+1 EB = 1000 PB = 1000,000 TB
+use case: when to transfer more than 10 PB
+
+Snowball into Glacier
+Not directly
+***  First import into S3 and then use S3 lifecycle policy
+
+5) AWS DataSync 
+*** Transfer File Storage to cloud
+*** Move large amount of data from on-premise to AWS
+*** Secure
+*** 10 X faster of TB to/from AWS Over internet or AWS Direct Connect
+*Transfer from on Premise File storage (NFS,SMB) to S3, EFS,FSx for Windows
+* EFS to EFS  in diff regions using DataSync Agent installed in EC2 instances
+
+Integration with AWS storage Gateway for ongoing update
+use case: Data Migration,replication and clod data archival
+
+Alternatively, use S3 transfer acceleration if apps integrated with S3 AP1 
+
+-------------------------------------------------------------------------------------------
 
 
 

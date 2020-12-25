@@ -3645,19 +3645,3 @@ Athena:pay per query/per TB data scanned, serverless
 Redshift: pay per node provisioned, 1/10 of cost vs other DWS
 Neptune: pay per node as RDS
 ElasticSearch: pay per node as RDS
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

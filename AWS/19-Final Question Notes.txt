@@ -1,3 +1,17 @@
+---------------Key Tips ---------------
+
+Highlight keywords 
+Build Architectural sketch based on requirements in the Mind
+Now look what is required at the last line in a question
+Skip Wrong answers
+Prefer AWS new services 
+In case of Tie, go with cost optimised solution
+Skip multi choice question and do it in the end to save time
+Mark all questions which you think are of doubt
+If both solutions seems feasible , skip the one which is complicated
+
+
+
 See Network Related Images
 
 ----------------------------------------------------------------------------------------------------1 -----------------------------------------------------------------------------------------------------------------------
@@ -947,7 +961,9 @@ AWS customers are welcome to carry out security assessments or penetration tests
 With MySQL, authentication is handled by AWSAuthenticationPlugin—an AWS-provided plugin that works seamlessly with IAM to authenticate your IAM users
 
 ** To enable your Lambda function to access resources inside your private VPC, you must provide additional VPC-specific configuration information 
-that includes VPC subnet IDs and security group IDs.
+that includes 
+VPC subnet IDs 
+Security group IDs.
 
 An origin is the origin of the files that the CDN will distribute. Origins can be either an S3 bucket, an EC2 instance, and Elastic Load Balancer, or Route 53 – can also be external (non-AWS).
 For RTMP CloudFront distributions files must be stored in an S3 bucket.
@@ -1025,7 +1041,7 @@ CloudHSM is used for key management and storage but not distribution
 - Snapshots of encrypted volumes are encrypted automatically.
 - EBS volumes restored or created from encrypted snapshots are encrypted automatically.
 
-AWS DataSync can be used to move large amounts of data online between on-premises storage and Amazon S3, Amazon EFS, or Amazon FSx for Windows File Server.
+AWS DataSync can be used to move large amounts of data online between on-premises storage and Amazon S3, Amazon EFS, or NAS device  Amazon FSx for Windows File Server.
 The Server Migration Service  SMS is used for migrating virtual machines, not data
 The server migration service is used to migrate virtual machines 
 
@@ -1235,7 +1251,7 @@ is typically used by large distributed and replicated workloads, such as Hadoop,
 
 Cluster – packs instances 
 close together inside an Availability Zone. This strategy enables workloads to achieve the low-latency network performance necessary for
- tightly-coupled node-to-node communication that is typical of HPC applications
+tightly-coupled node-to-node communication that is typical of HPC applications
 
 Spread – strictly places a small group of instances across distinct underlying hardware (racks) to reduce correlated failures.
 
@@ -1357,7 +1373,7 @@ whereas Kinesis Data Streams provides support for real-time processing of stream
 downstream Amazon Kinesis Applications.
 
 Amazon Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service.
- Amazon Route 53 effectively connects user requests to infrastructure running in AWS – such 
+Amazon Route 53 effectively connects user requests to infrastructure running in AWS – such 
 as Amazon EC2 instances – and can also be used to route users to infrastructure outside of AW
 
 By default, Route 53 Resolver automatically answers DNS queries for local VPC domain names for EC2 instances
@@ -1374,7 +1390,7 @@ File Gateway Configuration of AWS (Storage Gateway)  enables you to store and re
 using file protocols such as Network File System (NFS) and Server Message Block (SMB).
 EFS uses the Network File System protocol
 EBS and EFS and S3 does not support SMB protocol
- 
+
 DataSync is natively integrated with Amazon S3, Amazon EFS, Amazon FSx for Windows File Server, Amazon CloudWatch, and AWS CloudTrail, 
 A single DataSync agent is capable of saturating a 10 Gbps network link.
 
@@ -1704,8 +1720,8 @@ Service B should return a static response, a simple alternative to returning an 
 
 
 Use AWS Cost Explorer Resource Optimization to get a report of EC2 instances that are either idle or have low utilization and use AWS Compute Optimizer to look at instance type recommendations
-
 By using Amazon S3 Analytics Storage Class analysis you can analyze storage access patterns to help you decide when to transition the right data to the right storage class. 
+AWS Compute Optimizer recommends optimal AWS Compute resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics
 
 DAX is tightly integrated with DynamoDB—you simply provision a DAX cluster, use the DAX client SDK to point your existing DynamoDB API calls at the DAX cluster, and let DAX handle the rest. Because DAX is API-compatible with DynamoDB, you don't have to make any functional application code changes. DAX is used to natively cache DynamoDB reads.
 
@@ -1718,6 +1734,18 @@ Service account is an account used for programmatic access by applications runni
 To block access of two countries and allow access to home country ?
 use WAF on ALB in a VPC , based on the rules in a web access control list (web ACL,) Geographic (Geo) Match Conditions in AWS WAF allows you to use AWS WAF to restrict application access based on the geographic location of your viewer
 Geo Restriction feature of CloudFront helps in restricting traffic based on the user's geographic location. But, CloudFront works from edge locations and doesn't belong to a VPC
+You can use X-Ray to collect data across AWS Accounts. The X-Ray agent can assume a role to publish data into an account different from the one in which it is running
+Amazon S3 can be used to host the static website. While Amazon CloudFront can be used to distribute the content for low latency access
+
+DAX is tightly integrated with DynamoDB and is preferred over Redis with DynamoDb
+
+
+AWS Data Migration Service supports Amazon S3 as the source and Kinesis as the target, so data stored in an S3 bucket is streamed to Kinesis. 
+
+
+When different application processes simultaneously request a cache key, get a cache miss, and then each hits the same database query for data, it results in the database getting swamped with identical queries. The solution is to prewarm the cache
+
+
 Geo Restriction feature of CloudFront helps in restricting traffic based on the user's geographic location. But, CloudFront works from edge locations and doesn't belong to a VPC
 
 
@@ -1770,4 +1798,228 @@ Use Centralized VPC Endpoints for connecting with multiple VPCs, also known as s
 
 Amazon EC2 Instance store for maximum performance, Amazon S3 for durable data storage, and Amazon S3 Glacier for archival storage - 
 For high I/O performance, instance store volumes are a better option
+
+--------------------------Last Questions Review --------------------------------------------------------------------------------------------------------------
+
+Transit Gateway is a Fully Managed AWS Service(Latest)
+Transit Gateway offers up to 50 Gbps as compared to Transit VPC 1.5 Gbps
+Transit Gateway offers a Simpler Design
+
+An instance store provides temporary Block-level storage for your instance and Faster than EBS
+EFS is good for shared storage with Strong Consistency  having Hierarchical  Data structure  w.r.t S3 as it involves efforts to use S3 API
+OAI to restrict access to content in Amazon S3 but not on EC2 or ALB
+Cross-region replication is an Amazon S3 concept
+
+Using a reduced cool down period will also more quickly terminate unneeded instances, further reducing costs.
+Prefer Target Tracking over step scaling
+
+S3 static website using HTTP Only
+CloudFront can server static content using the HTTPS protocol
+Create a read replica as Multi AZ DB for read performance and HA
+ElastiCache Redis has a good use case for autocompletion
+
+EC2 in diff Subnets and AZ , Feature required at instance-level firewall ?
+Network ACL’s function at the subnet level and Security groups act at the instance level, not the subnet level. 
+Therefore, each instance in a subnet in your VPC can be assigned to a different set of security groups.
+
+You can only create Deny rules with network ACLs, it is not possible with security groups. 
+NACL apply to all EC2 in a Subnet however SG only apply to EC2 which is part of SG
+
+NACL (Deny + Allow Rule)
+Subnet (Only Allow Rule)
+
+Security Patches can force a DB to take down offline during Maintenance widows
+SQS will reduce the risk of writes of database  being dropped
+
+EBS DescribeVolumeStatus 
+The possible values are ok, impaired, warning, or insufficient-data. 
+If all checks pass, the overall status of the volume is ok. If the check fails, the overall status is impaired. 
+If the status is insufficient-data, then the checks may still be taking place on your volume at the time.
+
+You need to enable S3 health check for automate the failover
+The point of an ALB health check is to identify the health of targets (EC2 instances). It cannot redirect clients to another Region
+
+Using S3 pre singed URL, bypasses the web server avoiding any performance bottlenecks  without having any AWS security credentials/permissions
+Using PrivateLink you can connect your VPC to supported AWS services, services hosted by other AWS accounts (VPC endpoint services), and supported AWS Marketplace partner services.
+
+Kinesis Data Stream = Process and Digest data Near real time 
+
+General Purpose SSD gp2 ability to burst to 3,000 IOPS for extended periods of time.
+burst IOPS to 3000 , Max IOPS 16000
+
+Provisioned IOPS SSD (io1)
+> 16000 IOPS
+
+No I/O SLA  available for EBS Cold HDD (sc1) and EBS Throughput Optimized HDD (st1)
+
+For RDS, you create a DB subnet group which is a collection of subnets (typically private)  for more security
+if ALB in public subnet then put EC2 and RDS both in private subnets for better security
+
+An Aurora Replica is both a Standby in a Multi-AZ configuration and a Target for Read traffic. 
+Aurora Replicas are independent endpoints in an Aurora DB cluster,
+
+NAT Gateway Highly available than NAT Instance
+Managed by AWS , hence scaled automatically
+
+short duration and temporary deploy , can tolerate delays not time critical
+Use Spot instance
+
+ON demand is gOod for temporary when you can't tolerate any delays
+
+API call to interact EC2 and S3
+Grant Programmatic access
+Create IAM policy
+With IAM policies, you can grant IAM users fine-grained control to your S3 buckets
+
+Use An Alias record for resolving apex or naked domain names
+
+You can manage a single connection for multiple VPCs or VPNs that are in the same Region by associating a Direct Connect Gateway to a Transit gateway
+For VPCs in the same region a VPG is not necessary
+
+AWS Secure Token Service (STS) and SAML provides SSO
+Amazon Cognito is used for authenticating users to web and mobile apps not for providing single sign-on between on-premises directories and the AWS management console
+
+Use AWS Batch (support MPI) to deploy multi node parallel jobs ( tightly-coupled HPC workload)
+
+Short term Direct Connect connection ?
+Use IPsec VPN and use same BGP
+This is the most cost-effective solution. With this option both the Direct Connect connection and IPSec VPN are active and being advertised using the Border Gateway Protocol (BGP). 
+The Direct Connect link will always be preferred unless it is unavailable.
+
+To add encryption to Direct Connect, use IPsev VPN over Direct Connect
+something you might do to add encryption to Direct Connect
+
+
+– You’ve reached your EBS volume limit.
+– An EBS snapshot is corrupt.
+– The root EBS volume is encrypted and you do not have permissions to access the KMS key for decryption.
+– The instance store-backed AMI that you used to launch the instance is missing a required part (an image.part.xx file).
+
+
+NAT Gateway and Internet Gateway mostly used for d for outbound communications 
+For each private subnet create a corresponding public subnet in the same AZ
+Elastic IP addresses are used in public subnets and not in private subnet to allow Internet access via an Internet Gateway
+You can suspend and then resume one or more of the scalinYg processes for your Auto Scaling group
+
+With an identity pool, users can obtain temporary AWS credentials to access AWS services, such as Amazon S3 and DynamoDB.
+AWS CodeStar is a planning and management service designed for a team of developers working on a project in the Amazon Web Services (AWS) public cloud. building a full CI/CD w
+
+Amazon ElastiCache in-transit encryption is an optional feature that allows you to increase the security of your data at its most vulnerable points—when it is in transit from one location to another
+Redis AUTH command is used when using a password to access the database.
+
+Multi site (active-active) faster> Warm standby(active-passive) > Pilot light (active-passive) > backup
+
+Default SG
+Allow inbound  and outbound traffic from network interfaces that are assigned to the same security group.
+
+Pilot light , most critical is running , a active-passive
+Warm Standby is active-passive
+Multi site is active-active
+
+Faster 
+Warm is faster than Pilot 
+
+Use Elastic Cache for Redis when reading S3 media from Data Center
+use Cloud front when getting media closer to users b
+
+Use Redshift for complex analytics queries from S3
+Firehose used for streaming data and not read from S3
+
+Subnets are mapped 1:1 to AZs.
+Therefore you need 4 subnets – 2 (for redundancy) per public/private subnet.
+Pub Pri AZ1
+Pub Pri AZ2
+
+For Better performance and IOPS
+EBS optimized instances provide dedicated capacity for Amazon EBS I/O
+Provisioned IOPS EBS volumes allow you to specify the amount of IOPS
+
+ALL EBS types supports encryption
+Not all Instance Types support encryption
+There is no direct way to change the encryption state of a volume
+
+Default Security Group
+There is an inbound rule that allows all traffic from the security group itself
+There is an outbound rule that allows all traffic to all addresses
+
+Default Network ACL
+Inbound Deny All
+Outbound Deny All
+
+Amazon DynamoDB auto scaling uses the AWS Application Auto Scaling service to dynamically adjust provisioned throughput capacity on your behalf
+
+To analyse and process data in S3
+Amazon S3 Select is designed to help analyze and process data within an object in Amazon S3 buckets, faster and cheaper
+Or use Redshift Spectrum
+
+A Direct connect Gateway can be associate with
+1) Transit GW when u have multiple VPC in same region
+2) VPN GW 
+
+ElastciCache Redis provides HA and Replication for caching layer
+
+EFS security can be controlled by
+1) POSIX permissions allows you to restrict access from hosts by user and group
+2  EFS Security Groups act as a firewall, and the rules you add define the traffic flow
+
+You can use block device mapping to specify additional EBS volumes or instance store volumes to attach to an instance when it’s launched. 
+You can also attach additional EBS volumes to a running instance.
+
+In a default VPC, instances will be assigned public and private DNS hostname
+In a non-default VPC, instances will be assigned only private DNS
+
+You cannot add a route to an internet gateway to a private subnet route table rather use NAT Gateway
+
+With ALB and NLB IP addresses can be used to register:
+- Instances in a peered VPC.
+- AWS resources that are addressable by IP address and port.
+- On-premises resources linked to AWS through Direct Connect or a VPN connection
+
+CloudTrail is used for auditing not performance monitoring.
+CloudWatch is used for Monitoring
+
+Multi AZ is within AZ
+Cross Region read replicas for multi region database 
+
+Used Reserved for Production application that run continuously
+
+With Enterprise Support plan, you get a Technical Account Manager (TAM), who is your single point of contact to coordinate access to resources and experts
+Trusted Advisor is an online tool that provides real-time guidance to help you provision your resources following AWS best practices. By following recommendations provided by Trusted Advisor regularly, you can provision your resources optimally
+Business and Enterprise Support customers have full access to all Trusted Advisor Checks
+At the minimum, customer should enroll in Business Support plan when running production workloads. Enterprise support is for mission-critical workloads
+Developer Support plan when experimenting and testing 
+
+By combining the results of health checks of your EC2 instances and your ELBs, Route 53 DNS Failover can evaluate the health of the load balancer and the health of the application running on the EC2 instances behind
+
+AWS Global Accelerator, Multi Region , low internet latency and add automatic failover across AWS Regions with anycast IP, 60%
+
+
+Blue/green deployment is a technique for releasing applications by shifting traffic between two identical environments running different versions of the application: "Blue" is the currently running version and "green" the new version. 
+With AWS Global Accelerator, you can shift traffic gradually or all at once between the blue and the green environment and vice-versa without being subject to DNS caching on client devices
+Route 53 do  DNS caching , hence use  Global Accelerator
+
+**  EBS is Locked to a AZ , to move volume across to other AZ , you first need to snapshot it
+*** EBS Volumes in an availability zone CAN ONLY be attached to EC2 instances in the SAME AZ
+
+By default, all DynamoDB tables are encrypted under an AWS owned customer master key (CMK), which do not write to CloudTrail log
+
+If you have objects that are smaller than 1GB or if the data set is less than 1GB in size use CloudFront with S3 otherwise use S3 Transfer accelerator
+
+
+users will be directed to a static error page, configured as a backup,?
+Set up a Route 53 active-passive failover configuration. If Route 53 health check determines the ALB endpoint as unhealthy, the traffic will be diverted to a static error page, hosted on Amazon S3 bucket
+
+For cross-account access, you need to add a policy that has as its Principal (rather than Resource) the AWS account you want to give permissions to.
+
+
+Application Load Balancer can be used to securely authenticate users for accessing your applications to offload the work of applciations and can use Cognito User Pools to authenticate users through well-known social IdP
+
+
+Amazon EC2 instance store for maximum performance, Amazon S3 for durable data storage, and Amazon S3 Glacier for archival storage -
+
+Amazon EC2 Auto Scaling chooses the policy that provides the largest capacity, so policy with the custom metric is triggered, and two new instances will be launched by the ASG
+
+Throttling is the process of limiting the number of requests an authorized program can submit to a given operation in a given amount of time
+Use Amazon API Gateway, Amazon SQS and Amazon Kinesis
+
 

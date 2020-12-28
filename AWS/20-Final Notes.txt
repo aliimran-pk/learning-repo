@@ -232,7 +232,7 @@ Represent flow as a JSON state machine
 build workflows as a series of steps with Retry and invoke multiple aws services 
 1 year duration
 Integrate with API GW,EC2, ECS and on-primise
-No External interventoin allowed
+No External intervention allowed
 Not worked when child process that return values to parent processes
 
 ---------------------------AWS Simple Workflow Service (SWF) (OLD)-------------
@@ -805,7 +805,7 @@ AWS Firewall Manager to manage firewall rules across organisational accounts
 Sample Reference Architecture for DDos Protection
 Client --> Route 53 (AWS shield) -> CloudFront (AWS shield OR WAF) --> VPC -> ALB(Security Group  AWS Shield) in public subnet -> SG(private subnet)
 
--------------------------------------------------------------------------------------------------------------------
+------------------------------------------- Networking ------------------------------------------------------------------------
 
 Max 5  custom VPC in a Region but 1 default VPC
 200 subnets in a VPC
@@ -861,6 +861,7 @@ when we create a custom VPC then below created automatically
 Only private IPv4 created
 
 1 VPC = 1 CIDR
+
 ****Block size must be between /16 and /28
 min /28 = 16 IPS
 max /16 = 65536
@@ -909,6 +910,17 @@ IGW serves two purposes
 1) Provide a Target in VPC route table for internet traffic
 2) Perform Network Address Translation for the instances that have not been assigned public IPV4 addresses
 
+
+------------------Egress Only Internet Gateway--------------------------------
+NAT gateways are not supported for IPv6 traffic, use an outbound-only (egress-only) internet gateway instead. 
+Egress-only Internet gateway is a horizontally scaled, redundant, and highly available VPC component that allows outbound communication over IPv6 from instances in the VPC to the Internet, 
+and prevents the Internet from initiating an IPv6 connection with your instances.
+All IPv6 are public addresses
+therefore all our instances with IPv6 are publicly accessible
+
+**Egress only internet Gateway gives our IPv6 instance access to the internet
+
+
 -----------------------------------------------------------
  Default SG is created when we created a VPC
 allows all outbound traffic and denied all in bound
@@ -922,17 +934,18 @@ MSSQL  Server:1433
 
 ---------------------------------------------------------------------------
 NAT device to enable instances in a private subnet to connect to the internet (for example, for software updates) or other AWS services, but prevent the internet from initiating connections with the instances. 
-A NAT device forwards traffic from the instances in the private subnet to the internet or other AWS services, 
-and then sends the response back to the instances. 
+
+A NAT device forwards traffic from the instances in the private subnet to the internet or other AWS services, and then sends the response back to the instances. 
 When traffic goes to the internet, the source IPv4 address is replaced with the NAT device’s address and similarly, when the response traffic goes to those instances, the NAT device translates the address back to 
-those instances’ private IPv4 addresses
+those instances private IPv4 addresses
 
 NAT comes in 2 flavours
+
 1) NAT Instances (outdated)
 2) NAT Gateway
 
 
--------------------------NAT instances----------------------------------
+-------------------------NAT instances----------------------------------------------------------------------------------
 ***Allow instances in the private subnets to connect to the internet
 ***NAT instance must be launched in a public subnet
 *** Must Disable EC2 flag: source/destination check
@@ -950,11 +963,27 @@ need to create ASG in muti AZ and resilient user-data script
 **Need to manage SG and inbound/outbound rules
 *** Bandwidth depends on EC2 instance
 
-----------------------VPC Endpoint ----------------------
+
+-------------------------------NAT Gateway (latest)------------------------------------------------------------------------------
+* AWS managed NAT, higher bandwidth , better availability , no admin
+** NAT is created in a specific AZ uses Elastic IP, It is resilient within a single AZ
+** Must create multiple NAT Gateway in multiple AZ for fault-tolerance
+You cannot associate a security group with a NAT gateway.
+can't be used by an instance in that subnet (only from other subnets)
+** Requires Internet Gateway (Private subnet -> NAT GW -> IGW)
+5 Gbps with auto scaling up to 45Gbps
+
+pay by the hour for usage and bandwidth
+
+Deleting a NAT gateway disassociates its Elastic IP address, but does not release the address from your account.
+You cannot route traffic to a NAT gateway through a VPC peering connection, a Site-to-Site VPN connection, or AWS Direct Connect
+A NAT gateway supports the following protocols: TCP, UDP, and ICMP.
+
+-------------------------------VPC Endpoint ---------------------------------------------------------
 VPC Endpoints are virtual devices and are horizontally scaled, redundant, and highly available
-*** VPC endpoints make it possible to access AWS services like S3, CloudWatch, DynamoDB 
-within a private network (private subnet) instead of public www network
-Securely connect your VPC to another service
+*** VPC endpoints make it possible to access AWS services like S3, CloudWatch, DynamoDB  within a private network (private subnet) instead of public www network
+
+VPC end point securely connect your VPC to another service
 
 Instances in the VPC do not require public IP addresses to communicate with resources in the service. Traffic between the VPC and the other service does not leave the Amazon network.
 
@@ -967,15 +996,15 @@ Two Types of VPC endpoints
 securely connect to S3 and DynamoDB
 endpoint serves as target in your route table for traffic
 
-2) VPC Interface Endpoint (ENI with Private IP)
+2) VPC Interface Endpoint (ENI with Private IP PrivateLink with SG)
 **securely connect to Aws services other than S3 and DynamoDB
 powered by PrivateLink (keep traffic within AWS network)
 **need ENI (private IP) as entry point for traffic , 
-** must attach security Group
+** Must attach security Group
 
 service A in VPC1 can be accessed by App2 in VPC2
-
 ** Requires a NLB at Service VPC and ENI Elastic Network Interface in Customer VPC
+ 
  If NLB is in multiple AZ and ENI in Multiple AZ, then the solution is Fault Tolerant
 
 ------------VPC Flow Logs ---------------
@@ -988,15 +1017,15 @@ Action: success or failure due to SG/NACL
 if problem with request -> problem with NACL or SG
 if problem with response -> problem with NACL
 
--------AWS and On-Premises ---------------------
+----------------------------------------------------------------------------AWS and On-Premises ---------------------
 
 1) -------Virtual Private Network (VPN)------- ----------------------------------
 called AWS managed VP (Site to Site VPN)
 
 AWS managed VPN consists of two parts
 
-    Virtual Private Gateway (VPG) on AWS side
-    Customer Gateway (CGW) on the on-premises data center
+    1) Virtual Private Gateway (VPG) on AWS side
+    2) Customer Gateway (CGW) on the on-premises data Center
 
 ***IPsec VPN tunnels from VPC to Customer Network over internet
 Encrypted using IPsec protocol
@@ -1004,12 +1033,10 @@ low cost, quick to setup but not reliable because of internet
 
 Virtual Private Gateway are Highly Available as it represents two distinct VPN endpoints, physically located in separate data centers to increase the availability of the VPN connection.
 
-
 Virtual Private Gateway to connect one VPC to customer Network
 Customer Gateway installed in customer network and u need a internet routable IP address of customer gateway
 Use static internet -routable IP address for your Customer Gateway Device
 if behind a CGW behind NAT , use public IP address of NAT 
-
 
 
 -2)--------------------AWS Direct Connect (DC) --------------------------------------------
@@ -1058,28 +1085,6 @@ Customer DC -> VPN - Direct Connect Location
 ** if you want to setup a direct connect from on-premise DC to one or more VPC
 in different regions(same account), you must use  Direct Connect Gateway
 
-
- NAT Gateway (latest)
-* AWS managed NAT, higher bandwidth , better availability , no admin
-** NAT is created in a specific AZ uses Elastic IP, It is resilient within a single AZ
-** Must create multiple NAT Gateway in multiple AZ for fault-tolerance
-You cannot associate a security group with a NAT gateway.
-can't be used by an instance in that subnet (only from other subnets)
-** Requires Internet Gateway (Private subnet -> NAT GW -> IGW)
-5 Gbps with auto scaling up to 45Gbps
-
-pay by the hour for usage and bandwidth
-
-Deleting a NAT gateway disassociates its Elastic IP address, but does not release the address from your account.
-You cannot route traffic to a NAT gateway through a VPC peering connection, a Site-to-Site VPN connection, or AWS Direct Connect
-A NAT gateway supports the following protocols: TCP, UDP, and ICMP.
-
-------------------Egress Only Internet Gateway--------------------------------
-NAT gateways are not supported for IPv6 traffic, use an outbound-only (egress-only) internet gateway instead. 
-Egress-only Internet gateway is a horizontally scaled, redundant, and highly available VPC component that allows outbound communication over IPv6 from instances in the VPC to the Internet, and prevents the Internet from initiating an IPv6 connection with your instances.
-All IPv6 are public addresses
-therefore all our instances with IPv6 are publicly accessible
-**Egress only internet Gateway gives our IPv6 instance access to the internet
 
 ------DNS Resolution in VPC----
 
@@ -1171,9 +1176,8 @@ Transit Gateway abstracts away the complexity of maintaining VPN connections wit
 
 --------------Transit VPC -------------------------------------
 A transit VPC is a common strategy for connecting multiple, geographically disperse VPCs and remote networks in order to create a global network transit center.
-
-A transit VPC is a common strategy for connecting multiple, geographically disperse VPCs and remote networks in order to create a global network transit center.
 A transit VPC simplifies network management and minimizes the number of connections required to connect multiple VPCs and remote networks
+
 Transit VPC can be used to support important use cases 
 
 Private Networking – You can build a private network that spans two or more AWS Regions.
@@ -3645,3 +3649,4 @@ Athena:pay per query/per TB data scanned, serverless
 Redshift: pay per node provisioned, 1/10 of cost vs other DWS
 Neptune: pay per node as RDS
 ElasticSearch: pay per node as RDS
+

@@ -1306,7 +1306,7 @@ AES-256 encryption type
 2) SSE-KMS (key management service)
 
 ** Must set header:  "x-amz-server-side -encryption":"aws:kms"
-KMS uses customer master keys (CMKs) to encrypt the S3 objects.
+KMS uses CUSTOMER master keys (CMKs) to encrypt the S3 objects.
 ** With SSE-KMS you let AWS manage the encryption keys but you have full control of the key rotation policy
 
 3) SSE-C

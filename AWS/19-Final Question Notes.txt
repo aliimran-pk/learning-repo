@@ -1,18 +1,79 @@
+
+
+There are several methods of connecting to a VPC.
+
+1----------- AWS Managed VPN-----------------
+
+AWS Managed IPsec VPN connection
+quick , simple , static routes, BGP peering
+depend on internet
+VPN GW at AWS and Customer GW on-premise
+
+2----- AWS Direct Connect-------------------------------------------
+Dedicated network connection over private line string to AWS
+predictable connection
+use virtual interfaces  VIFS from onpreimse to private VIFs 
+
+3----- AWS Direct Connect plus a VPN--------------------------
+IPsec VPN connection over Direct line
+secure
+
+4------ AWS VPN CloudHub----------------------------------
+if you have multiple branch offices and existing internet connections
+Assgin multiple Customer GW to Virtual Private GW each with their 
+On BGP ASN and unique IP
+
+
+5---------------- Software VPN--------------------------------
+You provide your own VPN endpoint and software
+both sides of your Amazon VPC connectivity by creating a VPN connection between your remote network and a software VPN appliance running in your Amazon VPC network.
+
+6 -----Transit VPC ---------------------------------------------------------------------------
+
+common strategy for connecting geographically dispersed VPC and location to
+create a global network
+multiple region
+
+7-------- VPC Peering------------------------
+mulitple vpc need to commincate each other without traversing internet
+can poosible inter region vpc peering
+data is encrypted
+
+
+8 ----------------- AWS PrivateLink----------------------------------------------------
+
+
+
+• VPC Endpoints
+
+
 ---------------Key Tips ---------------
 
-Highlight keywords 
-Build Architectural sketch based on requirements in the Mind
-Now look what is required at the last line in a question
-Skip Wrong answers
-Prefer AWS new services 
-In case of Tie, go with cost optimised solution
-Skip multi choice question and do it in the end to save time
-Mark all questions which you think are of doubt
-If both solutions seems feasible , skip the one which is complicated
+Hi All
+
+Please to share that I have passed Amazon Web Services Certified Solutions Architect – Associate exam.
+
+Thank you Neal Davis and Stephane Maarek for their wonderful courses and practice tests.
+
+Test was tough though I managed it timely :).
+
+Here are some tips and tricks I applied during the exam that might helpful for test takers.
+
+•	Highlight keywords in the question.
+•	Build an Architectural sketch based on requirements in the Mind.
+•	Now look, what is required at the last line in a question.
+•	Skip Wrong answers.
+•	Prefer AWS new services over legacy.
+•	In case of  an tie, go with cost optimised solution.
+•	Skip multi-choice question, mark them and do it in the end to save time.
+•	Mark all questions which you think are of doubt and review in the last.
+•	If both solutions seems feasible , skip the one which is complicated.
+
 
 
 
 See Network Related Images
+Stogae Neal Devis Cheat key
 
 ----------------------------------------------------------------------------------------------------1 -----------------------------------------------------------------------------------------------------------------------
 Use ElastiCache Memcached for
@@ -190,7 +251,7 @@ Creating an IAM role in the PROD AWS Account and adding DEV AWS Account as a tru
 General Purpose SSD 		  - System boot volumes and transactional workloads
 Provisioned IOPS SSD 		  - Transactional workloads needing very high IOPS (up to 64,000 IOPS per volume)
 Throughput Optimized HDD  - Frequently accessed, large sequential operations with high throughput (cost-sensitive)
-Cold HDD 						  - Infrequent access use cases (minimum cost)
+Cold HDD 						  			- Infrequent access use cases (minimum cost)
 
 Redshift Workload Management
 WLM can be configured to PRIORITIZE QUEUES
@@ -313,15 +374,15 @@ AWS Storage Gateway is a hybrid cloud storage service that gives you on-premises
 The service provides three different types of gateways – 
 
 File Gateway
-Volume Gateway 
-Tape Gateway
+Volume Gateway - iSCSI
+Tape Gateway - VTL
 
 Amazon EFS is a file storage service for use with Amazon EC2. Amazon EFS provides a file system interface, file system access 
-EFS is not backed by S3
+EFS is NOT backed by S3
 
 FSx for lustre , millions of IOPS backed by S3
-Storage Tape Gateway : VTL Virtual Tape Library backed by S3 and Glacier
 Storage Volume Gateway: Block storage using iSCSI protocol backed by S3
+Storage Tape Gateway : VTL Virtual Tape Library backed by S3 and Glacier
 
 *** The Auto Scaling group ASG is using EC2 based health check and the Application Load Balancer  is using its in-built health check
 If both the ASG and ALB use ALB based health checks, then you will be able to avoid the scenario mentioned in the question.
@@ -437,7 +498,7 @@ when you want both applications to consume data from the same stream concurrentl
 
 SNS is a notification service and cannot be used for real-time processing of data.
 
-Use VPC sharing to share one or more subnets with other AWS accounts belonging to the same parent organization from AWS Organizations
+Use VPC SHARING to share one or more subnets with other AWS accounts belonging to the same parent organization from AWS Organizations
 
 VPC sharing (part of Resource Access Manager) allows multiple AWS accounts to create their application resources such as EC2 instances, RDS databases, Redshift clusters, and Lambda functions, 
 into shared and centrally-managed  VPC 
@@ -603,7 +664,6 @@ You can then create the encrypted cross-region Read Replica of the master DB.
 Use an AWS Storage Gateway file gateway to replace the NFS storage
 Use an AWS Storage Gateway volume gateway to replace the Block storage
 
-
 The S3 Intelligent-Tiering storage class is designed to optimize costs by automatically moving data to the most cost-effective access tier, without performance impact or operational overhead.
 It works by storing objects in two access tiers: 
 1) one tier that is optimized for FREQUENT ACCESS 
@@ -634,6 +694,7 @@ Aurora Replicas
 
 ** Low latency and fast regional failover
 Multiple regions behind ALB and use AWS Global Accelerator (2 static IPs)
+
 AWS Global Accelerator is a networking service that sends your user’s traffic through Amazon Web Service’s global network infrastructure, improving your internet user performance by up to 60%
 With Global Accelerator, you are provided two global static customer-facing IPs to simplify traffic management.
 On the back end, add or remove your AWS application origins, such as Network Load Balancers, Application Load Balancers, Elastic IPs, and EC2 Instances, without making user-facing change
@@ -693,7 +754,6 @@ Instance stores offer very high performance and low latency and is cheaper than 
 
 Amazon EC2 Enhanced Networking with an EBS HDD Throughput Optimized volume provides higher bandwidth and lower latency 
 and is implemented using an Elastic Network Adapter (ENA)
-
 
 RedShift is a COLUMNAR DATA WAREHOUSE DB that is ideal for running LONG COMPLEX QUERIES. 
 RedShift can also improve performance for repeat queries by CACHING THE RESULT and returning the cached result when queries are re-run. 
@@ -856,7 +916,7 @@ For the “impaired” status, the ASG will wait a few minutes to see if the ins
 If the “impaired” status persists, termination occurs#
 Auto Scaling will not launch a new instance immediately as it always terminates unhealthy instance before launching a replacement
 
-Use On-Demand Instances  when to deploy several EC2 instances quickly to run the batch process and you must ensure that the job completes
+Use On-Demand Instances,  when to deploy several EC2 instances quickly to run the batch process and you must ensure that the job completes
 
 When you're using an Edge device, the data migration process has the following stages:
 
@@ -901,7 +961,7 @@ you can use Amazon Data Lifecycle Manager (Amazon DLM) to automate the creation,
 
 Amazon DynamoDB Streams captures a time-ordered sequence of item-level modifications in any DynamoDB table and stores this information in a log for up to 24 hours.
 
-When request submissions exceed the steady-state request rate and burst limits, 
+When request submissions exceed the steady-state request rate and burst limits, ?
 API Gateway fails the limit-exceeding requests and returns 429 Too Many Requests error responses to the client.
 
 AWS recommend that you use the AWS SDKs to make programmatic API calls to IAM. 
@@ -909,13 +969,6 @@ However, you can also use the IAM Query API to make direct calls to the IAM web 
 An access key ID and secret access key must be used for authentication when using the Query API.
 
 AWS Batch Multi-Node Parallel Jobs,  enable you to run single jobs that span multiple Amazon EC2 instances. 
-With AWS Batch multi-node parallel jobs, you can run large-scale, tightly coupled, high performance computing applications and
-distributed GPU model training without the need to launch, configure, and manage Amazon EC2 resources directly.
-
-AWS Batch is a set of batch management capabilities that can easily and efficiently run hundreds of thousands of batch computing jobs on AWS. 
-AWS Batch dynamically provisions the optimal quantity and type of compute resources (e.g., CPU or memory optimized instances) 
-based on the volume and specific resource requirements of the batch jobs submitted.
-
 AWS Batch eliminates the need to operate third-party commercial or open source batch processing solutions. There is no batch software or servers to install or manage. 
 AWS Batch manages all the infrastructure for you, avoiding the complexities of provisioning, managing, monitoring, and scaling your batch computing jobs.
 
@@ -928,6 +981,7 @@ You cannot disable the launch configuration and you can’t modify a launch conf
 Both Direct connect and IPSec VPN are active and being advertised  using BGP
 
 Athena allows you to easily query encrypted data stored in Amazon S3 and write encrypted results back to your S3 bucket
+
 IAM policies can be used to grant IAM users’ with fine-grained control to Amazon S3 buckets
 
 Access Control Lists (ACLs) are legacy (but not deprecated), 
@@ -944,7 +998,7 @@ Auto Scaling does not terminate the instance that has been running the longest.
 
 Using Amazon Redshift Spectrum, you can efficiently query and retrieve STRUCTURED AND SEMI-STRUCTURED DATA from files in Amazon S3 without having to load the data into Amazon Redshift tables
 
-To restrict web servers to be accessible only through the ELB you can configure the web tier security group of EC2 to allow only traffic from the ELB. 
+To restrict web servers to be accessible only through the ELB you can configure the web tier security group of EC2 to allow only traffic from the ELB. ?
 You would normally do this by adding the ELBs security group to the rule on the web tier security group of EC2
 
 With EBS you can use KMS-managed or customer-managed encryption keys.
@@ -962,7 +1016,7 @@ With MySQL, authentication is handled by AWSAuthenticationPlugin—an AWS-provid
 
 ** To enable your Lambda function to access resources inside your private VPC, you must provide additional VPC-specific configuration information 
 that includes 
-VPC subnet IDs 
+Subnet IDs 
 Security group IDs.
 
 An origin is the origin of the files that the CDN will distribute. Origins can be either an S3 bucket, an EC2 instance, and Elastic Load Balancer, or Route 53 – can also be external (non-AWS).
@@ -980,7 +1034,6 @@ and allows you to automate operational tasks across your AWS resources
 
 The AWS Systems Manager run command is used to manage the configuration of existing instances by using remotely executed commands.
 This service is used to manage the configuration of AWS resources, it does not run scripts on instances
-
 
 - IAM Groups are collections of users and have policies attached to them.
 - A group is not an Identity and cannot be identified as a principal in an IAM policy.
@@ -1006,7 +1059,7 @@ You can access the instance metadata through a URI
 OR 
 by using the Instance Metadata Query tool.
 
-The instance metadata is available at http://169.254.169.254/latest/meta-data.
+The instance metadata is available at http://169.254.169.254/latest/meta-data./
 
 A VPC endpoint for Amazon API Gateway can be created and this will provide access to API Gateway using private IP addresses and avoids the internet completely.
 A Transit virtual interface is used to access Amazon VPC Transit Gateways
@@ -1115,7 +1168,7 @@ EFS Security Groups act as a firewall, and the rules you add define the traffic 
 
 EBS optimized instances provide dedicated capacity for Amazon EBS I/O. EBS optimized instances are designed for use with all EBS volume types
 
-All EBS types and all instance families support encryption 
+All EBS types and all Instance families support encryption 
 but 
 Not all instance types support encryption. 
 There is no direct way to change the encryption state of a volume.
@@ -1163,7 +1216,7 @@ AWS Direct Connect by itself cannot provide an encrypted connection between a da
 
 AWS Site-to-Site VPN  are a good solution if you have an immediate need, have low to modest bandwidth requirements, and can tolerate the inherent variability in Internet-based connectivity.
 
-A Transit gateway is a network Transit Hub that you can use to interconnect your virtual private clouds (VPC) and on-premises networks. 
+A Transit Gateway is a network Transit Hub that you can use to interconnect your virtual private clouds (VPC) and on-premises networks. 
 
 Standard-IA  (in-frequent access with millisecond latency)is designed for 99.9% availability compared to 99.99% availability of S3 Standard
 S3 Glacier cannot support millisecond latency
@@ -1636,7 +1689,6 @@ Volumes attached to the instance are either EBS or Instance store:
 Amazon Elastic Block Store (EBS) provides persistent storage.
 Instance store volumes are ephemeral (non-persistent).
 
-
 X-Ray is used to trace your application
 
 Amazon GuardDuty is a threat detection service that continuously monitors for malicious activity and unauthorized behaviour to protect your AWS accounts, workloads, and data stored in Amazon S3
@@ -1649,14 +1701,13 @@ DNS logs.
 To stop GuardDuty and delete the findings you need to
 Disabling GuardDuty service,  will delete all remaining data, including your findings and configurations before relinquishing the service permissions and resetting the service
 
-
 By default, Lambda functions always operate from an AWS-owned VPC and hence have access to any public internet address or public AWS APIs. 
 Once a Lambda function is VPC-enabled, it will need a route through a NAT gateway in a public subnet to access public resources.#
 
 Since Lambda functions can scale extremely quickly, its a good idea to deploy a CloudWatch Alarm that notifies your team when function metrics 
 such as ConcurrentExecutions or Invocations exceeds the expected threshold
 
-You can configure your Lambda function to pull in additional code and content in the form of layers. A layer is a ZIP archive that contains libraries, a custom runtime, or other dependenc
+You can configure your Lambda function to pull in additional code and content in the form of layers. A layer is a ZIP archive that contains libraries, a custom runtime, or other dependency
 A function can use up to 5 layers at a time.
 You can create layers, or use layers published by AWS and other AWS customers
 The total unzipped size of the function and all layers can't exceed the unzipped deployment package size limit of 250 MB.
@@ -1717,7 +1768,6 @@ Use Amazon EventBridge, which is a serverless event bus that makes it easy to co
 
 . AWS suggests implementing graceful degradation to transform applicable hard dependencies into soft dependencies.
 Service B should return a static response, a simple alternative to returning an error when service C fails to respond
-
 
 Use AWS Cost Explorer Resource Optimization to get a report of EC2 instances that are either idle or have low utilization and use AWS Compute Optimizer to look at instance type recommendations
 By using Amazon S3 Analytics Storage Class analysis you can analyze storage access patterns to help you decide when to transition the right data to the right storage class. 
@@ -1816,6 +1866,7 @@ Prefer Target Tracking over step scaling
 S3 static website using HTTP Only
 CloudFront can server static content using the HTTPS protocol
 Create a read replica as Multi AZ DB for read performance and HA
+
 ElastiCache Redis has a good use case for autocompletion
 
 EC2 in diff Subnets and AZ , Feature required at instance-level firewall ?
@@ -1829,6 +1880,7 @@ NACL (Deny + Allow Rule)
 Subnet (Only Allow Rule)
 
 Security Patches can force a DB to take down offline during Maintenance widows
+
 SQS will reduce the risk of writes of database  being dropped
 
 EBS DescribeVolumeStatus 
@@ -1840,6 +1892,7 @@ You need to enable S3 health check for automate the failover
 The point of an ALB health check is to identify the health of targets (EC2 instances). It cannot redirect clients to another Region
 
 Using S3 pre singed URL, bypasses the web server avoiding any performance bottlenecks  without having any AWS security credentials/permissions
+
 Using PrivateLink you can connect your VPC to supported AWS services, services hosted by other AWS accounts (VPC endpoint services), and supported AWS Marketplace partner services.
 
 Kinesis Data Stream = Process and Digest data Near real time 
@@ -1864,7 +1917,7 @@ Managed by AWS , hence scaled automatically
 short duration and temporary deploy , can tolerate delays not time critical
 Use Spot instance
 
-ON demand is gOod for temporary when you can't tolerate any delays
+ON demand is Good for temporary when you can't tolerate any delays
 
 API call to interact EC2 and S3
 Grant Programmatic access
@@ -1881,7 +1934,7 @@ Amazon Cognito is used for authenticating users to web and mobile apps not for p
 
 Use AWS Batch (support MPI) to deploy multi node parallel jobs ( tightly-coupled HPC workload)
 
-Short term Direct Connect connection ?
+Short term Direct Connect connection for backup
 Use IPsec VPN and use same BGP
 This is the most cost-effective solution. With this option both the Direct Connect connection and IPSec VPN are active and being advertised using the Border Gateway Protocol (BGP). 
 The Direct Connect link will always be preferred unless it is unavailable.
@@ -1889,20 +1942,18 @@ The Direct Connect link will always be preferred unless it is unavailable.
 To add encryption to Direct Connect, use IPsev VPN over Direct Connect
 something you might do to add encryption to Direct Connect
 
-
 – You’ve reached your EBS volume limit.
 – An EBS snapshot is corrupt.
 – The root EBS volume is encrypted and you do not have permissions to access the KMS key for decryption.
 – The instance store-backed AMI that you used to launch the instance is missing a required part (an image.part.xx file).
 
-
-NAT Gateway and Internet Gateway mostly used for d for outbound communications 
+NAT Gateway and Internet Gateway mostly used for outbound communications 
 For each private subnet create a corresponding public subnet in the same AZ
 Elastic IP addresses are used in public subnets and not in private subnet to allow Internet access via an Internet Gateway
-You can suspend and then resume one or more of the scalinYg processes for your Auto Scaling group
+You can suspend and then resume one or more of the scaling processes for your Auto Scaling group
 
 With an identity pool, users can obtain temporary AWS credentials to access AWS services, such as Amazon S3 and DynamoDB.
-AWS CodeStar is a planning and management service designed for a team of developers working on a project in the Amazon Web Services (AWS) public cloud. building a full CI/CD w
+AWS CodeStar is a planning and management service designed for a team of developers working on a project in the Amazon Web Services (AWS) public cloud. building a full CI/CD
 
 Amazon ElastiCache in-transit encryption is an optional feature that allows you to increase the security of your data at its most vulnerable points—when it is in transit from one location to another
 Redis AUTH command is used when using a password to access the database.
@@ -1916,11 +1967,8 @@ Pilot light , most critical is running , a active-passive
 Warm Standby is active-passive
 Multi site is active-active
 
-Faster 
-Warm is faster than Pilot 
-
-Use Elastic Cache for Redis when reading S3 media from Data Center
-use Cloud front when getting media closer to users b
+Use Elastic Cache for Redis when reading S3 media from DataCenter
+use Cloud front when getting media closer to users 
 
 Use Redshift for complex analytics queries from S3
 Firehose used for streaming data and not read from S3
@@ -1978,7 +2026,7 @@ With ALB and NLB IP addresses can be used to register:
 CloudTrail is used for auditing not performance monitoring.
 CloudWatch is used for Monitoring
 
-Multi AZ is within AZ
+Multi AZ is within  a region
 Cross Region read replicas for multi region database 
 
 Used Reserved for Production application that run continuously
@@ -1993,29 +2041,30 @@ By combining the results of health checks of your EC2 instances and your ELBs, R
 
 AWS Global Accelerator, Multi Region , low internet latency and add automatic failover across AWS Regions with anycast IP, 60%
 
-
-Blue/green deployment is a technique for releasing applications by shifting traffic between two identical environments running different versions of the application: "Blue" is the currently running version and "green" the new version. 
+Blue/green deployment is a technique for releasing applications by shifting traffic between two identical environments running different versions of the application: 
+"Blue" is the currently running version and "green" the new version. 
 With AWS Global Accelerator, you can shift traffic gradually or all at once between the blue and the green environment and vice-versa without being subject to DNS caching on client devices
 Route 53 do  DNS caching , hence use  Global Accelerator
 
 **  EBS is Locked to a AZ , to move volume across to other AZ , you first need to snapshot it
 *** EBS Volumes in an availability zone CAN ONLY be attached to EC2 instances in the SAME AZ
 
-By default, all DynamoDB tables are encrypted under an AWS owned customer master key (CMK), which do not write to CloudTrail log
+By default, all DynamoDB tables are encrypted under an AWS Owned customer master key (CMK), which do not write to CloudTrail log
 
-If you have objects that are smaller than 1GB or if the data set is less than 1GB in size use CloudFront with S3 otherwise use S3 Transfer accelerator
-
+If you have objects that are smaller than 1GB or if the data set is less than 1GB in size use CloudFront with S3 
+otherwise use S3 Transfer accelerator
 
 users will be directed to a static error page, configured as a backup,?
 Set up a Route 53 active-passive failover configuration. If Route 53 health check determines the ALB endpoint as unhealthy, the traffic will be diverted to a static error page, hosted on Amazon S3 bucket
 
 For cross-account access, you need to add a policy that has as its Principal (rather than Resource) the AWS account you want to give permissions to.
 
+Application Load Balancer can be used to securely authenticate users for accessing your applications to offload the work of applications
+ and can use Cognito User Pools to authenticate users through well-known social IdP
 
-Application Load Balancer can be used to securely authenticate users for accessing your applications to offload the work of applciations and can use Cognito User Pools to authenticate users through well-known social IdP
-
-
-Amazon EC2 instance store for maximum performance, Amazon S3 for durable data storage, and Amazon S3 Glacier for archival storage -
+Amazon EC2 instance store for maximum performance, 
+Amazon S3 for durable data storage, and 
+Amazon S3 Glacier for archival storage -
 
 Amazon EC2 Auto Scaling chooses the policy that provides the largest capacity, so policy with the custom metric is triggered, and two new instances will be launched by the ASG
 

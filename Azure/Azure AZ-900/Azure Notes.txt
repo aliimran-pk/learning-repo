@@ -923,6 +923,7 @@ PaaS
 Azure Apps Web/mobile
 Azure SQL 
 Cosmos DB
+Azure Data Warehouse (now known as Azure Synapse Analytics
 
 Hybrid = public + private
 
@@ -940,13 +941,13 @@ If your subscription expires, you lose access to all the other resources associa
 
 Azure subscription can have multiple delete locks
 azure resources inherits locks from its Resource group
-resource can have a rad only and delete lock
+resource can have a read only and delete lock
 
 North America has several Azure regions including west us, central us, south us
 
-There are different replication options available with a storage account. The ‘minimum replication option is
-Locally Redundant Storage (LRS). With LRS, data is replicated synchronously three times within the primary
-region.
+There are different replication options available with a storage account. 
+The ‘minimum replication option is
+Locally Redundant Storage (LRS). With LRS, data is replicated synchronously three times within the primary region.
 Geo-redundant storage (GRS) has cross-regional replication
 
 Data is not backed up automatically to another Azure Data Center
@@ -955,16 +956,13 @@ Not all Azure regions support availability zones.
 To ensure that a virtual machine cannot connect to the other virtual machines, the virtual machine must be
 deployed to a separate virtual network.
 
-A resource group is a logical container for Azure resources. Resource groups make the management of Azure
-resources easier.
-The permissions you apply to the resource group apply to all resources
-contained in the resource group.
+A resource group is a logical container for Azure resources. Resource groups make the management of Azure resources easier.
+The permissions you apply to the resource group apply to all resources contained in the resource group.
 
 DevTest Labs creates labs consisting of pre-configured bases or Azure Resource Manager templates.
 By using DevTest Labs, you can test the latest versions of your applications by doing the following tasks
 
-Azure Data Warehouse (now known as Azure Synapse Analytics) is a PaaS offering from
-Microsoft can offer
+Azure Data Warehouse (now known as Azure Synapse Analytics) is a PaaS offering from Microsoft can offer
 99.9% availability because it has high availability features built into the platform.
 
 Azure Cloud Shell is an interactive, authenticated, browser-accessible shell for managing Azure
@@ -977,14 +975,21 @@ Warehouse.
 The URL of the Azure portal is https://portal.azure.com.
 
 An Availability Zone is a physically separate zone, within an Azure region. There are three
-Availability Zones per supported Azure region.you can protect your apps and data from the loss of a datacenter.
-
+Availability Zones per supported Azure region.you can protect your apps and data from the loss of a data center.
 
 A Local Network Gateway is an object in Azure that represents your on-premise VPN device. 
 The local network gateway typically refers to your on-premises location.
 
 A Virtual Network Gateway is the VPN object at the Azure end of the VPN. 
 A ‘connection is what connects the Local Network Gateway an the Virtual Network Gateway to bring up the VPN.
+
+The Azure VPN device is known as a Virtual Network Gateway. 
+The virtual network gateway needs to be located in a dedicated subnet in the Azure virtual network. 
+This dedicated subnet is known as a gateway subnet and must be named ‘GatewaySubnet
+
+To implement a solution that enables the client computers on your on-premises network to communicate to the
+Azure virtual machines, you need to configure a VPN (Virtual Private Network) to connect the on-premises
+network to the Azure virtual network.
 
 In the Azure virtual machines page in the Azure portal, there is a named Maintenance Status. This column will
 display service issues that could affect your virtual machine.
@@ -1003,36 +1008,22 @@ opens. The Service Health blade contains the Planned Maintenance link which open
 view a list of planned maintenance events that can affect the availability of an Azure subscription
 
 Azure DevOps is Microsoft’s primary software development and deployment platform
-Azure Advisor is a personalized cloud consultant that helps you follow best practices to optimize your Azure
-deployments.
+Azure Advisor is a personalized cloud consultant that helps you follow best practices to optimize your Azure deployments.
 
-Azure Cognitive Services are APIs, SDKs, and services available to help developers build intelligent
-applications without having direct AI or data science skills or knowledge.
+Azure Cognitive Services are APIs, SDKs, and services available to help developers build intelligent applications without having direct AI or data science skills or knowledge.
 create applications that can see, hear, speak, understand, and even begin to reason
-Azure Cognitive Services can be categorized into five main pillars - Vision, Speech,Language, Web Search, and Decision.
+Azure Cognitive Services can be categorized into five main pillars - 
+Vision, Speech,Language, Web Search, and Decision.
 
 Azure Application Insights detects and diagnoses anomalies in web apps.
-Application Insights, a feature of Azure Monitor, is an extensible Application Performance Management (APM)
-service for developers and DevOps
-Use it to monitor your live applications. It will automatically
-detect performance anomalies,
-
-To implement a solution that enables the client computers on your on-premises network to communicate to the
-Azure virtual machines, you need to configure a VPN (Virtual Private Network) to connect the on-premises
-network to the Azure virtual network.
-
-The Azure VPN device is known as a Virtual Network Gateway. 
-The virtual network gateway needs to be located in a dedicated subnet in the Azure virtual network. 
-This dedicated subnet is known as a gateway subnet and must be named ‘GatewaySubnet
+Application Insights, a feature of Azure Monitor, is an extensible Application Performance Management (APM) service for developers and DevOps
+Use it to monitor your live applications. It will automatically detect performance anomalies,
 
 Azure SQL Database
-is a relational database service. Azure SQL Database is a managed SQL Server Database in
-Azure.
-
+is a relational database service. Azure SQL Database is a managed SQL Server Database in Azure.
 
 Azure SQL Synapse Analytics (previously called Data Warehouse) 
 is a cloud-based Platform-as-a-Service
-(PaaS) offering from Microsoft
 It is a large-scale, distributed, MPP (massively parallel processing) relational
 database technology in the same class of competitors as Amazon Redshift or Snowflake.
 
@@ -1051,11 +1042,10 @@ Azure Advisor displays security recommendations.
 Azure page blobs are the backbone of the virtual disks platform for Azure IaaS
 used to store the unmanaged data disks of the virtual machine.
 
-
 Networks in Azure are known as virtual networks.
 
-Azure Files is Microsoft's easy-to-use cloud file system. Azure file shares can be seamlessly used in Windows
-and Windows Server.
+Azure Files
+ is Microsoft's easy-to-use cloud file system. Azure file shares can be seamlessly used in Windows and Windows Server.
 map a network drive from several computers that run Windows 10 to Azure Storage
 
 Azure Cosmos DB is Microsoft's globally distributed, multi-model database service
@@ -1067,10 +1057,12 @@ account. You get billed per subscription.
 
 Microsoft's Software as a Service (SaaS)-based cloud offerings (Office 365, Intune/EMS, and Dynamics 365)
 charge per-user license fees.
+
 Microsoft's Platform as a Service (PaaS) and Infrastructure as a Service (IaaS) cloud offerings (Azure) charge
 based on cloud resource consumption.
 
-Azure Logic Apps is a cloud service that helps you schedule, automate, and orchestrate tasks, business
+Azure Logic Apps
+is a cloud service that helps you schedule, automate, and orchestrate tasks, business
 processes, and workflows when you need to integrate apps, data, systems, and services across enterprises or organizations
 Serverless Computing
 
@@ -1083,7 +1075,8 @@ users, to minimize latency.
 IoT Hub (Internet of things Hub) provides data from millions of sensors.
 IoT Hub is a managed service, hosted in the cloud, that acts as a central message hub for bi-directional
 communication between your IoT application and the devices it manages.
-There are two storage services IoT Hub can route messages to -- Azure Blob Storage and Azure Data Lake
+There are two storage services IoT Hub can route messages to -- 
+Azure Blob Storage and Azure Data Lake
 
 The Azure portal is the web-based portal for managing Azure. Being web-based, you can use the Azure portal
 Azure Cloud Shell is a web-based command line for managing Azure. You access the Azure Cloud Shell from
@@ -1094,58 +1087,47 @@ SQL Database = 99.99%
 What is the maximum downtime you would expect for this application?
 The composite SLA for the application is the product of both SLAs, which equals 99.94 percent.
 
-Azure resources deployed to a single resource group can be located in different regions. The resource group
-only contains metadata about the resources it contains.
-By default, permissions set
-at the resource level are inherited by the resources in the resource group.
+Azure resources deployed to a single resource group can be located in different regions. 
+The resource group only contains metadata about the resources it contains.
+By default, permissions set at the resource level are inherited by the resources in the resource group.
 
-Microsoft Azure Machine Learning Studio (classic) is a collaborative, drag-and-drop tool you can use to build,
-test, and deploy predictive analytics solutions on your data.
+Microsoft Azure Machine Learning Studio (classic) 
+is a collaborative, drag-and-drop tool you can use to build, test, and deploy predictive analytics solutions on your data.
 
 Azure storage offers different access tiers: hot, cool and archive.
 The archive access tier has the lowest storage cost. But it has higher data retrieval costs compared to the hot
 and cool tiers. Data in the archive tier can take several hours to retrieve.
-While a blob is in archive storage, the blob data is offline and can't be read, overwritten, or modified. To read or
-download a blob in archive, you must first rehydrate it to an online tier.
 
-Azure Advisor provides you with a consistent, consolidated view of recommendations for all your Azure
-resources.However, Azure Advisor does not provide recommendations on how to improve the security of an Azure AD
-environment.
+While a blob is in archive storage, the blob data is offline and can't be read, overwritten, or modified.
+To read or download a blob in archive, you must first rehydrate it to an online tier.
+
+Azure Advisor provides you with a consistent, consolidated view of recommendations for all your Azure resources.
+However, Azure Advisor does not provide recommendations on how to improve the security of an Azure AD environment.
 
 Advisor helps you optimize and reduce your overall Azure spend by identifying idle and underutilized resources.
 You can get cost recommendations from the Cost tab on the Advisor dashboard
 
-The Azure Cloud Shell is a free interactive shell. It has common Azure tools preinstalled and configured to use
-with your account.
+The Azure Cloud Shell is a free interactive shell. It has common Azure tools pre-installed and configured to use with your account.
 
-Now with the open source and cross-platform release of
-PowerShell, you’ll be able to manage all your Azure resources from Windows, Linux and macOS using your
-tool of choice, either the Azure CLI or Azure PowerShell cmdlets.
-
-Now with the open source and cross-platform release of
-PowerShell, you’ll be able to manage all your Azure resources from Windows, Linux and macOS using your
-tool of choice, either the Azure CLI or Azure PowerShell cmdlets.
+Now with the open source and cross-platform release of PowerShell, 
+you’ll be able to manage all your Azure resources from Windows, Linux and macOS using your tool of choice, either the Azure CLI or Azure PowerShell cmdlets.
 
 Azure virtual machines provide operation system virtualization
 
 Azure Container Instances provide portable environments for virtualized applications
 
 Azure App Service is used to build, deploy and scale web apps
-Azure App Service is a platform-as-a-service (PaaS) offering that lets you create web and mobile apps for any
-platform or device and connect to data anywhere
+Azure App Service is a platform-as-a-service (PaaS) offering that lets you create web and mobile apps for any platform or device and connect to data anywhere
 
 Azure Functions provide a platform for serverless code
 
-To open the Cloud Shell, just select Try it from the upper right corner of a code block. You can also launch
-Cloud Shell in a separate browser tab by going to https://shell.azure.com/bash.
+To open the Cloud Shell, just select Try it from the upper right corner of a code block. You can also launch Cloud Shell in a separate browser tab by going to https://shell.azure.com/bash.
 
-You can use Azure Resource Manager templates to automate the creation of the Azure resources. Deploying
-resource through templates is known as ‘Infrastructure as code’.
-example is a JavaScript Object Notation (JSON) file t
+You can use Azure Resource Manager templates to automate the creation of the Azure resources. 
+Deploying resource through templates is known as ‘Infrastructure as code’. example is a JavaScript Object Notation (JSON) file 
 
 Azure Databricks is a big analysis service for machine learning.
-Azure Databricks is an Apache Spark-based analytics platform. The platform consists of several components
-including ‘MLib
+Azure Databricks is an Apache Spark-based analytics platform. The platform consists of several components including ‘MLib
 
 Azure Application Insights detects and diagnoses anomalies in web apps.
 Application Insights, a feature of Azure Monitor, is an extensible Application Performance Management (APM)
@@ -1157,29 +1139,23 @@ You can develop in your favourite language, be it .NET, .NET Core, Java, Ruby, N
 
 You need a minimum of two virtual machines with each one located in a different availability zone
 
-Azure Event Hubs is a big data streaming platform and event ingestion service.
-Azure Event Hubs can be used to ingest, buffer, store, and process your stream in real time to get actionable
-insights.
-Azure Event Hubs can be used to capture your data in near-real time in an Azure Blob storage or Azure Data
-Lake Storage for long-term retention or micro-batch processing.
+Azure Event Hubs
+ is a big data streaming platform and event ingestion service.Azure Event Hubs can be used to ingest, buffer, store, and process your stream in real time to get actionable insights.
+Azure Event Hubs can be used to capture your data in near-real time in an Azure Blob storage or Azure Data Lake Storage for long-term retention or micro-batch processing.
 
 
-PowerApps lets you quickly build business applications with little or no code. It is not used to create Azure
-virtual machines.
-PowerApps Portals allow organizations to create websites which can be shared with users external to their
-organization either anonymously or through the login provider of their choice like LinkedIn, Microsoft Account,
+PowerApps lets you quickly build business applications with little or no code. It is not used to create Azure virtual machines.
+PowerApps Portals allow organizations to create websites which can be shared with users external to their organization either anonymously or through the login provider of their choice like LinkedIn, Microsoft Account,
 other commercial login providers.
 
-Being web-based, the Azure portal can be run on a browser from a tablet that runs the Android operating
-system.
+Being web-based, the Azure portal can be run on a browser from a tablet that runs the Android operating system.
 
 Azure Databricks is an Apache Spark-based analytics service
 
 Azure Monitor can monitor performance of on-premises as well
 
 Azure Monitor can send alerts to AAD security
-Alerts in Azure Monitor proactively notify you of critical conditions and potentially attempt to take corrective
-action.
+Alerts in Azure Monitor proactively notify you of critical conditions and potentially attempt to take corrective action.
 
 Azure Monitor can trigger alerts based on data in Azure log Analytic workspace
 Azure Monitor uses Target Resource, which is the scope and signals available for alerting. A target can be any
@@ -1190,19 +1166,17 @@ Azure Repos is a set of version control tools that you can use to manage your co
 
 
 Azure Site Recovery provides Fault Tolerance for VM
-Azure Site Recovery helps ensure business continuity by keeping business apps and workloads running during
-outages. Site Recovery replicates workloads running on physical and virtual machines (VMs) from a primary
-site to a secondary location.
+Azure Site Recovery helps ensure business continuity by keeping business apps and workloads running during outages. 
+Site Recovery replicates workloads running on physical and virtual machines (VMs) from a primary site to a secondary location.
 
 Availability Zones are unique physical locations within an Azure region.
 
 Secures websites from attacks
 Generates reports that contain details of attempted attacks
 Sol:
-Azure has two DDoS service offerings that provide protection from network attacks: DDoS Protection Basic
-and DDoS Protection Standard.
-DDoS Standard can generate reports that contain details of attempted attacks
-as required in this question.
+Azure has two DDoS service offerings that provide protection from network attacks: 
+DDoS Protection Basic and DDoS Protection Standard.
+DDoS Standard can generate reports that contain details of attempted attacks as required in this question.
 
 
 Monitor threats by using sensors
@@ -1486,5 +1460,228 @@ and for billing. You are charged monthly for all resources in a subscription. A 
 Active Directory) can contain multiple Azure subscriptions
 
 
+A resource group is a container that holds related resources for an Azure solution. The resource group can
+include all the resources for the solution, or only those resources that you want to manage as a group.
 
 
+To enable each department administrator to manage the Azure resources used by that department, you will
+need to create a separate subscription per department. You can then assign each department administrator
+as an administrator for the subscription to enable them to manage all resources in that subscription
+
+The Modern Lifecycle Policy covers products and services that are serviced and supported continuously. For
+products governed by the Modern Lifecycle Policy, Microsoft will provide a minimum of 12 months' notification
+prior to ending support if no successor product or service is offered—excluding free services or preview
+releases.
+
+A subscription owner can manage all resources and permissions within the subscription but cannot transfer ownership of the subscription
+You can convert a free trial subscription to Pay-As-You-Go. T
+You can remove the spending limit, but you can’t increase or decrease it.
+The spending limit in Azure prevents spending over your credit amount
+if you signed up for Azure free account, your spending limit is $200 and you can't change it to $500.
+
+A reservation is where you commit to pay for a resource (for example a virtual machine) for one or three years.
+This gives you a discounted price on the resource for the reservation period.
+
+To ensure that a virtual machine is ‘stopped (deallocated)’, you need to stop the virtual machine in the Azure portal
+
+You are not charged for unused network interfaces. Therefore, deleting unused network interfaces will not
+reduce the Azure costs for the company.
+You are charged for public IP addresses. Therefore, deleting unused public IP addresses will reduce the Azure
+costs.
+You are not charged for user accounts. Therefore, deleting unused user accounts will not reduce the Azure
+costs for the company
+
+"Maximum Available Minutes" is the total accumulated minutes during a billing month .
+"Downtime" is the total accumulated minutes that are part of Maximum Available Minutes where a system is
+unavailable.
+Monthly Uptime % = (Maximum Available Minutes-Downtime) / Maximum Available Minutes x 100.
+
+
+Resource groups are logical containers for Azure resources. You do not pay for resource groups.
+
+Data ingress over a VPN is data ‘coming in’ to Azure over the VPN. 
+You are charged data transfer costs for data ingress
+
+Data egress over a VPN is data ‘going out’ of Azure over the VPN. You are not charged for data egress.
+
+A basic support plan provides:
+24x7 access to billing and subscription support, online self-help, documentation, whitepapers, and support
+forums
+Best practices: Access to full set of Azure Advisor recommendations
+Health Status and Notifications: Access to personalized Service Health Dashboard & Health API
+
+You can open support cases in the following plans: Premier, Professional Direct, Standard, and Developer only.
+You cannot open support cases in the Basic support plan.
+
+You can create an Azure support request from the Help and Support blade in the Azure portal or from the
+context menu of an Azure resource in the Support + Troubleshooting section.
+
+You are not charged for Azure Active Directory Groups. Therefore, deleting unused groups will not reduce your
+Azure costs.
+
+The Basic support plan is free so is therefore the cheapest. The Developer support plan is the cheapest paidfor
+support plan. The order of support plans in terms of cost ranging from the cheapest to most expensive is:
+Basic, Developer, Standard, Professional Direct, Premier
+
+Preview features are made available to you on the condition
+excluded from the Service Level Agreements
+
+The SLA for virtual machines guarantees ‘uptime’.
+For all Virtual Machines that have two or more instances deployed across two or more Availability Zones in
+the same Azure region, we guarantee you will have Virtual Machine Connectivity to at least one instance at
+least 99.99% of the time.
+
+Public Preview means that the service is in public beta and can be tried out by anyone with an Azure
+subscription. Services in public preview are often offered at a discount price.
+Public previews are excluded from SLAs and in some cases, no support is offered.
+
+Services in private preview are available only to selected people who has signed up to the private preview
+program
+
+Services in development are not available to the public.
+
+Services provided under an Enterprise Agreement (EA) subscription are available only to the subscription
+owner
+
+
+The Basic support plan does not have any technical support for engineers.
+Access to Support Engineers via email or phone is available in the following support plans: 
+Standard, Professional Direct, Premier
+
+The Premier support plan provides customer specific architectural support such as design reviews,
+performance tuning, configuration and implementation assistance delivered by Microsoft Azure technical
+specialists.
+
+Most services go to private preview then public preview before being released to general availability.
+The private preview is only available to certain Azure customers for evaluation purposes. The public preview is
+available to all Azure customers
+
+Azure services in public preview can be managed using the regular management tools: Azure Portal, Azure
+CLI and PowerShell
+
+Service In Public Preview mode
+Anyone can use the service but normal service level agreements do not apply
+Public Preview is for anyone to use, but it is not supported nor guaranteed to continue to be available
+
+
+Services in private or public preview are usually offered at reduced costs. However, the costs increase, not
+decrease when the services are released to general availability
+
+Azure customers with an Azure Enterprise Agreement (EA), Microsoft Customer Agreement (MCA), or
+Microsoft Partner Agreement (MPA) can use Azure Cost Management.
+Cost management is the process of effectively planning and controlling costs involved in your business
+
+you are unable to start a VM after a trial has expired
+You are not charged for Azure Active Directory user accounts so you can continue to create accounts.
+
+Azure Active Directory 
+is a Platform as a Service that provides single sign-on and multi-factor authentication.
+
+Azure Active Directory provides the following licenses: 
+Free, "Pay as you go", Premium P1, and Premium P2.
+
+
+
+The Basic support plan does not have any technical support for engineers.
+The Developer support plan has only technical support for engineers via email.
+The Standard, Professional Direct, and Premier support plans have technical support for engineers via email
+and phone.
+
+
+There are different payment options in Azure including 
+pay-as-you-go (PAYG), 
+Enterprise Agreement (EA), and
+Microsoft Customer Agreement (MCA) accounts
+
+Your Azure costs are ‘per subscription
+
+
+A reservation is where you commit to a resource (for example a virtual machine) for one or three years
+
+A resource group is a logical container for Azure resources. You can view the total cost of all the resources
+in a resource group
+
+An Azure free account has a spending limit. This is currently 200 USD or 150 GBP.
+
+Azure free account has a 5 GB blob storage limit and a 5 GB file storage limit.
+
+Azure free account has a limit of 10 web, mobile or API apps
+
+An Azure service in general availability is available to all Azure customers, not just a subset of the customers.
+
+You can use the same account to manage multiple subscriptions.
+
+You cannot merge two subscriptions into a single subscription. However, you can move some Azure
+resources from one subscription to another. You can also transfer ownership of a subscription and change the
+billing type for a subscription.
+
+A company can have multiple subscriptions and store resources in the different subscriptions. However, a
+resource instance can exist in only one subscription
+
+
+SLA’s vary based on the resource type and the location distribution of the resource. However, the minimum
+uptime for all Azure services is 99.9 percent
+
+The SLA guaranteed uptime is increased (usually to 99.95 percent) when resources are deployed across
+multiple regions
+
+The number of subscriptions is unrelated to uptime SLA’s.
+
+Budget alerts notify you when spending, based on usage or cost, reaches or exceeds the amount defined in
+the alert condition of the budget. Cost Management budgets are created using the Azure portal or the Azure
+Consumption API.
+
+With Azure ExpressRoute, all inbound data transfer is free of charge.
+
+Data traffic b/w Azure services within the same Azure region is always free
+Outbound data traffic from Azure to on-premise is always free
+
+The price of Azure storage varies by region.
+You are charged for read and write operations in general-purpose v2 storage accounts.
+
+Transfer data b/w storage accounts in diff regions is not free
+
+
+Network layer of network security
+Subnets is part of network security
+
+
+General Availability GA mode
+Anyone can use the service for any reason
+It is fully supported and can be used for production
+
+
+Bandwidth refers to data moving in and out of Azure data centers, 
+Ingress bandwidth is free. You pay for egress (outbound)
+
+Azure Power-shell scripts and Command Line Interface (CLI) scripts  are not compatible with each other
+PowerShell is it's own language, different than CLI
+
+For tax optimization
+Operating Expenditure is thought to be preferable because you can fully deduct expenses when they are incurred
+
+DDoS protection services
+Azure DDos Protection Basic is free, 
+while you can upgrade to Standard for a fee
+
+Microsoft Service Trust Portal
+A list of standards that Microsoft follows, pen test results, security assessments, white papers, faqs, and other documents that can be used to show Microsoft's compliance efforts
+Cloud Shell - allows access to the CLI and Powershell consoles in the Azure Portal
+
+Azure Service Health -
+lets you know about any Azure-related service issues including region-wide downtime
+
+Elasticity - the ability of a system to automatically grow when maximum capacity is reached, and automatically shrink to minimize waste
+
+basic way of protecting an Azure Virtual Network subnet?
+Network Security Group (NSG)
+
+Azure Monitor - 
+a centralized dashboard that collects all the logs, metrics and events from your resources
+
+Economies of scale -
+ the more you buy something, the cheaper it is per unit to buy
+
+Private Preview means you have to apply to use a service, and you may or may not be selected
+
+Firewall is part of the perimeter security

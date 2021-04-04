@@ -373,7 +373,7 @@ Core resources
 1) Compute
 2 Network services
 3) Storage services
-4) Database services4
+4) Database services
 5) Azure Marketplace
 
 
@@ -401,7 +401,7 @@ runs on a cluster of servers, enterprise-grade
 
 Windows Virtual Desktop
 desktop version of windows that runs in cloud
-can even see your desktop on IOS and Andriod or from browser
+can even see your desktop on IOS and Android or from browser
 runs on Azure
 
 
@@ -975,7 +975,7 @@ The ‘minimum replication option is
 1) Locally Redundant Storage (LRS). With LRS, data is replicated synchronously three times within the primary region.
 2) Geo-redundant storage (GRS) has cross-regional replication
 
-Data is not backed up automatically to another Azure Data Center
+Data is NOT backed up automatically to another Azure Data Center
 Not all Azure regions support availability zones.
 
 To ensure that a virtual machine cannot connect to the other virtual machines, the virtual machine must be deployed to a separate virtual network.
@@ -997,7 +997,7 @@ You can use Power BI to analyze and visualize data stored in Azure Data Lake and
 The URL of the Azure portal is https://portal.azure.com
 
 An Availability Zone is a physically separate zone, within an Azure region. 
-0There are three Availability Zones per supported Azure region.
+There are three Availability Zones per supported Azure region.
 you can protect your apps and data from the loss of a data center.
 
 A Local Network Gateway is an object in Azure that represents your on-premise VPN device. 
@@ -1122,7 +1122,7 @@ The ARCHIVE access tier has the lowest storage cost. But it has higher data retr
 Data in the archive tier can take several hours to retrieve.
 
 While a blob is in archive storage, the blob data is offline and can't be read, overwritten, or modified.
-** To read or download a blob in archive, you must first rehydrate it to an online tier.
+** To read or download a blob in archive, you must first REHYDRATE it to an online tier.
 
 Azure Advisor provides you with a consistent, consolidated view of recommendations for all your Azure resources.
 However, Azure Advisor does not provide recommendations on how to improve the security of an Azure AD environment.
@@ -1537,7 +1537,8 @@ The Premier support plan provides customer specific architectural support such a
 performance tuning, configuration and implementation assistance delivered by Microsoft Azure technical specialists.
 
 Most services go to PRIVATE preview then PUBLIC preview before being released to GENERAL availability.
-The private preview is only available to certain Azure customers for evaluation purposes. The public preview is available to all Azure customers
+The private preview is only available to certain Azure customers for evaluation purposes. 
+The public preview is available to all Azure customers
 
 Azure services in public preview can be managed using the regular management tools: Azure Portal, Azure CLI and PowerShell
 
@@ -1558,7 +1559,6 @@ is a Platform as a Service that provides single sign-on and multi-factor authent
 
 Azure Active Directory provides the following licenses: 
 Free, "Pay as you go", Premium P1, and Premium P2.
-
 
 The Basic support plan does not have any technical support for engineers.
 The Developer support plan has only technical support for engineers via email.
@@ -1585,7 +1585,7 @@ An Azure service in General Availability is available to all Azure customers, no
 
 ** You can use the same account to manage multiple subscriptions.
 
-*** You cannot merge two subscriptions into a single subscription. 
+*** You CANNOT merge two subscriptions into a single subscription. 
 However, you can move some Azure resources from one subscription to another. 
 You can also transfer ownership of a subscription 
 Can change the billing type for a subscription.
@@ -1756,11 +1756,10 @@ an Azure subscription can only be associated with one Azure AD tenant.
 
 You can modify the Azure Active Directory (Azure AD) tenant to which an Azure subscription is associated to
 
-If your subscription expires, you lose access to all the other resources associated with the subscription. 
+If your subscription expires, you lose ACCESS to all the other resources associated with the subscription. 
 However, the Azure AD directory remains in Azure.
 
 Europe has several Azure regions, including North Europe, West Europe, UK West, Switzerland North and some others as well
-
 
 *** Azure Site Recovery provides DR for virtual machines.
 Site Recovery replicates workloads running on physical and virtual machines (VMs) from a primary site to a secondary location.
@@ -1990,8 +1989,6 @@ You can also install Powershell on macOS based operating systems.
 
 * If you use a Platform as a service in Azure to host a web application, you can configure the hosts to automatically scale the number of instances based on demand
 
-* Group policies are not available in Azure Active Directory
-
 The Azure Traffic Manager profile is used to distribute traffic at the DNS level and not for https
 
 *  it is not required to deploy a federated solution to implement Multi-Factor authentication
@@ -2018,7 +2015,6 @@ Network traffic filtering across multiple Azure subscriptions and virtual networ
 
 network security groups can only be attached to subnets and virtual machines.
 
-Monthly Uptime % = (Maximum Available Minutes-Downtime) / Maximum Available Minutes X 100
 
 Users in Azure Active Directory can be organized into Azure Active Directory groups and not in Resource groups
 
@@ -2029,7 +2025,8 @@ Fault tolerance for VM resources = Availability Set
 An Azure Geography is a defined area of the world that contains at least one Azure Region.
 AZ is a high-availability offering
 
-A combination of a fault domain and an update domain is called Availability Zone
+Availability Set
+A combination of a fault domain and an update domain is called 
 
 ** A virtual network is scoped to a single region.
 
@@ -2228,4 +2225,10 @@ Separate servers into distinct subnets by role
 
 Azure AD can control the access of both the apps and the app resources.
 
+Total Cost of Ownership (TCO) calculator.
+helps you cost saving from on-premise
 
+Cost Calculator
+Detail estimation of your cost
+
+PaaS services typically provide substantial savings in both resource and operational costs

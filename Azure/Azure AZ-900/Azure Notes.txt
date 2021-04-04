@@ -611,8 +611,8 @@ Health Alerts in case your resource is affected
 ---------------------------Azure Security (10-15%)-------------------------------------
 Azure Security Center
 centralised security mgmt system tHAT MONITORS AND PROTECT SYSTEMs inside and outside of Azure
- whether they're in Azure or not - as well as on premises.
- strength security
+whether they're in Azure or not - as well as on premises.
+strength security
 protect against threats
 get secure faster
 
@@ -942,7 +942,7 @@ Azure Active Directory
 
 IaaC
 Azure Resource Manager Template ARM :  ‘Infrastructure as code’
- 
+
 Hybrid = public + private
 
 Scale Set = Group of load balanced VMs
@@ -1090,7 +1090,7 @@ based on cloud resource consumption.
 ************************************
 Azure Logic Apps
 is a cloud service that helps you schedule, automate, and orchestrate tasks, business processes, and workflows when you need to integrate apps, data, systems, and services across enterprises or organizations
- Serverless Computing
+Serverless Computing
 
 
 video playback experience.
@@ -1891,9 +1891,10 @@ search for available VM = Marketplace Blade
 azure security recommendations. =  Advisor Blade
 
 The General Data Protection Regulation (GDPR) introduces new rules for organizations that offer goods and services to people in the European Union (EU
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Azure Blueprints can be used to define a repeatable set of Azure resources that needs to be deployed in Azure.
+******************************************************************************************************************************
+
+Azure Blueprints can be used to define a REPEATABLE SET OF AZURE RESOURCES that needs to be deployed in Azure.
 Azure Blueprints are a declarative way to orchestrate the deployment of various resource templates and other artifacts, 
 
 ** You can add an Azure Resource Manager template to an Azure blueprint
@@ -1906,13 +1907,11 @@ Azure China is operated by 21Vianet and not Microsoft.
 Azure Government is operated by Microsoft.
 Azure Government is available only to US government agencies and their partners.
 
-
 Every Azure Region has multiple data centers.  This provides for high availability solutions within the same region
 Availability zones replicate applications, settings, and data to multiple data centers.
 
 At times, based on demand, you need to run multiple instances of this application across multiple virtual machines.
 Scalability will start new instances of virtual machines when demand increases.
-
 
 allow more resources on demand to stop the application from running in a degraded state when reports are generated
 Elasticity allows applications to consume more resources on demand, then release those resources when resource demand is less
@@ -1920,7 +1919,7 @@ Elasticity allows applications to consume more resources on demand, then release
 The Azure Monitor is capable of sending Email alerts to groups when defined thresholds are exceeded.
 
 Azure service should you use from the Azure portal to view service failure notifications that can affect the availability of VM-01
-*** In the Azure virtual machines page in the Azure portal, there is a named Maintenance Status
+*** In the Azure virtual machines page in the Azure portal, there is a named "Maintenance Status"
 
 ***A Local Network Gateway is an object in Azure that represents your on-premise VPN device. 
 A Virtual Network Gateway is the VPN object at the Azure end of the VPN
@@ -1933,14 +1932,13 @@ devtestlab
 As availability zones are part of the same Azure region, 
 they are used to replicate data and applications in the same region, to multiple data centers, and not to multiple different regions.
 
-
 All data copied to an Azure Storage account is backed up automatically to another Azure data center.
 FALSE
 depends on the replication option
 Locally Redundant Storage (LRS) is the default which maintains three copies of the data,, in the same data center.
 Data could be copied to another data center (or availability zone), in the same region, if ZRS replication is chosen.
 Data can be backed up automatically to another Azure data center in a different Azure region, if you choose GRS or GZRS replication.
-Geo-redundant storage (GRS) has cross-regional replication to protect against regional outag
+Geo-redundant storage (GRS) has cross-regional replication to protect against regional outage
 
 Encrypts the administrative credentials during the deployment
 Key Vault
@@ -1950,8 +1948,7 @@ Azure Key Vault is used to store secrets for Server Applications
 monitor threats in your Azure environment by using sensors?
 Azure Advanced Threat Protection (ATP)
 
-
-All Azure Free Accounts expire after a speciFIC period
+All Azure Free Accounts expire after a specific period
 All Azure services are available with Free account
 You can create a single Azure Free account using Microsoft account
 
@@ -2039,7 +2036,6 @@ A combination of a fault domain and an update domain is called Availability Zone
 * Sends encrypted traffic between an Azure virtual network and an on-premises location over the public Internet.
 VPN Gateway
 
-
 * is a web traffic load balancer that enables you to manage traffic to your web applications.
 Azure Application Gateway
 
@@ -2079,9 +2075,9 @@ Microsoft CAN'T assist with key recovery if a key that's stored in the Key Vault
 
 Azure role-based access control (Azure RBAC) helps you manage who has access to Azure resources, what they can do with those resources, and what areas they have access to
 A role assignment consists of three elements: 
-security principal (user, group, service principal, or managed identity)
-role definition (collection of permissions)
-scope (resources that the access applies ) management group, subscription, resource group, or resource
+security PRINCIPAL (user, group, service principal, or managed identity)
+ROLE DEFINITION (collection of permissions)
+SCOPE (resources that the access applies ) management group, subscription, resource group, or resource
 
 ** By default, within RBAC, a user is denied access to all resources and access need to be granted explicitly.
 
@@ -2092,4 +2088,144 @@ Azure VMs are billed by Seconds
 
 identifies VMs with low utilization
 Advisor
+
+most number of virtual machines that can me managed under a single Virtual Machine Scale Set
+1000
+
+Cool access tier offers cost savings when you expect to store your files and not need to access them often
+it is cheaper than hot access tier
+
+hardware device is required to exist or be installed on your company network in order to set up a site-to-site VPN?
+A VPN Gateway needs to be configured to connect to Azure for a private network to be established
+
+Estimate the future costs of your Azure products and services by adding products to a shopping basket and helping you calculate the costs
+Azure Pricing Calculator
+
+Compliance Manager will track your own compliance with various standards and laws.
+
+How can you create a VM that is blocked by the policy
+You cannot perform a task that violates policy, so you have to remove the policy in order to perform the tas
+
+give someone else access to your Azure subscription without giving them your user name and password
+Yes, anyone can create their own Azure account and you can give them access to your subscription with granular control as to permissions
+
+High Availability - a system specifically designed to be resilient when some component of the system fails 
+
+Consumption-Based Model - paying for something based on how much you used, as opposed to paying for something no matter if you use it or not. 
+
+Logic apps, functions, and service fabric are all examples 
+Serverless Model
+
+Azure Default Credit 
+150 GBP or 200 USD
+
+the most immediate savings when it comes to reducing Azure costs
+Reserved Instances often offer 40% or more savings off of the price of pay-as-you-go virtual machines
+
+US state is the East US 2 region
+Virginia
+
+Application Gateways also comes with an optional Web Application Firewall (or WAF) as a security benefit
+
+Anyone can use a GA service. It is fully supported and can be used for production.
+
+One of the downsides of CapEx is that the money invested cannot be deducted immediately from your taxes
+You must wait over a period of years to depreciate that investment on your taxes
+
+estimating the cost of an unmanaged storage account difficult
+There is a cost for egress (bandwidth out) and it's hard to estimate how many bytes will be counted leaving an Azure network
+
+The Log Alert Rule is not a feature of Azure AD.
+
+benefit of using a command line tool like Powershell or CLI as opposed to the Azure portal
+Automation
+
+Azure SLA for two or more Virtual Machines in an Availability Set
+99.95%
+
+Private Preview means you must apply to use them.
+
+how many subscriptions can a single account be associated with
+unlimited
+
+two or more Azure Virtual Machines in diff Availability Zone
+99.99%
+
+
+Regions Azure have in Brazil
+2
+
+
+recommendation for RDP and SSH
+don't allow them public internet access , instead use a secure server like Bastion
+
+
+benefit of using Power shell over CLI
+no its the same
+
+paired regions
+Paired regions are usually in the same geo (not always) but are the most logical place to store backups because they have a high speed connection and Azure staggers the service updates to those regions.
+
+
+Virtual Machine Scale Sets - these are a set of identical virtual machines (from 1 to 1000 instances) that are designed to auto-scale up and down based on user demand; 
+IaaS
+
+
+Azure Storage space a single subscription
+Unlimited Virtual
+
+minimum charge for having an Azure Account each month, even if you don't use any resources
+0 $
+An Azure account can cost nothing if you don't use any resources or only use free resources
+
+
+What is the concept of being able to get your applications and data running in another environment quickly?
+Disaster Recovery DR and Business Continuity BC
+
+If you don't want to spend over a certain amount, implement a spending limit in the account center
+
+Infrastructure as a service is the easiest to migrate into, from an existing hosted app - lift and shift
+
+Scale Sets provide
+Autoscaling of VM
+Load Balancing b/w VM
+
+The best place to track events at the resource level is Azure Monitor
+ie when a VM is created
+
+Azure Service Health - lets you know about any Azure-related service issues 
+including region-wide downtime
+
+Trust Portal Provides
+A list of standards that Microsoft follows, pen test results, security assessments, white papers, faqs, and other documents that can be used to show Microsoft's compliance efforts
+
+Cosmos DB is low latency, and even offers sub 5-ms response times at some levels
+
+Using up the free credits causes all your resources to be stopped until you decide to get a paid account.
+
+policy initiative in Azure = Ability to group polices together
+
+
+Each Azure free account includes 750 hours free for Azure B1S General Purpose Virtual Machines for the first 12 months.
+
+AD Connect is used to synchronize your corporate AD with Azure AD.
+
+Which Azure service can be enabled to enable Multi-Factor Authentication for administrators but not require it for regular users ?
+Privileged Identity Management can be used to ensure privileged users have to jump through additional verification because of their role
+
+If your feature is in the General Availability phase, then your feature will receive support from all Microsoft support channels.
+Yes
+
+A load balancer is a networking product and not a compute resource
+
+Application gateway can make load balancing decisions based on the URL path, while a load balancer can't.
+
+The region is the area of the world where resources get created. You can create resources in any region that you have access to
+But networks must also be in the same region for logical reasons.
+
+Network Layer part
+Separate servers into distinct subnets by role
+
+Azure AD can control the access of both the apps and the app resources.
+
 

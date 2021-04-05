@@ -32,7 +32,7 @@ with ibm credentials
 
 
 ----------------------------------------------Test-----------------------
-Saheli Banerjee  11:31 AM
+Saheli Banerjee
 https://ibm-learning.udemy.com/course/az-900-practice-tests/learn/quiz/4956894#overview (DONE)
 
 
@@ -148,6 +148,10 @@ fill the Assured Prize form here at https://www.microsoft.com/en-in/campaign/Azu
 and get an assured prize from Microsoft at your doorstep.
 
 https://dev.azure.com
+
+https://www.credly.com/badges/ea59c635-e131-4548-b38f-a87eadf2a06c/public_url
+
+
 
 
 Private Cloud

@@ -1,0 +1,232 @@
+1) https://vigowebs.medium.com/frequently-asked-node-js-interview-questions-and-answers-b74fa1f20678
+
+
+Good NodeJs
+https://www.tutorialsteacher.com/nodejs/setup-nodejs-development-environment
+
+what the heck is event loop
+
+JWT VS OAuth
+
+------------------------------
+Node.js is a run-time JavaScript environment built on top of Chrome’s V8 engine. 
+It compiles the JavaScript directly into the native machine code
+It uses an event-driven, non-blocking I/O model.
+Node.js is asynchronous, event-driven, non-blocking, and single-threaded
+It is lightweight and so efficient
+
+It is  a cross-platform run-time environment
+Used for building fast and scalable server-side networking applications
+
+Node.js is an open source, cross-platform runtime environment for developing server-side and networking applications. Node.js applications are written in JavaScript, and can be run within the Node.js runtime on OS X, Microsoft Windows, and Linux.
+
+
+Node is single-threaded and uses a concurrency model based on an event loop. 
+It is non-blocking, so it doesn't make the program wait, but instead it registers a callback 
+and lets the program continue. This means it can handle concurrent operations without multiple threads of execution, so it can scale pretty well.
+
+The Node.js Runtime
+The source code written in source file is simply javascript. 
+The Node.js interpreter will be used to interpret and execute your javascript code.
+
+A Node.js application consists of the following three important components −
+Import required modules − We use the require directive to load Node.js modules.
+Create server − A server which will listen to client's requests similar to Apache HTTP Server.
+Read request and return response − The server created in an earlier step will read the HTTP request made by the client which can be a browser or a console and return the response.
+
+A callback function is called at the completion of a given task. 
+Callbacks are nothing but functions that take some time to produce a result.
+
+Thus, a blocking program executes very much in sequence
+Node uses observer pattern
+
+Call Back Hell
+caused by coding with complex nested callbacks. Here, each and every callback takes an argument that is a result of the previous callbacks. In this manner, 
+The code structure looks like a pyramid, making it difficult to read and maintain. Also, if there is an error in one function, then all other functions get affected.
+
+JavaScript provides an easy way of escaping from a callback hell. This is done by event queue and promises.
+A promise is a returned object from any asynchronous function, to which callback methods can be added based on the previous function’s result.
+Promises use .then() method to call async callbacks. We can chain as many callbacks as we want and the order is also strictly maintained.
+it made the chaining of functions straightforward and simplified the code, making it much easier to read.
+
+// Promise is a object that either return a result or failure of a Aync Operation
+
+Node implements the CommonJS interface for modules. In Node you can also load other dependencies using the require keyword.
+In functional programming, continuation-passing style (CPS) is a style of programming in which control is passed explicitly in the form of a continuation. 
+
+Event-driven programming is building our application based on and respond to events. When an event occurs, like click or keypress, we are running a callback function which is registered to the element for that event.
+
+Node uses libuv library to pass control to kernel threads
+
+Streams represent an abstract interface for asynchronously manipulating a continuous flow of data.
+
+Error Handling
+The "error-first" callback is a standard protocol for Node callbacks.
+the first argument for the callback function should be the error object.
+
+With traditional multithreaded request/response model, every client gets a different thread where as with NodeJS, the simpler request are all handled directly by the EventLoop
+
+Callback Hell is also known as the Pyramid of Doom. It is a pattern caused by intensively nested callbacks which are unreadable and unwieldy. 
+It typically contains multiple nested callback functions which in turn make the code hard to read and debug
+
+The Event loop handles all async callbacks. Node.js (or JavaScript) is a single-threaded, event-driven language
+So all the callback functions are queued in an loop, and will run one-by-one when the response has been received.
+
+this means that we can attach listeners to events, and when a said event fires, the listener executes the callback we provided.
+
+The event loop enables Node’s non-blocking I/O model, which is the key to Node’s ability to scale under load
+Node is asynchronous and circular. At its center is an event loop which loops constantly and with extreme speed, processing callbacks during each phase of that loop.
+
+REPL means Read-Eval-Print-Loop.
+it represents a computer environment like a Windows console or Unix/Linux shell where a command is entered It is a virtual environment that comes with Node.js. We can quickly test our JavaScript code in the Node.js REPL environment.
+it represents a computer environment like a Windows console or Unix/Linux shell where a command is entered
+
+node , if we type 10 + 20, it will print 30 in the next line.
+
+A module encapsulates related code into a single unit of code. This can be interpreted as moving all related functions into a file
+
+package.json
+This file holds various metadata information about the project. This file is used to give information to npm that allows it to identify the project as well as handle the project's dependencies
+
+Popular modules of Node.js
+1) express
+Express is a minimal and flexible Node.js web application framework that provides a robust set of features to develop web and mobile applications.
+It facilitates the rapid development of Node based Web applications
+middlewares to respond to HTTP Requests
+
+2) async
+Async is a utility module which provides straight-forward, powerful functions for working with asynchronous JavaScript
+node js module “async” that helps us to push down our functions in an array, so that we can execute them as per the need of the project.
+
+3) bower
+Actually Bower is a front end package manager to manage different libraries like Bootstrap and font awesome etc
+
+Node.js, being an asynchronous platform, doesn’t wait around for things like file I/O to finish — Node.js uses callbacks. A callback is a function called at the completion of a given task; this prevents any blocking, and allows other code to be run in the meantime.
+
+Every method in the fs module has synchronous as well as asynchronous form
+In Node Application, any async function accepts a callback as the last parameter and a callback function accepts an error as the first paramete
+
+Advantages of Node.js
+Node.js is an open-source
+Uses JavaScript to build entire server side application.
+Lightweight framework that includes bare minimum modules.
+Asynchronous by default. So it performs faster than other frameworks.
+Cross-platform framework that runs on Windows, MAC or Linux
+
+A promise is an object that may produce a single value some time in the future: either a resolved value, or a reason that it’s not resolved
+
+"Producing code" is code that can take some time
+"Consuming code" is code that must wait for the result
+A Promise is a JavaScript object that links producing code and consuming code
+
+-----------------------------------------------------
+
+var fs = require("fs");
+fs.readFile('input.txt', function (err, data) {
+if (err) {
+console.log(err.stack);
+return;
+}
+console.log(data.toString());
+});
+console.log("Program Ended");
+
+Here fs.readFile() is a async function whose purpose is to read a file. 
+If an error occurs during the read operation, then the err object will contain the corresponding error, 
+else data will contain the contents of the file. 
+readFile passes err and data to the callback function after the read operation is complete, 
+which finally prints the content.
+
+Node.js global objects are global in nature and they are available in all modules. We do not need to include these objects in our application, rather we can use them directly
+
+Node.js provides an http module which can be used to create an HTTP client of a server
+
+A callback is a function which is called when a task is completed, thus helps in preventing any kind of blocking and a callback function
+Using Callback concept, Node.js can process a large number of requests without waiting for any function to return the result which makes Node.js highly scalable. For example: In Node.js, when a function start reading file, it returns the control to execution environment immediately so that the next instruction can be executed. Once file I/O gets completed, callback function will get called to avoid blocking or wait for File I/O
+Callback is an asynchronous equivalent for a function
+
+---------------------------------------------------------------
+Express Overview
+Express is a minimal and flexible Node.js web application framework that provides a robust set of features to develop web and mobile applications.
+It facilitates the rapid development of Node based Web applications
+middlewares to respond to HTTP Requests
+It is a nodejs HTTP framework that handles a lot of things out of the box and requires very little code to create fully functional RESTful APIs
+
+Routing refers to determining how an application responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).
+
+var express = require('express');
+var app = express();
+
+// This responds with "Hello World" on the homepage
+app.get('/', function (req, res) {
+console.log("Got a GET request for the homepage");
+res.send('Hello GET');
+})
+
+var server = app.listen(8081, function () {
+var host = server.address().address
+var port = server.address().port
+
+console.log("Example app listening at http://%s:%s", host, port)
+})
+
+
+Express provides a built-in middleware express.static to serve static files, such as images, CSS, JavaScript
+app.use(express.static('public'));
+
+
+REST stands for REpresentational State Transfer. REST is web standards based architecture and uses HTTP Protocol
+A web service is a collection of open protocols and standards used for exchanging data between applications or systems. 
+Web services based on REST Architecture are known as RESTful web services. These webservices uses HTTP methods to implement the concept of REST architecture
+
+Nodemon is used to run the server and monitor it as well. If there is any change in the server code, nodemon will restart it automatically with the new changes.
+
+------------------------------------------------------
+Node.js Process Model
+Node.js runs in a single process and the application code runs in a single thread and thereby needs less resources than other platform
+An event loop is constantly watching for the events to be raised for an asynchronous job and executing callback function when the job completes. Internally, Node.js uses libev for the event loop which in turn uses internal C++ thread pool to provide asynchronous I/O
+
+Node.js comes with virtual environment called REPL (aka Node shell). REPL stands for Read-Eval-Print-Loop. It is a quick and easy way to test simple Node.js/JavaScript code.
+
+Buffer
+Node.js includes an additional data type called Buffer (not available in browser's JavaScript). Buffer is mainly used to store binary data, while reading from a file or receiving packets over the network.
+
+Defaults to local
+Node's JavaScript is different from browser's JavaScript when it comes to global scope. In the browser's JavaScript, variables declared without var keyword become global. In Node.js, everything becomes local by default.
+
+
+Node.js Module
+Module in Node.js is a simple or complex functionality organized in single or multiple JavaScript files which can be reused throughout the Node.js application.
+
+var module = require('module_name');
+core modules like http, url, fs, util
+
+
+
+You can debug Node.js application using various tools including following:
+
+Core Node.js debugger
+Node Inspector
+Built-in debugger in IDEs
+
+Node inspector is GUI based debugger.
+
+
+Node.js allows us to create and handle custom events easily by using events module. Event module includes EventEmitter class which can be used to raise and handle custom events.
+The core of NodeJS is event-driven programming. In NodeJS, we achieve event-driven programming with the event-emitter class.
+EventEmitter is a class that helps us create a publisher-subscriber pattern in NodeJS.
+With an event emitter, we can simply raise a new event from a different part of an application, and a listener will listen to the raised event and have some action performed for the event.
+
+Express.js is based on the Node.js middleware module called connect which in turn uses http module. So, any middleware which is based on connect will also work with Express.js.
+
+Node.js supports all kinds of databases no matter if it is a relational database or NoSQL database. However, NoSQL databases like MongoDb are the best fit with Node.js
+To access the database from Node.js, you first need to install drivers for the database you want to 
+npm install mysql
+npm install oracledb
+
+
+Template engine helps us to create an HTML template with minimal code. Also, it can inject data into HTML template at client side and produce the final HTML
+Jade is a template engine for Node.js. Jade syntax is easy to learn. It uses whitespace and indentation as a part of the syntax.
+
+https://www.edureka.co/blog/interview-questions/top-node-js-interview-questions-2016/#moderatelevel
+

@@ -1,0 +1,388 @@
+Good Micorservice 
+https://microservices.io/patterns/data/cqrs.html
+
+--------------------------------------------------
+Microservice Interview Questions
+
+https://www.edureka.co/blog/interview-questions/top-node-js-interview-questions-2016/
+
+https://github.com/kkasiviswanath628/MicroservicesInterviewQuestions
+https://github.com/bbiswal333/Microservices-Interview
+
+Good
+https://careerkaizen.com/microservices-interview-questions/
+
+A microservice can be anything, that does one thing, but one thing well.
+
+----------------------------------------------------------------------------------------
+
+https://www.edureka.co/blog/interview-questions/microservices-interview-questions/
+
+Granularity is the extent to which an API divides information among individual resources.
+Coarse-grained - larger components
+Fine-grained - smaller components of which the larger ones are composed
+
+With coarse-grained resources, developers need to make fewer calls to get the same amount of information
+On the one hand, you’re not giving consumers more information than they need (thus saving bandwidth), but on the other hand, developers now need to make more calls to get the same amount of information (thus slowing down client implementations).
+
+
+Microservice Architecture is an architectural development style that allows building applications as a collection 
+of small autonomous services developed for a business domain.
+Microservice architecture is a variant of service-oriented architecture. It breaks down applications into a framework of interconnected functions or services.
+
+Characteristics of Microservices
+
+1) Small: Microservices are designed to be small. (code base is easy to maintain.)
+2) Decoupling – Services within a system are largely decoupled. So the application as a whole can be easily built, altered, and scaled
+3) Scalability - . Easy to scale as individual component
+3) Fault isolation - i.e. a process failure should not bring whole system down
+4) Componentization – Microservices are treated as independent components that can be easily replaced and upgraded
+5) Business Capabilities – Microservices are very simple and focus on a single capability
+6) Autonomy – Developers and teams can work independently of each other, thus increasing speed
+7) Continuous Delivery – Allows frequent releases of software, through systematic automation of software creation, testing, and approval
+8) Technology diversity – The focus is on using the right tool for the right job. That means there is no standardized pattern or any technology pattern.
+9) Agility – Microservices support agile development. Any new feature can be quickly developed and discarded again
+10) Stateless: Microservices must be stateless and it must service the request without remembering the previous communications from the external system.
+11) Full-Stack Application: A full stack application is individually deploy-able. It has its own server, network & hosting environment.  The business logic, data model and the service interface (API / UI) must be part of the entire system.  .
+12) Better testability
+
+Microservices best practices
+
+1) Separate data store for each Microservice
+2) Separate code base
+3) Separate build for each Microservice
+4) Deploy in container
+5) stateless service
+
+
+Cons of Microservice Architecture
+1) increases troubleshooting challenges
+2) Increases delay due to remote calls
+3) Increased efforts for configuration and other operations
+4) Difficult to maintain transaction safety
+5) Tough to track data across various boundaries
+6) Difficult to code between services
+
+
+SOA uses Enterprise Service Bus for communication, while microservices uses REST or some other less elaborate messaging
+Microservices follows "share as little as possible" architecture approach.	SOA follows "share as much as possible architecture" approach.
+Microservices uses lightweight protocols such as REST, and HTTP, etc.	SOA supports multi-message protocols.
+Microservices focuses on decoupling.	SOA focuses on application service re-usability.
+
+Cohesion is an indication of how related and focused the responsibilities of an software element are.
+cohesion means that a class should represent a single concept.
+
+Coupling refers to how strongly a software element is connected to other elements.
+The measure of the strength of the dependencies between components is said to be coupling.
+
+REST is a medium to build Microservices
+Containers are a good way to manage microservice based application to develop and deploy them individually
+DRY stands for Don’t Repeat Yourself. It basically promotes the concept of reusing the code. This results in developing and sharing the libraries which in turn result in tight coupling
+
+Cons 
+troubleshooting challenges
+delay due to remote calls
+Increased efforts for configuration
+Difficult to maintain transaction
+Tough to track data across various boundaries
+Difficult to Debugging
+
+
+SOA
+Coarse -grained
+Collection of services
+Follows “share-as-much-as-possible” architecture approach
+Importance is on business functionality reuse
+Uses Enterprise Service bus (ESB) for communication	
+support multiple message protocols
+
+Microservices
+Fine-grained
+Importance is on the concept of “bounded context” (Focuses on decoupling)
+Simple messaging system
+hey use lightweight protocols such as HTTP/REST etc.
+------------------------------------------------------------------------------------------------------------
+Microservices Patterns
+
+1) Strangler pattern: 
+The Strangler Pattern is a popular design pattern to incrementally/gradually  transform your monolithic application into microservices by replacing a particular functionality with a new service
+You can develop a new component, let both the new and the old component exist for a period of time, and finally terminate the old component.
+
+2) Backends for Frontends: 
+It will create separate backend services for different types of clients, like desktop and mobile.
+Create one backend per user interface.
+
+3) Command and Query Responsibility Segregation (CQRS) pattern
+
+To join data across multiple microservices having  their own database
+
+This means that the data models used for querying and updates can be different. 
+CQRS is simply the creation of two objects where there was previously only one. 
+The separation occurs based upon whether the methods are a command or a query (A command is any method that change state and a query is any method that returns a value).
+As a result, it is no longer straightforward to implement queries that join data from multiple services
+
+Commands: are those operations related to create, update, delete
+Queries: are those operations related to query/read data
+
+Applying CQRS on this would result in two services:
+Define a view database, which is a read-only replica that is designed to support that query. The application keeps the replica up to data by subscribing to Domain events published by the service that own the data.
+As a result, it is no longer straightforward to implement queries that join data from multiple services
+
+OrderingWriteService:
+1 void Ship(OrderId)
+2 void ChangeOrderShipmentAddress(OrderId, NewAddress)
+3 void CreateOrder(Order)
+4 void ChangeOrderPaymentMethod(OrderId, PaymentMethod)
+
+OrderingReadService:
+1 Order GetOrder(OrderId)
+
+3) Decompose by business capability
+A monolith can be decomposed by using your organization's business capabilities. A business capability is what a business does to generate value (for example, sales, customer service, or marketing).
+
+Sales
+Marketing
+Customer
+
+4) Decompose by subdomain
+This pattern uses a domain-driven design (DDD) subdomain to decompose monoliths. This approach breaks down the organization’s domain model into separate subdomain
+Each subdomain has a model and the scope of that model is called a bounded context; microservices are developed around this bounded context.
+
+Sales -> 
+Purchasing
+Claims
+
+Nobody identifies business capabilities perfectly, but a useful place to start is by analysing the organization’s purpose, structure, and business processes.
+
+Customer Account Management 	→ Account Service
+Order Management							→ Order Service
+Book Inventory Management 			→ Book Service
+Shipping Management 					→ Shipping Service
+
+6) Saga
+
+SAGA is one of the best way to ensure the consistency of the data in a distributed architecture without having a single ACID transaction
+
+In the database-per-service pattern, each Microservice is responsible for its own data. However, this leads to an interesting situation. 
+What happens when a business transaction involves data that spans across multiple microservices
+A saga pattern is a sequence of local transactions where each transaction updates data within a single service. 
+
+if the state of the order needs to be tracked, Order Service could simply listen to all events and update its state.
+
+Order Service saves a new order, set the state as pending and publish an event called ORDER_CREATED_EVENT.
+The Payment Service listens to ORDER_CREATED_EVENT, charge the client and publish the event BILLED_ORDER_EVENT.
+The Stock Service listens to BILLED_ORDER_EVENT, update the stock, prepare the products bought in the order and publish ORDER_PREPARED_EVENT.
+Delivery Service listens to ORDER_PREPARED_EVENT and then pick up and deliver the product. At the end, it publishes an ORDER_DELIVERED_EVENT
+Finally, Order Service listens to ORDER_DELIVERED_EVENT and set the state of the order as concluded.
+
+Rolling back a distributed transaction does not come for free. Normally you have to implement another compensating transaction for what has been done before.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Private-tables-per-service – each service owns a set of tables that must only be accessed by that service
+Schema-per-service – each service has a database schema that’s private to that service
+Database-server-per-service – each service has it’s own database server.
+
+The word Domain used in context of software development refers to business
+When we are developing software our focus should not be primarily on technology, rather it should be primarily on business
+
+An API Gateway is a server that is the single entry point into the system. (in DMZ) 
+It is similar to the Facade pattern from object‑oriented design. 
+The API Gateway encapsulates the internal system architecture and provides an API that is tailored to each client. 
+It might have other responsibilities such as authentication, monitoring, load balancing, caching, request shaping and management, and static response handling.
+
+The Gateway can decouple the microservices from the clients. It will provide functions such as authentication, logging, load balancing etc.
+
+Canary release
+The canary release is a technique to reduce the risk of introducing a new software version in production by slowly rolling out the change to a small subset of users before rolling it out to the entire infrastructure.
+
+Blue Green Deployment
+It is more about the predictable release with zero downtime deployment.
+Easy rollbacks in case of failure.
+When deploying a new version of an application, a second environment is created. Once the new environment is tested, it takes over from the old version. The old environment can then be turned off.
+
+Continuous Integration(CI) is the practice to automatically build and unit test an entire application frequently, ideally on every source code check-in. 
+Continuous Delivery(CD) is the practice to deploy every build to a production such as environment and perform automated integration and acceptance testing after it will pass its build and unit tests
+
+Spring Boot actuator will be a good tool monitor metrics, counters for individual microservices.
+Actuator is mainly used to expose operational information about the running application — health, metrics, info, dump, env, etc
+
+Distributing tracing 
+Cloud Sleuth and ZipKin server for Spring Boot application
+[application-name,traceid,spanid,zipkin-export]
+
+
+Kubernetes is the market leading orchestration solution. It will help with automating container deployments, scheduling, and the scalability of containers.
+
+winston is designed to be a simple and universal logging library with support for multiple transports
+
+Generally, microservices are significantly smaller than what SOA tends to be
+We are talking about the scope (problem domain) of the service itself. Microservices generally do one thing in a better way.
+
+AWS offers a rich set of tools to manage those microservices, including 
+Amazon Elastic Container Service (Amazon ECS), 
+AWS Fargate, 
+AWS Lambda (serverless computing)
+Amazon Elastic Kubernetes Service (Amazon EKS), 
+and Amazon Elastic Compute Cloud (Amazon EC2).
+
+Distributed tracing refers to the capability of getting visibility for local calls or functions, and being able to see the lifecycle of the full request
+X-Ray allows you to trace requests from beginning to end across all touch points of your distributed system. 
+
+Fault tolerant microservices  
+Hystrix is a library from Netflix. Hystrix isolates the points of access between the services, stops cascading failures across them and provides the fallback options.
+For example, when you are calling a 3rd party application, it takes more time to send the response. So at that time, the control goes to the fallback method and returns the custom response to your application.
+
+Netflix Ribbon is a Part of Netflix Open Source Software (Netflix OSS). It is a cloud library that provides the client-side load balancing. 
+It automatically interacts with Netflix Service Discovery (Eureka) because it is a member of the Netflix family.
+
+RESTful services is a way for implementing microservices.
+
+Tables in a service's bounded context are granted read/write/delete privileges; otherwise, they cannot access tables in other services. 
+A service user account can be created for each service and privileges applied.
+
+A generalized messaging and convention can be established in your service implementations. 
+When any service performs a create, read, update, or delete operation (CRUD), then they can raise an event that reflects the primary key, operation, user, and maybe a date/time of the event.
+
+Teams can take full ownership over their work, from design to development to deployment
+Teams are working towards the same goal, on the same timeline. That means no more blocking
+
+DDD itself describes a methodology of software development in which individuals within an organization work together to define a common language.
+
+Bounded Context
+a system that encapsulates cooperative components — with clearly-defined boundaries that govern what can enter the system, and what can exit it.
+
+DDD is about understanding and distilling the domain of the problem we want to solve
+The problem domain may have different areas of functionality, which would be domains too. They are the subdomains. So a subdomain is a subset of the problem domain
+To solve the problem, you model the subdomains, and you create bounded contexts (BCs). In practice, a BC is an autonomous application that contains the software model of a subdomain
+
+
+Dev Ops is a methodology focuses on speeding up the process of software development to customer deployment.
+Agile is the software development process model evolved from Extreme Programming (XP) and Iterative-and-Incremental (2I) development process models.  
+Agile is best suitable for small teams working on software deliverable where the requirement volatility is high and time to market is shorter.
+
+*************************************************************
+
+A hypervisor, or a virtual machine monitor, is software, firmware, or hardware that creates and runs VMs
+Within each virtual machine runs a unique guest operating system. VMs with different operating systems can run on the same physical serve
+which adds overhead in memory and storage footprint
+
+Containers sit on top of a physical server and its host OS—for example, Linux or Windows. Each container shares the host OS kernel and, usually, the binaries and libraries,
+Containers also reduce management overhead. Because they share a common operating system, o
+
+Docker is an open-source containerization platform. It is used to automate the deployment of any application, using lightweight, portable containers.
+Containers are deployed applications bundled with all necessary dependencies and configuration files. All of the elements share the same OS kernel.
+Docker containers, wrap a piece of software in a complete filesystem that contains everything needed to run: code, runtime, system tools, system libraries etc. anything that can be installed on a server.
+This guarantees that the software will always run the same, regardless of its environment
+
+Docker is a centralized platform for packaging, deploying, and running applications. 
+It allows applications to use the same Linux kernel as a system on the host computer, rather than creating a whole virtual operating system
+
+The place where all Docker Images are stored is known as the Docker Registry. The Docker Hub is a public registry which is the default storage for these images.
+
+FROM: We use FROM to set the base image for subsequent instructions. In every valid Dockerfile, FROM is the first instruction.
+LABEL: We use LABEL to organize our images as per project, module, licensing etc. We can also use LABEL to help in automation.
+In LABEL we specify a key value pair that can be later used for programmatically handling the Dockerfile.
+RUN: We use RUN command to execute any instructions in a new layer on top of the current image. With each RUN command we add something on top of the image and use it in subsequent steps in Dockerfile.
+CMD: We use CMD command to provide default values of an executing container. In a Dockerfile, if we include multiple CMD commands, then only the last instruction is used.
+
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+EXPOSE 8096
+ADD target/*.jar app.jar
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+
+FROM node:7
+WORKDIR /app
+COPY package.json /app
+RUN npm install
+COPY . /app
+CMD node index.js
+EXPOSE 8081
+
+Benefits
+
+It runs the container in seconds instead of minutes.
+It uses less memory.
+It provides lightweight virtualization.
+It does not a require full operating system to run applications.
+
+Docker follows Client-Server architecture, which includes the three main components that are 
+
+Docker Client, 
+Docker client uses commands and REST APIs to communicate with the Docker Daemon (Server)
+
+Docker Host
+Docker Host is used to provide an environment to execute and run applications.
+
+Docker Registry
+Docker Registry manages and stores the Docker images
+
+Docker images are the read-only binary templates used to create Docker Containers.
+
+----------------------------------
+
+Continuous Integration
+Source + Build
+Automatically kick-off a new release when code is checked in
+build and test code in consistent repeatable environment
+continually have an artifacts ready for deployment
+
+Continuous Delivery
+Source + build + test + production 
+(with human intervention) 
+automatically deploy new changes to staging environment for testing
+
+Continuous Deployment
+Source + build + test + production 
+
+Source   = AWS CodeCommit
+Build       = AWS CodeBuild  (compiles source code , run unit test and produce artifacts)
+Test        = AWS CodeBuild + third party
+Deploy   = AWS CodeDeploy , Fargate/ECS
+Monitor   = AWS CloudWatch
+
+AWS CodePipeline covers all
+AWS codePipeline is a continuous delivery service to model,visualize and automate the steps to release your software
+
+AWS Cloud Map is cloud resource service discovery service in AWS
+
+Before App Mesh communication and monitoring is manual  for each service
+In app Mesh
+For every service , we have a envoy proxy as in bound and outbound proxy 
+and envoy proxy is communicated with App Mesh
+
+Create App Mesh
+Virtual Node & Virtual Service
+Create Virtual Router
+
+Cloud Formation
+
+MongoDB is a cross-platform, document oriented database
+
+Table			= 	Collection
+Tuple/Row	= Document
+column		= Field
+
+server = mongod
+client = mongo
+
+Schema less
+Structure of a single object is clear.
+When no complex joins require
+Ease of scale-out 
+
+If you don’t provide then MongoDB provides a unique id for every document. These 12 bytes first 4 bytes for the current timestamp, next 3 bytes for machine id, next 2 bytes for process id of MongoDB server and remaining 3 bytes are simple incremental VALUE.
+
+Elasticsearch is a real-time distributed and open source full-text search and analytics engine
+It is accessible from RESTful web service interface and uses schema less JSON (JavaScript Object Notation) documents to store data. It is built on Java programming language and hence Elasticsearch can run on different platforms
+
+The Docker Compose feature enables you to "link" multiple Docker containers into a single "composition"
+
+-------------------------------------------------------------------------------------------------------------------------------
+Functional programming is a paradigm of building computer programs using expressions and functions without mutating state and data.
+Functional programming aims to write code that is clearer to understand and more bug resistan
+
+Functional programming is declarative. It means that we declare what action task to perform without specifying the exact steps to achieve that
+

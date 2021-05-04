@@ -1,8 +1,36 @@
+To Ask
+
+API Gateway Vs Service Mesh
+
+
+https://javagyanmantra.wixsite.com/website
+
+------------------------------------------
+
+Pet Monlolithic
+https://github.com/aws-samples/amazon-ecs-java-microservices/tree/master/1_ECS_Java_Spring_PetClinic
+
+Pet Microservice
+https://github.com/aws-samples/amazon-ecs-java-microservices/tree/master/2_ECS_Java_Spring_PetClinic_Microservices
+
+Spring Pet Clinic
+https://github.com/spring-projects/spring-petclinic
+
+Rest Version
+https://awesomeopensource.com/project/spring-petclinic/spring-petclinic-rest
+
+
 Good Micorservice 
 https://microservices.io/patterns/data/cqrs.html
 
+
+Good Java Microservices
+https://www.javatpoint.com/microservices
+
 --------------------------------------------------
 Microservice Interview Questions
+
+
 
 https://www.edureka.co/blog/interview-questions/top-node-js-interview-questions-2016/
 
@@ -11,6 +39,9 @@ https://github.com/bbiswal333/Microservices-Interview
 
 Good
 https://careerkaizen.com/microservices-interview-questions/
+
+
+https://hackr.io/blog/microservices-interview-questions
 
 A microservice can be anything, that does one thing, but one thing well.
 
@@ -101,8 +132,98 @@ Fine-grained
 Importance is on the concept of “bounded context” (Focuses on decoupling)
 Simple messaging system
 hey use lightweight protocols such as HTTP/REST etc.
-------------------------------------------------------------------------------------------------------------
-Microservices Patterns
+
+
+An API Gateway acts as a single point of entry into a cluster, a data center, or a group of distributed services. In the network topology, it’s often referred to as north-south traffic. T
+
+The main purpose of an API gateway is to accept traffic from outside your network and distribute it internally.
+ The main purpose of a service mesh is to route and manage traffic within your network
+ 
+ both north-south (outside the datacenter) and east-west (inside the datacenter)
+ The APIs exposed by an API gateway are most likely running over the HTTP protocol (i.e., REST, SOAP, GraphQL or gRPC), and the traffic can be both north-south or east-west depending if the client application runs inside or outside the data center
+ The gateway also acts as a load balancer and will implement features like HTTP routing, support proxying the request to different versions of our APIs (in this context, it can also enable blue/green and canary deployments use cases)
+ 
+ A service mesh 
+ is a technology that manages service-to-service communication within a distributed software system. Service meshes manage the east-west type of network communications. East-west traffic indicates a traffic flow inside a data center
+ 
+
+API Gateway operates at Application Layer  (High level)
+stands b/w external and interal apps
+can do transformation request/response
+for both monolithic and microservice
+Amazon API Gateway, MuleSoft, apigee
+
+Service Mesh operates at Infrastructure Layer  (low level)
+stands b/w internal apps
+simply relay communcation as is
+only for microservice
+Istio, Kuma
+
+
+ With the help of actuator, you can check various metrics and monitor your application
+
+Spring Cloud 
+provides tools for developers to quickly build some of the common patterns in distributed systems
+ (e.g. configuration management, service discovery, circuit breakers, intelligent routing, leadership election, distributed sessions, cluster state).
+
+REST over HTTP is a way to implement Microservices
+
+
+OAuth stands for open authorization protocol. This allows accessing the resources of the resource owner by enabling the client applications on HTTP services such as third-party providers Facebook, GitHub
+Containers are used to manage microservice-based applications. 
+
+Architecture of Microservices
+API layer: This layer is the entry of all types of requests from clients. This layer enables the services to interact with each other through HTTP, TCP UDP protocols.
+Logic layer: The logic of the application is present in this layer to provide resolution of the business requirement. It can be written in different programming languages for different microservices.
+Database layer: Each microservice has its own database storage. 
+Container orchestration: To maintain the Microservices as separate entities they are run in their own containers.
+
+
+Coupling: It is the degree to which the modules are dependent, interacting with each other. Hence, coupling works across modules. It can be achieved by designing good interface boundaries.
+Cohesion: It is the degree to which the methods/ elements of a module serve a common purpose together. Hence, cohesion works within a module.
+
+Spring Cloud (open-source module of Spring)
+in Microservices provides tools to create patterns for distributed systems rapidly. 
+E.g., service discovery, circuit breakers, configuration management, intelligent routing, etc. 
+
+
+To configure  Spring security into an application we add the Spring Security on the classpath
+spring-boot-starter-security
+
+Microservices must have the idempotence property because there are scenarios where APIs get duplicate requests. In such scenarios, the system should be fault-tolerant and should not give erroneous results
+
+Single Responsibility Principle
+The single responsibility principle states that a class or a module in a program should have only one responsibility. Any microservice cannot serve more than one responsibility, at a time.
+
+Isolated Failure
+The large application can remain mostly unaffected by the failure of a single module. It is possible that a service can fail at any time. So, it is important to detect failure quickly, if possible, automatically restore failure.
+
+Deploy independently
+Microservices are platform agnostic. It means we can design and deploy them independently without affecting the other services.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------Microservices Patterns------------------------------------------------------------------
+
 
 1) Strangler pattern: 
 The Strangler Pattern is a popular design pattern to incrementally/gradually  transform your monolithic application into microservices by replacing a particular functionality with a new service
@@ -176,6 +297,20 @@ Delivery Service listens to ORDER_PREPARED_EVENT and then pick up and deliver th
 Finally, Order Service listens to ORDER_DELIVERED_EVENT and set the state of the order as concluded.
 
 Rolling back a distributed transaction does not come for free. Normally you have to implement another compensating transaction for what has been done before.
+
+Good
+https://www.vinsguru.com/retry-pattern/
+
+
+Retry Pattern
+Microservices are distributed in nature
+anything could happen. We might be dealing with network issues, service unavailability, application slowness etc. An issue with one system might affect another system behavior/performance
+Ability of the system to recover from such failures and remain functional makes the system more RESILIENT. 
+
+
+Control Loop
+ it is very difficult to manually detect and correct problems such as crashed or hung microservice instances.
+In the world of containers, a container orchestrator such as Kubernetes is typically used to implement this patter
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -251,6 +386,7 @@ DDD itself describes a methodology of software development in which individuals 
 
 Bounded Context
 a system that encapsulates cooperative components — with clearly-defined boundaries that govern what can enter the system, and what can exit it.
+"A description of a boundary (typically a subsystem, or the work of a particular team) within which a particular model is defined and applicable." This means that the microservice defined by a Bounded Context will have a well-defined model of its own data. 
 
 DDD is about understanding and distilling the domain of the problem we want to solve
 The problem domain may have different areas of functionality, which would be domains too. They are the subdomains. So a subdomain is a subset of the problem domain
@@ -385,4 +521,549 @@ Functional programming is a paradigm of building computer programs using express
 Functional programming aims to write code that is clearer to understand and more bug resistan
 
 Functional programming is declarative. It means that we declare what action task to perform without specifying the exact steps to achieve that
+
+SpringBoot focuses on the rapid and convenient development of individual microservices, and SpringCloud focuses on the overall service governance framework.
+
+Service avalanche
+M1 -> M2 - > M3
+delay at  M3 become bottlenetck for M1 called avalanche effect
+
+
+three solutions for the protection of service dependence
+1) Fuse mode: This mode is mainly a reference circuit blown
+In the Spring Cloud framework, the fuse mechanism is implemented through Hystrix. Hystrix will monitor the status of calls between micro services. When a failed call reaches a certain threshold, the default is that 20 call failures within 5 seconds will start the fuse mechanism. 
+
+-----------------------------------Hystrix------------------
+ Hystrix is an error tolerance and latency library
+Netflix has created a library called Hystrix that implements the circuit breaker pattern.
+<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+
+@EnableHystrix
+
+@EnableCircuitBreaker
+fallbackMethod
+
+
+
+Add a Circuit Breaker that prevents new outgoing requests from a caller if it detects a problem with the service it calls.
+
+Circuit Breaker simply skips the calls to Service C and goes with the fall back method 
+
+-------------------Eureka-----------------------------
+Eureka is alternatively known as the Netflix Service Discovery Server
+Eureka Server is also known as Discovery Server.
+Every Micro service will register into the Eureka server and Eureka server knows all the client applications running on each port and IP address
+
+<artifactId>spring-cloud-starter-eureka-server</artifactId>
+The @EnableEurekaServer annotation is used to make your Spring Boot application acts as a Eureka Server.
+
+http://localhost:8761
+
+The @EnableEurekaClient annotation makes your Spring Boot application act as a Eureka client.
+eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka
+
+With service discovery and registration, you only need to use the service identifier to access the service without modifying the configuration file of the service cal
+
+--------Strategies of Microservices Deployment-----------------------------------------------------------------
+
+Multiple Service Instance per Host: Run single or multiple service instances of the application on single/multiple physical/virtual hosts.
+Service Instance per Host: Run a service instance per host.
+Service Instance per Container: Run each service instance in its respective container.
+Serverless Deployment: Package the service as a ZIP file and upload it to the Lambda function. The Lambda function is a stateless service that automatically runs enough micro-services to handle all requests.
+
+--------------------------
+Reactive Extensions is a design approach through which results are collected by calling multiple services in order to compile a combined response. Also known as Rx, these calls can be synchronous or asynchronous
+
+----------------Spring Boot Exception Handling-------------(@ControllerAdvide)------------------------------------------
+
+SpringBoot provides a very powerful annotation called @ControllerAdvide under package org.springframework.web.bind.annotation. This annotation makes our life easy to handle all kinds of exceptions at a central place in our application
+@ControllerAdvice is intercepting all the exceptions occurring in the control
+
+@RestController
+@RequestMapping(path = "/employees")
+public class EmployeeController {
+
+if(null==employeeId || positionId.equals(0L)) {
+            throw new InvalidInputException("Employee Id is not valid");
+       }
+
+  if(null==userId || userId.equals(0L)) {
+           throw new UnauthorizedException("Unauthorized user");
+        }
+
+
+
+@ControllerAdvice
+public class ExceptionHelper {
+
+
+@ExceptionHandler(value = { InvalidInputException.class })
+    public ResponseEntity<Object> handleInvalidInputException(InvalidInputException ex) {
+        LOGGER.error("Invalid Input Exception: ",ex.getMessage());
+        return new ResponseEntity<Object>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = { Unauthorized.class })
+    public ResponseEntity<Object> handleUnauthorizedException(Unauthorized ex) {
+        LOGGER.error("Unauthorized Exception: ",ex.getMessage());
+        return new ResponseEntity<Object>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
+
+
+src main java com ibm
+
+controller
+EmployeeController.java
+
+dto
+Employee.java
+
+EmployeeException.java
+ private int errorCode;
+    private String message;
+
+service
+EmployeeService
+List<Student> getAllStudents() throws Exception;
+    Student findStudentById(int id);
+	
+EmployeeServiceImpl
+
+
+---------------------------------------------------------------------------------------------------------------------------
+ A bean is just a fancy name for an object and we use the nomenclature bean to signify that the Spring IoC container will manage that object. 
+
+
+The ApplicationContext is Springs IoC container.
+The job of the ApplicationContext is to read bean definitions, assemble them, and provide access to them
+
+
+
+
+Inversion of control is the principle where the control flow of a program is inverted: instead of the programmer controlling the flow of a program, the external sources (framework, services, other components) take control of it.
+The Inversion of control is a term used in Object Oriented Programming, by which the control of an object or set of objects is given to a framework or a container provided by the framework.
+We take configurations and dependencies out of the components and give them to a container called as Inversion of Control Container or IOC Container
+When a class A calls a method of class B. Then Class A is dependent on Class B.
+
+The Dependency Injection is a term used in Object Oriented Programming, by which Objects will focus on doing the assigned functionality and utilising other object
+In a Spring based application, Inversion of Control Container (IoC container) does the dependency injection
+
+he class ApplicationContext represents the Spring IOC Container. The Application context is responsible for instantiating, configuring and wiring the beans.
+Remember, Beans are nothing but Java objects registered with Spring’s Application Context.
+
+
+
+Tight Coupled
+
+public class FileUploadService {
+    private List<String> validFiles = Arrays.asList("xls", "doc"."txt", "ppt");
+    private FileStorageService service = new AzureBlobStorageService();
+
+    public FileUploadService() {}
+
+}
+
+public class FileUploadService {
+    private List<String> validFiles;
+    private FileStorageService service;
+     
+    public FileUploadService(List<String> validFiles, FileStorageService service){
+        this.validFiles = validFiles;
+        this.service = service;
+    }
+}
+
+
+
+
+--------------------------Spring Annotations--------------------------------------------------
+if you want to use third-party classes or jar then use @Bean.
+If you are writing your own classes for your application then use Component.
+If you want to use a third party class or jar that is not written using Spring Component then use @Bean.
+
+ Remember, @Inject is a standard annotation defined by JSR-330 and @Autowired is spring specific. In theory, if you move to another DI framework like Google Guice, @Inject will work there. 
+
+Read more: https://javarevisited.blogspot.com/2017/04/difference-between-autowired-and-inject-annotation-in-spring-framework.html#ixzz6rcKXW8fT
+
+
+Autowiring feature of spring framework enables you to inject the object dependency implicitly. It internally uses setter or constructor injection.
+Autowiring can't be used to inject primitive and string values. It works with reference only.
+We can use the @Autowired to mark a dependency which Spring is going to resolve and inject. We can use this annotation with a constructor, setter, or field injection.
+Marks a constructor, field, setter method, or config method as to be autowired by dependency injection. We can mark whether the annotated dependency is required (mandatory to populate) or not using it’s ‘required’ attribute. By default, its value is ‘true’.
+
+
+@Autowired
+    private CustomerService customerService;
+	
+public class EmployeeService {
+       
+    @Autowired
+    private EmployeeDao dao;
+}
+
+
+
+ @SpringBootApplication
+The @SpringBootApplication annotation is equivalent to using 
+@Configuration
+@EnableAutoConfiguration
+@ComponentScan
+
+We use this annotation to mark the main class of a Spring Boot application:
+
+@EnableAutoConfiguration
+@EnableAutoConfiguration annotation tells Spring Boot to “guess” how you want to configure Spring, based on the jar dependencies that you have added. Since spring-boot-starter-web dependency added to classpath leads to configure Tomcat and Spring MVC, the auto-configuration assumes that you are developing a web application and sets up Spring accordingly.
+
+When using @SpringBootApplication annotation, the auto-configuration of the context is automatically enabled and adding this annotation has, therefore, no additional effect.
+For example, if we have tomcat-embedded.jar on the classpath, we are likely to want a TomcatServletWebServerFactory.
+When we add the spring-boot-starter-web dependency in the project, Spring Boot auto-configuration looks for the Spring MVC is on the classpath. It auto-configures dispatcherServlet, a default error page, and web jars.
+
+Similarly, when we add the spring-boot-starter-data-jpa dependency, we see that Spring Boot Auto-configuration, auto-configures a datasource and an Entity Manager
+We can also disable the specific auto-configuration classes, if we do not want to be applie
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})  
+
+The @Autowired annotation is used to automatically inject dependencies of the specified type into the current bean
+
+
+@Bean
+when the source code of the POJOs are not available and we need to create Spring-managed beans, @bean annotation is extremely usefu
+This annotation is applied to a method and produces a bean that is managed by Spring
+
+
+    @Bean(name = "admin", initMethod = "", destroyMethod = "")
+    public Admin admin(){
+        return new Admin();
+    }
+
+Spring’s @Value annotation is quite useful and handy to assign default values and controlling a variable's value with Spring Expression Language (SpEL)
+
+@Value("default-user")
+    private String name;
+	
+	@Value("${NAME}") // Reading from Environment
+    private String name;
+	
+----------------------Stereotype Annotations-------------------------------------
+
+Stereotype annotations are @Component, @Service, @Repository and @Controller annotations.
+he Spring stereotype @Component is parent stereotype. 
+The other stereotypes i.e @Service, @Repository and @Controller are the specialization of @Component annotation
+
+stereotype annotations mark classes as a bean candidate
+Firstly, the @Component annotation is the primary annotation for marking classes as beans:
+
+@Component 
+annotation is a stereotype and is used at class level that makes the class a component. These classes are eligible for auto-detection through classpath scanning
+
+@Component
+public class DepartmentComponent {
+}
+Here, Spring will register DepartmentComponent as a bean.
+
+@Service annotation 
+is a stereotype and is used at class level that makes the class a service. A service class can act as Business Service Facade of j2EE pattern
+A service class implements business logic using DAO, utility classes etc.
+hese class files are used to write business logic
+@Service annotation is a specialization of @Component annotation
+
+@Service
+public class ProductServiceImpl implements ProductService {
+}
+
+In Spring Boot, the controller class is responsible for processing incoming REST API requests, preparing a model, and returning the view to be rendered as a response.
+The @Controller annotation extends the use-case of @Component and marks the annotated class as a business or presentation layer. 
+
+@Controller
+@Controller annotation is a stereotype and is used at class level in spring MVC. It indicates that the class is a web controller.
+Spring scans the @Controller annotated classes and creates request mappings:
+Controllers are the ones that interpret user input and transform it into a model that is represented to the user by the view
+
+@Controller
+@RequestMapping(value = "/book")
+public class BookController {} 
+
+The @Controller is a common annotation that is used to mark a class as Spring MVC Controller while @RestController is a special controller used in RESTFul web services and the equivalent of @Controller + @ResponseBody.
+That is the response from a web application is generally view (HTML + CSS) because they are intended for human viewers.
+REST API just returns data in form of JSON or XML because most of the REST clients are programs.
+
+@Controller
+@ResponseBody
+Public class MVCController{
+}
+
+Both are same
+
+@RestController
+public class MVCController{
+}
+
+
+@GetMapping is a shortcut for @RequestMapping(method = RequestMethod.GET)
+ @GetMapping("/{id}")
+    public @ResponseBody Tree getTreeById(@PathVariable int id) {
+        return repository.findById(id);
+    }
+	Because of the @ResponseBody annotation, the fields from the fetched object are serialized into JSON and returned to the client that requested it
+	
+	
+	@Repository
+	 @Repositoryis a Spring annotation that indicates that the decorated class is a repository. A repository is a mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects
+	 
+	 
+<dependency>
+ <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>	 
+
+Spring @Repository annotation is used to indicate that the class provides the mechanism for storage, retrieval, search, update and delete operation on objects
+
+public interface ObjectRepository<T> {
+	public void store(T t);
+}
+
+@Repository
+public class EmployeeRepository implements ObjectRepository<Employee> {
+@Override
+	public void store(Employee emp) {
+		repository.put(emp.getId(), emp);
+	}
+	
+This annotation has a automatic translation feature. For example, when an exception occurs in the @Repository there is a handler for that exception and there is no need to add a try catch block	
+	
+---------------------------------------------------------------------------------
+@Lazy
+This Spring framework annotation makes @Bean or @Component be initialized on demand rather than eagerly.
+
+@Required
+This annotation can be used to specify a mandatory dependency. It can even fail the configuration if the dependency cannot be injected
+
+The setter method is not configured with a value, then the spring container will throw a BeanCreationException during the initialization phase of the bean
+@ComponentScan
+This Spring annotation instructs Spring to scan the package for all the @Configuration classes, which contains Spring bean definition in Java-based configuration.
+
+Cross Origin Resource Sharing (CORS) enables cross-domain communication
+@CrossOrigin(origins = "http://example.com")
+@RequestMapping("/message")
+  public Message getMessage() {
+      // ...
+    }
+	
+	----------------------------------------------------------------------------------------
+
+application.properties
+limits-service.minimum=99  
+limits-service.maximum=999
+
+@Component
+
+@ConfigurationProperties("limits-service")  
+public class Configuration   
+{
+
+private int maximum;  
+private int minimum;  
+}
+
+
+
+
+ @RequestBody annotation to bind request attributes to method parameters.
+ 
+ In traditional object-oriented design, a domain model is a collection of classes and relationships between classes.
+ 
+----------------------------------------------------------------------------------------------------------
+
+
+https://learning.oreilly.com/library/view/hands-on-microservices-with/9781789613476/eaec078c-9fa9-449b-b5e5-838e4c2db3bd.xhtml
+
+SERVICE DISCOVERY
+How can clients find microservices and their instances?
+service discovery service component, which keeps track of currently available microservices and the IP addresses of its instances.
+Automatically register/unregister microservices 
+request to a logical endpoint
+must be load-balanced
+
+EDGE SERVER
+Expose some of the microservices to the outside of the system landscape and hide the remaining microservices from external access ?
+must be protected 
+ an Edge Server, to the system landscape
+ An edge server typically behaves like a reverse proxy and can be integrated with a discovery service to provide dynamic load balancing capabilities
+ Hide internal services that should not be exposed outside their context
+ Expose external services and protect them from malicious requests
+  OAuth, JWT
+  
+
+REACTIVE MICROSERVICE
+synchronous communication using blocking I/O
+sing a blocking I/O means that a thread is allocated from the operating system for the length of the request
+Whenever feasible, use an asynchronous programming model
+
+Microservices must also be designed to be resilient, that is, capable of producing a response, even if a service that it depends on fails
+Once the failing service is operational again, its clients must be able to resume using it, which is known as self-healing.
+
+CENTRAL CONFIGURATION
+How do I get a complete picture of the configuration that i ?  
+How do I update the configuration and make sure that all the affected microservice instances are updated correctly?
+store configuration information for a group of microservices in one place, with different settings for different environments (for example, dev, test, qa, and prod).
+Spring Cloud Config Server is one of the popular implementations of a cloud config server
+Spring Cloud Config Server enables you to store all the configuration for multiple microservices for different environments in a Git or a SVN Repository
+An interesting feature present with the Spring Cloud Config Server, is auto refresh.
+
+Whenever a change is committed to the Git repository, configuration in the application is auto-refreshed.
+
+Serverless architecture is similar in respect to decoupling, where each function can be a complete separation of concerns. In Serverless architecture, you can think of each action of the app as a separate function which can be completely decoupled.
+
+ twelve-factor app never concerns itself with routing or storage of its output stream. It should not attempt to write to or manage logfiles. Instead, each running process writes its event stream, unbuffered, to stdout. 
+
+Spring Cloud Sleuth is a Spring Cloud library that provides the ability to track the progress of subsequent microservices by adding trace and span Ids on the appropriate HTTP request headers. The Sleuth library is based on the MDC (Mapped Diagnostic Context) concept, where we can easily extract values, put to context, and display them in the log.
+
+The Spring Cloud Sleuth token has the following components:
+
+Application name: The name of the application that is defined in the properties file.
+Trace Id: The Sleuth adds the Trace Id. It remains the same in all services for a given request.
+Span Id: The Sleuth also adds the Span Id. It remains the same in a unit of work but different for different services for a given request.
+Zipkin Export Flag: It indicates a boolean value. It can be either true or
+
+However, we face a challenge in tracing. If we want to trace a request, we have to check the log of the individual application. The solution to this problem is called centralized logs.
+There are the following solutions for centralize logging:
+
+ELK Stack (Elastic Search)
+Kibana
+Zipkin
+
+Spring Cloud Sleuth is used to generate and attach the trace id, span id to the logs so that these can then be used by tools like Zipkin and ELK for storage and analysis
+
+<artifactId>spring-cloud-starter-sleuth</artifactId>
+
+server.port=8080
+spring.application.name=microservice1
+spring.zipkin.enabled=false
+
+ If you are exporting span data to Zipkin or Spring Cloud Stream, there is also an AlwaysSampler that exports everything and a PercentageBasedSampler that samples a fixed fraction of span
+ 
+ @Bean
+	public Sampler defaultSampler() {
+		return Sampler.ALWAYS_SAMPLE;
+	}
+
+
+private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+String baseUrl = "http://localhost:8081/microservice2";
+String response = (String) restTemplate.exchange(baseUrl, HttpMethod.GET, null, String.class).getBody();
+LOG.info("The response received by method1 is " + response);
+
+2016-06-20 09:03:44.939 INFO microservice1,380c24fd1e5f89df,380c24fd1e5f89df,true] 19263 --- [nio-8080-exec-1] com.ex
+		
+RestTemplate bean is necessary because Spring Cloud Sleuth adds the trace id and span id via headers in the request. The headers can then be used by other Spring Cloud Sleuth enabled microservices to trace the request
+		
+Spring Boot 2.0 is based on Spring Framework 5.0
+		pring WebFlux, which supports the development of reactive, that is, non-blocking, HTTP clients and services
+		
+
+An entity describes the data that will be stored by Spring Data
+
+@Entity
+@IdClass(ReviewEntityPK.class)
+@Table(name = "review")
+
+For MongoDB
+
+Document
+public class RecommendationEntity {
+
+@Id
+private String id;
+
+Spring Cloud Stream provides a streaming abstraction over messaging, based on the publish-and-subscribe integration pattern. Spring Cloud Stream currently comes with support for Apache Kafka and RabbitMQ out of the box.
+	
+loud native is an approach to building and running applications that fully exploit the advantages of the cloud computing model.
+Cloud native development incorporates the concepts of DevOps, continuous delivery, microservices, and containers
+
+--------------------------------
+DevOps is the combination of cultural philosophies, practices, and tools that increases an organization’s ability to deliver applications and services at high velocity: evolving and improving products at a faster pace
+	
+Continuous Integration
+A development practice where developers integrate code into a shared repository frequently
+Each piece of code (change/patch) is verified, to make the change is safe to merge.
+
+Continuous Deployment
+A development strategy used by developers to release software automatically into production where any code commit must pass through an automated testing phase
+
+Continuous Delivery
+A development strategy used to frequently deliver code to QA and Ops for testing. This entails having a staging area that has production like features where changes can only be accepted for production after a manual review.
+
+Refactoring
+Changing the structure of the code without changing the	behaviour
+
+--------------------------------------Step Functions---------------------------------------------------------------------
+
+https://states-language.net/
+
+AWS Step function is a Serverless Function Orchestrator that makes it east to sequence AWS Lambda fucntions
+and AWS services 
+It manages the state in the workflow
+Handle Retry Logic
+Error Handling 
+Parallel Processing
+
+A State Machine is represented by a JSON Object. based on Amazon State Language
+
+States are represented as fields of the top-level "States" object.
+All states MUST have a "Type" field.
+Any state MAY have a "Comment" field, to hold a human-readable comment or description
+The term "Terminal State" means a state with with { "End": true }, or a state with { "Type": "Succeed" }, or a state with { "Type": "Fail" }.
+
+
+Step Functions States
+
+1) Task State
+
+Type: Task
+
+can have retries and catch
+
+2) Wit State
+
+how many secods to watu
+State machine is still hold
+
+
+3) Parallel State
+
+to execute parallel states
+if one of the brach fails, the entire parallel stare fails
+
+4) Choice State
+like if else
+
+5)
+
+-----------------------------SWAGGER------------------------------------------------------------------
+Swagger2 is an open source project used to generate the REST API documents for RESTful web services. It provides a user interface to access our RESTful web services via the web browser.
+
+		
+<groupId>io.springfox</groupId>
+<artifactId>springfox-swagger2</artifactId>
+<artifactId>springfox-swagger-ui</artifactId>
+
+@Api(value = "Cargo Booking Controller",  description = " Endpoints for booking cargo and finding cargo ", tags = "Cargo Booking Commands")
+add above on RestController		
+
+
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+
+    @Bean
+    public Docket apiDocket(){
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.way2learnonline"))
+                .paths(PathSelectors.any())
+                .build()
+                .apiInfo(getApiInfo());
+    }
+	
+-------------------------------------------------------------------------------------------------------------------------	
 

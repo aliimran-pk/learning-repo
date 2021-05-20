@@ -1,7 +1,7 @@
 To Ask
 
 API Gateway Vs Service Mesh
-
+Mokito
 
 https://javagyanmantra.wixsite.com/website
 
@@ -54,11 +54,73 @@ Coarse-grained - larger components
 Fine-grained - smaller components of which the larger ones are composed
 
 With coarse-grained resources, developers need to make fewer calls to get the same amount of information
-On the one hand, you’re not giving consumers more information than they need (thus saving bandwidth), but on the other hand, developers now need to make more calls to get the same amount of information (thus slowing down client implementations).
+thus saving bandwidth
 
 
-Microservice Architecture is an architectural development style that allows building applications as a collection 
-of small autonomous services developed for a business domain.
+
+
+Component-based
+Service-oriented
+Monolithic application
+Layered
+Event-driven
+Client-server
+
+Architectural patterns are names of the reusable solutions to the general architectural problems which give an idea of how the inner parts are implemented to solve them. 
+Examples are, 2-Tier, 3-Tier, N-Tier, MVC, REST etc.
+
+One style can use multiple patterns to solve multiple problems. For example, a Client/Server style can use an N-Tier pattern or(and) an MVC pattern for separating its business logic, presentation logic and data logic for introducing modularity which solves modifiability and maintainability problems.
+
+An Architectural Style is the application design at the highest level of abstraction;
+
+
+-------------- Architectural Style  -------------------------------------
+Architectural Style is abstract i.e. conceptual.
+
+Architectural styles tell us, in very broad strokes, how to organise our code.
+It specifies layers, high-level modules of the application and how those modules and layers interact with each other, the relations between them
+when building the architectural style of our system we focus on layers and modules and how they are communicating with each other.
+
+
+1) Monolithic application
+2) Microservice
+3) Representational state transfer (REST) is a software architectural style for distributed hypermedia systems. 
+4) Service-oriented architecture (SOA) is an architectural style that supports service orientation
+
+Layered 
+ It partitions the concerns of the application into layers.
+Most of the time, we have four layers:
+Presentation layer or UI layer
+Application layer or Service layer
+Business logic layer or Domain layer
+Data access layer or Persistence layer
+
+
+----------- Architectural Pattern ----------------------------
+
+An architectural pattern is a general, reusable solution to a commonly occurring problem in software architecture within a given context
+An Architectural Pattern is concrete  and a way to implement an Architectural Style;
+An Architecture Patterns can be a subset of an Architectural Styles targeting a specific scope.
+
+
+1) Model-view-controller
+2) Domain Driven Design (Domain-driven design (DDD) is the concept , that the structure and language of software code (class names, class methods, class variables) should match the business domain. )
+For example, if a software processes loan applications, it might have classes such as LoanApplication and Customer, and methods such as AcceptOffer and Withdraw.
+3) 3-tier, N-tier, 
+4) Event-Driven (Also called EDA, this pattern organizes a system around the production, detection and consumption of events.)
+
+
+For example: how to separate the UI of the data module in our architectural style? 
+How to integrate a third-party component with our system? 
+how many tires will we have in our client-server architecture? 
+
+---------------------------------Design pattern-------------------------------------------------------------------------------
+A Design pattern is a general reusable solution to a commonly occurring problem in software design at architectural level.
+For example: Factory, Singleton, Prototype.
+
+-------------------------------------------------------------
+
+Microservice Architecture is an architectural development style that allows building applications as a collection of small autonomous services  (independently deployable) developed for a business domain.
 Microservice architecture is a variant of service-oriented architecture. It breaks down applications into a framework of interconnected functions or services.
 
 Characteristics of Microservices
@@ -67,15 +129,14 @@ Characteristics of Microservices
 2) Decoupling – Services within a system are largely decoupled. So the application as a whole can be easily built, altered, and scaled
 3) Scalability - . Easy to scale as individual component
 3) Fault isolation - i.e. a process failure should not bring whole system down
-4) Componentization – Microservices are treated as independent components that can be easily replaced and upgraded
-5) Business Capabilities – Microservices are very simple and focus on a single capability
-6) Autonomy – Developers and teams can work independently of each other, thus increasing speed
-7) Continuous Delivery – Allows frequent releases of software, through systematic automation of software creation, testing, and approval
-8) Technology diversity – The focus is on using the right tool for the right job. That means there is no standardized pattern or any technology pattern.
-9) Agility – Microservices support agile development. Any new feature can be quickly developed and discarded again
-10) Stateless: Microservices must be stateless and it must service the request without remembering the previous communications from the external system.
-11) Full-Stack Application: A full stack application is individually deploy-able. It has its own server, network & hosting environment.  The business logic, data model and the service interface (API / UI) must be part of the entire system.  .
-12) Better testability
+4) Business Capabilities – Microservices are very simple and focus on a single capability
+5) Autonomy – Developers and teams can work independently of each other, thus increasing speed
+6) Continuous Delivery – Allows frequent releases of software, through systematic automation of software creation, testing, and approval
+7) Technology diversity – The focus is on using the right tool for the right job. That means there is no standardized pattern or any technology pattern.
+8) Agility – Microservices support agile development. Any new feature can be quickly developed and discarded again
+9) Stateless: Microservices must be stateless and it must service the request without remembering the previous communications from the external system.
+10) Full-Stack Application: A full stack application is individually deploy-able. It has its own server, network & hosting environment.  The business logic, data model and the service interface (API / UI) must be part of the entire system.  .
+11) Better testability
 
 Microservices best practices
 
@@ -99,75 +160,50 @@ SOA uses Enterprise Service Bus for communication, while microservices uses REST
 Microservices follows "share as little as possible" architecture approach.	SOA follows "share as much as possible architecture" approach.
 Microservices uses lightweight protocols such as REST, and HTTP, etc.	SOA supports multi-message protocols.
 Microservices focuses on decoupling.	SOA focuses on application service re-usability.
+SOA = Coarse -grained , Microservice = Fine-grained
 
 Cohesion is an indication of how related and focused the responsibilities of an software element are.
 cohesion means that a class should represent a single concept.
+Cohesion: It is the degree to which the methods/ elements of a module serve a common purpose together. Hence, cohesion works within a module.
 
 Coupling refers to how strongly a software element is connected to other elements.
 The measure of the strength of the dependencies between components is said to be coupling.
+Coupling: It is the degree to which the modules are dependent, interacting with each other. Hence, coupling works across modules. It can be achieved by designing good interface boundaries.
 
-REST is a medium to build Microservices
+
+
+REST over HTTP is a way to implement Microservices
 Containers are a good way to manage microservice based application to develop and deploy them individually
-DRY stands for Don’t Repeat Yourself. It basically promotes the concept of reusing the code. This results in developing and sharing the libraries which in turn result in tight coupling
 
-Cons 
-troubleshooting challenges
-delay due to remote calls
-Increased efforts for configuration
-Difficult to maintain transaction
-Tough to track data across various boundaries
-Difficult to Debugging
+DRY stands for Don’t Repeat Yourself. 
+It basically promotes the concept of reusing the code. This results in developing and sharing the libraries which in turn result in tight coupling
 
 
-SOA
-Coarse -grained
-Collection of services
-Follows “share-as-much-as-possible” architecture approach
-Importance is on business functionality reuse
-Uses Enterprise Service bus (ESB) for communication	
-support multiple message protocols
-
-Microservices
-Fine-grained
-Importance is on the concept of “bounded context” (Focuses on decoupling)
-Simple messaging system
-hey use lightweight protocols such as HTTP/REST etc.
-
-
-An API Gateway acts as a single point of entry into a cluster, a data center, or a group of distributed services. In the network topology, it’s often referred to as north-south traffic. T
-
+An API Gateway 
+acts as a single point of entry into a cluster, a data center, or a group of distributed services. In the network topology, 
+it’s often referred to as north-south traffic. 
 The main purpose of an API gateway is to accept traffic from outside your network and distribute it internally.
- The main purpose of a service mesh is to route and manage traffic within your network
- 
- both north-south (outside the datacenter) and east-west (inside the datacenter)
- The APIs exposed by an API gateway are most likely running over the HTTP protocol (i.e., REST, SOAP, GraphQL or gRPC), and the traffic can be both north-south or east-west depending if the client application runs inside or outside the data center
  The gateway also acts as a load balancer and will implement features like HTTP routing, support proxying the request to different versions of our APIs (in this context, it can also enable blue/green and canary deployments use cases)
- 
- A service mesh 
- is a technology that manages service-to-service communication within a distributed software system. Service meshes manage the east-west type of network communications. East-west traffic indicates a traffic flow inside a data center
- 
-
 API Gateway operates at Application Layer  (High level)
-stands b/w external and interal apps
 can do transformation request/response
 for both monolithic and microservice
 Amazon API Gateway, MuleSoft, apigee
 
+ A service mesh 
+The main purpose of a service mesh is to route and manage traffic within your network
+ both north-south (outside the datacenter) and east-west (inside the datacenter)
+  is a technology that manages service-to-service communication within a distributed software system. 
+Service meshes manage the east-west type of network communications( traffic flow inside a data center)
 Service Mesh operates at Infrastructure Layer  (low level)
-stands b/w internal apps
-simply relay communcation as is
-only for microservice
+Only for microservice
 Istio, Kuma
 
 
- With the help of actuator, you can check various metrics and monitor your application
+With the help of actuator, you can check various metrics and monitor your application
 
 Spring Cloud 
 provides tools for developers to quickly build some of the common patterns in distributed systems
  (e.g. configuration management, service discovery, circuit breakers, intelligent routing, leadership election, distributed sessions, cluster state).
-
-REST over HTTP is a way to implement Microservices
-
 
 OAuth stands for open authorization protocol. This allows accessing the resources of the resource owner by enabling the client applications on HTTP services such as third-party providers Facebook, GitHub
 Containers are used to manage microservice-based applications. 
@@ -178,9 +214,6 @@ Logic layer: The logic of the application is present in this layer to provide re
 Database layer: Each microservice has its own database storage. 
 Container orchestration: To maintain the Microservices as separate entities they are run in their own containers.
 
-
-Coupling: It is the degree to which the modules are dependent, interacting with each other. Hence, coupling works across modules. It can be achieved by designing good interface boundaries.
-Cohesion: It is the degree to which the methods/ elements of a module serve a common purpose together. Hence, cohesion works within a module.
 
 Spring Cloud (open-source module of Spring)
 in Microservices provides tools to create patterns for distributed systems rapidly. 
@@ -202,6 +235,20 @@ Deploy independently
 Microservices are platform agnostic. It means we can design and deploy them independently without affecting the other services.
 
 
+monolith primarily as a unit of deployment. We can think about the classical monolith, which is all the code packaged in a single process
+
+ Modular Monolithic
+ broken down our single-process monolithic application into modules. If we get our module boundaries right, we can work on each module independently.
+ While we still have a monolithic deployment, a modular monolith has some significant benefits to
+ Breaking our code down into those modules does give us a degree of independent working
+ 
+
+ we've taken the modular monolith and we've broken down that single monolithic database that backs it so that we're storing and managing the data for each module in isolation.
+ 
+ distributed monolith
+ application code is now running on separate processes that communicate with each othe
+ 
+The concept of a release train is that on a regular basis, maybe every four weeks, all of the software that's ready goes out the door. If our software isn't ready, it is bumped to the next release train
 
 
 
@@ -217,102 +264,6 @@ Microservices are platform agnostic. It means we can design and deploy them inde
 
 
 
-
-
-
-
-
-------------------------------------------Microservices Patterns------------------------------------------------------------------
-
-
-1) Strangler pattern: 
-The Strangler Pattern is a popular design pattern to incrementally/gradually  transform your monolithic application into microservices by replacing a particular functionality with a new service
-You can develop a new component, let both the new and the old component exist for a period of time, and finally terminate the old component.
-
-2) Backends for Frontends: 
-It will create separate backend services for different types of clients, like desktop and mobile.
-Create one backend per user interface.
-
-3) Command and Query Responsibility Segregation (CQRS) pattern
-
-To join data across multiple microservices having  their own database
-
-This means that the data models used for querying and updates can be different. 
-CQRS is simply the creation of two objects where there was previously only one. 
-The separation occurs based upon whether the methods are a command or a query (A command is any method that change state and a query is any method that returns a value).
-As a result, it is no longer straightforward to implement queries that join data from multiple services
-
-Commands: are those operations related to create, update, delete
-Queries: are those operations related to query/read data
-
-Applying CQRS on this would result in two services:
-Define a view database, which is a read-only replica that is designed to support that query. The application keeps the replica up to data by subscribing to Domain events published by the service that own the data.
-As a result, it is no longer straightforward to implement queries that join data from multiple services
-
-OrderingWriteService:
-1 void Ship(OrderId)
-2 void ChangeOrderShipmentAddress(OrderId, NewAddress)
-3 void CreateOrder(Order)
-4 void ChangeOrderPaymentMethod(OrderId, PaymentMethod)
-
-OrderingReadService:
-1 Order GetOrder(OrderId)
-
-3) Decompose by business capability
-A monolith can be decomposed by using your organization's business capabilities. A business capability is what a business does to generate value (for example, sales, customer service, or marketing).
-
-Sales
-Marketing
-Customer
-
-4) Decompose by subdomain
-This pattern uses a domain-driven design (DDD) subdomain to decompose monoliths. This approach breaks down the organization’s domain model into separate subdomain
-Each subdomain has a model and the scope of that model is called a bounded context; microservices are developed around this bounded context.
-
-Sales -> 
-Purchasing
-Claims
-
-Nobody identifies business capabilities perfectly, but a useful place to start is by analysing the organization’s purpose, structure, and business processes.
-
-Customer Account Management 	→ Account Service
-Order Management							→ Order Service
-Book Inventory Management 			→ Book Service
-Shipping Management 					→ Shipping Service
-
-6) Saga
-
-SAGA is one of the best way to ensure the consistency of the data in a distributed architecture without having a single ACID transaction
-
-In the database-per-service pattern, each Microservice is responsible for its own data. However, this leads to an interesting situation. 
-What happens when a business transaction involves data that spans across multiple microservices
-A saga pattern is a sequence of local transactions where each transaction updates data within a single service. 
-
-if the state of the order needs to be tracked, Order Service could simply listen to all events and update its state.
-
-Order Service saves a new order, set the state as pending and publish an event called ORDER_CREATED_EVENT.
-The Payment Service listens to ORDER_CREATED_EVENT, charge the client and publish the event BILLED_ORDER_EVENT.
-The Stock Service listens to BILLED_ORDER_EVENT, update the stock, prepare the products bought in the order and publish ORDER_PREPARED_EVENT.
-Delivery Service listens to ORDER_PREPARED_EVENT and then pick up and deliver the product. At the end, it publishes an ORDER_DELIVERED_EVENT
-Finally, Order Service listens to ORDER_DELIVERED_EVENT and set the state of the order as concluded.
-
-Rolling back a distributed transaction does not come for free. Normally you have to implement another compensating transaction for what has been done before.
-
-Good
-https://www.vinsguru.com/retry-pattern/
-
-
-Retry Pattern
-Microservices are distributed in nature
-anything could happen. We might be dealing with network issues, service unavailability, application slowness etc. An issue with one system might affect another system behavior/performance
-Ability of the system to recover from such failures and remain functional makes the system more RESILIENT. 
-
-
-Control Loop
- it is very difficult to manually detect and correct problems such as crashed or hung microservice instances.
-In the world of containers, a container orchestrator such as Kubernetes is typically used to implement this patter
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Private-tables-per-service – each service owns a set of tables that must only be accessed by that service
 Schema-per-service – each service has a database schema that’s private to that service
@@ -1065,5 +1016,304 @@ public class SwaggerConfig {
                 .apiInfo(getApiInfo());
     }
 	
--------------------------------------------------------------------------------------------------------------------------	
+--------------------------------------Spring Cloud Microservice----------------------------------------------------------------------------------	
+https://github.com/shabbirdwd53/Springboot-Microservice
+
+https://www.youtube.com/watch?v=BnknNTN8icw
+
+
+Microservices
+http://localhost:9191/departments/1
+http://localhost:9191/users/1
+
+Eureka Server
+http://localhost:8761 
+http://localhost:8761/eureka/apps
+
+Streaming of API gateway
+http://localhost:9191/actuator/hystrix.stream
+
+
+Hystrix DashBoard URL
+localhost:9295/hystrix
+
+Zipkin Server
+docker run -d -p 9411:9411 openzipkin/zipkin
+http://localhost:9411
+
+
+
+INFO [USER-SERVICE,6488312dffdb2672,6488312dffdb2672]
+INFO [DEPARTMENT-SERVICE,6488312dffdb2672,08cc67736af03807]
+
+1) Start Eureka Server
+
+@EnableEurekaServer
+<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+
+2) Start Cloud Config Server
+<artifactId>spring-cloud-config-server</artifactId>
+<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+
+
+server:
+  port: 9296
+   uri: https://github.com/aliimran-pk/config-server
+ 
+git application.yaml
+ service-url:
+         defaultZone: http://localhost:8761/eureka/
+ 
+  
+3) Start API Gateway
+
+<artifactId>spring-cloud-starter-gateway</artifactId>
+<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+<artifactId>spring-cloud-starter-config</artifactId>
+
+server:
+  port: 9191
+
+routes:
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-SERVICE
+                fallbackuri: forward:/userSer
+				
+bootstrap.yaml
+ uri: http://localhost:9296 #URL of config server
+ 
+ @EnableEurekaClient
+@EnableHystrix
+
+
+4) Start Department Service
+
+<artifactId>spring-boot-starter-data-jpa</artifactId>
+<artifactId>spring-boot-starter-data-jpa</artifactId>
+<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+<artifactId>spring-cloud-starter-config</artifactId>
+<artifactId>spring-cloud-starter-config</artifactId>
+
+server:
+  port: 9001
+  
+  application:
+   name: DEPARTMENT-SERVICE
+
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+
+bootstrap.yaml
+    config:
+      enabled: true
+      uri: http://localhost:9296
+
+
+5) Start User Service
+
+6) Start Hystix DashBoard
+<artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
+<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+
+server:
+  port: 9295
+   proxy-stream-allow-list: "*"
+
+
+
+7) See tracing in Zipkin Server
+docker run -d -p 9411:9411 openzipkin/zipkin
+http://localhost:9411
+
+
+-----------------------------------
+Resilence
+design your microservices with failure in mind.
+fallback plan 
+fault tolerant and handle failures gracefully
+
+One way to achieve this is by making your microservices to fail and then try to recover from the failure. This process is commonly termed as Chaos Testing.
+Design you applications such that you do not have single points of failure.
+
+Solution
+Circuit Breaker Pattern
+common pattern to avoid cascading failure in your microservice ecosystem
+
+Good All Microservices Articles
+https://dzone.com/microservices-news-tutorials-tools/list
+
+------------------------------------------------------------------------------------------------------------
+Design patterns give us a proven solution to existing and recurring problems
+
+Architectural Patterns
+
+These are patterns for the overall layout of your application or application
+
+1) Layered Pattern
+ split up your code into “layers”, where each layer has a certain responsibility and provides a service to a higher laye
+ Presentation or UI layer
+Application layer
+Business or domain layer
+Persistence or data access layer
+Database layer
+
+Advantages
+Most developers are familiar with this pattern.
+It provides an easy way of writing a well-organized and testable application.
+
+Disadvantages
+monolithic applications that are hard to spli
+writing a lot of code to pass through the different layers
+
+Ideal for
+Standard line-of-business apps that do more than just CRUD operations
+
+2) Command and Query Responsibility Segregation (CQRS) pattern
+
+To join data across multiple microservices having  their own database
+
+This means that the data models used for querying and updates can be different. 
+CQRS is simply the creation of two objects where there was previously only one. 
+The separation occurs based upon whether the methods are a command or a query (A command is any method that change state and a query is any method that returns a value).
+As a result, it is no longer straightforward to implement queries that join data from multiple services
+
+An application has read operations and write operations that must be totally separated
+ Furthermore, the data will be stored in different locations. 
+ 
+Commands: are those operations related to create, update, delete
+Queries: are those operations related to query/read data
+
+Applying CQRS on this would result in two services:
+Define a view database, which is a read-only replica that is designed to support that query. The application keeps the replica up to data by subscribing to Domain events published by the service that own the data.
+As a result, it is no longer straightforward to implement queries that join data from multiple services
+
+OrderingWriteService:
+1 void Ship(OrderId)
+2 void ChangeOrderShipmentAddress(OrderId, NewAddress)
+3 void CreateOrder(Order)
+4 void ChangeOrderPaymentMethod(OrderId, PaymentMethod)
+
+OrderingReadService:
+1 Order GetOrder(OrderId)
+
+Advantages
+Command models can focus on business logic and validation while read models can be tailored to specific scenarios.
+You can avoid complex queries (e.g. joins in SQL) which makes the reads more performant.
+
+Disadvantages
+Keeping the command and the read models in sync can become complex.
+
+Ideal for
+Applications that expect a high amount of reads
+Applications with complex domains
+
+3) Event Sourcing
+As I mentioned above, CQRS often goes hand in hand with event sourcing. 
+This is a pattern where you don’t store the current state of your model in the database, but rather the events that happened to the model. So when the name of a customer changes, you won’t store the value in a “Name” column. 
+You will store a “NameChanged” event with the new value (and possibly the old one too).
+
+
+
+Microservices is about independent deployability.
+
+1) Strangler pattern: 
+The Strangler Pattern is a popular design pattern to incrementally/gradually  transform your monolithic application into microservices by replacing a particular functionality with a new service
+You can develop a new component, let both the new and the old component exist for a period of time, and finally terminate the old component.
+
+2) Backends for Frontends: 
+It will create separate backend services for different types of clients, like desktop and mobile.
+Create one backend per user interface.
+
+
+
+
+
+3) Decompose by business capability
+A monolith can be decomposed by using your organization's business capabilities. A business capability is what a business does to generate value (for example, sales, customer service, or marketing).
+
+Sales
+Marketing
+Customer
+
+4) Decompose by subdomain
+This pattern uses a domain-driven design (DDD) subdomain to decompose monoliths. This approach breaks down the organization’s domain model into separate subdomain
+Each subdomain has a model and the scope of that model is called a bounded context; microservices are developed around this bounded context.
+
+Sales -> 
+Purchasing
+Claims
+
+Nobody identifies business capabilities perfectly, but a useful place to start is by analysing the organization’s purpose, structure, and business processes.
+
+Customer Account Management 	→ Account Service
+Order Management							→ Order Service
+Book Inventory Management 			→ Book Service
+Shipping Management 					→ Shipping Service
+
+6) Saga
+
+SAGA is one of the best way to ensure the consistency of the data in a distributed architecture without having a single ACID transaction
+
+In the database-per-service pattern, each Microservice is responsible for its own data. However, this leads to an interesting situation. 
+What happens when a business transaction involves data that spans across multiple microservices
+A saga pattern is a sequence of local transactions where each transaction updates data within a single service. 
+
+if the state of the order needs to be tracked, Order Service could simply listen to all events and update its state.
+
+Order Service saves a new order, set the state as pending and publish an event called ORDER_CREATED_EVENT.
+The Payment Service listens to ORDER_CREATED_EVENT, charge the client and publish the event BILLED_ORDER_EVENT.
+The Stock Service listens to BILLED_ORDER_EVENT, update the stock, prepare the products bought in the order and publish ORDER_PREPARED_EVENT.
+Delivery Service listens to ORDER_PREPARED_EVENT and then pick up and deliver the product. At the end, it publishes an ORDER_DELIVERED_EVENT
+Finally, Order Service listens to ORDER_DELIVERED_EVENT and set the state of the order as concluded.
+
+Rolling back a distributed transaction does not come for free. Normally you have to implement another compensating transaction for what has been done before.
+
+Good
+https://www.vinsguru.com/retry-pattern/
+
+
+Retry Pattern
+Microservices are distributed in nature
+anything could happen. We might be dealing with network issues, service unavailability, application slowness etc. An issue with one system might affect another system behavior/performance
+Ability of the system to recover from such failures and remain functional makes the system more RESILIENT. 
+
+
+Control Loop
+ it is very difficult to manually detect and correct problems such as crashed or hung microservice instances.
+In the world of containers, a container orchestrator such as Kubernetes is typically used to implement this patter
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+----------------12 Factor App-----------------------------------------------------------------------------
+
+12 principles for Cloud Native application to make application resilience
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

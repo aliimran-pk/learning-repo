@@ -152,8 +152,6 @@ https://dev.azure.com
 https://www.credly.com/badges/ea59c635-e131-4548-b38f-a87eadf2a06c/public_url
 
 
-
-
 Private Cloud
 regulatory requirements / restrictions / 
 eg. Azure stack 
